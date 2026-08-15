@@ -1,0 +1,8 @@
+population,n_pairs,genes,min_q,genes_q05,min_p,top_gene
+Distal Epithelium,12,12118,0.124,0,1.02e-05,BIRC6
+lung secretory cell,21,12672,0.195,0,1.54e-05,CCDC33
+basal cell,17,12947,0.275,0,6.53e-05,ACADL
+Endothelial,20,12305,0.525,0,4.85e-05,CLK1
+Mesenchymal,11,12647,0.57,0,1.27e-04,REX1BD
+lung interstitial macrophage,14,11106,0.85,0,1.27e-04,RTL10
+Fibroblast,10,12210,0.917,0,2.20e-04,KCTD21

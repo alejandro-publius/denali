@@ -1,0 +1,4 @@
+cell_type,n_pairs,genes_tested,min_q,genes_q05,top_gene,top_log2FC
+interstitial macrophage,14,11106,0.85,0,RTL10,1.12
+basal cell,17,12947,0.275,0,ACADL,-1.29
+secretory cell,21,12672,0.195,0,CCDC33,0.96

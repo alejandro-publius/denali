@@ -61,8 +61,8 @@ Stated once here rather than repeated as caveats throughout:
 | Number | Where it appears | Status |
 |---|---|---|
 | Gate C1 outcomes for the four candidate programs | `docs/GATE_C1_RESULTS.md` | pre-event |
-| ILD null: 7 populations, best q = 0.124; positive control 481–6,532 genes | this document only | pre-event, not re-run |
-| Retrieval audit: 34 sources / 113 genes, one review at 50.4%, 14/113 title matches, 19 of 20 probe genes returning the same paper | `LIMITATIONS.md` §5, `CAPTIONS.md` FIG 4 | **measured 2026-08-15, carried over dated** — the underlying indexes are live and will not reproduce exactly |
+| ILD null: 7 populations, best q = 0.124; positive control 481–6,532 genes | `results/prior_work/` — **the tables are included** | pre-event, not re-run |
+| Retrieval audit: 34 sources / 113 genes, one review at 50.4%, 14/113 title matches, 19 of 20 probe genes returning the same paper | `LIMITATIONS.md` §5, `CAPTIONS.md` FIG 4; script `src/probe_retrieval.py`, raw output `results/discovery/probe_retrieval.json` | **measured 2026-08-15, carried over dated** — the underlying indexes are live and will not reproduce exactly |
 
 Everything else in this repository — the 50-program matrix, the predictor, the
 held-out evaluation, the controls, the sensitivity check — is computed from

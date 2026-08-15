@@ -1,0 +1,337 @@
+[
+  {
+    "gene": "SREBF2",
+    "seconds": 1.48,
+    "papers": 6,
+    "claims": [
+      "Buffalo SREBF2 gene was isolated and characterized, showing high similarity to other Bovidae species. Knockdown of SREBF2 in mammary cells significantly reduced triglyceride and cholesterol synthesis.",
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "This study investigated gene expression in zebrafish retinal ganglion cells during optic nerve regeneration. Srebf2, a regulator of mevalonate synthesis, was found to be essential for successful axon regeneration and visual recovery.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases.",
+      "Bone marrow mesenchymal stem cell-derived extracellular vesicles were studied for their effect on intestinal ischemia-reperfusion injury. These vesicles inhibit ferroptosis by delivering miR-378a-3p, which targets the SREBF2/HMGB1 axis.",
+      "This study analyzed 8,707 knockout mouse lines for abnormal corneal morphology. The analysis identified 213 candidate genes for corneal disorders, with 83% not previously implicated."
+    ],
+    "n_claims": 6,
+    "kind": "canonical"
+  },
+  {
+    "gene": "SCAP",
+    "seconds": 1.0,
+    "papers": 7,
+    "claims": [
+      "Cholesterol's role in regulating SREBP activation was investigated structurally and functionally. Cholesterol displaces Scap's transmembrane helix, promoting SREBP activation by stabilizing the Scap-Insig complex.",
+      "This study investigated the role of the SREBP pathway in pancreatic ductal adenocarcinoma (PDAC). The SREBP pathway is essential for PDAC progression and growth, making it a potential therapeutic target.",
+      "This study investigated the SCAP/SREBP2 cholesterol synthesis pathway in PM-induced airway inflammation. The pathway suppresses macrophage activation and inflammation, with cholesterol supplementation mitigating PM-induced responses.",
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "This study investigated miR-615-3p's role in regulating odontogenic differentiation of SCAPs. Inhibiting miR-615-3p enhances dentinogenesis via PVT1-mediated mitochondrial regulation.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases.",
+      "This study analyzed 8,707 knockout mouse lines for abnormal corneal morphology. The analysis identified 213 candidate genes for corneal disorders, with 83% not previously implicated."
+    ],
+    "n_claims": 7,
+    "kind": "canonical"
+  },
+  {
+    "gene": "INSIG1",
+    "seconds": 1.45,
+    "papers": 10,
+    "claims": [
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "A gene network regulating cholesterol biosynthesis, including the \"cholesterol sensor\" and SREBP target genes, was reconstructed and analyzed. Feedback loops involving specific genes were identified as key controllers of SREBP activity.",
+      "This study integrated single-cell sequencing and machine learning to analyze psoriasis. Insulin-induced gene 1 (INSIG1) was identified as a downregulated candidate biomarker potentially regulating fatty acid metabolism, and tetrandrine showed promise as a therapeutic agent.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases.",
+      "This study analyzed 8,707 knockout mouse lines for abnormal corneal morphology. The analysis identified 213 candidate genes for corneal disorders, with 83% not previously implicated.",
+      "TRIM25 promotes MASH by ubiquitinating INSIG1, enhancing lipid synthesis. Inhibiting TRIM25 with C 27 H 26 N 2 O 4 S, delivered via HSC-EVs, ameliorates MASH progression and fibrosis.",
+      "This review details techniques for gene knockout, knockdown, and overexpression in mycobacteria. These methods, including homologous recombination and CRISPR-Cas, enable targeted genetic modification for research.",
+      "LY295427 directly binds to INSIG, competing with 25-hydroxycholesterol. This binding prevents 25-hydroxycholesterol from inhibiting SREBP processing and degrading HMGCR. The compound thus antagonizes 25-hydroxycholesterol's effects on cholesterol metabolism."
+    ],
+    "n_claims": 9,
+    "kind": "canonical"
+  },
+  {
+    "gene": "HMGCR",
+    "seconds": 1.06,
+    "papers": 9,
+    "claims": [
+      "Hmgcr deficiency was studied in mouse and fly models, revealing impaired muscle development. Hmgcr deficiency disrupts skeletal muscle cell proliferation, fusion, and mitochondrial function, suggesting shared mechanisms across related muscle diseases.",
+      "This paper investigates HMGCR's role in tumor growth, immune escape, and its interaction with TNF-\u03b1. HMGCR is a key regulator of cholesterol metabolism that fuels tumors, and targeting this axis offers a promising therapeutic strategy.",
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "A multi-omics approach identified genes regulating cholesterol and lipid homeostasis. Gamma-glutamyltransferase GGT7 was found to positively regulate cholesterol levels and LDL-C uptake.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases.",
+      "This study investigated genetic variations in the HMGCR gene and their relation to cognitive decline in Parkinson's disease patients. No significant associations were found, though some correlations with cholesterol levels were observed.",
+      "This study analyzed 8,707 knockout mouse lines for abnormal corneal morphology. The analysis identified 213 candidate genes for corneal disorders, with 83% not previously implicated.",
+      "This review details techniques for gene knockout, knockdown, and overexpression in mycobacteria. These methods, including homologous recombination and CRISPR-Cas, enable targeted genetic modification for research."
+    ],
+    "n_claims": 9,
+    "kind": "canonical"
+  },
+  {
+    "gene": "LDLR",
+    "seconds": 0.74,
+    "papers": 8,
+    "claims": [
+      "A dual-reporter system was developed to monitor Low-Density Lipoprotein Receptor (LDLR) expression. This system accurately reflects LDLR regulation and function, facilitating drug discovery for hyperlipidemia.",
+      "This study functionally characterized LDLR variants from Polish FH patients using cell-based assays. Three variants showed impaired LDL binding/uptake, while one was fully functional, aiding clinical classification.",
+      "This study investigated miR-99a-5p's role in cholesterol metabolism. MiR-99a-5p suppresses PCSK9, upregulating LDLR and enhancing LDL-C uptake in human hepatocytes.",
+      "This study investigated the pathogenicity of the *LDLR* c.97C>T (p.Gln33Ter) mutation in familial hypercholesterolemia. The mutation prevents LDLR protein synthesis and impairs LDL uptake, confirming its pathogenicity without inducing NMD.",
+      "A prime editing screen assessed the impact of 5,184 LDLR variants on LDL-C uptake. This method accurately classified variants, enabling reclassification of many previously unclassified LDLR variants.",
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "Researchers used a CRISPR screen to identify 25 regions impacting LDLR gene expression. One validated enhancer in the first intron, containing a common genetic variant, significantly affects LDLR levels and human LDL cholesterol.",
+      "This review examines the LDLR family's dual roles in viral infections, acting as entry receptors and regulating lipid metabolism. The LDLR family's complex actions can both support and inhibit viral replication, offering potential therapeutic targets."
+    ],
+    "n_claims": 8,
+    "kind": "canonical"
+  },
+  {
+    "gene": "ATF4",
+    "seconds": 0.81,
+    "papers": 12,
+    "claims": [
+      "Transcriptional readthrough at the Atf4 locus was studied in mouse models. This readthrough suppresses Rps19bp1, impairing heart development, and RPS19BP1, not ATF4, is essential for this process.",
+      "This study investigated the roles of 4EHP and NELF-E in ATF4 translation. These proteins, along with ribosomal and eIF3 subunits, form a network regulating ATF4 and proteostasis in *Drosophila*.",
+      "The eIF2\u03b1 phosphorylation-ATF4 axis was studied for its role in mitochondrial homeostasis during ER stress. This axis is crucial for transcriptional reprogramming that mitigates mitochondrial impairment.",
+      "This study investigated how ATF4 affects glutaminolysis and glycolysis in colorectal cancer. ATF4 transcriptionally induces SLC1A5, promoting cancer progression by enhancing glutamine and glucose metabolism.",
+      "ATF4 expression increases in AAA and promotes aneurysm formation by activating SMPD3. This leads to M1 macrophage polarization and inflammation, contributing to AAA development.",
+      "This review summarizes the bidirectional regulatory network between ATF4 and lncRNAs in systemic diseases. This crosstalk influences critical physiological processes and offers therapeutic potential for modulating ATF4-mediated stress responses.",
+      "This paper reviews how translation initiation factors and RNA-binding proteins regulate ATF4 mRNA translation during cellular stress. These factors are crucial for the selective production of ATF4, a key component of the adaptive integrated stress response.",
+      "ATF4 promotes liver fibrosis by activating a stress-independent enhancer program in hepatic stellate cells. Inhibiting ATF4 translation effectively mitigates liver fibrosis, offering a potential therapeutic strategy."
+    ],
+    "n_claims": 12,
+    "kind": "canonical"
+  },
+  {
+    "gene": "XBP1",
+    "seconds": 0.7,
+    "papers": 7,
+    "claims": [
+      "This review examines XBP1's roles in development and regeneration, beyond its known function in ER stress. XBP1 is a crucial transcription factor regulating cell fate and tissue maintenance, with significant therapeutic potential for regenerative medicine.",
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "XBP1s promotes endometritis-induced epithelial-mesenchymal transition (EMT) by targeting MAP3K2. This regulation activates the MAPK/ERK pathway, driving EMT.",
+      "XBP1 knockdown in periodontitis models reduced pyroptosis, inflammation, and tissue damage. This inhibition of the IL-17 pathway restored Th17/Treg balance, suggesting XBP1 is a therapeutic target.",
+      "DDX1 was studied in human cells to determine its role in non-spliceosomal RNA splicing. DDX1's enzymatic activity is specifically required for tRNA splicing, but not for XBP1 mRNA splicing.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases.",
+      "XBP1's role in macrophage-originated sterile inflammation during liver ischemia/reperfusion injury was studied. XBP1 promotes liver injury by regulating MT2 transcription and the NF-\u03baB pathway."
+    ],
+    "n_claims": 7,
+    "kind": "canonical"
+  },
+  {
+    "gene": "ERN1",
+    "seconds": 0.65,
+    "papers": 8,
+    "claims": [
+      "Organic dust exposure was studied for its role in lung inflammation via ERN1. ERN1 activation is found to regulate organic dust-induced lung inflammation by modulating inflammatory mediator production.",
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases.",
+      "This study analyzed 8,707 knockout mouse lines for abnormal corneal morphology. The analysis identified 213 candidate genes for corneal disorders, with 83% not previously implicated.",
+      "This review details techniques for gene knockout, knockdown, and overexpression in mycobacteria. These methods, including homologous recombination and CRISPR-Cas, enable targeted genetic modification for research.",
+      "This study investigated intestine-enriched genes in flatworms and their role in feeding behavior. Knockdown of four specific genes led to fasting phenotypes, reduced growth, and impaired reproduction.",
+      "This study systematically phenotyped knockout mouse lines to identify genes associated with age-related corneal dystrophies. Twelve novel genes were identified that may be potential therapeutic targets for human corneal diseases.",
+      "A floxed mouse model for the Gabbr2 gene was developed. This model recapitulates the neurological phenotype of germline Gabbr2 knockout mice, enabling further study of GABBR2 function."
+    ],
+    "n_claims": 8,
+    "kind": "canonical"
+  },
+  {
+    "gene": "EIF2AK3",
+    "seconds": 0.76,
+    "papers": 8,
+    "claims": [
+      "This study investigated the impact of EIF2AK3 variants on PERK activity in mice. PERK-B variants showed higher kinase activity, leading to increased apoptosis in pancreatic tissue under ER stress.",
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases.",
+      "This study analyzed 8,707 knockout mouse lines for abnormal corneal morphology. The analysis identified 213 candidate genes for corneal disorders, with 83% not previously implicated.",
+      "Hypoxia upregulates EIF2AK3, enhancing autophagy and cisplatin resistance in NSCLC via PI3K/AKT signaling. Targeting EIF2AK3 may overcome chemoresistance.",
+      "This review details techniques for gene knockout, knockdown, and overexpression in mycobacteria. These methods, including homologous recombination and CRISPR-Cas, enable targeted genetic modification for research.",
+      "This study investigated intestine-enriched genes in flatworms and their role in feeding behavior. Knockdown of four specific genes led to fasting phenotypes, reduced growth, and impaired reproduction.",
+      "This study systematically phenotyped knockout mouse lines to identify genes associated with age-related corneal dystrophies. Twelve novel genes were identified that may be potential therapeutic targets for human corneal diseases."
+    ],
+    "n_claims": 8,
+    "kind": "canonical"
+  },
+  {
+    "gene": "HSPA5",
+    "seconds": 0.67,
+    "papers": 7,
+    "claims": [
+      "This study investigated the role of host protein HSPA5 in Influenza A Virus replication. HSPA5 is required for efficient progeny virus release, suggesting it's a target for antiviral development.",
+      "This study identified ferroptosis-associated genes impacting lung adenocarcinoma prognosis and immune evasion. High HSPA5 expression correlates with poor prognosis and immune evasion, suggesting it as a therapeutic target.",
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "RhoA's role in atherosclerosis was studied in a mouse model and cell cultures. RhoA promotes atherosclerosis by interacting with Hspa5, enhancing vascular smooth muscle cell migration, invasion, and mitophagy.",
+      "This study investigated the role of the ER protein HSPA5/BiP in human endometrial stromal cell decidualization. HSPA5/BiP is essential for decidual transformation, regulating both decidual cell differentiation and senescence.",
+      "Trim7 promotes ferroptosis in ischemic stroke by degrading HSPA5. This Trim7-HSPA5-GPX4 pathway exacerbates neuronal injury and offers potential therapeutic targets.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases."
+    ],
+    "n_claims": 7,
+    "kind": "canonical"
+  },
+  {
+    "gene": "FIS1",
+    "seconds": 0.9,
+    "papers": 12,
+    "claims": [
+      "This study investigated the role of Fis1 in dendritic mitochondrial networks of cortical neurons. Fis1 is required for proper mitochondrial morphology, dynamics, and function in dendrites, influencing neuronal structure and connectivity.",
+      "A hidden cysteine in Fis1 is exposed by oxidative stress, leading to homodimerization and excessive mitochondrial fission. A molecule targeting this cysteine prevents fission and preserves mitochondrial function.",
+      "Fission 1 (Fis1) was studied for its role in mitochondrial dynamics in cortical neurons. Fis1 depletion decreased mitochondrial length in dendrites, altered their function, and impacted dendritic branching and spine density.",
+      "FIS1, a DRP1 receptor, was studied for its role in triple-negative breast cancer tumor-initiating cells (TICs). FIS1 absence suppressed TICs without impairing mitochondrial function, suggesting it's a viable therapeutic target.",
+      "This study investigated the spatial distribution of the mitochondrial fission receptor Fis1 in yeast. Focal clustering of Fis1 on mitochondria requires the dynamin-like GTPase Dnm1.",
+      "FIS1's role in mitochondrial homeostasis is altered by post-translational modifications. These modifications link FIS1 to disease and damage from environmental pollutants.",
+      "Crystal structures of human Fis1 and its complex with Bap31 were determined. The structures reveal how Bap31 binds to Fis1's TPR domain, offering insight into ER-mitochondria interactions.",
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression."
+    ],
+    "n_claims": 12,
+    "kind": "random"
+  },
+  {
+    "gene": "TOR3A",
+    "seconds": 0.67,
+    "papers": 8,
+    "claims": [
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases.",
+      "This study analyzed 8,707 knockout mouse lines for abnormal corneal morphology. The analysis identified 213 candidate genes for corneal disorders, with 83% not previously implicated.",
+      "This review details techniques for gene knockout, knockdown, and overexpression in mycobacteria. These methods, including homologous recombination and CRISPR-Cas, enable targeted genetic modification for research.",
+      "This study investigated intestine-enriched genes in flatworms and their role in feeding behavior. Knockdown of four specific genes led to fasting phenotypes, reduced growth, and impaired reproduction.",
+      "This study systematically phenotyped knockout mouse lines to identify genes associated with age-related corneal dystrophies. Twelve novel genes were identified that may be potential therapeutic targets for human corneal diseases.",
+      "A floxed mouse model for the Gabbr2 gene was developed. This model recapitulates the neurological phenotype of germline Gabbr2 knockout mice, enabling further study of GABBR2 function.",
+      "A scalable system, SHIFTiKO, was developed for inducible gene knockout in malaria parasites. This system allows for efficient study of essential gene functions and phenotypic screening."
+    ],
+    "n_claims": 8,
+    "kind": "random"
+  },
+  {
+    "gene": "ATP2C1",
+    "seconds": 0.76,
+    "papers": 9,
+    "claims": [
+      "CRISPR/Cas9 was used to create human keratinocyte models of Hailey Hailey Disease by knocking out ATP2C1. These models revealed disrupted insulin-regulated actin dynamics and impaired keratinocyte spreading, which can be restored by gene expression or a Ca2+-ATPase agonist.",
+      "This study investigated an 18-year-old female with papular acantholytic dyskeratosis. Whole exon sequencing identified a novel nonsense mutation in the ATP2C1 gene as the cause.",
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases.",
+      "This study analyzed 8,707 knockout mouse lines for abnormal corneal morphology. The analysis identified 213 candidate genes for corneal disorders, with 83% not previously implicated.",
+      "This review details techniques for gene knockout, knockdown, and overexpression in mycobacteria. These methods, including homologous recombination and CRISPR-Cas, enable targeted genetic modification for research.",
+      "This study investigated intestine-enriched genes in flatworms and their role in feeding behavior. Knockdown of four specific genes led to fasting phenotypes, reduced growth, and impaired reproduction.",
+      "This study systematically phenotyped knockout mouse lines to identify genes associated with age-related corneal dystrophies. Twelve novel genes were identified that may be potential therapeutic targets for human corneal diseases."
+    ],
+    "n_claims": 9,
+    "kind": "random"
+  },
+  {
+    "gene": "ZNF555",
+    "seconds": 0.87,
+    "papers": 10,
+    "claims": [
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "A multi-omics analysis investigated over 100 zinc-finger proteins (ZFPs) and their RNA interactions. ZFPs were found to regulate RNA splicing, polyadenylation, stability, and translation, with some binding both DNA and RNA targets.",
+      "ZNF536 knockout in SH-SY5Y cells impaired retinoic acid response and neuronal differentiation. This suggests ZNF536 is crucial for RA-responsive gene networks and neuronal development, impacting schizophrenia pathogenesis.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases.",
+      "This study analyzed 8,707 knockout mouse lines for abnormal corneal morphology. The analysis identified 213 candidate genes for corneal disorders, with 83% not previously implicated.",
+      "This review details techniques for gene knockout, knockdown, and overexpression in mycobacteria. These methods, including homologous recombination and CRISPR-Cas, enable targeted genetic modification for research.",
+      "This study investigated intestine-enriched genes in flatworms and their role in feeding behavior. Knockdown of four specific genes led to fasting phenotypes, reduced growth, and impaired reproduction.",
+      "This study systematically phenotyped knockout mouse lines to identify genes associated with age-related corneal dystrophies. Twelve novel genes were identified that may be potential therapeutic targets for human corneal diseases."
+    ],
+    "n_claims": 10,
+    "kind": "random"
+  },
+  {
+    "gene": "CSTF1",
+    "seconds": 0.87,
+    "papers": 8,
+    "claims": [
+      "This study investigated CSTF1 expression and its prognostic value in hepatocellular carcinoma. Elevated CSTF1 expression was found to predict poorer survival outcomes and is suggested as a novel prognostic biomarker for HCC.",
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases.",
+      "This study analyzed 8,707 knockout mouse lines for abnormal corneal morphology. The analysis identified 213 candidate genes for corneal disorders, with 83% not previously implicated.",
+      "This review details techniques for gene knockout, knockdown, and overexpression in mycobacteria. These methods, including homologous recombination and CRISPR-Cas, enable targeted genetic modification for research.",
+      "This study investigated intestine-enriched genes in flatworms and their role in feeding behavior. Knockdown of four specific genes led to fasting phenotypes, reduced growth, and impaired reproduction.",
+      "This study systematically phenotyped knockout mouse lines to identify genes associated with age-related corneal dystrophies. Twelve novel genes were identified that may be potential therapeutic targets for human corneal diseases.",
+      "A floxed mouse model for the Gabbr2 gene was developed. This model recapitulates the neurological phenotype of germline Gabbr2 knockout mice, enabling further study of GABBR2 function."
+    ],
+    "n_claims": 8,
+    "kind": "random"
+  },
+  {
+    "gene": "THRAP3",
+    "seconds": 0.7,
+    "papers": 10,
+    "claims": [
+      "THRAP3 promotes ferroptosis resistance in acute myeloid leukemia by facilitating GIT2 alternative splicing. This mechanism involves SLU7 recruitment and leads to reduced iron accumulation and increased GSH synthesis, suggesting THRAP3 as a therapeutic target.",
+      "THRAP3's role in C2C12 myotubes was studied by creating knockout cells. Loss of THRAP3 impaired muscle differentiation and reduced expression of key myogenic factors, indicating it supports thyroid hormone activity in muscle.",
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "A genetic screen identified five RNA-binding proteins that suppress latent splice site usage. ALYREF, a key regulator, interacts with U5 snRNA to maintain splicing accuracy.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases.",
+      "This study analyzed 8,707 knockout mouse lines for abnormal corneal morphology. The analysis identified 213 candidate genes for corneal disorders, with 83% not previously implicated.",
+      "This review details techniques for gene knockout, knockdown, and overexpression in mycobacteria. These methods, including homologous recombination and CRISPR-Cas, enable targeted genetic modification for research.",
+      "This study investigated the selective dependency on splicing factor TRA2A in cancer. Cancer cells can become dependent on TRA2A due to incomplete compensation by its paralog TRA2B, leading to cell death."
+    ],
+    "n_claims": 10,
+    "kind": "random"
+  },
+  {
+    "gene": "FOSL2",
+    "seconds": 0.73,
+    "papers": 12,
+    "claims": [
+      "This study investigated the lncRNA CISTR-ACT's role in cell size regulation. CISTR-ACT controls cell size across species by interacting with FOSL2 and regulating cell morphogenesis and adhesion genes.",
+      "This study investigated the role of FOSL2 in diabetic kidney disease. FOSL2 promotes DKD by activating TGF-\u03b21-mediated GLUT1/mTOR signaling.",
+      "This study investigated how chromatin accessibility changes during follicular maturation in granulosa cells. Fosl2 facilitates these changes, enabling gene expression crucial for ovulation and reproduction, and its absence leads to subfertility.",
+      "This study investigated the role of SESN3 in idiopathic pulmonary fibrosis (IPF) using cell and mouse models. SESN3 restrains IPF progression by inhibiting M2 macrophage polarization through targeting FOSL2 activity.",
+      "This study investigated super-enhancers' role in PANoptosis in pulmonary arterial smooth muscle cells. Super-enhancers regulate FOSL2 expression, which in turn affects PANoptosis in these cells.",
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "This study investigated the role of transcription factor Fosl2 in kidney parietal epithelial cells during disease. Fosl2 regulates the transition of these cells to myofibroblasts, a conserved response in glomerulonephritis.",
+      "Single-cell transcriptomics identified a CXCL3+FOSL2+ macrophage subset in rheumatoid arthritis synovium. This subset drives inflammation via the FOSL2/AP-1 axis, suggesting a therapeutic target."
+    ],
+    "n_claims": 12,
+    "kind": "random"
+  },
+  {
+    "gene": "TNXB",
+    "seconds": 0.68,
+    "papers": 8,
+    "claims": [
+      "This study analyzed genome-wide DNA methylation in colorectal tumors and adjacent tissue. The gene *TNXB* was found to be hypomethylated and downregulated in colorectal cancer, correlating with poor survival and suggesting a role in disease progression.",
+      "Genetic variants in the extracellular matrix gene TNXB were identified in patients with arterial aneurysms, primarily affecting fibronectin III domains. These variants are predicted to alter protein structure and function, potentially contributing to aneurysm development.",
+      "Filamin B knockdown in mouse pre-osteoblasts was studied to understand its role in bone development. This knockdown inhibited cell proliferation, migration, and differentiation by altering gene transcription and alternative splicing.",
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases.",
+      "This study analyzed 8,707 knockout mouse lines for abnormal corneal morphology. The analysis identified 213 candidate genes for corneal disorders, with 83% not previously implicated.",
+      "This review details techniques for gene knockout, knockdown, and overexpression in mycobacteria. These methods, including homologous recombination and CRISPR-Cas, enable targeted genetic modification for research.",
+      "This study investigated intestine-enriched genes in flatworms and their role in feeding behavior. Knockdown of four specific genes led to fasting phenotypes, reduced growth, and impaired reproduction."
+    ],
+    "n_claims": 8,
+    "kind": "random"
+  },
+  {
+    "gene": "FRRS1",
+    "seconds": 0.68,
+    "papers": 10,
+    "claims": [
+      "A zebrafish model was created by knocking out the *bcas3* gene to study neurodevelopment. This knockout resulted in developmental defects, motor dysfunction, and increased apoptosis, mimicking human *BCAS3* mutation symptoms.",
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "Rare genetic variants shared by siblings with autism were identified. A gene, FRRS1L, involved in social memory, was found to be under positive selection in human evolution and linked to autism.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases.",
+      "This study analyzed 8,707 knockout mouse lines for abnormal corneal morphology. The analysis identified 213 candidate genes for corneal disorders, with 83% not previously implicated.",
+      "This review details techniques for gene knockout, knockdown, and overexpression in mycobacteria. These methods, including homologous recombination and CRISPR-Cas, enable targeted genetic modification for research.",
+      "This study investigated intestine-enriched genes in flatworms and their role in feeding behavior. Knockdown of four specific genes led to fasting phenotypes, reduced growth, and impaired reproduction.",
+      "This study systematically phenotyped knockout mouse lines to identify genes associated with age-related corneal dystrophies. Twelve novel genes were identified that may be potential therapeutic targets for human corneal diseases."
+    ],
+    "n_claims": 10,
+    "kind": "random"
+  },
+  {
+    "gene": "PARP6",
+    "seconds": 0.87,
+    "papers": 8,
+    "claims": [
+      "This study investigated discrepancies between gene knockout and knockdown in zebrafish. Maternal and zygotic gene contributions explain these differences, categorizing genes by their phenotypic expression.",
+      "Retinal phenotypes in late-adult knockout mice were analyzed to find genes linked to adult-onset retinal diseases. Twelve mouse genes showed abnormal retinal phenotypes, with eight not previously linked to retinal issues, suggesting they are novel candidates for late-onset retinal diseases.",
+      "This study analyzed 8,707 knockout mouse lines for abnormal corneal morphology. The analysis identified 213 candidate genes for corneal disorders, with 83% not previously implicated.",
+      "This review details techniques for gene knockout, knockdown, and overexpression in mycobacteria. These methods, including homologous recombination and CRISPR-Cas, enable targeted genetic modification for research.",
+      "This study investigated intestine-enriched genes in flatworms and their role in feeding behavior. Knockdown of four specific genes led to fasting phenotypes, reduced growth, and impaired reproduction.",
+      "This study systematically phenotyped knockout mouse lines to identify genes associated with age-related corneal dystrophies. Twelve novel genes were identified that may be potential therapeutic targets for human corneal diseases.",
+      "A floxed mouse model for the Gabbr2 gene was developed. This model recapitulates the neurological phenotype of germline Gabbr2 knockout mice, enabling further study of GABBR2 function.",
+      "A scalable system, SHIFTiKO, was developed for inducible gene knockout in malaria parasites. This system allows for efficient study of essential gene functions and phenotypic screening."
+    ],
+    "n_claims": 8,
+    "kind": "random"
+  }
+]

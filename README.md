@@ -10,10 +10,8 @@ balanced accuracy 0.4375, worse than chance — and we report that alongside fou
 controls, an independent DepMap reference, and thresholds that fired against us. **We do not
 claim any gene-level result** — guide-pair concordance is −0.019, no novel gene is
 named anywhere, and the held-out evaluation came back **underpowered and
-inconclusive** with one axis failing outright. To reproduce: clone, run
-`.venv/bin/python -m src.sweep` (9.2 min, 50 programs × 9,837 knockdowns), then
-`src.freeze_matrix`, `src.freeze_predictor`, `src.score_heldout` in that order —
-every input is public and md5-verified in `results/frozen/provenance.json`. Next
+inconclusive** with one axis failing outright. To reproduce: `make setup && make data && make all` — about 22 minutes, every
+input public and md5-verified, full instructions below. Next
 is the experiment the pipeline itself proposes: re-run the identical sweep in
 **stressed** K562, which our stated mechanism predicts will move the unfolded
 protein response from zero hits to non-zero, and which refutes that mechanism if
@@ -41,6 +39,59 @@ it does not.
 3. **Essentiality is not the driver at program level** — coefficient +0.021,
    p = 0.90. It dominates individual hit lists and predicts nothing about whether
    a program is reversible at all.
+
+---
+
+## Reproduce
+
+**Python 3.12.0.** Every number in `results/frozen/` and every figure is
+reproducible bit-for-bit — seeds are fixed and inputs are checksummed.
+
+```bash
+make setup     # venv + pinned deps from requirements.txt
+make data      # prints the ONE manual step, below
+make all       # ~22 min, reproduces everything deterministic
+make page      # serve the expo page
+```
+
+### The one manual step — 470 MB substrate
+
+Not in git. ⚠ **figshare returns 403 on HEAD but 206 on ranged GET** — use GET.
+
+```bash
+mkdir -p data/raw
+curl -sL -o data/raw/K562_gwps_normalized_bulk_01.h5ad https://ndownloader.figshare.com/files/35773217
+curl -sL -o data/raw/rpe1_normalized_bulk_01.h5ad       https://ndownloader.figshare.com/files/35775512
+curl -sL -o data/raw/CRISPRGeneEffect.csv               https://ndownloader.figshare.com/files/51064667
+curl -sL -o data/raw/Model.csv                          https://ndownloader.figshare.com/files/51065297
+```
+
+| File | md5 |
+|---|---|
+| `K562_gwps_normalized_bulk_01.h5ad` | `a3dfaa94ea8724217f5ecb1e14a5f0c8` |
+| `rpe1_normalized_bulk_01.h5ad` | `6f1e7d6a09e2f869759e3c4526b7f171` |
+| `CRISPRGeneEffect.csv` | `6edf7ade09b9b34199210b559d4745d3` |
+| `Model.csv` | `675210d17675f3517b0ce39a3c274f16` |
+
+Replogle et al. 2022 Perturb-seq (CC BY 4.0) · DepMap 24Q4 (CC BY 4.0) ·
+MSigDB v2026.1.Hs (committed under `data/genesets/`).
+
+### What `make all` does not re-run
+
+**Two live-API steps**: Europe PMC and Paperclip retrieval (`make retrieval`).
+Those indexes change, so their outputs — the 34-sources / 50.4% / 19-of-20
+retrieval audit — are committed as **dated observations from 2026-08-15** rather
+than reproducible numbers. The script that produced them is
+`src/probe_retrieval.py` and its raw output is
+`results/discovery/probe_retrieval.json`. That instability is the finding, not a
+defect.
+
+### Prior work, not reproducible here
+
+`results/prior_work/` holds the pre-event ILD evidence — the positive control
+returning **481–6,532 genes at q<0.05** while the pre-registered contrast
+returned zero across seven populations. It needs a 4.5 GB atlas not included
+here. See `docs/PRIOR_WORK.md`.
 
 ## Data
 

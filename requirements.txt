@@ -1,0 +1,20 @@
+# denali — pinned to the interpreter that produced every number in results/frozen/.
+# Python 3.12.0.  Install:  uv pip install -r requirements.txt
+#
+# Versions are the exact ones from the run, not floors. numpy 2.x and pandas 3.x
+# both changed default behaviour in ways this code depends on (strict dtype
+# assignment, corrcoef on <2 columns); an unpinned resolver will not reproduce.
+
+h5py==3.16.0
+matplotlib==3.11.1
+numpy==2.5.2
+pandas==3.0.5
+pyarrow==24.0.0
+scipy==1.18.0
+statsmodels==0.14.6
+
+# expo page
+streamlit==1.61.1
+
+# MCP server (optional — only for src/mcp_server.py)
+mcp==1.29.0

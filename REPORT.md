@@ -203,6 +203,14 @@ program name:
 - **Unscored** → predicted R_p, prediction SD, and expected information gain.
 
 **The single highest-value next experiment this work implies:** re-run the
-identical sweep in a **stressed** K562 population. Program A's null predicts that
-inducing ER stress moves the UPR from 0 hits to non-zero. If it does not, our
-stated mechanism is refuted and the null is biological rather than conditional.
+identical sweep in a **stressed** K562 population.
+
+Be precise about which null this tests. Program A returned **517 hits and ranks
+12 of 50** — it is not a quiet program. What failed is the `known_regulator_recovery`
+control: the canonical UPR sensors do **not** land at the extremes of the ranking
+(`controls.csv`, program_a, FAIL). So the ranking moved, and it did not move the
+genes the biology says it should.
+
+Our stated mechanism — no ER stress, so the sensors are never engaged — predicts
+that inducing ER stress recovers those sensors at the extremes. If it does not,
+the mechanism is refuted and the null is biological rather than conditional.

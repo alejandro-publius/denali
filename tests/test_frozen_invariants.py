@@ -399,6 +399,29 @@ def main() -> int:
               not any(w in blob for w in ("we recommend", "top candidate",
                                           "most promising", "best target")))
 
+    # ---------------- J. program A is described correctly ----------------
+    # REPORT.md claimed inducing ER stress would move program A "from 0 hits to
+    # non-zero". It has 517. The null is real but it is the known-regulator
+    # control failing, not an absence of hits -- two different findings that had
+    # been collapsed into one sentence for hours. Nothing was watching prose
+    # claims about a specific program, so now something is.
+    readme_txt = (ROOT / "README.md").read_text()
+    a_row = summary[summary.is_program_A]
+    if len(a_row):
+        a = a_row.iloc[0]
+        for label, txt in [("REPORT.md", report), ("README.md", readme_txt)]:
+            bad = re.search(r"UPR from 0 hits|program A.{0,40}\b0 hits|"
+                            r"first program returned a clean null", txt, re.I)
+            check(f"{label} does not call program A a zero-hit null", bad is None,
+                  f"program A has {int(a.n_hits_q05)} hits: {bad.group(0) if bad else ''}")
+        kr = controls[(controls.control == "known_regulator_recovery")
+                      & (controls.program == "program_a")]
+        check("program A's null is the known-regulator control, and it FAILs",
+              len(kr) == 1 and kr.verdict.iloc[0] == "FAIL")
+        check("program A's hit count is stated where the null is discussed",
+              str(int(a.n_hits_q05)) in report and str(int(a.n_hits_q05)) in readme_txt,
+              f"expected {int(a.n_hits_q05)} in both")
+
     # ---------------- F. the docs' own self-description ----------------
     report_readme = (ROOT / "README.md").read_text()
     # These are hand-typed and therefore drift: the badge said 84, the Tests

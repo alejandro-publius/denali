@@ -7,3 +7,16 @@ textColor = "#111827"
 
 [server]
 headless = true
+
+# Expo-table hardening. The page is unattended between 10:45 and 11:30, and on a
+# projector during judging. Nothing here changes layout — see NOTE below.
+[client]
+toolbarMode = "viewer"        # hide Rerun / Settings / Deploy from visitors
+showErrorDetails = "none"     # a traceback must never render on the screen
+disableDataExport = true      # no CSV-download affordances on any element
+
+# NOTE — not set deliberately: [theme] baseFontSize (default 16). Raising it to
+# 18-20 helps projector legibility, but every size in app.py is in rem, so it
+# rescales the 4.1rem headline too. Test at the projector's real resolution
+# before changing it; Streamlit also shrinks headings as the viewport narrows
+# (streamlit#7972), and there is no zoom config (streamlit#9613).

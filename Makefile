@@ -61,11 +61,13 @@ all: check
 	@echo "== 7/9  freeze the matrix, then the predictor           ~1 min"
 	$(PY) -m src.freeze_matrix
 	$(PY) -m src.freeze_predictor
-	@echo "== 8/9  score the held-out ten against the frozen model ~3 min"
+	@echo "== 8/10 score the held-out ten against the frozen model ~3 min"
 	$(PY) -m src.score_heldout
-	@echo "== 9/9  figures + post-freeze sensitivity check          ~1 min"
+	@echo "== 9/10 figures + post-freeze sensitivity check          ~1 min"
 	$(PY) -m src.figures_matrix
 	$(PY) -m src.sensitivity_stripped
+	@echo "== 10/10 freeze the three proposals the page renders     ~1 s"
+	$(PY) -m src.freeze_proposals
 	@echo ""
 	@echo "DONE. Compare against the committed results/frozen/ — they should be identical."
 	@echo "     git diff --stat results/frozen/"

@@ -75,3 +75,39 @@ cut Sunday, cut demo polish, not reproduction.
    presented as independent replication, that is the second-most-likely attack.
 6. **Scope creep into proteostasis writ large.** The gate passed the UPR/folding
    arm only; the broad proteasomal set failed. Claims must stay scoped.
+
+---
+
+# BUILD I + II OUTCOME — 2026-08-15
+
+**Full record: `docs/BUILD_I_II_RESULTS.md`.**
+
+> **The primary program (UPR) FAILED. The sealed held-out program (cholesterol)
+> SUCCEEDED.** Opening line of the demo must pre-empt: *"our primary program
+> failed, for a reason we can name — K562 has no ER stress, so the UPR was never
+> engaged."*
+
+| | UPR (primary) | Cholesterol (sealed, `9ad74a7`) |
+|---|---|---|
+| Top hit | MCM4 (replication licensing) | **SREBF2, rank 2/11,258, Tier 1** |
+| Canonical regulators | not recovered (PERK/IRE1/XBP1 q≈0.8–1.0) | **both tails, correct sign** |
+| q<0.05 | 517 | 773 |
+
+**Framing settled:** two-tier output with an essentiality-matched null. Guide-pair
+replication was recommended then killed by a 60-second check (738 genes = 7.5%
+coverage). RPE1 is a generalisation check, never "the replication arm".
+
+**The collision, quantified:** RPE1 covers **94.1%** of essential genes and
+**11.3%** of non-essential ones.
+
+**Divergence counts (113 UPR genes):** DISAGREES 90 / UNTESTED 12 / AGREES 11.
+
+**Controls:** nonsense program 0 survivors (vs 517/773) ✅ · cholesterol
+regulators recovered at both tails ✅ · UPR regulators not recovered ❌ ·
+**guide-pair concordance −0.019** ❌ · top-50 essentiality 4.09× (p<0.001) ❌.
+
+**scbench: ABANDONED, no number.** No `ANTHROPIC_API_KEY`, no Latch credentials,
+not installed.
+
+**Not done as specified:** Paperclip (unauthenticated — Europe PMC substituted);
+Sanger KY cross-library agreement (only merged Chronos used).

@@ -21,9 +21,9 @@
 
 ---
 
-## 2 · NEGATIVE ONE — most of what looks like biology is measurement
+## 2 · NEGATIVE ONE — most of what looks like biology isn't biology
 
-> **"Between fifty-six and seventy-five percent of the variance in which programs look reversible is explained by measurement quality alone, not biology."**
+> **"Between fifty-six and seventy-five percent of the variance in which programs look reversible is explained by how the programs were defined — chiefly their size — not biology."**
 >
 > **"The range is wide because one of our own features is partly circular — computed from the same matrix as the outcome. Fifty-six is the number that survives that objection. We report both ends."**
 >
@@ -123,7 +123,7 @@
 
 > **"You're right, and we ran it after someone made exactly that point. It collapses. Measurement features alone give adjusted R-squared of fifteen percent. Set-construction features alone give seventy percent. Set size by itself beats all three measurement features combined, three times over."**
 >
-> **"So our headline attributed the variance to measurement, and it's carried by how the gene set was built. The number stands — the word 'measurement' doesn't. That check is post-freeze, it's not pre-registered, and it's in the repo under results slash sensitivity with a note saying a critique prompted it, not our plan."**
+> **"So an earlier version of our headline attributed the variance to measurement, and it's carried by how the gene set was built. We corrected it — the number stands, the word 'measurement' didn't. That check is post-freeze, it's not pre-registered, and it's in the repo under results slash sensitivity with a note saying a critique prompted it, not our plan."**
 
 **Do not soften this.** The honest version is stronger than a hedge, and the
 alternative is being walked into it.

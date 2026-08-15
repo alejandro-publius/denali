@@ -6,7 +6,7 @@
 
 ## Finding
 
-> ### Between **56% and 75%** of the variance in which biological programs *appear* reversible in a genome-scale CRISPRi screen is explained by measurement quality alone, not by biology.
+> ### Between **56% and 75%** of the variance in which biological programs *appear* reversible in a genome-scale CRISPRi screen is explained by how the programs were defined — chiefly their size — not by their biology.
 >
 > The range is not hedging. It is the honest interval: **0.561** using only
 > features independent of the outcome matrix, **0.751** including

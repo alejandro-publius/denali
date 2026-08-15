@@ -253,9 +253,9 @@ The list is less trustworthy than it looks, for three reasons a newcomer would n
 
 ## What did we build?
 
-denali reads a finished screen back and estimates **how much of the apparent signal is explained by measurement quality rather than biology**, before anyone commits to a candidate.
+denali reads a finished screen back and estimates **how much of the apparent signal is explained by how the programs were defined — chiefly their size — rather than biology**, before anyone commits to a candidate.
 
-The answer, on a published genome-scale screen: **between 56% and 75%**. A model that never looks at what a single gene *does* — only at how well each pathway was measured — predicts most of what looks like discovery. Pathway size alone explains **46.5%**.
+The answer, on a published genome-scale screen: **between 56% and 75%**. A model that never looks at what a single gene *does* — only at how each pathway was defined, chiefly its size — predicts most of what looks like discovery. Pathway size alone explains **46.5%**.
 
 We also checked the obvious fix. If you filter out poorly-measured pathways, you throw away **20 of 50** pathways that produce real results anyway. The quality filter a careful person would build is wrong 40% of the time.
 

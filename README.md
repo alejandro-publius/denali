@@ -142,7 +142,7 @@ Set up is not the same as used. What actually touched the result:
 |---|---|---|
 | **Paperclip / GXL** | **USED AND AUDITED** | 113/113 gene queries, authenticated. We measured its retrieval quality and found it weak — that audit is FIG 4. Its hosted MCP server is registered and deliberately unqueried: the index is live, and re-running would move the numbers FIG 4 cites |
 | **Anthropic MCP** | **SHIPPED** | `src/mcp_server.py`, 2 tools over the frozen matrix |
-| **Modal** | Set up, not in the pipeline | `modal app list` answered live, workspace `alejandro-publius`, **0 apps ever deployed**. No file in `results/frozen/` comes from a Modal run |
+| **Modal** | **USED** | Runs the real 50-program sweep across 10 containers in **133 s** (`src/modal_sweep.py`), reproducing `n_hits`, `R_p`, `n_present` and the gate **identical on all 50**. It verifies the frozen result rather than producing it, so reproduction no longer needs the 470 MB download — `modal run src/modal_sweep.py` |
 | **Biohub ESMC** | Set up, not in the pipeline | Verified twice — local MIT weights **and** the authenticated hosted Biohub Platform API, both returning `(1, 67, 960)`. Nothing frozen depends on it |
 | **Benchling** | MCP registered, nothing to register | Hosted server at `hackathon.mcp.bnchdev.org/mcp` answers 401 — up and OAuth-gated. Our pipeline has no wet-lab entity to push into a notebook |
 | **Proto (Evo Design)** | **Installed, not used** | `pip install git+https://github.com/evo-design/proto-tools.git` succeeds. 140 tools, 17 categories, `proto-tools doctor` exits 0 against a live Modal workspace. Serves AlphaFold, Boltz, ESMC, Evo2, AlphaGenome — denali makes no structural or sequence-design claim |
@@ -234,3 +234,57 @@ The suite has caught, in order: a stat bug reporting 5 evidence sources instead 
 ---
 
 Code MIT ([LICENSE](LICENSE)). Data: Replogle et al. 2022 Perturb-seq and DepMap 24Q4, both CC BY 4.0; MSigDB v2026.1.Hs under its own terms.
+
+---
+
+# In plain language
+
+*This section assumes no background. Everything above it assumes some.*
+
+## What problem is this?
+
+A CRISPR screen switches off ten thousand genes, one at a time, and measures what happens to the cell after each one. It hands a biologist a ranked list of thousands of "hits." Labs then spend months, and often six figures, chasing the top of that list.
+
+The list is less trustworthy than it looks, for three reasons a newcomer would not guess:
+
+- **Some genes are just load-bearing.** Switch off a gene the cell needs to survive and *everything* changes. Those genes flood the top of any ranking without telling you anything specific.
+- **Bigger pathways win automatically.** A pathway with 200 genes returns more hits than one with 30, regardless of what either does — the same way a raw crime count always ranks big cities as the most dangerous.
+- **The measurement disagrees with itself.** Two reagents aimed at the *same* gene should give the same answer. In this dataset their agreement is **−0.019** — statistically indistinguishable from noise.
+
+## What did we build?
+
+denali reads a finished screen back and estimates **how much of the apparent signal is explained by measurement quality rather than biology**, before anyone commits to a candidate.
+
+The answer, on a published genome-scale screen: **between 56% and 75%**. A model that never looks at what a single gene *does* — only at how well each pathway was measured — predicts most of what looks like discovery. Pathway size alone explains **46.5%**.
+
+We also checked the obvious fix. If you filter out poorly-measured pathways, you throw away **20 of 50** pathways that produce real results anyway. The quality filter a careful person would build is wrong 40% of the time.
+
+## Why should anyone care?
+
+Because the expensive mistake in this field is not missing a hit. It is **chasing one that was never there.** A false lead costs a year of a graduate student's life and a grant cycle.
+
+denali is a cheap check that runs before that decision. It does not find new drug targets and does not claim to. It tells you which parts of your ranking are measurement artifacts, and it proposes a next experiment that **changes when your results change** — if a pathway comes back empty it tells you to raise statistical power and re-run; if it comes back strong it tells you to validate in a second, independently screened cell type.
+
+It is a tool for deciding what *not* to chase. That is unglamorous, and it is where the money goes.
+
+## How do you know we're not fooling ourselves?
+
+This is the part we care most about, so it is built into the code rather than promised in prose.
+
+- **We wrote down what would prove us wrong, hashed it, and committed it before running anything.** The pre-registration is recoverable at a named commit.
+- **We held ten pathways back** and only opened them after the model was frozen and hashed. The model **failed** on them — worse than a coin flip, zero true positives. We published that instead of quietly refitting.
+- **Three of our four evaluations came back negative.** All four are reported.
+- **The one positive is a control, not a discovery.** Run unchanged on a pathway it was never tuned for, the ranking puts that pathway's known master switch at **rank 2 of 11,258**. So the machinery works — it just is not finding what people assume it is finding.
+- **86 automated checks** fail the build if the words and the data stop agreeing. They have caught us four times, including once when we published a number with the wrong sign.
+
+---
+
+# How this meets the judging criteria
+
+**1 · Closing the loop.** Ten pathways were named and committed as a held-out set before the code that scores them existed. The predictor was frozen and hashed first; the scorer verifies that hash on load and aborts if it changed. It failed on the held-out set — balanced accuracy **0.4375**, zero true positives — and we reported it. For the second half, hold a pathway fixed and change only its result: the proposed experiment flips from *"validate in a second cell type"* to *"raise power and re-run."* No branch in that code tests a pathway's name. → `src/next_experiment.py`, `src/score_heldout.py`, `results/frozen/heldout_evaluation.json`
+
+**2 · Inspectability.** Every number on the results page passes through a helper that records the frozen file it came from; **32** values are traced and an untraceable number does not render. The pre-registration is hashed and diffable against what we reported. Four self-found errors are written into the limitations, including one where we blamed a sponsor tool that in fact works. → `src/build_page.py`, `docs/MATRIX_PREREG.md`, `docs/LIMITATIONS.md` §7
+
+**3 · Validation.** Judged against standards outside our own reasoning: a published Perturb-seq screen, MSigDB pathway definitions, and DepMap gene-fitness data across 1,178 cell lines. The positive control recovers a known master regulator at rank 2 of 11,258, with 11 of 17 canonical members in the extreme 10% (p = 7.0×10⁻⁸) and the correct sign at both tails. Four of seven controls fail and are kept. → `results/frozen/controls.csv`, `REPORT.md`
+
+**4 · Sponsor tools.** The distinctive use is that we treated one as the **object of measurement** rather than a dependency: Paperclip retrieved literature for 113 genes, we blind-probed 20 of them, and **19 of 20 came back with the same unrelated paper**. That audit is a published figure, and nothing it returned feeds any result. Modal runs the real sweep across containers and reproduces the frozen numbers exactly, so reproduction no longer needs a 470 MB download. The project also ships *as* a tool: an MCP server whose reply for an unscored pathway volunteers the predictor's own failure, unasked. Every tool's status is tested rather than recalled, and an automated check fails the build if an "unused" claim stops being true. → `docs/TOOLS.md`, `src/modal_sweep.py`, `src/mcp_server.py`

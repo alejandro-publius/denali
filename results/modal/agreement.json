@@ -1,0 +1,12 @@
+{
+  "n_programs": 50,
+  "columns_checked": [
+    "n_hits_q05",
+    "R_p",
+    "n_present",
+    "passes_measurability_gate"
+  ],
+  "mismatched_columns": [],
+  "shards": 10,
+  "reproduces_frozen": true
+}

@@ -246,13 +246,35 @@ def main() -> int:
           f"{held['axis2_balanced_accuracy']:.4f}" in VALIDATION, VALIDATION)
 
     # "Touched a number" is a claim about this repository, so run the grep the
-    # page invites a reviewer to run. If any of these ever enters the pipeline,
-    # the strip becomes false and this fails first.
-    src_text = "\n".join(f.read_text() for f in sorted((ROOT / "src").glob("*.py")))
+    # page invites a reviewer to run. Scope it to what `make all` actually runs:
+    # src/modal_sweep.py imports modal by design, but it REPRODUCES the frozen
+    # files rather than producing them, and it is deliberately not a make-all
+    # step. That distinction is the whole claim, so assert it rather than
+    # loosening the guard until it passes.
+    mk = (ROOT / "Makefile").read_text()
+    all_block = mk.split("all:")[1].split("\n\n")[0] if "all:" in mk else mk
+    pipeline_mods = set(re.findall(r"-m\s+src\.(\w+)", all_block))
+    check("make all runs a non-empty module list", len(pipeline_mods) >= 5,
+          f"found {sorted(pipeline_mods)}")
+    check("modal_sweep is NOT a make-all step (it verifies, it does not produce)",
+          "modal_sweep" not in pipeline_mods)
+
+    src_text = "\n".join((ROOT / "src" / f"{m}.py").read_text()
+                         for m in sorted(pipeline_mods)
+                         if (ROOT / "src" / f"{m}.py").exists())
     for tool in ["modal", "esm", "benchflow", "benchling", "paperclip"]:
         used = re.search(rf"^\s*(?:import|from)\s+{tool}\b", src_text, re.I | re.M)
-        check(f"no pipeline module imports {tool} -- 'touched a number: no' holds",
+        check(f"no make-all module imports {tool} -- 'touched a number: no' holds",
               used is None, used.group(0).strip() if used else "")
+
+    # The Modal run's own claim is that it reproduces the frozen numbers. Do not
+    # take its word for it either -- it writes a verdict and this reads it back.
+    agree = ROOT / "results" / "modal" / "agreement.json"
+    if agree.exists():
+        a = json.loads(agree.read_text())
+        check("Modal reproduced all 50 programs from the frozen result",
+              a["reproduces_frozen"] and a["n_programs"] == 50
+              and not a["mismatched_columns"], str(a.get("mismatched_columns")))
 
     # A frozen artifact with a timing field cannot be byte-compared across
     # machines, which is exactly what the reproduction check does.

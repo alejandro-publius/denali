@@ -45,6 +45,15 @@ def main() -> int:
     ds = prov["deciding_statistic"]
     gap = prov["gap_numbers"]
 
+    # ---------------- 0. every shipped module must at least parse ----------------
+    for f in sorted((ROOT / "src").glob("*.py")) + sorted((ROOT / "tests").glob("*.py")):
+        try:
+            compile(f.read_text(), str(f), "exec")
+            okc, err = True, ""
+        except SyntaxError as e:
+            okc, err = False, f"line {e.lineno}: {e.msg}"
+        check(f"{f.relative_to(ROOT)} parses", okc, err)
+
     # ---------------- A. the frozen numbers ----------------
     m = pd.read_csv(FROZEN / "matrix.csv", index_col=0)
     check("matrix.csv is 9,837 x 50", m.shape == (9837, 50), f"got {m.shape}")

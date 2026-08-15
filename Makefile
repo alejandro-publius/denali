@@ -70,6 +70,8 @@ all: check
 	$(PY) -m src.sensitivity_stripped
 	$(PY) -m src.vif_camera
 	$(PY) -m src.engagement_bound
+	@echo "== freeze the three proposals the page renders          ~1 s"
+	$(PY) -m src.freeze_proposals
 	@echo "== build the page from the frozen numbers"
 	$(PY) -m src.build_page
 	@echo "== invariants: every number must match the committed frozen files"

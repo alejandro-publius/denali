@@ -369,6 +369,36 @@ def main() -> int:
         check("engagement: states what it cannot settle",
               "cannot bound it across screens" in eb.get("what_this_does_not_settle", ""))
 
+    # ---------------- I. the frozen proposals (Rachel's expo layer) ----------------
+    # proposals.json is a frozen artifact the page renders, so it gets the same
+    # treatment as every other one: the branches must be chosen by measured value
+    # rather than by name, and nothing in it may read as a nomination.
+    prop_p = FROZEN / "proposals.json"
+    if prop_p.exists():
+        prop = json.loads(prop_p.read_text())
+        check("proposals: one per branch of next_experiment",
+              {"null", "hit", "unscored"} <= set(prop),
+              f"got {sorted(k for k in prop if not k.startswith('_'))}")
+        # each pick must be re-derivable from the frozen table, not hardcoded
+        null_p = summary[summary.n_hits_q05 == 0].nlargest(1, "n_present").iloc[0].program
+        check("proposals: the NULL branch is chosen by measured value",
+              prop["null"]["program"] == null_p,
+              f"json {prop['null']['program']} vs recomputed {null_p}")
+        hit_p = summary.nlargest(1, "R_p").iloc[0].program
+        check("proposals: the HIT branch is the top measured R_p",
+              prop["hit"]["program"] == hit_p,
+              f"json {prop['hit']['program']} vs recomputed {hit_p}")
+        check("proposals: outcomes are the three real branches",
+              {prop[k]["outcome"] for k in ("null", "hit", "unscored")} ==
+              {"NULL_WITH_MECHANISM", "HIT_ABOVE_THRESHOLD", "UNSCORED"})
+        check("proposals: the unscored branch keeps its observed outcome",
+              "observed_outcome" in prop["unscored"]
+              and prop["unscored"]["observed_outcome"]["n_hits_q05"] == 0)
+        blob = json.dumps(prop).lower()
+        check("proposals: no nomination language",
+              not any(w in blob for w in ("we recommend", "top candidate",
+                                          "most promising", "best target")))
+
     # ---------------- F. the docs' own self-description ----------------
     report_readme = (ROOT / "README.md").read_text()
     # These are hand-typed and therefore drift: the badge said 84, the Tests

@@ -1,0 +1,61 @@
+{
+  "_regenerate": "python -m src.freeze_proposals",
+  "_source": "results/frozen/program_summary.csv + heldout.csv",
+  "_note": "Generated from measured values only. No branch tests a program name.",
+  "null": {
+    "program": "HALLMARK_XENOBIOTIC_METABOLISM",
+    "outcome": "NULL_WITH_MECHANISM",
+    "evidence": {
+      "n_hits_q05": 0,
+      "expr_ratio": 1.1622,
+      "sd_ratio": 1.0296,
+      "frac_present": 0.425,
+      "passes_measurability_gate": false
+    },
+    "mechanism": "members are expressed and variable (expr_ratio=1.16, sd_ratio=1.03) yet nothing reaches significance; this is a POWER limit, not a biology limit",
+    "next_experiment": "Change the condition: increase cells per perturbation, or aggregate related perturbations to raise effective n. Then re-run the identical sweep.",
+    "falsifies_the_mechanism": "If doubling depth yields no hits, the null is biological rather than statistical and the mechanism is refuted.",
+    "cost": "one re-profile; scoring is ~11 s on the existing pipeline."
+  },
+  "hit": {
+    "program": "HALLMARK_MYC_TARGETS_V1",
+    "outcome": "HIT_ABOVE_THRESHOLD",
+    "evidence": {
+      "n_hits_q05": 5707,
+      "R_p": 3.7565,
+      "R_p_predicted_from_measurability": 4.1649,
+      "residual": -0.408,
+      "passes_measurability_gate": true
+    },
+    "next_experiment": "Validate at PATHWAY level: test whether the ranked knockdowns recover this program's canonical regulators at both tails, in a second independently screened cell type, using set-level enrichment \u2014 not individual gene lookups.",
+    "why_not_gene_level": "Guide-pair concordance is -0.019. Two independent guides against the same gene give uncorrelated scores, so any single-gene call here is not reproducible. Set-level statistics aggregate over thousands of perturbations and survive that noise; individual ranks do not.",
+    "caveat": "Observed R_p is 0.41 below what measurability alone predicts. The measurability model explains most of the variance across programs, so the residual is the only part that can be biology.",
+    "cost": "existing RPE1 matrix; no new data."
+  },
+  "unscored": {
+    "program": "REACTOME_SCAVENGING_OF_HEME_FROM_PLASMA",
+    "outcome": "UNSCORED",
+    "evidence": {
+      "predicted_R_p": 5.26,
+      "predicted_hits": 181772,
+      "prediction_sd": 0.577,
+      "expected_information_gain": 0.467,
+      "frac_present": 0.0144927536231884,
+      "expr_ratio": 1.0688254681370943,
+      "sd_ratio": 1.727340401398725,
+      "n_present": 1.0,
+      "essentiality_density": 0.0,
+      "coherence": 0.0482859999999999
+    },
+    "next_experiment": "Score REACTOME_SCAVENGING_OF_HEME_FROM_PLASMA against all 9,837 knockdowns. Predicted R_p=5.26 (~181772 hits) with prediction SD 0.58, from measurability features alone.",
+    "expected_information_gain": "0.467 of one observed-spread SD. The measurability model already explains most of the variance, so the informative part of this experiment is the RESIDUAL: whether the observed R_p departs from 5.26 by more than 0.58.",
+    "cost": "~11 s compute on the existing matrix.",
+    "observed_outcome": {
+      "n_hits_q05": 0,
+      "n_present": 1,
+      "n_declared": 69,
+      "unscoreable": true,
+      "verdict": "The agent's highest-confidence proposal of the ten. 1 of 69 members measured. It returned 0 hits."
+    }
+  }
+}

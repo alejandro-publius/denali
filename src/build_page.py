@@ -154,9 +154,14 @@ TOOLCHAIN = [
      "matrix, the predictor, or any claim. The hosted MCP server is registered "
      "and deliberately not queried — the index is live, and re-running it would "
      "move the numbers FIG 4 cites."),
-    ("Modal", "1.5.4", "Verified — authenticated, 0 apps ever deployed",
-     "no", "`modal app list` answered live against the workspace. The matrix runs "
-     "on a laptop, so nothing needed remote compute and nothing was sent."),
+    ("Modal", "1.5.4", "Used — 50 programs across 10 containers, 133 s",
+     "reproduces every one",
+     "Runs the real sweep, not a demo: src/modal_sweep.py imports the same frozen "
+     "scorer, fans the 50 programs across containers, and returns n_hits, R_p, "
+     "n_present and the gate identical to results/frozen/ on all 50. It verifies "
+     "the result rather than producing it, and it is deliberately not a make-all "
+     "step. What it buys is that reproducing us no longer needs a 470 MB download "
+     "and twelve minutes of laptop."),
     ("CZ Biohub — ESM Cambrian", "esm 3.2.3",
      "Verified twice — local weights and hosted API, both (1, 67, 960)",
      "no", "esmc_300m ran on a real sequence locally, and the same sequence ran "

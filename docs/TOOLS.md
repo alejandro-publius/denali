@@ -2,15 +2,15 @@
 
 Every row below was checked against this machine, not recalled. The column that
 matters is the last one: whether anything in `results/frozen/` would differ if
-the tool had not run. For all but two the answer is no, and that is the point of
-the table rather than something to pad around.
+the tool had not run. Most answers are still no, and that is the point of the
+table rather than something to pad around.
 
 | Tool | Installed | Auth | Verified how | Touched a number |
 |---|:--:|:--:|---|:--:|
 | **Claude Code** | ✅ `2.1.233` | ✅ | `claude --version` | yes, as the author |
 | **Paperclip** | ✅ `0.7.37` | ✅ account authenticated | `paperclip config`; 113/113 gene queries stored; hosted MCP registered | yes, as the audited object |
 | **Anthropic MCP** | ✅ `mcp 1.29.0` | n/a | `src/mcp_server.py` started over stdio, 2 tools listed, 3 calls returned non-empty | ships the result |
-| **Modal** | ✅ `1.5.4` | ✅ workspace `alejandro-publius` | `modal app list` answered live — 0 apps ever deployed | no |
+| **Modal** | ✅ `1.5.4` | ✅ workspace `alejandro-publius` | **runs the sweep**: 50 programs / 10 containers / 133 s, output identical to `results/frozen/` on all 50 | reproduces all 50 |
 | **CZ Biohub / ESMC** | ✅ `esm 3.2.3` | ✅ hosted API key | verified twice — local weights **and** the hosted Biohub Platform API, both returning `(1, 67, 960)` | no |
 | **Proto — Evo Design** | ✅ `proto-tools 0.1.0` | ✅ via Modal | installed from git; 140 tools / 17 categories; `proto-tools doctor` exits 0 | no |
 | **Benchling** | ⚠ MCP endpoint live | ⏳ OAuth pending | `hackathon.mcp.bnchdev.org/mcp` returns 401 — up and gated | no |

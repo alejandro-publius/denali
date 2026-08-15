@@ -119,52 +119,92 @@ def figure(name: str) -> str:
 
 # ---------------------------------------------------------------- page
 CSS = """
-:root{--ink:#1a1a1a;--soft:#5c5c5c;--rule:#e3e3e3;--accent:#1a4d7a;--paper:#fff}
-*{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
+/* Design language adapted from Rachel's Figma Make study
+   (Scientific-Results-Page-Design, IfX8SSpdJtmfx1a5ud9PtJ).
+   Typography, palette, hairline rules and the two-touch accent are hers.
+   Every number, figure and sentence is ours, from results/frozen/. */
+:root{
+  --ink:#1c1c1a;          /* warm near-black */
+  --soft:#8c8c89;         /* warm muted */
+  --rule:rgba(0,0,0,.11); /* hairline */
+  --fill:#f2f2f0;         /* figure ground */
+  --accent:#4a6fa5;       /* used TWICE: pull-quote rule, footer link */
+  --paper:#fff;
+  --radius:0px;
+}
+*{box-sizing:border-box;margin:0;padding:0;border-radius:var(--radius)}
+html{-webkit-text-size-adjust:100%;font-size:16px}
 body{background:var(--paper);color:var(--ink);
-  font:400 17px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
-  padding:0 40px}
-main{max-width:1100px;margin:0 auto;padding:52px 0 120px}
-/* four type sizes: hero / heading / body / small */
-.hero{font-size:63px;line-height:1.04;letter-spacing:-.035em;font-weight:700}
-h2{font-size:23px;line-height:1.3;font-weight:600;letter-spacing:-.01em;margin:0 0 22px}
-.small{font-size:14.5px;line-height:1.55;color:var(--soft)}
-.claim{font-size:20px;line-height:1.45;max-width:52em;margin:22px 0 0}
-.circ{font-style:italic;font-size:16px;color:var(--soft);max-width:56em;margin:14px 0 0}
-.mech{font-size:16px;margin:12px 0 0;max-width:56em}
-section{margin:80px 0 0}
-hr{border:0;border-top:1px solid var(--rule);margin:72px 0 0}
-.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:38px 0 0}
-.metric{border:1px solid var(--rule);border-radius:3px;padding:20px 22px}
-.metric .n{font-size:40px;line-height:1;font-weight:700;letter-spacing:-.02em}
-.metric .l{margin-top:10px;font-size:14.5px;line-height:1.4;color:var(--soft)}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
-.card{border-top:2px solid var(--accent);padding:20px 0 0}
-.card h3{font-size:17px;font-weight:600;margin:0 0 10px}
-.card p{font-size:15.5px;line-height:1.6;color:#333}
-figure{margin:0}
-figure img{width:100%;height:auto;display:block;border:1px solid var(--rule)}
-figcaption{margin-top:14px;font-size:14.5px;line-height:1.6;color:var(--soft);max-width:58em}
+  font:400 16px/1.62 "Source Serif 4",Georgia,"Times New Roman",serif;
+  padding:0 40px;-webkit-font-smoothing:antialiased}
+main{max-width:1100px;margin:0 auto;padding:44px 0 96px}
+
+/* four sizes: hero / heading / body / small */
+.hero{font-size:clamp(2.5rem,5.1vw,4.25rem);line-height:1.05;
+  letter-spacing:-.025em;font-weight:600}
+h2{font-size:1.25rem;line-height:1.4;font-weight:600;margin:0 0 26px}
+.claim{font-size:1.1875rem;line-height:1.5;max-width:46em;margin:22px 0 0}
+.circ{font-style:italic;font-size:.8125rem;color:var(--soft);
+  max-width:60em;margin:13px 0 0;line-height:1.55}
+.mech{font-size:1rem;margin:11px 0 0;max-width:60em}
+
+/* hairline-ruled column, not whitespace-separated blocks */
+section{padding:40px 0;border-bottom:1px solid var(--rule)}
+section.hero-sec{padding:0 0 34px;border-bottom:1px solid var(--rule)}
+figure{padding:44px 0;border-bottom:1px solid var(--rule);margin:0}
+
+/* shared-rule grids: cells divided by hairlines, no floating boxes */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--rule);background:var(--rule);gap:1px}
+.metric{background:var(--paper);padding:22px 24px}
+.metric .n{font-size:1.25rem;font-weight:600;line-height:1;margin-bottom:9px;
+  font-variant-numeric:tabular-nums}
+.metric .l{font-size:.8125rem;line-height:1.4;color:var(--soft)}
+
+.cards{display:grid;grid-template-columns:repeat(3,1fr);
+  border:1px solid var(--rule);background:var(--rule);gap:1px}
+.card{background:var(--paper);padding:24px 26px}
+.card h3{font-size:.8125rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--soft);margin:0 0 14px}
+.card p{font-size:1rem;line-height:1.62}
+
+figure img{width:100%;height:auto;display:block;background:var(--fill);
+  border:1px solid var(--rule)}
+figcaption{margin-top:14px;font-size:.8125rem;line-height:1.65;color:var(--soft);
+  max-width:62em}
 figcaption b{color:var(--ink);font-weight:600}
-blockquote{border-left:2px solid var(--accent);padding:2px 0 2px 26px;margin:0;
-  max-width:44em}
-blockquote p{font-size:17px;line-height:1.62}
-.control{max-width:46em}
-.control p{font-size:15.5px;line-height:1.62;color:#333}
-.control .note{margin-top:14px;font-weight:600;color:var(--ink)}
-ol.limits{list-style:none;counter-reset:l;display:grid;grid-template-columns:1fr 1fr;
-  gap:22px 44px}
-ol.limits li{counter-increment:l;position:relative;padding-left:32px;font-size:15.5px;
-  line-height:1.6}
-ol.limits li::before{content:counter(l);position:absolute;left:0;top:0;
-  color:var(--accent);font-weight:700;font-variant-numeric:tabular-nums}
-footer{margin-top:96px;padding-top:26px;border-top:1px solid var(--rule);
-  font:400 13px/1.9 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--soft)}
+
+/* the accent, first of two uses */
+blockquote{margin-left:32px;padding-left:20px;border-left:2px solid var(--accent);
+  max-width:46em}
+blockquote p{font-size:1.25rem;font-style:italic;line-height:1.55}
+
+.label{font-size:.8125rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--soft);margin:0 0 14px}
+.control{max-width:48em}
+.control p{font-size:1rem;line-height:1.62}
+.control .note{margin-top:14px;font-size:.8125rem;font-style:italic;
+  color:var(--soft)}
+
+ol.limits{list-style:none;counter-reset:l;display:grid;
+  grid-template-columns:1fr 1fr;gap:22px 48px}
+ol.limits li{counter-increment:l;display:flex;gap:18px;font-size:1rem;
+  line-height:1.62}
+ol.limits li::before{content:counter(l) ".";color:var(--soft);flex:none;
+  font:400 .8125rem/1.9 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-variant-numeric:tabular-nums}
+
+footer{padding:26px 0 0;
+  font:400 .8125rem/1.95 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color:var(--soft)}
 footer b{color:var(--ink);font-weight:600}
-a{color:var(--accent)}
-@media(max-width:1000px){.metrics,.cards,ol.limits{grid-template-columns:1fr}
-  .hero{font-size:42px}body{padding:0 22px}main{padding:56px 0 80px}}
+/* the accent, second and last use */
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline;text-underline-offset:2px}
+
+@media(max-width:1000px){
+  .metrics,.cards,ol.limits{grid-template-columns:1fr}
+  body{padding:0 22px}main{padding:40px 0 64px}}
 """
 
 HTML = f"""<!doctype html>
@@ -175,6 +215,7 @@ HTML = f"""<!doctype html>
 <main>
 
 <!-- 1. hero -->
+<section class="hero-sec">
 <p class="hero">{PCT_LO}–{PCT_HI}% of what<br>looks like biology<br>is not biology.</p>
 <p class="claim">Across all {N_PROGRAMS} Hallmark gene programs scored against
 {N_KD:,} CRISPRi knockdowns in K562, that share of the variance in <em>apparent</em>
@@ -185,21 +226,19 @@ figure that survives that objection, and we never quote the top alone.</p>
 <p class="mech">The mechanism is size. Bigger programs with more co-moving members
 return more hits regardless of what they do — <b>program size alone explains
 {SIZE_R2*100:.1f}%</b>.</p>
+</section>
 
 <!-- 2. metrics -->
+<section>
 <div class="metrics">
   <div class="metric"><div class="n">4</div><div class="l">evaluations run</div></div>
   <div class="metric"><div class="n">3</div><div class="l">came back negative</div></div>
   <div class="metric"><div class="n">1</div><div class="l">came back positive</div></div>
   <div class="metric"><div class="n">0</div><div class="l">gene-level claims made</div></div>
 </div>
+</section>
 
-<hr>
-
-<!-- 3. fig 1 -->
-<section>{figure("fig1_matrix.png")}</section>
-
-<hr>
+{figure("fig1_matrix.png")}
 
 <!-- 4. three negatives -->
 <section>
@@ -223,12 +262,7 @@ return more hits regardless of what they do — <b>program size alone explains
 </div>
 </section>
 
-<hr>
-
-<!-- 5. fig 2 -->
-<section>{figure("fig2_gate_failure.png")}</section>
-
-<hr>
+{figure("fig2_gate_failure.png")}
 
 <!-- 6. the heme example -->
 <section>
@@ -240,10 +274,9 @@ program returned nothing because it was not measurable at all. The failure and t
 finding are the same fact.</p></blockquote>
 </section>
 
-<hr>
-
 <!-- 7. the control -->
 <section class="control">
+<div class="label">Control</div>
 <h2>The one positive</h2>
 <p>Run unchanged on a program it had not been developed against, the pipeline puts
 that pathway's master regulator at rank 2 of 11,258 scored perturbations — more
@@ -256,12 +289,7 @@ That same program fails our measurability filter on an expression ratio of
 does not say the ranking found anything, and we do not claim that it did.</p>
 </section>
 
-<hr>
-
-<!-- 8. fig 4 -->
-<section>{figure("fig4_retrieval.png")}</section>
-
-<hr>
+{figure("fig4_retrieval.png")}
 
 <!-- 9. limitations -->
 <section>

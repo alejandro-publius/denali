@@ -18,7 +18,7 @@ from mcp.server.fastmcp import FastMCP
 from src.next_experiment import propose
 
 FROZEN = Path("results/frozen")
-mcp = FastMCP("reversal-map")
+mcp = FastMCP("denali")
 
 _S = pd.read_csv(FROZEN / "program_summary.csv")
 _P = json.loads((FROZEN / "predictor.json").read_text())
@@ -53,7 +53,7 @@ def reversibility(program: str) -> dict:
             "measurability_limited": bool(r.measurability_limited),
             "predicted_from_measurability_alone": float(r.R_p_predicted_from_measurability),
             "residual_that_could_be_biology": float(r.R_p_residual_after_measurability),
-            "is_sealed_program": bool(r.is_sealed_program_B),
+            "is_held_out_program": bool(r.is_held_out_program),
             "next_experiment": propose(program, _S),
             "scope_limit": SCOPE,
         }
@@ -86,7 +86,7 @@ def reversibility(program: str) -> dict:
 
 @mcp.tool()
 def provenance() -> dict:
-    """Hashes, seals and the honest limits of this dataset."""
+    """Provenance, controls and the honest limits of this dataset."""
     return json.loads((FROZEN / "provenance.json").read_text())
 
 

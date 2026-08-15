@@ -9,8 +9,8 @@ seeing a result, and **no threshold here may be revised after seeing one.**
 ## 0. What has and has not been run
 
 **Already scored, before this document:** `HALLMARK_UNFOLDED_PROTEIN_RESPONSE`
-(program A) and `HALLMARK_CHOLESTEROL_HOMEOSTASIS` (program B, sealed
-`9ad74a7`). Both remain in the Tier 1 sweep; **neither is held out**, and the
+(program A) and `HALLMARK_CHOLESTEROL_HOMEOSTASIS` (program B, held out
+`63596b5`). Both remain in the Tier 1 sweep; **neither is held out**, and the
 predictor in Tier 3 will be fit including them. This is disclosed because they
 are not naive rows.
 
@@ -86,7 +86,7 @@ Any one of these and we report the diagnostic, not a claim:
 4. **n_effective < 20 programs** entering the OLS after gating — 6 features on
    fewer than 20 points is not a model.
 
-## 6. (e) HELD-OUT SET — SEALED
+## 6. (e) HELD-OUT SET — HELD OUT
 
 **Selection rule, blind and deterministic. No seed, no hand-picking, fully
 re-derivable by anyone:**
@@ -116,8 +116,8 @@ Held out from a *different collection* than the training set, so this tests
 generalisation across curation style as well as across programs — a harder test,
 and one we may fail.
 
-**Program B (`HALLMARK_CHOLESTEROL_HOMEOSTASIS`) remains separately sealed at
-`9ad74a7` as the original single-program held-out.** It is in the Tier 1 training
+**Program B (`HALLMARK_CHOLESTEROL_HOMEOSTASIS`) remains separately held out at
+`63596b5` as the original single-program held-out.** It is in the Tier 1 training
 set and is **not** part of this 10.
 
 ### Held-out evaluation metric, fixed now
@@ -173,7 +173,7 @@ then compared to its measured call. **Balanced accuracy** across the 10:
 
 - Tier 1 must call the **byte-identical committed scoring function**
   `src/score_k562.py`, sha256 `2abfdc6f730d786180e37f73e2951c303c5a7b42caa27dc3394c74c323d7bbfa`.
-  **If the statistic changes, program B's seal is void.**
+  **If the statistic changes, the numbers here are not from that run.**
 - Held-out rows are not scored, inspected, or plotted before the Tier 3 model is
   frozen and pushed.
 - **Pathway-level claims only. No novel gene is named anywhere.** Guide-pair

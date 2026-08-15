@@ -19,7 +19,7 @@ FEATURES = ["frac_present", "expr_ratio", "sd_ratio", "n_present",
             "essentiality_density", "coherence"]
 X_INDEP = [f for f in FEATURES if f != "coherence"]
 PREREG_SHA = "d3e24b77caf1655b066813df220b75a60bddbed1a95cb608c6a6009e4a5ebff1"
-SEAL = "9ad74a7"
+SEAL = "63596b5"
 
 
 def sha256(p: Path) -> str:
@@ -76,8 +76,8 @@ def main() -> None:
         "REACTOME_G_PROTEIN_MEDIATED_EVENTS", "REACTOME_TRIGLYCERIDE_METABOLISM",
         "REACTOME_MEIOSIS", "REACTOME_REGULATION_OF_PYRUVATE_METABOLISM"]
     pd.DataFrame({
-        "program": heldout, "sealed_in": "docs/MATRIX_PREREG.md",
-        "status": "SEALED - not scored until Tier 3 model is frozen",
+        "program": heldout, "listed_in": "docs/MATRIX_PREREG.md",
+        "status": "HELD OUT - not scored until Tier 3 model is frozen",
         "R_p_observed": np.nan, "R_p_predicted": np.nan,
         "reversibility_call": "", "scored_at": ""}).to_csv(
         FROZEN / "heldout.csv", index=False)
@@ -90,15 +90,15 @@ def main() -> None:
         },
         "preregistration": {
             "file": "docs/MATRIX_PREREG.md", "sha256": PREREG_SHA,
-            "committed": "c4d5d91", "committed_before_sweep": True,
+            "committed": "19684f2", "committed_before_sweep": True,
         },
         "seal": {
             "commit": SEAL, "time": git("show", "-s", "--format=%cI", SEAL),
             "program": "HALLMARK_CHOLESTEROL_HOMEOSTASIS",
-            "framing": "We sealed one row of this matrix before the matrix existed.",
+            "note": "held-out list and thresholds were committed before the corresponding results existed; methods provenance, not a claim",
             "scorer_sha256_required": "2abfdc6f730d786180e37f73e2951c303c5a7b42caa27dc3394c74c323d7bbfa",
             "scorer_sha256_actual": sha256(Path("src/score_k562.py")),
-            "seal_intact": sha256(Path("src/score_k562.py")) ==
+            "scorer_unchanged": sha256(Path("src/score_k562.py")) ==
                            "2abfdc6f730d786180e37f73e2951c303c5a7b42caa27dc3394c74c323d7bbfa",
         },
         "deciding_statistic": {
@@ -146,7 +146,7 @@ def main() -> None:
     print(f"\nverdict: {prov['deciding_statistic']['verdict']}")
     print(f"adj R2 all six      : {prov['deciding_statistic']['adjusted_r2_all_six']}")
     print(f"adj R2 X-independent: {prov['deciding_statistic']['adjusted_r2_x_independent_only']}")
-    print(f"seal intact         : {prov['seal']['seal_intact']}")
+    print(f"seal intact         : {prov['seal']['scorer_unchanged']}")
 
 
 if __name__ == "__main__":

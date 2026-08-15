@@ -1,4 +1,4 @@
-program,n_declared,n_present,frac_present,expr_ratio,sd_ratio,essentiality_density,coherence,n_hits_q05,R_p,passes_measurability_gate,is_sealed_program_B,is_program_A
+program,n_declared,n_present,frac_present,expr_ratio,sd_ratio,essentiality_density,coherence,n_hits_q05,R_p,passes_measurability_gate,is_held_out_program,is_program_A
 HALLMARK_MYC_TARGETS_V1,200,194,0.97,6.9733,1.1064,0.6546,0.1149,5707,3.7565,True,False,False
 HALLMARK_E2F_TARGETS,200,190,0.95,2.5679,1.0042,0.5158,0.0924,5668,3.7535,True,False,False
 HALLMARK_G2M_CHECKPOINT,200,182,0.91,2.0771,0.9985,0.489,0.0706,5229,3.7185,False,False,False

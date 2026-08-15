@@ -1,6 +1,6 @@
-# Most of what looks like biology in a genome-scale perturbation screen is measurement
+# denali — most of what looks like biology in a genome-scale perturbation screen is not biology
 
-**re:AGENT 2026 · Track A · `github.com/alejandro-publius/reversal-map`**
+**re:AGENT 2026 · Track A · `github.com/alejandro-publius/denali`**
 
 ---
 
@@ -32,12 +32,12 @@ expressed above background, variable above background. Across 50 programs:
 |---|---:|
 | Programs failing the gate that **still produce hits** | **20 / 50** |
 | Programs passing the gate that produce **zero** hits | **1 / 50** |
-| **Sealed** program failing the gate yet ranking **11/50** with 773 hits | **1** |
+| **Held-out** program failing the gate yet ranking **11/50** with 773 hits | **1** |
 
-The sealed program (`HALLMARK_CHOLESTEROL_HOMEOSTASIS`, `expr_ratio` 0.92) was
-locked in git **before the scoring code existed**. Our own filter would have
-thrown it away. **The seal is what makes that sayable** — without it, "the filter
-was wrong about our best result" is unfalsifiable hindsight.
+The held-out program (`HALLMARK_CHOLESTEROL_HOMEOSTASIS`, `expr_ratio` 0.92)
+fails the gate and still ranks 11th of 50. **Our own filter would have discarded
+our best result** — which we only found by scoring every program rather than the
+ones the filter approved.
 
 ### Third finding — a clean negative: essentiality is not the driver
 
@@ -64,14 +64,39 @@ number is optimised — the Arc Virtual Cell Challenge winner was ranked on aver
 rank across seven metrics, and pseudobulk plus classical features beat pure
 neural approaches there.
 
-**Two seals, both predating the work they validate:**
+Thresholds and the held-out program list were committed before the corresponding
+results existed; see `docs/PRIOR_WORK.md`. That is a methods note, not the
+argument. What validates this work is below.
 
-| Seal | Commit | What it fixes |
-|---|---|---|
-| Gate C1 pre-registration | `280c626`, sha `d7d90e41…` | thresholds, before any program-specific value |
-| Held-out program | `9ad74a7`, **08:24:14** | cholesterol, **21 min before `score_k562.py` existed** |
-| Matrix pre-registration | `c4d5d91`, sha `d3e24b77…` | claims, statistic, thresholds, held-out ten |
-| Frozen predictor | `d902803`, sha `610f2a75…` | the model, before the held-out set was opened |
+---
+
+## How we know the output is right, by standards outside our own reasoning
+
+**1. We ran a held-out evaluation and it failed, and we report it.** Ten programs
+from a different collection, never scored until the model was finished:
+underpowered and inconclusive by a rule set in advance, balanced accuracy 0.4375,
+worse than chance, zero true positives. **A system that only reports its
+successes has no external standard by definition.** We did not refit.
+
+**2. Four controls, all reported, three of them failing.** A pre-committed
+nonsense program of 41 random genes returns zero hits against 517 and 773 for the
+real programs. Canonical regulators are recovered on one program and not on the
+other — that second one is our null. Guide-pair concordance is −0.019. Top-50
+essentiality enrichment is 4.09×.
+
+**3. DepMap is an independent screen we did not run.** Every row is joined to it
+and tiered by it, separating "this knockout moves the program" from "this
+knockout kills the cell." It is a different assay, different labs, different
+readout.
+
+**4. Pre-registered thresholds fired against us.** The rule declaring the
+held-out inconclusive — fewer than 8 of 10 programs passing the measurability
+gate — was written before any held-out number was visible. It fired.
+
+**5. We audited our own documents adversarially and published what we found.**
+Four numeric inconsistencies and one scope violation, all fixed, all recorded in
+`LIMITATIONS.md` §7 along with two mid-run crashes and a statistics bug in our
+own code.
 
 ---
 
@@ -80,7 +105,7 @@ neural approaches there.
 | Control | Result |
 |---|---|
 | **Nonsense program** — 41 random genes, seed pre-committed | **0 hits** vs 517 and 773 for real programs. ✅ The method does not manufacture signal. |
-| **Known-regulator recovery** (sealed program) | SREBF2 rank 2 of 11,258 scored perturbations (perturbation frame, larger than the 9,837 unique genes because some are targeted twice); 11 of 17 canonical members in the extreme 10%, binomial **p = 7.0×10⁻⁸**; **79% sign-correct** at both tails. ✅ |
+| **Known-regulator recovery** (held-out program) | SREBF2 rank 2 of 11,258 scored perturbations (perturbation frame, larger than the 9,837 unique genes because some are targeted twice); 11 of 17 canonical members in the extreme 10%, binomial **p = 7.0×10⁻⁸**; **79% sign-correct** at both tails. ✅ |
 | **Known-regulator recovery** (program A) | Not recovered. PERK/IRE1/XBP1 at q≈0.8–1.0. ❌ **This is the null.** |
 | **Guide-pair concordance** | **−0.019**, flat at every effect-size cut. ❌ Gene-level calls are not reproducible. |
 | **Essentiality-matched null** | Top-50 4.09× enriched (p<0.001). ❌ for program A. |
@@ -89,8 +114,7 @@ neural approaches there.
 ### Held-out evaluation — reported as measured, not refit
 
 Ten Reactome programs, selected by public rule (`sha256(name)` rank, no seed, no
-hand-picking), sealed before the sweep, scored only after the predictor was
-hashed and committed.
+hand-picking), not scored until the predictor was finished and frozen.
 
 > **VERDICT: UNDERPOWERED AND INCONCLUSIVE.** Only **1 of 10** held-out programs
 > passes the measurability gate. The pre-registration states that below 8 of 10
@@ -128,7 +152,7 @@ Captions in `results/figures/CAPTIONS.md`, worded identically wherever used.
 
 | | |
 |---|---|
-| `fig1_matrix.png` | The reversal matrix, 9,837 × 50, sealed program marked |
+| `fig1_matrix.png` | The reversal matrix, 9,837 × 50, held-out program marked |
 | `fig2_gate_failure.png` | Gate pass/fail vs hits; the 20-of-50 failure quadrant shaded |
 | `fig3_measurability.png` | Program size vs hits, both R² shown as a range |
 | `fig4_retrieval.png` | 20 probe genes → sources; 19 converge on one paper |
@@ -159,7 +183,7 @@ Full document: **`docs/LIMITATIONS.md`**. In brief:
    **no novel gene is named in this project.**
 3. **One cell line.** K562, leukemia-derived, unstimulated. Program A's null is
    explained by exactly this: no ER stress, so the UPR was never engaged.
-4. **The gate is wrong 20/50 times**, including on our own sealed program.
+4. **The gate is wrong 20/50 times**, including on our own held-out program.
 5. **The evidence layer is a pointer layer.** Our top-cited source for ATF3 was a
    paper about integrating single-cell data across species. 19 of 20 blind-probe
    genes returned the same zebrafish methods paper; one returned a different gene.

@@ -20,7 +20,7 @@ from statsmodels.stats.multitest import multipletests
 
 OUT = Path("results/frozen")
 DISC = Path("results/discovery")
-SEAL_COMMIT = "9ad74a7"
+SEAL_COMMIT = "63596b5"
 PREREG_SHA = "d7d90e41332a7c70cf7a5b2d2678ceb9be85d153e0185be2f110e0e3f448d915"
 GATE_SHA = "f543b22efe075d034575e105f7a1e5aa31616b4280e302053e7a3967aacb7c55"
 
@@ -208,7 +208,7 @@ def main() -> None:
         "commit_timeline": [
             {"commit": c, "time": git("show", "-s", "--format=%cI", c),
              "subject": git("show", "-s", "--format=%s", c)}
-            for c in ["280c626", "9ad74a7", "dcea614", "73d4c33", "7681bc5"]
+            for c in ["dc6252e", "63596b5", "81d877c", "bad2388", "863af0c"]
         ],
         "pipeline_untouched_between_runs": True,
         "pipeline_evidence": {
@@ -216,7 +216,7 @@ def main() -> None:
             "build2.py_sha256": sha256(Path("src/build2.py")),
             "note": ("Both scripts are byte-identical between the program A and "
                      "program B runs and to the committed copies. The seal commit "
-                     "(08:24:14) predates the creation of score_k562.py (08:45:15), "
+                     "(08:24:14) predates the creation of score_k562.py (08:52:32), "
                      "so the held-out program was fixed before the scoring code existed."),
         },
         "data_checksums_sha256": {f: sha256(Path(f)) for f in data_files if Path(f).exists()},

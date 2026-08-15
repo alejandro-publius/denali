@@ -100,12 +100,12 @@ We built the gate anyone would build. Across 50 programs:
 
 - **20/50** fail the gate and still produce hits
 - **1/50** passes the gate and produces zero hits
-- the **sealed** program fails the gate (`expr_ratio` 0.92) and ranks **11/50**
+- the **held-out** program fails the gate (`expr_ratio` 0.92) and ranks **11/50**
   with 773 hits
 
 **Our own filter would have discarded our best result.** We report this rather
-than quietly dropping the gate, and the seal is what makes it a finding instead of
-hindsight.
+than quietly dropping the gate, and we only found it by scoring every program rather
+than the ones the filter approved.
 
 ## 5. The evidence layer is a pointer layer, not an evidence chain
 
@@ -130,7 +130,7 @@ a larger one-shot query, and we did not build it.
 
 ## 6. The held-out evaluation is underpowered and one axis failed
 
-Ten Reactome programs, sealed by public rule before the sweep, scored only after
+Ten Reactome programs, chosen by public rule and not scored until
 the predictor was hashed.
 
 - **Only 1 of 10 passes the measurability gate** → pre-registered rule fires:
@@ -146,6 +146,18 @@ the predictor was hashed.
 we didn't.
 
 ## 7. Disclosed process failures
+
+- **The "21-minute gap" was filesystem mtime, not git.** `score_k562.py` was
+  *created* on disk at 08:45:15 but first *committed* at 08:52:32. Git stores the
+  latter. Every claim now states the **git-checkable 28 minutes** (held-out list committed 08:24:14 →
+  scorer first committed 08:52:32). Found while preparing this repository; the
+  original figure was not verifiable by anyone reading `git log`.
+- **The pre-registration has been appended to twice since it was hashed.** The
+  file hashed `d3e24b77` is the version at commit `19684f2`, recoverable with
+  `git show 19684f2:docs/MATRIX_PREREG.md`. Two disclosed appends followed — a
+  knockdown-count correction and a stale-count pointer — so the working copy now
+  hashes `826ed952`. **The original was never edited in place**; both additions sit
+  below the original text, which remains visible and unchanged.
 
 - **Two crashes during the held-out run** (undefined coherence at <2 members;
   BH correction on zero scoreable perturbations). Guarded with neutral

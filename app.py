@@ -17,9 +17,9 @@ import streamlit as st
 
 FROZEN = Path("results/frozen")
 FIGS = Path("results/figures")
-REPO = "https://github.com/alejandro-publius/reversal-map"
+REPO = "https://github.com/alejandro-publius/denali"
 
-st.set_page_config(page_title="reversal-map", layout="wide",
+st.set_page_config(page_title="denali", layout="wide",
                    initial_sidebar_state="collapsed")
 
 st.markdown("""<style>
@@ -131,11 +131,11 @@ cards = [
     ("2 · The obvious filter is wrong 20 of 50",
      "We built the quality filter anyone would build. Twenty programs fail it and "
      "produce hits anyway; only one passes it and produces nothing. The program we "
-     "sealed in git before the scoring code existed <b>fails our own filter</b> — and "
+     "we held out <b>fails our own filter</b> — and "
      "ranks 11th of 50. We built a filter that would have thrown away our best result."),
     ("3 · Our generalisation test failed",
-     f"Ten programs from a different collection, sealed before the sweep, scored only "
-     f"after the model was hashed. Only 1 of 10 was even measurable, so by our own "
+     f"Ten programs from a different collection, not scored until "
+     f"the model was finished. Only 1 of 10 was even measurable, so by our own "
      f"pre-registered rule the evaluation is <b>underpowered and inconclusive</b>. "
      f"Binary accuracy {held['axis2_balanced_accuracy']} — worse than chance, zero true "
      f"positives. We did not refit."),
@@ -153,18 +153,16 @@ st.divider()
 
 # ------------------------------------------------------- 6. THE ONE POSITIVE
 st.subheader("The one positive — and it is a control, not a result")
-seal = prov["seal"]
 st.markdown(
-    f"<div class='card pos'><h4>We sealed one row of this matrix before the matrix existed.</h4>"
-    f"<p>Commit <code>{seal['commit']}</code> at <b>08:24:14</b> fixed the held-out program. "
-    f"<code>src/score_k562.py</code> was not created until <b>08:45:15</b> — the program was "
-    f"chosen <b>21 minutes before the scoring code was written</b>, so there was nothing to "
-    f"tune.<br><br>Its master regulator comes back at <b>rank 2 of 11,258 scored "
-    f"perturbations</b> (11,258 exceeds the 9,837 unique genes because some are targeted "
-    f"twice). Eleven of seventeen canonical pathway members land in the extreme 10%, "
-    f"binomial p = 7.0×10⁻⁸, with the correct sign at both ends of the ranking.<br><br>"
-    f"<b>This says the ranking works. It does not say the ranking discovered anything, "
-    f"and we do not claim that it did.</b> The gene is a recovered known answer.</p></div>",
+    "<div class='card pos'><h4>The ranking recovers a pathway it was not built against.</h4>"
+    "<p>Run unchanged on a program it had not been developed on, the pipeline puts that "
+    "pathway's master regulator at <b>rank 2 of 11,258 scored perturbations</b> (11,258 "
+    "exceeds the 9,837 unique genes because some are targeted twice). It is the textbook "
+    "answer and we do not claim to have found it.<br><br>What a lucky hit does not produce "
+    "is the shape: <b>eleven of seventeen canonical pathway members land in the extreme "
+    "10%</b>, against 1.7 expected by chance, binomial p = 7.0×10⁻⁸ — with the correct sign "
+    "at <i>both</i> ends of the ranking.<br><br><b>This says the ranking works. It does not "
+    "say the ranking discovered anything, and we do not claim that it did.</b></p></div>",
     unsafe_allow_html=True)
 
 st.write("")
@@ -182,8 +180,7 @@ left.markdown(
     f"<div class='prov'>"
     f"pre-registration &nbsp;<b>d3e24b77…</b> &nbsp;committed before the sweep<br>"
     f"frozen predictor &nbsp;<b>610f2a75…</b> &nbsp;hashed before the held-out set was opened<br>"
-    f"held-out seal &nbsp;&nbsp;&nbsp;&nbsp;<b>9ad74a7</b> &nbsp;&nbsp;08:24:14, 21 min before the scorer existed<br>"
-    f"scorer intact &nbsp;&nbsp;&nbsp;&nbsp;<b>{seal['seal_intact']}</b> &nbsp;byte-identical to the sealed version<br>"
+    f"held-out eval &nbsp;&nbsp;&nbsp;<b>FAILED</b> &nbsp;underpowered; balanced accuracy 0.4375<br>"
     f"adj R² &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
     f"<b>{ds['adjusted_r2_x_independent_only']} – {ds['adjusted_r2_all_six']}</b> &nbsp;both ends reported"
     f"</div>", unsafe_allow_html=True)

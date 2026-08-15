@@ -40,9 +40,9 @@
 
 > **"We built the obvious quality filter: enough members measured, expressed above background, variable above background. Across fifty programs it's wrong twenty times. Twenty fail the filter and produce hits anyway."**
 >
-> **"And this is why the seal matters. The program we locked in git before the scoring code existed fails our own filter. Expression ratio zero-point-nine-two, just under the line. It ranks eleventh of fifty with seven hundred and seventy-three hits."**
+> **"And the one we held out fails our own filter. Expression ratio zero-point-nine-two, just under the line. It ranks eleventh of fifty with seven hundred and seventy-three hits."**
 >
-> **"We built a filter that would have thrown away our best result. We could only find that out because we sealed the program before we could know."**
+> **"We built a filter that would have thrown away our best result. We only found that out because we checked it against every program instead of the ones it passed."**
 
 *Screen: **FIG 2**.*
 `[pause]`
@@ -51,7 +51,7 @@
 
 ## 4 · NEGATIVE THREE — the held-out test failed
 
-> **"Ten programs from a different collection, chosen by a public rule, sealed before the sweep, scored only after we hashed the model."**
+> **"Ten programs from a different collection, chosen by a public rule, not scored until the model was finished and frozen."**
 >
 > **"One of the ten was even measurable. By our own pre-registered rule — written before any number was visible — that makes the whole evaluation underpowered and inconclusive. Binary accuracy came back below chance. Zero true positives."**
 >
@@ -63,15 +63,18 @@
 
 ---
 
-## 5 · THE POSITIVE — the machinery works
+## 5 · THE ONE POSITIVE — a control, not a headline
 
-> **"So here's the one that worked, and it's a control, not a headline."**
+> **"One of the four worked, and it is a control rather than a discovery."**
 >
-> **"We sealed one row of this matrix before the matrix existed. Cholesterol, commit 9ad74a7, twenty-one minutes before the scoring code was written."**
+> **"We took a program we had not scored and asked the pipeline to rank all nine thousand eight hundred knockouts against it. Its master regulator comes back second. That is the textbook answer — we are not claiming we found it."**
 >
-> **"SREBF2 comes back rank two of eleven thousand two hundred and fifty-eight scored perturbations — more than the nine thousand eight hundred genes, because some get targeted twice. It's the textbook answer — we're not claiming we found it. Eleven of seventeen canonical pathway members land in the extreme ten percent, p equals seven times ten to the minus eight, and the signs are right at both ends."**
+> **"What a lucky hit does not produce is the shape. Seventeen canonical members of that pathway were in the screen. Eleven land in the extreme ten percent — expected by chance, one point seven. p equals seven times ten to the minus eight. And the signs are right at both ends: knock out the activators and the program goes down, knock out the brake and it goes up."**
 >
-> **"That tells you the ranking works. It does not tell you the ranking is discovering anything, and we don't say that it does."**
+> **"That tells you the ranking works. It does not tell you the ranking discovered anything, and we do not say that it did."**
+
+*Screen: the 17-gene rank distribution, both tails highlighted.*
+`[pause]`
 
 ---
 
@@ -93,7 +96,7 @@
 
 ## CLOSE
 
-> **"Three of four evaluations negative. Every one pre-registered, every one reported. Scope is pathway-level only — concordance is minus nought-one-nine, so we name no novel gene anywhere in this project. Everything's frozen with a data dictionary and two hashes that predate the work they validate. Take it apart."**
+> **"Three of four evaluations negative. Every one pre-registered, every one reported. Scope is pathway-level only — concordance is minus nought-one-nine, so we name no novel gene anywhere in this project. Everything is frozen with a data dictionary, and the failures are in the repo next to the results. Take it apart."**
 
 ---
 
@@ -124,6 +127,21 @@
 
 **Do not soften this.** The honest version is stronger than a hedge, and the
 alternative is being walked into it.
+
+
+## ⚠ "How do you know any of this is right?" — the validation answer
+
+*Lead with 1. It is the strongest and it needs no timestamp.*
+
+> **1. "We ran a held-out evaluation and it failed. Ten programs we had never scored — underpowered, inconclusive, balanced accuracy zero-point-four-four, worse than chance, zero true positives. We report it. A system that only ever reports its successes has no external standard by definition."**
+>
+> **2. "Four controls, all reported. Random genes return nothing. Canonical regulators land where they should on one program and nowhere near it on another — that second one is our null."**
+>
+> **3. "DepMap is an independent screen we did not run. Every row is joined to it and tiered by it, so 'this knockout moves the program' is separated from 'this knockout kills the cell.'"**
+>
+> **4. "Thresholds were written down before the numbers existed — including the rule that declared the held-out inconclusive. That rule fired against us."**
+>
+> **5. "And we audited our own documents adversarially. Found four numeric inconsistencies and one scope violation. Fixed them, and wrote down that we found them."**
 
 ## Six adversarial questions, ranked by how badly they land
 

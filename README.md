@@ -1,13 +1,13 @@
-# reversal-map
+# denali
 
 **Between 56% and 75% of the variance in which biological programs *appear*
 reversible in a genome-scale CRISPRi screen is measurement quality, not biology —
 the range depends on whether a partly-circular feature is included, and we report
 both.** The mechanism is size: bigger programs with more co-moving members return
-more hits regardless of what they do, and program size alone explains 46.5%. Two
-things were sealed in git before the work that validates them — the held-out
-program at commit `9ad74a7`, twenty-one minutes before the scoring code existed,
-and the predictor at `d902803`, before the held-out set was opened. **We do not
+more hits regardless of what they do, and program size alone explains 46.5%. What validates it is
+that we ran a held-out evaluation and it **failed** — underpowered, inconclusive,
+balanced accuracy 0.4375, worse than chance — and we report that alongside four
+controls, an independent DepMap reference, and thresholds that fired against us. **We do not
 claim any gene-level result** — guide-pair concordance is −0.019, no novel gene is
 named anywhere, and the held-out evaluation came back **underpowered and
 inconclusive** with one axis failing outright. To reproduce: clone, run
@@ -23,6 +23,7 @@ it does not.
 
 | | |
 |---|---|
+| **Prior work** | [`docs/PRIOR_WORK.md`](docs/PRIOR_WORK.md) |
 | **Full report** | [`REPORT.md`](REPORT.md) |
 | **Limitations** | [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md) |
 | **Demo script** | [`docs/DEMO.md`](docs/DEMO.md) |
@@ -36,7 +37,7 @@ it does not.
    before running that if a measurability model cleared 60% we would report this
    as the finding, not as a failure. It cleared.
 2. **The obvious measurability filter is wrong 20 times out of 50** — and it would
-   have discarded our own sealed program, which fails the gate yet ranks 11/50.
+   have discarded our own best result, which fails the gate yet ranks 11/50.
 3. **Essentiality is not the driver at program level** — coefficient +0.021,
    p = 0.90. It dominates individual hit lists and predicts nothing about whether
    a program is reversible at all.

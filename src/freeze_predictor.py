@@ -1,4 +1,4 @@
-"""Tier 3 — freeze the predictor. RUN BEFORE THE SEALED TEN ARE OPENED.
+"""Tier 3 — freeze the predictor. RUN BEFORE THE HELD OUT TEN ARE OPENED.
 
 Serialises the OLS exactly as fit on the 50 Hallmark programs, together with
 every decision rule needed to evaluate the held-out set. Once this file is
@@ -80,7 +80,7 @@ def main() -> None:
     print(f"  adj R2 X-independent : {pred['adjusted_r2_x_independent_only']}")
     print(f"  residual SD          : {pred['residual_sd']}")
     print(f"  reversible iff R_p >= {pred['binary_rule']['reversible_iff_predicted_R_p_at_least']}")
-    print("\nSEALED TEN NOT YET OPENED.")
+    print("\nHELD OUT TEN NOT YET OPENED.")
 
 
 if __name__ == "__main__":

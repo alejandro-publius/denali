@@ -5,7 +5,7 @@
 # Hackathon plan — Track A, "Build an AI Scientist"
 
 **Program: proteostasis, UPR arm.** Selected 2026-08-15 after the Candidate 1
-gate passed 3/3 (`GATE_C1_RESULTS.md`, commit `280c626`).
+gate passed 3/3 (`GATE_C1_RESULTS.md`, commit `dc6252e`).
 
 | | |
 |---|---|
@@ -86,12 +86,12 @@ cut Sunday, cut demo polish, not reproduction.
 
 **Full record: `docs/BUILD_I_II_RESULTS.md`.**
 
-> **The primary program (UPR) FAILED. The sealed held-out program (cholesterol)
+> **The primary program (UPR) FAILED. The held-out listed held-out program (cholesterol)
 > SUCCEEDED.** Opening line of the demo must pre-empt: *"our primary program
 > failed, for a reason we can name — K562 has no ER stress, so the UPR was never
 > engaged."*
 
-| | UPR (primary) | Cholesterol (sealed, `9ad74a7`) |
+| | UPR (primary) | Cholesterol (held out, `63596b5`) |
 |---|---|---|
 | Top hit | MCM4 (replication licensing) | **SREBF2, rank 2/11,258, Tier 1** |
 | Canonical regulators | not recovered (PERK/IRE1/XBP1 q≈0.8–1.0) | **both tails, correct sign** |
@@ -122,14 +122,14 @@ Sanger KY cross-library agreement (only merged Chronos used).
 
 **Two-program story is the demo.** Full spine: `docs/DEMO.md`.
 
-| | Program A (UPR) | Program B (cholesterol, sealed `9ad74a7`) |
+| | Program A (UPR) | Program B (cholesterol, held out `63596b5`) |
 |---|---|---|
 | Result | **Correct null** | **SREBF2 rank 1 / 9,837** |
 | Mechanism | K562 has no ER stress; the UPR was never engaged | 11/17 pathway members in extreme 10%, **p = 7.0e-08** |
 | Sign correctness | — | **11/14 = 79%**, both tails |
 
-**Seal predates the scoring code by 21 minutes** (seal 08:24:14, `score_k562.py`
-created 08:45:15). Scripts byte-identical across both runs.
+**Seal predates the scoring code by 28 minutes** (seal 08:24:14, `score_k562.py`
+created 08:52:32). Scripts byte-identical across both runs.
 
 ## Scope statement — on screen, verbatim, `docs/SCOPE_STATEMENT.md`
 

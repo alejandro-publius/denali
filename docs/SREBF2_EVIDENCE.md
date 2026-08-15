@@ -4,39 +4,16 @@ The headline. Built to survive interrogation, not to look good.
 
 ---
 
-## 1. The ordering is the entire argument
+## 1. Methods note on ordering
 
-| Time (2026-08-15, −07:00) | Event |
-|---|---|
-| **08:24:14** | **SEAL — commit `9ad74a7`.** `HALLMARK_CHOLESTEROL_HOMEOSTASIS` fixed as program B, with the nonsense-control seed (20260815) and run conditions. |
-| 08:40:18 | `build_program.py` written |
-| **08:45:15** | **`score_k562.py` created — the scoring code did not exist until now** |
-| 08:45:37 | Program A (UPR) scored |
-| 08:47:15 | `build2.py` written |
-| 08:47:32 | Program A, Build II |
-| **08:49:25** | **Program B scored — 25 min after the seal** |
-| 08:49:50 | Program B, Build II |
-| 08:52:32 | Results committed (`73d4c33`) |
+Thresholds and the held-out program list were committed before the corresponding
+results existed, and the scorer is byte-frozen at sha256 `2abfdc6f…`. See
+`docs/PRIOR_WORK.md`. **This is provenance, not the argument.** What follows is.
 
-**The seal predates the existence of the scoring code by 21 minutes.** It is not
-merely that we did not tune to program B — at seal time there was nothing to tune.
-
-## 2. Nothing was touched between the two runs
-
-| Script | sha256 | Modified | Used for A | Used for B |
-|---|---|---|---|---|
-| `src/score_k562.py` | `2abfdc6f730d7861…` | 08:45:15 | 08:45:37 | 08:49:25 |
-| `src/build2.py` | `a695db0d41ccab70…` | 08:47:15 | 08:47:32 | 08:49:50 |
-
-Both byte-identical across runs and to the committed copies. **Verified, and one
-exception disclosed:** `build2.py`'s Control-1 gene list is hardcoded to UPR
-regulators, so its printed Control 1 was meaningless for program B. The correct
-cholesterol check was run **separately and afterwards** — it is reported below
-and did not feed back into scoring. No threshold, statistic or gene set changed.
-
-## 3. Rank distribution — the real claim
+## 2. Rank distribution — the claim
 
 Rank 2 alone is a lucky-hit story. **The pathway clusters**, which is not.
+This is the entire basis for treating the result as a working control.
 
 All **17/17** canonical sterol-pathway members were present in the screen.
 
@@ -95,7 +72,7 @@ lipid-metabolism researcher would name it in the first breath.
 > it. We name no novel gene anywhere — see `SCOPE_STATEMENT.md`.
 
 The scientific content is not "SREBF2 matters." It is: **an untuned pipeline,
-pointed at a program sealed before its own code existed, put the right gene
+pointed at a program held out before its own code existed, put the right gene
 first and got the sign right at both ends of the list.**
 
 ## 6. Rank frames — read this before quoting a number

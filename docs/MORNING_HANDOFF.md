@@ -1,6 +1,6 @@
 # Handoff — resume with zero explanation
 
-**Repo:** https://github.com/alejandro-publius/reversal-map (private)
+**Repo:** https://github.com/alejandro-publius/denali (private)
 **Read order:** this file → `REPORT.md` → `docs/DEMO.md`. Nothing else needed.
 
 **ANALYSIS IS CLOSED.** No new sweeps, no refits, no new features, no gene-level
@@ -21,9 +21,9 @@ reported.
 | | Result | Verdict |
 |---|---|---|
 | **NEG 1** | Measurability explains **56–75%** of variance in apparent reversibility (adj R² 0.561 X-independent / 0.751 all-six). Pre-registered claim **(b)** fired against a 0.60 threshold fixed before the sweep. Program size alone = 46.5%. | Reported as the finding |
-| **NEG 2** | The measurability gate is **wrong 20 of 50**. Only 1/50 passes with zero hits. The **sealed** program fails the gate (`expr_ratio` 0.92) and ranks **11/50 with 773 hits**. | Our own filter would have discarded our best result |
+| **NEG 2** | The measurability gate is **wrong 20 of 50**. Only 1/50 passes with zero hits. The **held-out** program fails the gate (`expr_ratio` 0.92) and ranks **11/50 with 773 hits**. | Our own filter would have discarded our best result |
 | **NEG 3** | Held-out: **UNDERPOWERED AND INCONCLUSIVE** (1/10 passed the gate; rule fired below 8/10 before any number was seen). Axis 1 ρ = +0.526, CI **[−0.101, +0.913]** → PARTIAL. Axis 2 balanced accuracy **0.4375**, zero true positives → **FAILURE**. | Not refit |
-| **POS** | Sealed SREBF2 recovery, rank 2 of 11,258 scored perturbations (larger than 9,837 unique genes; some are targeted twice). 11 of 17 canonical members in the extreme 10%, p = 7.0×10⁻⁸, 79% sign-correct both tails. | A **control**, not the headline |
+| **POS** | Held out SREBF2 recovery, rank 2 of 11,258 scored perturbations (larger than 9,837 unique genes; some are targeted twice). 11 of 17 canonical members in the extreme 10%, p = 7.0×10⁻⁸, 79% sign-correct both tails. | A **control**, not the headline |
 
 Also: **essentiality density is flat at program level**, +0.021, p = 0.90.
 
@@ -31,24 +31,24 @@ Clearest single illustration: `REACTOME_SCAVENGING_OF_HEME_FROM_PLASMA` drew the
 **highest** held-out prediction (R_p 5.26), has **one** measured member, returned
 **zero** hits. The failure and the finding are the same fact.
 
-## 3. Hashes and seals — the provenance spine
+## 3. Hashes — the provenance spine (methods, not the argument)
 
 | Artifact | Value |
 |---|---|
-| Matrix pre-registration | **`d3e24b77…`** (supersedes `7d28436d…`), commit `c4d5d91` |
-| Gate C1 pre-registration | `d7d90e41…`, commit `280c626` |
-| **Frozen predictor** | **`610f2a75…`**, commit `d902803` — frozen *before* the held-out set was opened |
-| **Held-out program seal** | **`9ad74a7`, 08:24:14** |
+| Matrix pre-registration | **`d3e24b77…` as committed at `19684f2`** (supersedes `7d28436d…`), commit `19684f2` |
+| Gate C1 pre-registration | `d7d90e41…`, commit `dc6252e` |
+| **Frozen predictor** | **`610f2a75…`**, commit `c2dce61` — frozen *before* the held-out set was opened |
+| **Held-out program seal** | **`63596b5`, 08:24:14** |
 | Scorer, byte-identical condition | `2abfdc6f…` |
 
-⚠ **The 21-minute gap is the core claim:** the seal landed at 08:24:14;
-`src/score_k562.py` was created at **08:45:15**. The held-out program was fixed
+⚠ **The 28-minute gap is the core claim:** the held-out list landed at 08:24:14;
+`src/score_k562.py` was first committed at **08:52:32**. The held-out program was fixed
 *before the scoring code existed*.
 
 ⚠ **Byte-identical scorer condition:** any sweep must call `src/score_k562.py` at
-sha256 `2abfdc6f…`. **If that hash changes, the seal at `9ad74a7` is void** and it
+sha256 `2abfdc6f…`. **If that hash changes, the run is not the one these numbers came from** and it
 must be said out loud, not quietly kept. Verified in `provenance.json` as
-`seal.seal_intact`.
+`seal.scorer_unchanged`.
 
 ## 4. ⚠ Partial-visibility disclosure — know this before a judge asks
 

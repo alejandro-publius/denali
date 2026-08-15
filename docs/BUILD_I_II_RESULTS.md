@@ -1,6 +1,6 @@
 # Build I + II results — 2026-08-15
 
-**The primary program failed. The sealed held-out program succeeded.**
+**The primary program failed. The held-out program succeeded.**
 That sentence is the result, and the ordering of the commits is what makes it
 credible rather than convenient.
 
@@ -10,7 +10,7 @@ credible rather than convenient.
 
 | | Primary: UPR | Held-out: cholesterol |
 |---|---|---|
-| Sealed before scoring? | no (chosen after the gate) | **yes — commit `9ad74a7`** |
+| Held out before scoring? | no (chosen after the gate) | **yes — commit `63596b5`** |
 | Top hit | MCM4 (DNA replication licensing) | **SREBF2 (master cholesterol TF)** |
 | Top hit rank | 1 / 11,258 | **2 / 11,258** |
 | Canonical regulators recovered | **no** — PERK/IRE1/XBP1 at q≈0.8–1.0 | **yes, both tails, correct sign** |
@@ -88,7 +88,7 @@ initiation and the RNA exosome, not UPR biology.
 
 ## Section 9 — the generalization run
 
-Pipeline run **unchanged** on the sealed program. No threshold moved, no gene set
+Pipeline run **unchanged** on the held-out program. No threshold moved, no gene set
 swapped, no re-specification.
 
 **SREBF2: rank 2/11,258, u_z +7.06, Chronos −0.024 (not essential), Tier 1,

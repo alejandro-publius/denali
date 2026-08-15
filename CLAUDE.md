@@ -1,10 +1,10 @@
-# CLAUDE.md — operational contract
+# CLAUDE.md — operational contract  ·  denali
 
 ## What this is
 
 A measurement of what a genome-scale CRISPRi screen can and cannot discover.
 All 50 MSigDB Hallmark gene programs scored against 9,837 knockdowns in K562,
-measurability-gated, with two pre-registrations and two seals.
+measurability-gated, pre-registered.
 
 **Four evaluations. Three negative. All four reported.**
 
@@ -13,14 +13,15 @@ gene-level claims. Communication and hardening only.
 
 ## Read in this order
 
-1. `docs/MORNING_HANDOFF.md` — zero-explanation resume: results, hashes, seals,
+1. `docs/MORNING_HANDOFF.md` — zero-explanation resume: results, hashes,
    disclosures, and DONE / ABANDONED / NOT STARTED
 2. `REPORT.md` — the two-page finding
 3. `docs/LIMITATIONS.md` — read before defending anything; §0 is a collapse we found ourselves
 4. `docs/DEMO.md` — the spoken script and the ranked adversarial answers
-5. `docs/ORIGINS.md` — why the project is built this way, and what died to get here
-6. `docs/METHOD_RULES.md` — the rules this code obeys
-7. `docs/DATA_DICTIONARY.md` — every frozen column in plain English
+5. `docs/PRIOR_WORK.md` — what came before, marked pre-event
+6. `docs/ORIGINS.md` — why the project is built this way, and what died to get here
+7. `docs/METHOD_RULES.md` — the rules this code obeys
+8. `docs/DATA_DICTIONARY.md` — every frozen column in plain English
 
 Reference: `docs/MATRIX_PREREG.md`, `docs/SCOPE_STATEMENT.md`,
 `results/figures/CAPTIONS.md`.

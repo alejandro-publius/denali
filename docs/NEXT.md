@@ -8,7 +8,7 @@
 Program: **proteostasis, UPR arm.** Decided by the user 2026-08-15.
 
 Full gate record: `GATE_C1_RESULTS.md` (results), `GATE_C1_PREREGISTRATION.md`
-(thresholds, hashed before any value was computed), commit `280c626`.
+(thresholds, hashed before any value was computed), commit `dc6252e`.
 
 The other three candidate programs — integrated stress response, senescence,
 interferon response — **FAILED the gate and are not revisited.**

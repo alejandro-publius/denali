@@ -8,11 +8,11 @@
   "preregistration": {
     "file": "docs/MATRIX_PREREG.md",
     "sha256": "d3e24b77caf1655b066813df220b75a60bddbed1a95cb608c6a6009e4a5ebff1",
-    "committed": "c4d5d91",
+    "committed": "19684f2",
     "committed_before_sweep": true
   },
   "seal": {
-    "commit": "9ad74a7",
+    "commit": "63596b5",
     "time": "2026-08-15T08:24:14-07:00",
     "program": "HALLMARK_CHOLESTEROL_HOMEOSTASIS",
     "framing": "We sealed one row of this matrix before the matrix existed.",

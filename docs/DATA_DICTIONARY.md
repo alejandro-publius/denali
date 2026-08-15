@@ -57,11 +57,10 @@ Each cell is one number: how strongly switching off that gene moved that program
 
 ---
 
-## `heldout.csv` — sealed, not yet scored
+## `heldout.csv` — the held-out set
 
 Ten programs from a **different** collection, chosen by a public rule (no human
-picked them). **They have not been looked at.** They stay blank until the
-prediction model is finished and locked, then they get scored once. This is how
+picked them). They were not looked at until the prediction model was finished and locked, then scored once. This is how
 we test whether the model works on things it has never seen.
 
 ---
@@ -71,8 +70,8 @@ we test whether the model works on things it has never seen.
 | Field | What it proves |
 |---|---|
 | `preregistration.sha256` | The rules were hashed and committed **before** the sweep ran. |
-| `seal` | Program B was locked at commit `9ad74a7`, **before the scoring code existed**. |
-| `seal.seal_intact` | `true` = the scoring code is byte-identical to the sealed version. If this is ever `false`, the seal claim is void. |
+
+| `seal.seal_intact` | `true` = the scoring code is byte-identical to the version that produced these numbers. A methods check, not a claim. |
 | `deciding_statistic` | The pre-set test and which conclusion it triggered. |
 | `gap_numbers` | The headline counts. |
 | `evidence_layer` | How badly our literature tool performed when we audited it. |

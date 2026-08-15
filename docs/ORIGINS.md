@@ -101,8 +101,8 @@ recorded as a design failure in `LIMITATIONS.md` §3, not as bad luck.
 
 `src/score_k562.py` cites a document that no longer exists in this repository.
 **The file is byte-frozen at sha256 `2abfdc6f…` because the held-out seal depends
-on it**, and editing a comment would change the hash and void the seal. The
+on it**, and editing a comment would change the hash and void the held-out list. The
 design principles it points at are the ones above.
 
 This was caught while preparing this repository: a docstring was edited, the hash
-moved, and the seal condition failed. The edit was reverted. **The rule worked.**
+moved, and the held-out list condition failed. The edit was reverted. **The rule worked.**

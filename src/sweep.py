@@ -2,7 +2,7 @@
 
 Calls the BYTE-IDENTICAL committed scorer from src/score_k562.py
 (sha256 2abfdc6f730d786180e37f73e2951c303c5a7b42caa27dc3394c74c323d7bbfa).
-If that statistic changes, program B's seal at 9ad74a7 is void -- see
+If that statistic changes, program B's seal at 63596b5 is void -- see
 docs/MATRIX_PREREG.md section 7.
 
 Pre-registered in docs/MATRIX_PREREG.md, sha256 d3e24b77...
@@ -25,7 +25,7 @@ from src.score_k562 import load_k562, load_sets, score
 GMT = "data/genesets/h.all.v2026.1.Hs.symbols.gmt"
 OUT_MATRIX = Path("results/discovery/hallmark_matrix.csv")
 OUT_SUMMARY = Path("results/discovery/hallmark_program_summary.csv")
-SEALED_B = "HALLMARK_CHOLESTEROL_HOMEOSTASIS"
+HELD OUT_B = "HALLMARK_CHOLESTEROL_HOMEOSTASIS"
 PROGRAM_A = "HALLMARK_UNFOLDED_PROTEIN_RESPONSE"
 
 # Gate C1 thresholds, unchanged from the committed gate
@@ -107,7 +107,7 @@ def main() -> None:
 
         rows.append({"program": name, **f, "n_hits_q05": n_hits, "R_p": round(R_p, 4),
                      "passes_measurability_gate": gate,
-                     "is_sealed_program_B": name == SEALED_B,
+                     "is_held_out_program": name == HELD OUT_B,
                      "is_program_A": name == PROGRAM_A})
         print(f"  [{i:2d}/50] {name[:48]:50s} hits={n_hits:5d} R_p={R_p:.3f} "
               f"gate={'Y' if gate else 'N'} ({time.time()-t:.1f}s)")
@@ -125,9 +125,9 @@ def main() -> None:
     print(f"\ngate passed : {int(S.passes_measurability_gate.sum())}/50")
     print(f"R_p > 0     : {int((S.R_p>0).sum())}/50")
     print(f"zero hits   : {int((S.n_hits_q05==0).sum())}/50")
-    b = S[S.is_sealed_program_B].iloc[0]
-    print(f"\nsealed program B rank by R_p: "
-          f"{int(S.reset_index(drop=True).index[S.reset_index(drop=True).program==SEALED_B][0])+1}/50 "
+    b = S[S.is_held_out_program].iloc[0]
+    print(f"\nheld-out program B rank by R_p: "
+          f"{int(S.reset_index(drop=True).index[S.reset_index(drop=True).program==HELD OUT_B][0])+1}/50 "
           f"(R_p={b.R_p}, hits={b.n_hits_q05}, gate={b.passes_measurability_gate})")
 
 

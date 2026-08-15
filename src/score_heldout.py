@@ -1,4 +1,4 @@
-"""Tier 2 — open and score the sealed ten. RUN ONLY AFTER predictor.json is committed.
+"""Tier 2 — open and score the held-out listed ten. RUN ONLY AFTER predictor.json is committed.
 
 Predictions come from the FROZEN predictor (results/frozen/predictor.json,
 sha256 610f2a75...). Nothing is refit here. Whatever the numbers say is reported.
@@ -94,7 +94,7 @@ def main() -> None:
         z = {k: (f[k] - mu[k]) / sdv[k] for k in F}
         pred = coef["const"] + sum(coef[k] * z[k] for k in F)
 
-        u_z, cos, delta, npres = score(X, symbols, prog)      # <-- the seal opens here
+        u_z, cos, delta, npres = score(X, symbols, prog)      # <-- the held-out list opens here
         p = 2 * norm.sf(np.abs(u_z))
         ok = np.isfinite(p)
         q = np.full_like(p, np.nan)

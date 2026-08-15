@@ -9,7 +9,7 @@ Every row below was checked against this machine, not recalled.
 | **Modal** | ✅ `1.5.4` | ✅ workspace `alejandro-publius` | token in `~/.modal.toml`, verified against `api.modal.com` |
 | **CZ Biohub / ESMC** | ✅ `esm 3.2.3` | n/a — open weights | **real forward pass**: `esmc_300m` → embeddings `(1, 67, 960)` |
 | **Benchflow** | ✅ `0.6.7` | not required | `benchflow --help` works; CLIs `bench`, `benchflow` |
-| **Benchling** | ⚠ SDK `1.25.0` | 🔴 **BLOCKED** | personal account `benchling.com/patagoniabear`; Developer Platform 404s |
+| **Benchling** | ⚠ SDK `1.25.0` | ✅ **PROVISIONED** | tenant at `hackathon.bnchdev.org`, AI credits applied, no key needed. **Not used** — nothing in our pipeline to register |
 | **Sundial** | ❌ | ❌ | no discoverable install path |
 | **Proto (Arc)** | ❌ | ❌ | not attempted; recorded gotcha below |
 
@@ -22,10 +22,13 @@ Every row below was checked against this machine, not recalled.
   now resolves to **`biohub/esmc-300m-2024-12`** — that redirect *is* the CZ Biohub
   integration. **Not gated**, MIT, no HF token needed. First load downloads ~4
   files and took ~3.5 min.
-- **Benchling is blocked by account tier, not by login.** `benchling-sdk` needs an
-  app client ID/secret from an enterprise tenant (`<company>.benchling.com`). A
-  free personal account exposes no Developer Platform at all. **Pipeline step 8
-  cannot be built without an organiser-provided tenant.**
+- **Benchling: PROVISIONED, superseding an earlier note.** An event tenant exists
+  at `hackathon.bnchdev.org` with AI credits already applied and no key required;
+  the same credits cover the MCP server and the API. My earlier finding — that
+  `benchling.com/patagoniabear` is a free personal account whose Developer
+  Platform 404s — was correct about *that* account and is superseded by the
+  provisioned tenant. **We still did not use it: there is nothing in this
+  pipeline to register.** Available and unused is the honest status, not blocked.
 - **`sundial` on PyPI is NOT the sponsor tool** — v0.0.1, a hobbyist progress-bar
   library. Do not install it and do not call it an integration.
 - **`benchflow` on PyPI IS the right package** — benchflow.ai, "universal
@@ -36,8 +39,7 @@ Every row below was checked against this machine, not recalled.
 
 ## Two questions for the organisers
 
-1. **Is there a re:AGENT Benchling tenant?** Determines whether pipeline step 8
-   exists at all.
+1. ~~Is there a re:AGENT Benchling tenant?~~ **Answered: yes**, `hackathon.bnchdev.org`.
 2. **What is Sundial and where is it distributed?** No public presence found.
 
 ## What this changes for the plan

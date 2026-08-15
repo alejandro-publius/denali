@@ -1,6 +1,6 @@
 # denali 🏔
 
-**A genome-scale CRISPRi screen, read back to ask what it can and cannot discover — and the answer is mostly measurement.**
+**A genome-scale CRISPRi screen, read back to ask what it can and cannot discover — and the answer is mostly an artifact of how the programs are defined, not their biology.**
 
 [![CI](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml/badge.svg)](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml)
 [![tests](https://img.shields.io/badge/tests-84-brightgreen.svg)](tests/test_frozen_invariants.py)

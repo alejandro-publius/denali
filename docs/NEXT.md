@@ -80,3 +80,16 @@ replication of the map.
 - Do not redefine a kill criterion after seeing data.
 - Computational and high-level only: no wet-lab protocols, no dosing, no
   clinical or therapeutic recommendations.
+
+---
+
+## Pre-publication task — NOT for this weekend
+
+⚠ **Personal email in git history.** `thealexschroeder@gmail.com` is hardcoded at
+`docs/archive/figcontract/figcontract_src/gate_a/fetch.py:85` (an NCBI eutils
+contact) and is present across the commit history. A new commit will not remove
+it — **this requires a history rewrite** (`git filter-repo` or equivalent) before
+any public release.
+
+The repo is currently **private**, so this is not urgent. It becomes blocking the
+moment anyone proposes making it public or handing it to an organiser.

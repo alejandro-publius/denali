@@ -111,3 +111,56 @@ not installed.
 
 **Not done as specified:** Paperclip (unauthenticated — Europe PMC substituted);
 Sanger KY cross-library agreement (only merged Chronos used).
+
+---
+
+# BUILD III — 2026-08-15
+
+**Two-program story is the demo.** Full spine: `docs/DEMO.md`.
+
+| | Program A (UPR) | Program B (cholesterol, sealed `9ad74a7`) |
+|---|---|---|
+| Result | **Correct null** | **SREBF2 rank 1 / 9,837** |
+| Mechanism | K562 has no ER stress; the UPR was never engaged | 11/17 pathway members in extreme 10%, **p = 7.0e-08** |
+| Sign correctness | — | **11/14 = 79%**, both tails |
+
+**Seal predates the scoring code by 21 minutes** (seal 08:24:14, `score_k562.py`
+created 08:45:15). Scripts byte-identical across both runs.
+
+## Scope statement — on screen, verbatim, `docs/SCOPE_STATEMENT.md`
+
+> Guide-pair concordance is −0.019. Independent guides targeting the same gene do
+> not agree, so gene-level calls are not reproducible in this data. We make
+> pathway-level claims only and name no novel gene. SREBF2 appears as a recovered
+> known answer validating the ranking, not as a discovery.
+
+Repo audited; **four violations found and fixed**, two planning docs annotated
+SUPERSEDED IN PART.
+
+## Evidence concentration — disclosed first
+
+34 Paperclip sources for 113 genes · **0.30 sources/gene** · one review holds
+**50.4%** (57 genes) · all 113 rest on exactly one source · only 14/113 top hits
+name their own gene. Machine-readable in
+`results/frozen/provenance.json → evidence_source_concentration`.
+**It is a pointer layer, not an evidence chain. Do not call it one.**
+
+## Frozen interface
+
+`results/frozen/` — 5 files, fixed columns, `docs/DATA_DICTIONARY.md`.
+Everything downstream reads these and never recomputes.
+
+## Open risks
+
+1. **−0.019 kills gene-level claims.** Pathway-level survives on the clustering
+   statistic. **Pre-empt this in the opening sentence.**
+2. **SREBF2 is a rediscovery.** Positive control, never a discovery.
+3. **Evidence layer is concentrated** — reported by us, not found by a judge.
+4. **Sanger KY never run.** Specified in Build II, not done.
+5. **scbench abandoned** — no key, no Latch credentials. No number exists.
+6. **Sign convention verified only internally** via SREBP tail-consistency.
+   ~1 min to check properly; if inverted, the direction narrative flips.
+7. **Two rank frames** (9,837 vs 11,258) already caused one error.
+8. **Sponsor tools unauthenticated** except Paperclip. Modal + Benchling SDK
+   installed (via `uv`; the venv has no pip). Proto/Biohub/Benchflow/Sundial have
+   no discoverable public installer — credentials come at the lightning talks.

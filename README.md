@@ -9,7 +9,7 @@
 
 We scored all **50 MSigDB Hallmark gene programs** against **9,837 CRISPRi knockdowns** in K562 and asked which programs are *reversible* — which have many knockdowns that measurably move them. Then we asked the question underneath it: how much of that is biology at all. **Between 56% and 75% of the variance in apparent reversibility is explained by a model that never looks at what a program does.** It is a range and not a point because one of our six features is computed from the same matrix as the outcome, so part of the upper figure is arithmetic rather than discovery; **0.561** is the number that survives that objection and we never quote the top alone. The mechanism is size — bigger programs with more co-moving members return more hits regardless of their function, and **program size alone explains 46.5%**.
 
-There is no hosted instance. `index.html` is a single self-contained file — open it by double-clicking, no server, no network. Everything in it is injected from `results/frozen/` at build time.
+There is no hosted instance. `index.html` is a single self-contained file — open it by double-clicking, no server, no network. Everything in it is injected from `results/frozen/` at build time. A Streamlit view of the same frozen data lives in `app.py` (`streamlit run app.py`); both read `results/frozen/` and neither recomputes.
 
 ![denali results page](docs/img/page-full.png)
 
@@ -218,7 +218,8 @@ The suite has caught, in order: a stat bug reporting 5 evidence sources instead 
 | `docs/` | Report, limitations, method rules, origins, prior work, data dictionary, pre-registrations |
 | `data/genesets/` | MSigDB v2026.1.Hs, committed |
 | `data/raw/` | git-ignored substrate — see above |
-| `index.html` | The page. Self-contained, built from frozen numbers |
+| `index.html` | The static page. Self-contained, built from frozen numbers |
+| `app.py` | Streamlit view of the same frozen data |
 
 ## Scope limits
 

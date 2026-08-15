@@ -13,5 +13,9 @@ pyarrow==24.0.0
 scipy==1.18.0
 statsmodels==0.14.6
 
+# Streamlit expo page (optional — only for app.py, Rachel's alternate view).
+# index.html needs none of this; it is static and self-contained.
+streamlit==1.61.1
+
 # MCP server (optional — only for src/mcp_server.py)
 mcp==1.29.0

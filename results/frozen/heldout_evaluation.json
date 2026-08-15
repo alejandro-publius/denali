@@ -1,0 +1,25 @@
+{
+  "predictor_sha256": "610f2a75dd11f9e28471aa552c587d2b500f81d4fbc5d5bc0dd96eb3acc819b6",
+  "n_heldout": 10,
+  "n_passing_gate": 1,
+  "underpowered_and_inconclusive": true,
+  "axis1_spearman_rho": 0.5257,
+  "axis1_p": 0.1186,
+  "axis1_bootstrap_95ci": [
+    -0.1009,
+    0.9127
+  ],
+  "axis1_verdict": "PARTIAL",
+  "axis2_confusion": {
+    "tp": 0,
+    "tn": 7,
+    "fp": 1,
+    "fn": 2
+  },
+  "axis2_sensitivity": 0.0,
+  "axis2_specificity": 0.875,
+  "axis2_balanced_accuracy": 0.4375,
+  "axis2_verdict": "FAILURE",
+  "refit_after_seeing_results": false,
+  "wall_clock_min": 1.64
+}

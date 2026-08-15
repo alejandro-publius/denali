@@ -91,6 +91,46 @@ EV_PROBE = V(ev["probe_genes_returning_same_zebrafish_methods_paper"], "provenan
 EV_N = V(ev["probe_genes"], "provenance.evidence_layer.probe_genes")
 
 
+# ---------------------------------------------------------------- explorer data
+# Every row and every proposal is computed at build time from results/frozen/.
+# Embedded as JSON so the page needs no network and no server.
+from src.next_experiment import propose as _propose
+
+_EXPLORER_COLS = ["program", "rank_by_R_p", "n_hits_q05", "R_p",
+                  "passes_measurability_gate", "n_present", "expr_ratio",
+                  "sd_ratio", "R_p_predicted_from_measurability",
+                  "R_p_residual_after_measurability", "reversibility_call",
+                  "call_plain", "is_held_out_program"]
+
+_HELDOUT_NAMES = set(HELDOUT.program)
+
+
+def _explorer_rows():
+    rows = []
+    for _, r in SUMMARY.iterrows():
+        d = {c: (None if pd.isna(r[c]) else r[c]) for c in _EXPLORER_COLS if c in SUMMARY.columns}
+        d["short"] = str(r.program).replace("HALLMARK_", "").replace("_", " ").title()
+        d["gate_fail_with_hits"] = bool((not r.passes_measurability_gate) and r.n_hits_q05 > 0)
+        try:
+            pr = _propose(r.program, SUMMARY)
+            d["proposal"] = {"outcome": pr["outcome"],
+                             "next_experiment": pr.get("next_experiment", ""),
+                             "mechanism": pr.get("mechanism", ""),
+                             "falsifies": pr.get("falsifies_the_mechanism", ""),
+                             "why_not_gene_level": pr.get("why_not_gene_level", ""),
+                             "caveat": pr.get("caveat", "")}
+        except Exception as e:
+            d["proposal"] = {"outcome": "ERROR", "next_experiment": str(e)}
+        rows.append(d)
+    return rows
+
+
+EXPLORER = _explorer_rows()
+V(len(EXPLORER), "program_summary.csv rows -> explorer")
+N_GATEFAIL_ROWS = V(sum(1 for r in EXPLORER if r["gate_fail_with_hits"]),
+                    "computed: gate fails AND hits > 0")
+
+
 # ---------------------------------------------------------------- captions
 def captions() -> dict[str, dict[str, str]]:
     txt = (FIGS / "CAPTIONS.md").read_text()
@@ -202,10 +242,46 @@ footer b{color:var(--ink);font-weight:600}
 footer a{color:var(--accent);text-decoration:none}
 footer a:hover{text-decoration:underline;text-underline-offset:2px}
 
+/* explorer — same palette, same four sizes */
+.ctl{display:flex;gap:22px;align-items:center;margin:0 0 18px;flex-wrap:wrap}
+.ctl label{font-size:.8125rem;color:var(--soft);display:flex;gap:8px;
+  align-items:center;cursor:pointer;user-select:none}
+.ctl input{accent-color:var(--accent);cursor:pointer}
+.ctl .count{font-size:.8125rem;color:var(--soft);
+  font-family:"JetBrains Mono",ui-monospace,monospace}
+table.ex{width:100%;border-collapse:collapse;font-size:.9375rem}
+table.ex th{text-align:left;font-size:.75rem;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--soft);font-weight:600;padding:0 12px 9px 0;
+  border-bottom:1px solid var(--rule);cursor:pointer;white-space:nowrap}
+table.ex th:hover{color:var(--ink)}
+table.ex th.num,table.ex td.num{text-align:right;font-variant-numeric:tabular-nums}
+table.ex td{padding:9px 12px 9px 0;border-bottom:1px solid var(--rule);
+  vertical-align:top}
+table.ex tbody tr{cursor:pointer}
+table.ex tbody tr:hover{background:var(--fill)}
+table.ex tbody tr.sel{background:var(--fill)}
+.tag{font-size:.6875rem;text-transform:uppercase;letter-spacing:.07em;
+  padding:2px 6px;border:1px solid var(--rule);color:var(--soft);white-space:nowrap}
+.tag.held{border-color:var(--accent);color:var(--accent)}
+.detail{margin-top:22px;padding:20px 24px;border:1px solid var(--rule);
+  background:var(--fill);display:none}
+.detail.on{display:block}
+.detail h3{font-size:1rem;font-weight:600;margin:0 0 12px}
+.detail dl{display:grid;grid-template-columns:auto 1fr;gap:5px 20px;
+  font-size:.875rem;margin:0 0 16px}
+.detail dt{color:var(--soft)}
+.detail dd{margin:0;font-variant-numeric:tabular-nums}
+.detail .prop{border-left:2px solid var(--accent);padding-left:16px;
+  font-size:.9375rem;line-height:1.6}
+.detail .prop b{display:block;font-size:.75rem;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--soft);margin-bottom:6px}
+.detail .prop p{margin:0 0 10px}
 @media(max-width:1000px){
   .metrics,.cards,ol.limits{grid-template-columns:1fr}
   body{padding:0 22px}main{padding:40px 0 64px}}
 """
+
+EXPLORER_JSON = json.dumps(EXPLORER, separators=(",", ":"), default=str)
 
 HTML = f"""<!doctype html>
 <meta charset="utf-8">
@@ -261,6 +337,76 @@ return more hits regardless of what they do — <b>program size alone explains
     {BAL} — worse than chance, {TP} true positives. We did not refit.</p></div>
 </div>
 </section>
+
+<!-- 4b. explorer -->
+<section>
+<h2>All {N_PROGRAMS} programs</h2>
+<p class="mech" style="margin:0 0 20px">Every program we scored, with the next
+experiment the pipeline generates for it. Sort any column. Click a row.</p>
+<div class="ctl">
+  <label><input type="checkbox" id="fGate"> Show only the {N_GATEFAIL_ROWS} that fail
+    the filter and produce hits anyway</label>
+  <label><input type="checkbox" id="fHeld"> Held-out programs only</label>
+  <span class="count" id="cnt"></span>
+</div>
+<table class="ex">
+  <thead><tr>
+    <th data-k="short">Program</th>
+    <th data-k="n_hits_q05" class="num">Hits</th>
+    <th data-k="R_p" class="num">R<sub>p</sub></th>
+    <th data-k="R_p_predicted_from_measurability" class="num">Predicted</th>
+    <th data-k="R_p_residual_after_measurability" class="num">Residual</th>
+    <th data-k="passes_measurability_gate">Gate</th>
+    <th data-k="reversibility_call">Call</th>
+  </tr></thead>
+  <tbody id="tb"></tbody>
+</table>
+<div class="detail" id="det"></div>
+</section>
+
+<script>
+const DATA = {EXPLORER_JSON};
+let sortK="n_hits_q05", sortAsc=false;
+const $=id=>document.getElementById(id);
+const num=v=>(v===null||v===undefined)?"\u2014":(typeof v==="number"?(Number.isInteger(v)?v.toLocaleString():v.toFixed(3)):v);
+function rows(){{let r=DATA.slice();
+  if($("fGate").checked) r=r.filter(d=>d.gate_fail_with_hits);
+  if($("fHeld").checked) r=r.filter(d=>d.is_held_out_program);
+  return r.sort((a,b)=>{{let x=a[sortK],y=b[sortK];
+    if(typeof x==="boolean"){{x=x?1:0;y=y?1:0;}}
+    if(x===null||x===undefined)return 1; if(y===null||y===undefined)return -1;
+    return (x<y?-1:x>y?1:0)*(sortAsc?1:-1);}});}}
+function draw(){{const r=rows();
+  $("cnt").textContent=r.length+" of "+DATA.length+" programs";
+  $("tb").innerHTML=r.map(d=>'<tr data-i="'+DATA.indexOf(d)+'"><td>'+d.short+
+    (d.is_held_out_program?' <span class="tag held">held out</span>':'')+
+    '</td><td class="num">'+num(d.n_hits_q05)+'</td><td class="num">'+num(d.R_p)+
+    '</td><td class="num">'+num(d.R_p_predicted_from_measurability)+
+    '</td><td class="num">'+num(d.R_p_residual_after_measurability)+
+    '</td><td><span class="tag">'+(d.passes_measurability_gate?'passes':'fails')+
+    '</span></td><td>'+d.reversibility_call+'</td></tr>').join("");
+  [...$("tb").rows].forEach(tr=>tr.onclick=()=>detail(+tr.dataset.i,tr));}}
+function detail(i,tr){{const d=DATA[i],pr=d.proposal||{{}};
+  [...$("tb").rows].forEach(x=>x.classList.remove("sel")); if(tr)tr.classList.add("sel");
+  const bits=[["Measured members",num(d.n_present)],
+    ["Knockdowns that moved it",num(d.n_hits_q05)],
+    ["Expression vs background",num(d.expr_ratio)],
+    ["Variance vs background",num(d.sd_ratio)],
+    ["Predicted from measurability",num(d.R_p_predicted_from_measurability)],
+    ["Residual, the part that could be biology",num(d.R_p_residual_after_measurability)],
+    ["Measurability gate",d.passes_measurability_gate?"passes":"fails"]]
+    .map(kv=>'<dt>'+kv[0]+'</dt><dd>'+kv[1]+'</dd>').join("");
+  const extra=["mechanism","falsifies","why_not_gene_level","caveat"]
+    .filter(k=>pr[k]).map(k=>'<p>'+pr[k]+'</p>').join("");
+  $("det").innerHTML='<h3>'+d.program+'</h3><p style="font-size:.9375rem;color:var(--soft);margin:-6px 0 14px">'+
+    d.call_plain+'</p><dl>'+bits+'</dl><div class="prop"><b>Generated next experiment &middot; '+
+    (pr.outcome||'')+'</b><p>'+(pr.next_experiment||'')+'</p>'+extra+'</div>';
+  $("det").classList.add("on");}}
+document.querySelectorAll("table.ex th").forEach(th=>th.onclick=()=>{{
+  const k=th.dataset.k; sortAsc=(k===sortK)?!sortAsc:(k==="short"); sortK=k; draw();}});
+$("fGate").onchange=$("fHeld").onchange=draw;
+draw();
+</script>
 
 {figure("fig2_gate_failure.png")}
 

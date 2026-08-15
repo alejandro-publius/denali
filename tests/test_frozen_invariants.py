@@ -126,8 +126,22 @@ def main() -> int:
     page = (ROOT / "index.html").read_text()
     check("index.html is standalone (figures inlined as base64)",
           "base64," in page, "figures must be embedded, not linked")
-    check("no interactive controls on the page",
-          not re.search(r"<(button|input|select|form)\b", page, re.I))
+    # The page is now interactive. The constraint that matters at an expo is not
+    # "no controls" but "nothing that can fail unattended" -- so: no network.
+    for pat, label in [(r"\bfetch\s*\(", "fetch()"),
+                       (r"XMLHttpRequest", "XMLHttpRequest"),
+                       (r"<script[^>]+src=", "external script"),
+                       (r'src="https?://', "remote asset"),
+                       (r'<link[^>]+href="https?://', "remote stylesheet")]:
+        check(f"page makes no network call: {label}",
+              not re.search(pat, page, re.I))
+    check("explorer data is embedded, not fetched", "const DATA = [" in page)
+    check("all 50 programs embedded in the explorer",
+          page.count('"program":"HALLMARK_') == 50,
+          f"got {page.count(chr(34) + 'program' + chr(34) + ':' + chr(34) + 'HALLMARK_')}")
+    check("gate-fail-with-hits rows match provenance",
+          page.count('"gate_fail_with_hits":true') == gap["gate_fail_but_has_hits"],
+          f"page {page.count(chr(34)+'gate_fail_with_hits'+chr(34)+':true')} vs frozen {gap['gate_fail_but_has_hits']}")
     caps = (FIGS / "CAPTIONS.md").read_text()
     both = report + page + caps
 

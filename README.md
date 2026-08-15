@@ -1,56 +1,165 @@
-# denali
+# denali 🏔
 
-**Between 56% and 75% of the variance in which biological programs *appear*
-reversible in a genome-scale CRISPRi screen is measurement quality, not biology —
-the range depends on whether a partly-circular feature is included, and we report
-both.** The mechanism is size: bigger programs with more co-moving members return
-more hits regardless of what they do, and program size alone explains 46.5%. What validates it is
-that we ran a held-out evaluation and it **failed** — underpowered, inconclusive,
-balanced accuracy 0.4375, worse than chance — and we report that alongside four
-controls, an independent DepMap reference, and thresholds that fired against us. **We do not
-claim any gene-level result** — guide-pair concordance is −0.019, no novel gene is
-named anywhere, and the held-out evaluation came back **underpowered and
-inconclusive** with one axis failing outright. To reproduce: `make setup && make data && make all` — about 22 minutes, every
-input public and md5-verified, full instructions below. Next
-is the experiment the pipeline itself proposes: re-run the identical sweep in
-**stressed** K562, which our stated mechanism predicts will move the unfolded
-protein response from zero hits to non-zero, and which refutes that mechanism if
-it does not.
+**A genome-scale CRISPRi screen, read back to ask what it can and cannot discover — and the answer is mostly measurement.**
 
----
+[![CI](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml/badge.svg)](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml)
+[![tests](https://img.shields.io/badge/tests-69-brightgreen.svg)](tests/test_frozen_invariants.py)
+[![Python](https://img.shields.io/badge/python-3.12-blue.svg)](.python-version)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-| | |
-|---|---|
-| **Prior work** | [`docs/PRIOR_WORK.md`](docs/PRIOR_WORK.md) |
-| **Full report** | [`REPORT.md`](REPORT.md) |
-| **Limitations** | [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md) |
-| **Demo script** | [`docs/DEMO.md`](docs/DEMO.md) |
-| **Data dictionary** | [`docs/DATA_DICTIONARY.md`](docs/DATA_DICTIONARY.md) |
-| **Frozen outputs** | [`results/frozen/`](results/frozen/) |
-| **Pre-registrations** | [`docs/MATRIX_PREREG.md`](docs/MATRIX_PREREG.md) · [`docs/GATE_C1_PREREGISTRATION.md`](docs/GATE_C1_PREREGISTRATION.md) |
+We scored all **50 MSigDB Hallmark gene programs** against **9,837 CRISPRi knockdowns** in K562 and asked which programs are *reversible* — which have many knockdowns that measurably move them. Then we asked the question underneath it: how much of that is biology at all. **Between 56% and 75% of the variance in apparent reversibility is explained by a model that never looks at what a program does.** It is a range and not a point because one of our six features is computed from the same matrix as the outcome, so part of the upper figure is arithmetic rather than discovery; **0.561** is the number that survives that objection and we never quote the top alone. The mechanism is size — bigger programs with more co-moving members return more hits regardless of their function, and **program size alone explains 46.5%**.
 
-## The three findings
+There is no hosted instance. `index.html` is a single self-contained file — open it by double-clicking, no server, no network. Everything in it is injected from `results/frozen/` at build time.
 
-1. **56–75% of apparent reversibility is measurement.** Pre-registered: we said
-   before running that if a measurability model cleared 60% we would report this
-   as the finding, not as a failure. It cleared.
-2. **The obvious measurability filter is wrong 20 times out of 50** — and it would
-   have discarded our own best result, which fails the gate yet ranks 11/50.
-3. **Essentiality is not the driver at program level** — coefficient −0.021,
-   p = 0.90. It dominates individual hit lists and predicts nothing about whether
-   a program is reversible at all.
+![denali results page](docs/img/page-full.png)
 
----
+![Program explorer](docs/img/table-detail.png)
 
-## Reproduce
+## Findings
 
-**Python 3.12.0.** Every number in `results/frozen/` and every figure is
-reproducible bit-for-bit — seeds are fixed and inputs are checksummed.
+Four evaluations. Three came back negative. All four are reported.
+
+| # | Evaluation | Result | Verdict |
+|---|---|---|---|
+| 1 | Is apparent reversibility biology? | adj R² **0.561–0.751** from measurability alone; program size alone 0.465 | **NEGATIVE** — pre-registered branch (b) fired |
+| 2 | Does the obvious quality filter work? | **20 of 50** programs fail the gate and produce hits anyway; only **1** passes and produces nothing | **NEGATIVE** — the filter would have discarded our own best result |
+| 3 | Does the predictor generalise? | **1 of 10** held-out programs measurable → underpowered and inconclusive; balanced accuracy **0.4375**, **zero** true positives | **NEGATIVE** — not refit |
+| 4 | Does the ranking work at all? | Master regulator at rank 2/11,258; **11 of 17** canonical pathway members in the extreme 10%, p = 7.0×10⁻⁸, correct sign at both tails | **POSITIVE** — a control, not a discovery |
+
+Also measured: essentiality density is flat at program level, coefficient **−0.021**, p = 0.90. It dominates individual hit lists and predicts nothing about whether a program is reversible.
+
+## Features
+
+- **Genome-scale sweep** — every one of 9,837 knockdown targets scored against all 50 Hallmark programs, 491,850 cells, in 9.2 minutes; the full matrix ships in the repo rather than a filtered top-N
+- **Rank-based reversal statistic** — Mann–Whitney of program-member effects against the rest of the transcriptome, per perturbation, with cosine similarity and mean effect size reported alongside so no single number carries the claim
+- **Pre-registered thresholds, hashed before any value was computed** — the primary claim, the alternative claim, the statistic deciding between them, and the conditions for reporting neither, all fixed in advance
+- **Held-out evaluation scored only after the predictor was frozen** — the model is serialised and hashed (`610f2a75…`), the hash verified at load time, and the ten programs opened only afterwards; a mismatch aborts
+- **DepMap essentiality filter** — every row joined to Chronos gene effect across 1,178 lines and tiered by it, separating "this knockout moves the program" from "this knockout kills the cell"
+- **Four controls with published outcomes, three of them failing** — a pre-committed nonsense program returns zero hits against 517 and 773; guide-pair concordance is −0.019; top-50 essentiality enrichment is 4.09×
+- **Literature layer with per-gene provenance and a measured retrieval audit** — 113 genes, one citation each via Paperclip, then a blind 20-gene probe that found **19 of 20 returning the same unrelated paper**; we report the audit, not the layer
+- **Scope guard that fails the build** — the test suite scans the rendered page and the captions for any gene symbol within 260 characters of verdict language, so "no novel gene is named" is enforced by code rather than by memory
+- **Static page with every number injected from frozen files** — 31 values pass through a `V()` helper that records each source; a number that cannot be traced does not render
+- **Client-side program explorer** — all 50 programs sortable and filterable, one toggle isolating the 20 that fail the gate and produce hits anyway, held-out programs tagged, and a generated next-experiment proposal per program; embedded as JSON, zero network calls
+- **MCP server** exposing the matrix to agents, whose unscored branch reports the predictor's own failure verbatim
+- **Deterministic reproduction in nine steps** — `make all`, verified from a clean clone
+
+## Architecture
+
+```mermaid
+flowchart TB
+  subgraph sub[" "]
+    direction TB
+    PC["Paperclip / GXL<br/>113 gene queries"] --> CIT["citations + blind probe"]
+    CIT --> AUD["retrieval audit<br/>34 sources · 19 of 20 · FIG 4"]
+  end
+
+  REP["Replogle K562 Perturb-seq<br/>11,258 × 8,248 · CC BY 4.0"] --> SW
+  GMT["MSigDB Hallmark<br/>50 programs"] --> SW
+  SW["src/sweep.py<br/>rank-based reversal, 50 × 9,837"] --> MAT
+
+  DEP["DepMap 24Q4 Chronos<br/>1,178 lines · CC BY 4.0"] --> FM
+  MAT["matrix.csv"] --> FM["src/freeze_matrix.py"]
+  FM --> FROZEN
+
+  FROZEN["results/frozen/ 🔒<br/>matrix · program_summary · provenance"] --> PRED
+  PRED["src/freeze_predictor.py<br/>OLS on 6 features → predictor.json 🔒"] --> FREEZE
+
+  FREEZE{{"FREEZE BOUNDARY<br/>predictor hashed"}} --> HO
+  HO["src/score_heldout.py<br/>10 Reactome programs, opened after the freeze"] --> FROZEN
+
+  FROZEN --> PAGE["src/build_page.py → index.html"]
+  FROZEN --> MCP["src/mcp_server.py → 2 tools"]
+
+  AUD -.->|"audit only — never feeds the matrix"| PAGE
+
+  style FROZEN fill:#f2f2f0,stroke:#1a4d7a,stroke-width:2px
+  style FREEZE fill:#fff,stroke:#1a4d7a,stroke-width:2px,stroke-dasharray:4 3
+  style sub fill:#fff,stroke:#e3e3e3,stroke-dasharray:3 3
+```
+
+**The freeze boundary is the load-bearing part.** `results/frozen/` is written once per run and read by everything downstream; nothing after it recomputes. The predictor is fit on the 50 scored programs, serialised, and **hashed** — and only then are the ten held-out programs scored, with `src/score_heldout.py` verifying the hash at load and aborting on mismatch. Scoring them before the freeze would have let the model see its own test set; scoring them after means the failure it produced is a real failure.
+
+**Paperclip is drawn as a side branch that terminates in the retrieval audit, because that is what it is.** It produced per-gene citations and a blind probe, and those numbers appear on the page — but nothing it generated feeds `matrix.csv`, the predictor, or any frozen result. The per-gene divergence table that once consumed it was withdrawn when guide-pair concordance made per-gene verdicts indefensible.
+
+## Method
+
+For a program *p* with measured members *M* and background *B*, each perturbation *i* gets a signed rank statistic from the Mann–Whitney U of member effects against background:
+
+```
+u_z(i, p) = −(U(X[i, M], X[i, B]) − μ) / σ        μ = n₁n₂/2,  σ = √(n₁n₂(n₁+n₂+1)/12)
+```
+
+Positive `u_z` means the knockdown pushed the program **down**. Per-perturbation p-values are Benjamini–Hochberg corrected **within** each program, and the program's reversibility is:
+
+```
+R_p = log₁₀(1 + |{ i : q(i, p) < 0.05 }|)
+```
+
+The pre-registered decision regressed `R_p` on six measurability features — `frac_present`, `expr_ratio`, `sd_ratio`, `n_present`, `essentiality_density`, `coherence` — with thresholds fixed before the sweep: **adj R² ≥ 0.60 → measurability dominates; ≤ 0.30 → program-intrinsic; between → report both and claim neither.** It returned 0.751.
+
+The **measurability gate** requires ≥50% of members present, ≥25 present in absolute terms, and both expression and variance ratios ≥ 1.0 against background.
+
+**The rule that fired before any number was seen:** the pre-registration states that if fewer than 8 of the 10 held-out programs pass that gate, the evaluation is reported as **underpowered and inconclusive** rather than as success or failure. One passed. The rule fired against us.
+
+## Research challenges
+
+**Circularity between a feature and the outcome.** One of the six features, `coherence`, is the mean pairwise correlation of a program's members across perturbations — computed from the same matrix as the outcome it predicts. A program whose members move together will produce a stronger aggregate signal by construction, so part of the 0.751 is arithmetic. We report the interval rather than the point, and 0.561 is what the outcome-independent features reach on their own. A post-freeze check, run because an adversarial critique demanded it rather than because we planned it, went further: splitting the features into measurement versus gene-set construction gives 0.152 and 0.697 respectively. The number stands; the word *measurement* in our first framing did not.
+
+**Distinguishing "not reversible" from "not engaged."** Our first program returned a clean null, and the reason was not biological. K562 is unstressed, so the unfolded protein response was never switched on — knocking out the sensors of an alarm that is not ringing moves nothing. The gate we built tested whether a program was *measurable*; it should have tested whether it was *engaged*. That distinction was absent from the pre-registration and is recorded as a design failure, not as bad luck.
+
+**Guide-pair concordance at −0.019.** The library targets 738 genes with two independent sgRNA constructs scored as separate rows. If per-gene scores were reliable those rows would agree; they do not, and the correlation stays flat at every effect-size threshold, so it is not a power artifact that resolves in the strong hits. This forbids gene-level claims outright. Pathway-level statistics aggregate over ~11,000 perturbations and survive the noise, which is why the unit of inference is the program and why no novel gene is named anywhere in the project — a constraint the test suite enforces by scanning the rendered output.
+
+**A quality filter that is wrong 20 times out of 50.** We built the measurability gate anyone would build, and then checked it against every program rather than only the ones it approved. Twenty fail it and produce hits anyway; exactly one passes and produces nothing. The program we held out fails it on an expression ratio of 0.92 and still ranks 11th of 50 with 773 hits — our own filter would have discarded our best result, which we found only because we did not trust it.
+
+**Retrieval concentration in the literature layer.** Attaching one citation per gene across 113 genes produced 34 distinct sources, with a single review accounting for 50.4% of them and only 14 of 113 top hits naming their own gene in the title. A blind 20-gene probe returned the same zebrafish methods paper for 19 of the 20, and for one gene returned a paper about a different gene entirely. This is a pointer layer, not an evidence chain, and it is labelled as one everywhere it appears.
+
+**Keeping a reproduction path deterministic when a script deleted its own input.** `src/divergence_repair.py` is a one-shot migration that consumed a per-gene verdict table and unlinked it. It sat in `make all`, where it could never run twice — and the first clean-clone check died there at step 5 of 9. The second died at step 6 on a Python file that did not parse, because a blanket text replacement had rewritten an identifier. Neither defect touched a reported number, and neither was visible from inside the working directory: a reproduction path that has never been run from a clean clone is a claim, not a fact.
+
+## MCP server — denali as a tool for AI agents
 
 ```bash
-make setup     # venv + pinned deps from requirements.txt
-make data      # prints the ONE manual step, below
-make all       # ~22 min, reproduces everything deterministic
+.venv/bin/python -m src.mcp_server
+```
+
+Reads `results/frozen/` only. Never recomputes, never scores.
+
+| Tool | Argument | Returns |
+|---|---|---|
+| `reversibility` | `program` (MSigDB name) | Measured result if the program is in the frozen 50 — rank, hits, tier, predicted vs. observed, residual — plus the generated next-experiment proposal. Held-out result if it was one of the ten. Otherwise an explicit `UNSCORED` response. |
+| `provenance` | — | Hashes, the deciding statistic, gap numbers, evidence concentration, and the scope limit. |
+
+Every response carries the scope limit. The `UNSCORED` branch reports the predictor's own failure verbatim:
+
+> `"predictor_validation": "FAILED on held-out data: balanced accuracy 0.4375, worse than chance, zero true positives. The predictor is reported, not endorsed."`
+
+A caller cannot mistake a prediction for a validated one.
+
+## Tool chain
+
+Set up is not the same as used. What actually touched the result:
+
+| Tool | Status | Detail |
+|---|---|---|
+| **Paperclip / GXL** | **USED AND AUDITED** | 113/113 gene queries, authenticated. We measured its retrieval quality and found it weak — that audit is FIG 4 |
+| **Anthropic MCP** | **SHIPPED** | `src/mcp_server.py`, 2 tools over the frozen matrix |
+| **Modal** | Set up, not in the pipeline | Authenticated, workspace `alejandro-publius`. No file in `results/frozen/` comes from a Modal run |
+| **Biohub ESMC** | Set up, not in the pipeline | Real forward pass verified, embeddings `(1, 67, 960)`. Public MIT weights, no key needed. Nothing frozen depends on it |
+| **Benchling** | Available, nothing to register | Tenant provisioned at `hackathon.bnchdev.org`, credits applied, no code needed. Our pipeline has nothing to register to it |
+| **Benchflow** | Installed, not used | CLI 0.6.7 runs |
+| **Proto** | **Import fails** | `pip install proto-language` succeeds at 0.1.0, then `import proto_language` → `ModuleNotFoundError: No module named 'proto_tools'` |
+| **Boltz-2** | **Declined** | No gene-level or structural claims are possible at −0.019 concordance |
+| **Tamarind** | **Declined** | Same reason |
+
+Arc Institute co-hosts this event, and their [Virtual Cell Challenge](https://arcinstitute.org/virtual-cell-challenge) wrap-up reported that almost all submitted models performed worse than baseline and that no single metric captured model quality. Our result echoes both: a model that ignores biology outperforms our expectations of one that doesn't, and we report several statistics rather than optimising one.
+
+## Reproduce it
+
+Python 3.12.0. Every number in `results/frozen/` and every figure is reproducible — seeds are fixed and inputs are checksummed.
+
+```bash
+make setup     # venv + pinned dependencies
+make data      # prints the one manual step, below
+make all       # nine steps, ~13 min, ends by running the invariants
 make page      # rebuild index.html from the frozen numbers
 ```
 
@@ -73,33 +182,52 @@ curl -sL -o data/raw/Model.csv                          https://ndownloader.figs
 | `CRISPRGeneEffect.csv` | `6edf7ade09b9b34199210b559d4745d3` |
 | `Model.csv` | `675210d17675f3517b0ce39a3c274f16` |
 
-Replogle et al. 2022 Perturb-seq (CC BY 4.0) · DepMap 24Q4 (CC BY 4.0) ·
-MSigDB v2026.1.Hs (committed under `data/genesets/`).
+**A fresh clone reproduced every number byte-identical**, with two exceptions: a `wall_clock_min` timing field, and three bytes of PNG metadata in FIG 4. Neither is a scientific value. Clone to finish: 3 s clone, 1 s setup, 101 s download with all four md5s matching, **13 m 03 s** for the nine steps, 69/69 invariants passing.
 
-### What `make all` does not re-run
+`make all` deliberately does **not** re-run the two live-API steps (`make retrieval`). Those indexes change, so their outputs are committed as dated observations from 2026-08-15. The instability of retrieval is the finding, not a defect.
 
-**Two live-API steps**: Europe PMC and Paperclip retrieval (`make retrieval`).
-Those indexes change, so their outputs — the 34-sources / 50.4% / 19-of-20
-retrieval audit — are committed as **dated observations from 2026-08-15** rather
-than reproducible numbers. The script that produced them is
-`src/probe_retrieval.py` and its raw output is
-`results/discovery/probe_retrieval.json`. That instability is the finding, not a
-defect.
+## What the reproduction check found
 
-### Prior work, not reproducible here
+Three defects, all in the reproduction wiring, **none touching a reported number**:
 
-`results/prior_work/` holds the pre-event ILD evidence — the positive control
-returning **481–6,532 genes at q<0.05** while the pre-registered contrast
-returned zero across seven populations. It needs a 4.5 GB atlas not included
-here. See `docs/PRIOR_WORK.md`.
+1. **`src.divergence_repair` was in `make all` and cannot run twice.** A one-shot migration that consumes and deletes its own input. Removed from the target, kept as documented history.
+2. **`src.freeze` and `src.freeze_matrix` both wrote `provenance.json`.** An interrupted run left the file half-migrated and looking like numeric drift. `freeze_matrix` is now the sole writer.
+3. **`src/sweep.py` did not compile.** A blanket text replacement had rewritten the identifier `SEALED_B` as `HELD OUT_B`. The repo shipped that way, and the tests passed the whole time because nothing imported it.
 
-## Data
+Each was found only by running from a clean clone, and the third only after the first two were fixed.
 
-Replogle et al. 2022 genome-scale Perturb-seq (K562, CC BY 4.0) · DepMap 24Q4
-(CC BY 4.0) · MSigDB v2026.1.Hs. All md5-verified; checksums in
-`results/frozen/provenance.json`.
+## Tests
 
-## Scope
+`tests/test_frozen_invariants.py` — **69 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
 
-Computational only. No wet-lab protocols, no dosing, no clinical or therapeutic
-recommendation. Transcriptional movement is not phenotypic reversal.
+Two guards exist because each caught a real defect. The **compile guard** parses every file under `src/` and `tests/` before anything else — added after a shipped module was found not to compile. The **scope guard** builds a gene-symbol universe from the Hallmark GMT and fails the build if any symbol appears within 260 characters of verdict language in the rendered page or the captions, with an allowance for "recovered known answer" and "positive control"; it enforces the −0.019 scope limit mechanically. A third set of checks asserts the page makes **no network calls** — no `fetch`, no `XMLHttpRequest`, no external script or stylesheet — so the interactive explorer cannot break unattended.
+
+The suite has caught, in order: a stat bug reporting 5 evidence sources instead of 34, an essentiality coefficient published with the wrong sign, a miscount of failing controls, a stale caption, and a module that did not parse.
+
+## Repo map
+
+| Path | Contents |
+|---|---|
+| `results/frozen/` | 🔒 **The frozen interface.** Matrix, program summary, predictor, held-out, controls, provenance. Everything downstream reads only this |
+| `results/sensitivity/` | Post-freeze checks, explicitly not pre-registered |
+| `results/figures/` | Four figures + `CAPTIONS.md`, the single source of caption wording |
+| `results/prior_work/` | Pre-event ILD evidence — the positive control returning 481–6,532 genes. Not reproducible here |
+| `results/discovery/` | Intermediate scoring outputs |
+| `src/` | Pipeline modules, run as `python -m src.<module>` |
+| `tests/` | Invariants over the frozen interface |
+| `docs/` | Report, limitations, method rules, origins, prior work, data dictionary, pre-registrations |
+| `data/genesets/` | MSigDB v2026.1.Hs, committed |
+| `data/raw/` | git-ignored substrate — see above |
+| `index.html` | The page. Self-contained, built from frozen numbers |
+
+## Scope limits
+
+1. **No gene-level result is claimed.** Guide-pair concordance is −0.019; no novel gene is named anywhere, and the build fails if one appears near verdict language.
+2. **Not generalisable on our own evidence.** The held-out evaluation was underpowered and inconclusive, and its binary axis failed outright at 0.4375.
+3. **One cell line, unstressed.** Everything is K562. Measurable is not the same as engaged, and our gate tested the wrong one.
+4. **The attribution is to gene-set construction, not measurement.** A post-freeze check gives 0.152 for measurement-only against 0.697 for construction-only. Better instrumentation would not move the number.
+5. **Transcriptional movement is not phenotypic reversal.** Computational only — no wet-lab protocols, no dosing, no clinical or therapeutic recommendation.
+
+---
+
+Code MIT ([LICENSE](LICENSE)). Data: Replogle et al. 2022 Perturb-seq and DepMap 24Q4, both CC BY 4.0; MSigDB v2026.1.Hs under its own terms.

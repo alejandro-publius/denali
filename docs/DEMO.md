@@ -7,7 +7,7 @@
 
 ## Open with this sentence
 
-> ### **"Seventy-five percent of what looks like biology in a genome-scale screen is measurement — and the second number you need is minus zero point zero one nine, our own reproducibility check failing."**
+> ### **"Between fifty-six and seventy-five percent of what looks like biology in a genome-scale screen is measurement — the range is that wide because one of our own features is partly circular, and we report both ends."**
 
 *Mechanism, one line:* **bigger programs with more co-moving members return more hits regardless of what they do — program size alone explains 47% of it.**
 
@@ -106,6 +106,32 @@
 
 ---
 
+## 4d · We built the filter anyone would build, and it was wrong
+
+`[Named finding. This is the one that lands hardest.]`
+
+> **"We built the obvious quality filter: enough members measured, expressed above background, variable above background. Anyone would build it."**
+>
+> **"Across fifty programs it is wrong twenty times. Twenty programs fail the filter and produce hits anyway. Only one passes it and produces nothing."**
+
+`[pause]`
+
+> **"And here is why the seal matters. The program we locked in git before the scoring code existed — cholesterol — fails our own filter. Expression ratio zero point nine two, just under the line. It ranks eleventh of fifty with seven hundred and seventy-three hits."**
+>
+> **"We built a filter that would have thrown away our best result. We could only find that out because we sealed the program before we could know."**
+
+*Screen: 20/50 wrong · sealed program at 11/50, gate = FAIL.*
+
+---
+
+## 4e · A clean negative worth stating
+
+> **"One more, because negatives are results. Essentiality — whether the cell dies without the gene — dominates every individual hit list we produce. At program level it predicts nothing. Coefficient plus zero point zero two, p equals zero point nine."**
+>
+> **"Whether a program looks reversible and which genes top its list are different questions. The field routinely runs them together."**
+
+---
+
 ## 5 · The scope statement — as a choice, not a confession
 
 > **"So back to minus zero one nine. Two independent guides aimed at the same gene give uncorrelated scores. Gene-level calls are not reproducible in this data."**
@@ -113,6 +139,10 @@
 > **"So we made a choice. We make pathway-level claims only, and we name no novel gene anywhere in this project. Not one. We could have put a novel gene on this slide and most of you would not have caught it tonight."**
 >
 > **"We also report that one review paper is the entire cited evidence for fifty-seven of our hundred and thirteen genes. That's a real weakness. You didn't have to find it."**
+
+`[pause]`
+
+> **"And the held-out test failed. Ten programs sealed before the sweep, scored only after we hashed the model. One of ten was even measurable, so by our own pre-registered rule the whole evaluation is underpowered and inconclusive. Binary accuracy came in below chance. We did not refit. The commit history shows we didn't."**
 
 `[pause]`
 

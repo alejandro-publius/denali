@@ -1,77 +1,53 @@
-# ILD/IPF donor-level program discovery
+# reversal-map
 
-A biological discovery pipeline in **fibrotic interstitial lung disease**, built
-entirely on public data. Discovery in a 119-donor lung single-cell atlas; two
-independent external cohorts held in reserve for validation.
+**Between 56% and 75% of the variance in which biological programs *appear*
+reversible in a genome-scale CRISPRi screen is measurement quality, not biology —
+the range depends on whether a partly-circular feature is included, and we report
+both.** The mechanism is size: bigger programs with more co-moving members return
+more hits regardless of what they do, and program size alone explains 47%. Two
+things were sealed in git before the work that validates them — the held-out
+program at commit `9ad74a7`, twenty-one minutes before the scoring code existed,
+and the predictor at `d902803`, before the held-out set was opened. **We do not
+claim any gene-level result** — guide-pair concordance is −0.019, no novel gene is
+named anywhere, and the held-out evaluation came back **underpowered and
+inconclusive** with one axis failing outright. To reproduce: clone, run
+`.venv/bin/python -m src.sweep` (9.2 min, 50 programs × 9,837 knockdowns), then
+`src.freeze_matrix`, `src.freeze_predictor`, `src.score_heldout` in that order —
+every input is public and md5-verified in `results/frozen/provenance.json`. Next
+is the experiment the pipeline itself proposes: re-run the identical sweep in
+**stressed** K562, which our stated mechanism predicts will move the unfolded
+protein response from zero hits to non-zero, and which refutes that mechanism if
+it does not.
 
-**The data decides. Agents do not.**
+---
 
-## Status
+| | |
+|---|---|
+| **Full report** | [`REPORT.md`](REPORT.md) |
+| **Limitations** | [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md) |
+| **Demo script** | [`docs/DEMO.md`](docs/DEMO.md) |
+| **Data dictionary** | [`docs/DATA_DICTIONARY.md`](docs/DATA_DICTIONARY.md) |
+| **Frozen outputs** | [`results/frozen/`](results/frozen/) |
+| **Pre-registrations** | [`docs/MATRIX_PREREG.md`](docs/MATRIX_PREREG.md) · [`docs/GATE_C1_PREREGISTRATION.md`](docs/GATE_C1_PREREGISTRATION.md) |
 
-**Discovery phase. The first pre-registered contrast returned NULL** and the
-project is awaiting a decision on the next route. The pipeline itself is
-validated — the positive control returns 6,532 genes at q<0.05 in the same cells.
+## The three findings
 
-Read `docs/CURRENT_STATE.md` first.
-
-## The arc
-
-```
-public lung single-cell data
-  → verify disease/control metadata against authoritative sources
-  → donor-aware cell-state / transcriptional-program discovery
-  → replicate in an independent 582-lung cohort
-  → test in an independent blood/outcome cohort
-  → prioritise candidate drivers
-  → optional public perturbation evidence for causality
-  → novelty check only after replication
-  → interface only after the biology survives
-```
-
-## Layout
-
-```
-CLAUDE.md              operational contract — read first
-docs/                  active documentation (12 files, all current)
-  archive/             superseded work — do not read unless asked
-src/                   analysis modules, run as `python -m src.<module>`
-tests/                 invariant smoke tests
-data/raw/              4.55 GB atlas (git-ignored, re-downloadable)
-data/metadata/         donor table, census, confounding audit
-data/processed/        pseudobulk matrices per cell type
-results/{discovery,validation,clinical,qc}/
-figures/{discovery,validation,final}/
-```
-
-## Reproduce
-
-Default `python3` on this machine is 3.9 and will not work — use the venv.
-
-```bash
-# fetch the discovery atlas (4.55 GB, ~5 min)
-curl -sL -o data/raw/natri_lung_ild.h5ad \
-  https://datasets.cellxgene.cziscience.com/c3d9262e-0dc5-4eca-bf20-56e6d96d0306.h5ad
-
-.venv/bin/python -m src.atlas_census                       # metadata census
-.venv/bin/python -m src.atlas_confound                     # donor-level confounding
-.venv/bin/python -m src.atlas_composition                  # composition analysis
-.venv/bin/python -m src.pseudobulk "lung secretory cell"
-.venv/bin/python -m src.paired_de  "lung secretory cell"   # the null result
-.venv/bin/python -m src.anchor_de  "lung secretory cell"   # the positive control
-.venv/bin/python -m src.figures
-```
+1. **56–75% of apparent reversibility is measurement.** Pre-registered: we said
+   before running that if a measurability model cleared 60% we would report this
+   as the finding, not as a failure. It cleared.
+2. **The obvious measurability filter is wrong 20 times out of 50** — and it would
+   have discarded our own sealed program, which fails the gate yet ranks 11/50.
+3. **Essentiality is not the driver at program level** — coefficient +0.021,
+   p = 0.90. It dominates individual hit lists and predicts nothing about whether
+   a program is reversible at all.
 
 ## Data
 
-| Role | Source | Scale |
-|---|---|---|
-| Discovery | Natri et al. *Nat Genet* 2024, CELLxGENE `07e12576-…` | 471,905 cells, 119 donors |
-| Lung validation | GSE47460 (LGRC) | 582 lungs, 160 UIP/IPF, DLCO on 515 |
-| Blood validation | GSE28042 | 75 IPF with transplant-free survival |
-
-Accessions, counts and every verified parsing trap: `docs/DATASETS.md`.
+Replogle et al. 2022 genome-scale Perturb-seq (K562, CC BY 4.0) · DepMap 24Q4
+(CC BY 4.0) · MSigDB v2026.1.Hs. All md5-verified; checksums in
+`results/frozen/provenance.json`.
 
 ## Scope
 
-Computational and high-level only. No wet-lab protocols, no biological
-sequences, no dosing, no clinical or therapeutic recommendations.
+Computational only. No wet-lab protocols, no dosing, no clinical or therapeutic
+recommendation. Transcriptional movement is not phenotypic reversal.

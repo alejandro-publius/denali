@@ -118,11 +118,43 @@ pseudobulks with donor as covariate rather than treating ~1,300 cells as
 independent (t-test → 3,194 DEGs; truth 1,150 ± 350). That is exactly this
 project's founding rule in `LESSONS_LEARNED.md`.
 
-## Substitutions and shortfalls — recorded, not buried
+## Paperclip — RE-RUN after authentication, and it changes the claim
 
-1. **Paperclip was NOT used.** Installed but unauthenticated; `paperclip login`
-   is interactive. Substituted **Europe PMC REST**. Labelled everywhere;
-   never described as Paperclip output.
+The user authenticated Paperclip mid-session, so step 1 was re-run against the
+real source (`src/paperclip_program.py`, output
+`results/discovery/upr_program_paperclip.csv`). Both columns are kept side by
+side: `paperclip_*` for evidence, `epmc_*` for the count metric. Paperclip's
+`search` does not expose a citation count, so citation-count ranking still uses
+the Europe PMC column and is labelled as such.
+
+**113/113 genes returned a citation. 0 errors.** But the evidence chain is
+weaker than "one citation per gene" implies, and this is a finding:
+
+| | |
+|---|---:|
+| Distinct PMC IDs across 113 genes | **34** (Europe PMC gave 75) |
+| Genes served by ONE review — *"When Proteins Go Berserk"* | **57 of 113** |
+| Citations used for exactly one gene | 25 |
+| Top hits whose **title actually names the gene** | **14 / 113** |
+| Paperclip top-hit year range | **2024–2026 only** |
+
+**Interpretation, stated plainly.** One-shot semantic search returns *a recent
+review that plausibly mentions the gene*, not the evidence that establishes the
+gene's role. ATF6's foundational papers are from ~2000; Paperclip's top hit for
+ATF6 is a 2025 hearing/vision-loss syndrome paper. For 14 genes it produced
+genuine gene-specific evidence (ATF4, ATF6, BAG3, CHAC1, DDIT4, DNAJC3 among
+them); for the rest it produced a pointer to a review.
+
+This reproduces a standing lesson in `LESSONS_LEARNED.md` — *semantic retrieval
+ranks on abstracts; citation chaining can outperform it on targeted corpora.*
+The fix is `paperclip citation-explorer` / repo-scoped chaining, not a bigger
+one-shot query. **Not done tonight.** Do not describe the pipeline as producing
+a per-gene evidence chain until it does.
+
+## Other substitutions and shortfalls — recorded, not buried
+
+1. **Europe PMC remains the source for citation COUNTS**, because Paperclip
+   `search` does not return them. Labelled in every table.
 2. **`citedByCount` is a paper property, not a gene property.** 75 distinct PMIDs
    cover 113 genes. `hits` is the primary literature metric; sanity check passed
    (ATF6, ATF4, XBP1, HSPA5 top it).

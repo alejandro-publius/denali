@@ -95,6 +95,7 @@
 - **"Isn't SREBF2 obvious?"** → *"Completely. Guessing SREBF2 is easy. Guessing INSIG1 at rank 9,815 is not."*
 - **"Could the null be a bug?"** → *"Same code, same session, produced a clean positive on program B. A bug that nulls one gene set and recovers a seventeen-member pathway in another doesn't exist."*
 - **"Did you replicate?"** → *"No. RPE1 covers 24% of our genes and none of the headline ones. We call it a generalization check, never replication."*
+- **"Your essentiality filter uses an average across a thousand cell lines. Isn't that the wrong number?"** → *"It was, for two genes, and we found that by checking rather than inheriting it. We pulled the K562-specific value — the line we actually ran in — and MBTPS2 and LDLR both cross the essentiality line there when the average said they didn't. Those two rows carry a note that overrides the tier. SREBF2 goes the other way: minus zero-two-four on the average, plus zero-two-nine in K562 — not essential by either measure, with more margin in the cell line that matters."*
 
 ## Timing
 

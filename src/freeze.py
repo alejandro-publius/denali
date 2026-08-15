@@ -36,7 +36,14 @@ TIER_LABEL = {
 COLUMNS = ["gene_symbol", "rank", "average_rank", "reversal_score_wilcoxon",
            "reversal_score_cosine", "reversal_effect_size", "q_value",
            "rpe1_rank", "rpe1_covered", "depmap_gene_effect",
-           "depmap_n_cell_lines", "is_essential", "tier", "tier_label"]
+           "depmap_n_cell_lines", "is_essential", "tier", "tier_label",
+           "k562_chronos", "tier_note"]
+
+# K562 = ACH-000551, the line we actually scored in. `tier`/`tier_label` are
+# derived from the 1,178-line MEAN, so they are stale wherever K562 disagrees.
+# We do NOT re-tier; we annotate only the rows we actually checked.
+K562_MODEL_ID = "ACH-000551"
+TIER_NOTE_GENES = ["MBTPS2", "LDLR"]
 
 
 def sha256(p: Path) -> str:
@@ -49,6 +56,13 @@ def sha256(p: Path) -> str:
 
 def git(*a: str) -> str:
     return subprocess.run(["git", *a], capture_output=True, text=True).stdout.strip()
+
+
+def k562_chronos() -> pd.Series:
+    """Per-gene DepMap gene effect in K562 specifically, not the 1,178-line mean."""
+    dm = pd.read_csv("data/raw/CRISPRGeneEffect.csv", index_col=0)
+    dm.columns = [c.split(" (")[0] for c in dm.columns]
+    return dm.loc[K562_MODEL_ID]
 
 
 def build_scores(ranked_csv: Path, raw_csv: Path) -> pd.DataFrame:
@@ -72,6 +86,19 @@ def build_scores(ranked_csv: Path, raw_csv: Path) -> pd.DataFrame:
     d["is_essential"] = r.essential
     d["tier"] = r.tier
     d["tier_label"] = r.tier.map(TIER_LABEL)
+
+    # K562-specific value for every row (a lookup, NOT a re-tiering).
+    kc = k562_chronos()
+    d["k562_chronos"] = d.gene_symbol.map(kc)
+
+    # tier_note is populated ONLY for rows we actually checked and found stale.
+    d["tier_note"] = ""
+    for g in TIER_NOTE_GENES:
+        m = d.gene_symbol == g
+        if m.any():
+            v = float(d.loc[m, "k562_chronos"].iloc[0])
+            d.loc[m, "tier_note"] = f"essential in K562 (Chronos {v:.3f})"
+
     d = d.sort_values("average_rank").reset_index(drop=True)
     d.insert(1, "rank", np.arange(1, len(d) + 1))
     return d[COLUMNS]

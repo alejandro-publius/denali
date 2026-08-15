@@ -35,11 +35,29 @@ One row per gene that was switched off. 9,837 rows each. Same columns in both.
 | `q_value` | Chance this is a fluke, adjusted for having tested ~11,000 genes. Below 0.05 is the usual bar. |
 | `rpe1_rank` | Rank in a **second, different cell type**. Blank = **this gene was never tested there.** |
 | `rpe1_covered` | `True`/`False`. **`False` means "we could not check", not "the check failed."** Never display a blank as if it were a clean result. |
-| `depmap_gene_effect` | From an independent database: how badly cells are damaged by losing this gene. **More negative = more damaging.** Below −0.5 counts as essential. |
+| `depmap_gene_effect` | From an independent database: how badly cells are damaged by losing this gene. **More negative = more damaging.** Below −0.5 counts as essential. ⚠ **This is an average across ~1,178 different cell lines, not our cell line.** |
 | `depmap_n_cell_lines` | How many cell lines that damage number is averaged over (~1,178). |
-| `is_essential` | `True` if `depmap_gene_effect` < −0.5, i.e. cells struggle to live without it. |
-| `tier` | Machine-readable confidence bucket (see below). |
+| `is_essential` | `True` if `depmap_gene_effect` < −0.5, i.e. cells struggle to live without it. Derived from the **mean**. |
+| `tier` | Machine-readable confidence bucket (see below). **Derived from mean-Chronos.** |
 | `tier_label` | The same thing as a sentence. **Use this on screen, not `tier`.** |
+| `k562_chronos` | The same damage measure **in K562 specifically** (DepMap `ACH-000551`) — the actual cell line the experiment was run in. Blank for ~500 genes DepMap does not cover. |
+| `tier_note` | **Empty for almost every row. Where non-empty, it OVERRIDES `tier_label`.** |
+
+### ⚠ `tier` is mean-Chronos; `tier_note` overrides it where we checked
+
+`tier` and `tier_label` come from the **1,178-line average**. We re-checked a
+subset against **K562**, the line we actually scored in, and two genes disagreed.
+We did **not** re-tier all 9,837 rows — we annotated only the rows we verified.
+
+| Gene | mean | K562 | `tier` says | `tier_note` says |
+|---|---:|---:|---|---|
+| MBTPS2 | −0.492 | **−0.632** | not explained by fitness | `essential in K562 (Chronos -0.632)` |
+| LDLR | −0.215 | **−0.568** | not explained by fitness | `essential in K562 (Chronos -0.568)` |
+
+**UI rule: render `tier_note` wherever it is non-empty, in place of `tier_label`.**
+Everywhere else, `tier_label` stands. An empty `tier_note` means "not re-checked
+against K562", **not** "confirmed correct" — repo-wide, 555 of 9,333 genes (5.9%)
+disagree between the two measures, and we have only annotated the two we verified.
 
 ### Tiers — why they exist
 

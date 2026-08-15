@@ -168,8 +168,10 @@ def main() -> None:
         "axis2_balanced_accuracy": None if np.isnan(bal) else round(float(bal), 4),
         "axis2_verdict": v2(bal),
         "refit_after_seeing_results": False,
-        "wall_clock_min": round((time.time() - t0) / 60, 2),
     }
+    # Runtime is printed, never written: a frozen artifact that carries a timing
+    # field cannot be byte-compared across machines, and a clean-clone check that
+    # has one guaranteed-differing line is a weaker check.
     d.to_csv(FROZEN / "heldout.csv", index=False)
     (FROZEN / "heldout_evaluation.json").write_text(json.dumps(res, indent=2))
 
@@ -182,7 +184,7 @@ def main() -> None:
           f"  (tp={tp} tn={tn} fp={fp} fn={fn})")
     print(f"AXIS 2 VERDICT      : {res['axis2_verdict']}")
     print("=" * 66)
-    print("Reported as measured. No refit.")
+    print(f"Reported as measured. No refit.   ({(time.time() - t0) / 60:.2f} min)")
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@
 #   make setup     create the venv and install pinned deps
 #   make data      print the ONE manual step (470 MB substrate download)
 #   make all       reproduce everything deterministic   (~22 min)
-#   make page      serve the expo page
+#   make page      rebuild index.html from the frozen numbers
 #   make clean     remove generated outputs (keeps data/raw)
 #
 # `make all` is deterministic: fixed seeds, checksummed inputs. It reproduces
@@ -13,10 +13,13 @@
 # retrieval). Those indexes change, so their outputs are committed as dated
 # observations. See `make retrieval` and docs/PRIOR_WORK.md.
 
-PY := .venv/bin/python
+# Overridable so CI can run the suite against the runner's interpreter:
+#   make test PY=python
+# It was hardcoded, which is why the CI badge was red from the day it was added.
+PY ?= .venv/bin/python
 RAW := data/raw
 
-.PHONY: all setup data check retrieval page clean
+.PHONY: all setup data check test retrieval page clean
 
 setup:
 	uv venv --python 3.12 .venv
@@ -53,24 +56,30 @@ all: check
 	$(PY) -m src.score_k562 HALLMARK_CHOLESTEROL_HOMEOSTASIS results/discovery/k562_chol_reversal.csv
 	@echo "== 4/9  program B: RPE1 arm, DepMap filter, 4 controls  ~4 min"
 	$(PY) -m src.build2 HALLMARK_CHOLESTEROL_HOMEOSTASIS results/discovery/k562_chol_reversal.csv results/discovery/chol
-	@echo "== 5/9  freeze A/B + divergence                         ~1 min"
+	@echo "== 5/9  freeze programs A and B                         ~1 min"
 	$(PY) -m src.freeze
-	$(PY) -m src.divergence_repair
 	@echo "== 6/9  sweep all 50 Hallmark programs                  ~9 min"
 	$(PY) -m src.sweep
 	@echo "== 7/9  freeze the matrix, then the predictor           ~1 min"
 	$(PY) -m src.freeze_matrix
 	$(PY) -m src.freeze_predictor
-	@echo "== 8/10 score the held-out ten against the frozen model ~3 min"
+	@echo "== 8/9  score the held-out ten against the frozen model ~3 min"
 	$(PY) -m src.score_heldout
-	@echo "== 9/10 figures + post-freeze sensitivity check          ~1 min"
+	@echo "== 9/9  figures + post-freeze sensitivity check          ~1 min"
 	$(PY) -m src.figures_matrix
 	$(PY) -m src.sensitivity_stripped
-	@echo "== 10/10 freeze the three proposals the page renders     ~1 s"
+	@echo "== freeze the three proposals the page renders          ~1 s"
 	$(PY) -m src.freeze_proposals
+	@echo "== build the page from the frozen numbers"
+	$(PY) -m src.build_page
+	@echo "== invariants: every number must match the committed frozen files"
+	@$(MAKE) --no-print-directory test
 	@echo ""
-	@echo "DONE. Compare against the committed results/frozen/ — they should be identical."
-	@echo "     git diff --stat results/frozen/"
+	@echo "DONE. Every number reproduced and every invariant held."
+	@echo "     git diff --stat results/frozen/   # should be empty"
+
+test:
+	@$(PY) tests/test_frozen_invariants.py
 
 retrieval:
 	@echo "LIVE API — will NOT reproduce the committed numbers. The indexes change."
@@ -81,8 +90,9 @@ retrieval:
 	$(PY) -m src.paperclip_program
 
 page:
-	$(PY) -m streamlit run app.py
+	$(PY) -m src.build_page
+	@echo "open index.html"
 
 clean:
-	rm -rf results/frozen results/figures/*.png results/sensitivity/stripped_model.json
+	rm -rf results/frozen results/figures/*.png results/sensitivity/stripped_model.json index.html
 	@echo "removed generated outputs. data/raw kept."

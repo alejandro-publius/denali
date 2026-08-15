@@ -147,6 +147,26 @@ we didn't.
 
 ## 7. Disclosed process failures
 
+- **We published the essentiality coefficient with the wrong sign.** It is
+  **−0.021**, not +0.021. The magnitude and the p-value (0.90) were right and the
+  conclusion — essentiality does not predict program-level reversibility — is
+  unaffected, but the sign was wrong in four documents. **Caught by
+  `tests/test_frozen_invariants.py`, which asserts the value against
+  `provenance.json` rather than against our memory.**
+- **We said "three of seven controls are FAIL."** It is **four** of seven, plus
+  one CAVEAT. Also caught by the test suite.
+- **We reported Proto as broken based on a package name Proto does not publish.**
+  Our note read `pip install proto-language` → fails at import. Proto is Evo
+  Design's generative-biology infrastructure, and `proto-language` is an unrelated
+  package; we had tested a name collision and recorded the result as Proto's
+  status. The real install —
+  `pip install git+https://github.com/evo-design/proto-tools.git` — **succeeds**,
+  and `proto-tools doctor` exits 0. Two things are wrong here and both are ours:
+  we published a failure we had not attributed correctly, and it is the same error
+  class as the `sundial` name collision we had already caught and warned about in
+  the same document. **We found and corrected this ourselves.** The corrected
+  status is INSTALLED, NOT USED.
+
 - **The "21-minute gap" was filesystem mtime, not git.** `score_k562.py` was
   *created* on disk at 08:45:15 but first *committed* at 08:52:32. Git stores the
   latter. Every claim now states the **git-checkable 28 minutes** (held-out list committed 08:24:14 →

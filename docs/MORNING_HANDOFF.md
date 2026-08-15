@@ -25,7 +25,7 @@ reported.
 | **NEG 3** | Held-out: **UNDERPOWERED AND INCONCLUSIVE** (1/10 passed the gate; rule fired below 8/10 before any number was seen). Axis 1 ρ = +0.526, CI **[−0.101, +0.913]** → PARTIAL. Axis 2 balanced accuracy **0.4375**, zero true positives → **FAILURE**. | Not refit |
 | **POS** | Held out SREBF2 recovery, rank 2 of 11,258 scored perturbations (larger than 9,837 unique genes; some are targeted twice). 11 of 17 canonical members in the extreme 10%, p = 7.0×10⁻⁸, 79% sign-correct both tails. | A **control**, not the headline |
 
-Also: **essentiality density is flat at program level**, +0.021, p = 0.90.
+Also: **essentiality density is flat at program level**, −0.021, p = 0.90.
 
 Clearest single illustration: `REACTOME_SCAVENGING_OF_HEME_FROM_PLASMA` drew the
 **highest** held-out prediction (R_p 5.26), has **one** measured member, returned
@@ -134,7 +134,7 @@ the page must not break:
 1. **Name no novel gene.** SREBF2 appears only as a recovered known answer.
 2. **`rpe1_covered = False` renders as "NOT CHECKED"**, never a blank or a pass.
 3. **Any ranked list carries −0.019 on screen.**
-4. **Show the failing controls.** Three of seven are FAIL and that is the point.
+4. **Show the failing controls.** Four of seven are FAIL and that is the point.
 
 ⚠ Two rank frames exist: `rank` is over 9,837 unique genes, `average_rank` over
 11,258 perturbation rows. Pick one and never mix them — this already caused one

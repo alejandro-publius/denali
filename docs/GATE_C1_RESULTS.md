@@ -209,7 +209,7 @@ canonical gene set does not respond to genetic perturbation.
 ## Reproduce
 
 ```bash
-cd /Users/alexvintera/figure-contract
+cd <repo root>
 # substrate (470 MB, CC BY 4.0, ranged GET — figshare 403s on HEAD)
 curl -sL -o data/raw/K562_gwps_normalized_bulk_01.h5ad https://ndownloader.figshare.com/files/35773217
 curl -sL -o data/raw/rpe1_normalized_bulk_01.h5ad       https://ndownloader.figshare.com/files/35775512

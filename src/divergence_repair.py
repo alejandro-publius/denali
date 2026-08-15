@@ -1,4 +1,12 @@
-"""Section 0 repair — reframe divergence from per-gene verdicts to program-level coverage.
+"""ONE-SHOT HISTORICAL MIGRATION. Already run. Not part of `make all`.
+
+⚠ This script CONSUMES AND DELETES its own input. It ran once, on 2026-08-15,
+against a results/frozen/divergence_table.csv that no longer exists in this
+repository. It cannot run again and it is deliberately excluded from the
+reproduction path — a clean-clone check failed on exactly this, which is how the
+exclusion was found. It is kept for the record of what was changed and why.
+
+Original purpose — reframe divergence from per-gene verdicts to program-level coverage.
 
 Guide-pair concordance is -0.019, so a per-gene verdict ("knocking out X does NOT
 move the program") is a claim our own data does not support. Counting how many

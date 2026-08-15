@@ -92,3 +92,17 @@ unavailable, it is listed as not done rather than faked with a package that
 happens to share the name.
 
 **No claims about how fast this was built.** The work stands on what it measured.
+
+---
+
+## Historical migrations, not part of the reproduction path
+
+`src/divergence_repair.py` is a one-shot migration that ran once and **deletes
+its own input**. It converted a per-gene verdict table into program-level counts
+after guide-pair concordance made per-gene calls indefensible. It cannot run a
+second time and is excluded from `make all`.
+
+That exclusion was not foresight: `make all` originally included it, and the
+first clean-clone reproduction check died there at step 5 of 9. Recorded because
+a reproduction path that has never been run from a clean clone is a claim, not a
+fact.

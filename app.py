@@ -1,10 +1,12 @@
-"""Expo page. Reads results/frozen/ only. Computes nothing.
+"""Expo page. Reads results/frozen/ and results/figures/ only. Computes nothing.
 
     .venv/bin/streamlit run app.py
 
-Caption wording is READ FROM results/figures/CAPTIONS.md so the page and the
-report cannot drift apart. No interactive controls: nothing here can be broken
-by someone clicking on it while nobody is standing at the screen.
+Every number on screen is read from a frozen file. Every figure caption is read
+from results/figures/CAPTIONS.md, verbatim, so the page and the report cannot
+drift apart. No interactive controls: nothing here can be broken by someone
+clicking on it while nobody is standing at the screen. No gene is named anywhere
+on this page — the data supports pathway-level claims only (concordance -0.019).
 """
 from __future__ import annotations
 
@@ -17,35 +19,44 @@ import streamlit as st
 
 FROZEN = Path("results/frozen")
 FIGS = Path("results/figures")
-REPO = "https://github.com/alejandro-publius/denali"
+REPO = "https://github.com/alejandro-publius/reversal-map"
 
-st.set_page_config(page_title="denali", layout="wide",
+st.set_page_config(page_title="reversal-map", layout="wide",
                    initial_sidebar_state="collapsed")
 
 st.markdown("""<style>
 html, body, .stApp {background:#ffffff !important; color:#111827 !important;}
-
 #MainMenu, footer, header {visibility:hidden;}
-.block-container {padding-top:2.2rem; max-width:1180px;}
-.huge {font-size:4.1rem; color:#111827; line-height:1.02; font-weight:800; letter-spacing:-.03em; margin:0;}
-.sub {font-size:1.42rem; line-height:1.45; color:#374151; margin:.55rem 0 0 0;}
-.qual {font-size:1.02rem; color:#6b7280; margin:.5rem 0 0 0;}
-.box {border:1px solid #d1d5db; color:#111827; border-radius:10px; padding:1rem 1.1rem; height:100%;
-      background:#fff;}
+.block-container {padding-top:1.8rem; padding-bottom:2rem; max-width:1180px;}
+.huge {font-size:4.6rem; color:#111827; line-height:.98; font-weight:800;
+       letter-spacing:-.03em; margin:0;}
+.sub {font-size:1.34rem; line-height:1.4; color:#374151; margin:.5rem 0 0 0;}
+.circ {font-size:1.06rem; line-height:1.45; color:#4b5563; margin:.5rem 0 0 0;}
+.size {font-size:1.06rem; color:#111827; margin:.3rem 0 0 0;}
+/* Four boxes: identical weight, no warning colour on any of them. */
+.box {border:1px solid #d1d5db; border-radius:10px; padding:1rem 1.1rem;
+      height:100%; background:#fff;}
 .boxn {font-size:2.9rem; font-weight:800; line-height:1; margin:0; color:#111827;}
-.boxl {font-size:.86rem; color:#6b7280; margin:.35rem 0 0 0; text-transform:uppercase;
-       letter-spacing:.05em;}
-.neg {border-left:5px solid #b2182b;}
-.pos {border-left:5px solid #2166ac;}
-.card {border:1px solid #d1d5db; color:#111827; border-left-width:5px; border-radius:10px;
-       padding:1.05rem 1.2rem; background:#fff; height:100%;}
-.card h4 {margin:0 0 .45rem 0; font-size:1.06rem;}
-.card p {margin:0; font-size:.96rem; color:#374151; line-height:1.5;}
+.boxl {font-size:.9rem; color:#6b7280; margin:.35rem 0 0 0;}
+.card {border:1px solid #d1d5db; border-radius:10px; padding:1.05rem 1.2rem;
+       background:#fff; height:100%;}
+.card h4 {margin:0 0 .55rem 0; font-size:1.02rem; color:#111827;}
+.cardn {font-size:2.1rem; font-weight:800; line-height:1; margin:0 0 .3rem 0; color:#111827;}
+.card p {margin:0; font-size:.95rem; color:#374151; line-height:1.5;}
+/* The one positive: deliberately smaller than the three negatives, and framed
+   as a control. */
+.ctrl {border:1px solid #d1d5db; border-radius:10px; padding:.85rem 1rem;
+       background:#fafafa;}
+.ctrl h4 {margin:0 0 .35rem 0; font-size:.9rem; color:#6b7280; font-weight:600;
+          text-transform:uppercase; letter-spacing:.05em;}
+.ctrl .cn {font-size:1.35rem; font-weight:700; color:#111827; margin:0 0 .25rem 0;}
+.ctrl p {margin:0; font-size:.86rem; color:#4b5563; line-height:1.45;}
 .cap {font-size:.9rem; color:#4b5563; line-height:1.5; border-left:3px solid #e5e7eb;
       padding-left:.85rem; margin-top:.5rem;}
-.prov {font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.8rem;
-       color:#6b7280; line-height:1.85;}
-
+.captitle {font-size:1.0rem; font-weight:700; color:#111827; margin-top:.4rem;}
+.prov {font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.78rem;
+       color:#6b7280; line-height:1.9;}
+.qual {font-size:1.02rem; color:#6b7280; margin:.5rem 0 0 0;}
 /* --- the loop: agent reasoning, one column per branch ------------------- */
 .loop {border:1px solid #d1d5db; border-top-width:4px; border-radius:10px;
        padding:1rem 1.1rem; background:#fff; height:100%;}
@@ -71,18 +82,24 @@ html, body, .stApp {background:#ffffff !important; color:#111827 !important;}
 
 
 @st.cache_data
-def captions() -> dict[str, str]:
-    """Pull each figure's bolded headline + quoted body straight from CAPTIONS.md."""
+def captions() -> dict:
+    """Pull each figure's bolded headline + quoted body straight from CAPTIONS.md.
+
+    Verbatim: the '>' block-quote is the exact wording used in the report."""
     txt = (FIGS / "CAPTIONS.md").read_text()
     out = {}
     for block in re.split(r"\n## FIG ", txt)[1:]:
         key = re.search(r"`(fig\d_[a-z_]+\.png)`", block)
         title = re.search(r"\*\*(.+?)\*\*", block)
         body = " ".join(l.lstrip("> ").strip()
-                        for l in block.splitlines() if l.startswith(">"))
+                        for l in block.splitlines() if l.lstrip().startswith(">"))
         if key:
             out[key.group(1)] = {"title": title.group(1) if title else "",
                                  "body": re.sub(r"\*\*|\*", "", body).strip()}
+    # The 46.5% size figure lives in the Fig 3 caption text; pull it so the
+    # headline stays synced to CAPTIONS.md. (Fig 3 itself is rendered below.)
+    m = re.search(r"explains (\d+\.\d+)% of the variance", txt)
+    out["_size_pct"] = m.group(1) if m else ""
     return out
 
 
@@ -97,111 +114,107 @@ def load():
 S, prov, held, PROP = load()
 CAP = captions()
 
+# Headline range, read from the frozen fit — not typed in by hand.
+ds = prov["deciding_statistic"]
+lo = round(ds["adjusted_r2_x_independent_only"] * 100)   # 56
+hi = round(ds["adjusted_r2_all_six"] * 100)              # 75
+gate_fail_hits = prov["gap_numbers"]["gate_fail_but_has_hits"]   # 20
+bal_acc = held["axis2_balanced_accuracy"]                        # 0.4375
+
 
 def figure(name: str):
+    # width="stretch", not use_container_width: the latter is deprecated in
+    # 1.61 and renders a warning banner on the page.
     st.image(str(FIGS / name), width="stretch")
     c = CAP.get(name, {})
     if c:
-        st.markdown(f"**{c['title']}**", unsafe_allow_html=True)
+        st.markdown(f"<div class='captitle'>{c['title']}</div>", unsafe_allow_html=True)
         st.markdown(f"<div class='cap'>{c['body']}</div>", unsafe_allow_html=True)
 
 
-# ---------------------------------------------------------------- 1. HEADLINE
-st.markdown("<div class='huge'>56–75% of what looks like biology<br>is not biology.</div>",
-            unsafe_allow_html=True)
+# ==================================================== 1. HEADLINE  (above fold)
+st.markdown(f"<div class='huge'>{lo}–{hi}%</div>", unsafe_allow_html=True)
 st.markdown(
-    "<div class='sub'>Across all 50 Hallmark gene programs scored against 9,837 CRISPRi "
-    "knockdowns in K562, that share of the variance in <i>apparent</i> reversibility is "
-    "explained without reference to what the program does.</div>",
+    "<div class='sub'>of how reversible a program looks is explained by how the "
+    "program was defined — chiefly its size — not by its biology.</div>",
     unsafe_allow_html=True)
 st.markdown(
-    "<div class='qual'><b>The range is a range for a reason:</b> one of our six features is "
-    "computed from the same matrix as the outcome, so part of the 75% is arithmetic. "
-    "56% is the number that survives that objection — we never quote the top alone.<br>"
-    "<b>Mechanism:</b> bigger programs with more co-moving members return more hits "
-    "regardless of what they do. <b>Program size alone explains 46.5%.</b><br>"
-    "<b>⚠ Post-freeze correction, not pre-registered:</b> splitting the six features shows "
-    "measurement-only reaches adj R² 0.152 while set-construction-only reaches 0.697. "
-    "The number stands; the word <i>“measurement”</i> does not. This is carried by how "
-    "gene sets are <i>defined</i>.</div>", unsafe_allow_html=True)
+    "<div class='circ'>The range is that wide because one of our own features is "
+    "partly circular, and we report both ends.</div>", unsafe_allow_html=True)
+st.markdown(
+    f"<div class='size'>Program size alone explains {CAP['_size_pct']}%.</div>",
+    unsafe_allow_html=True)
 
 st.write("")
 
-# ------------------------------------------------------------ 2. SCORE STRIP
-for col, (n, lab, cls) in zip(st.columns(4), [
-        ("4", "evaluations run", ""),
-        ("3", "came back negative", "neg"),
-        ("1", "positive — a control", "pos"),
-        ("0", "gene-level claims made", "neg")]):
-    col.markdown(f"<div class='box {cls}'><div class='boxn'>{n}</div>"
+# ==================================================== 2. FOUR BOXES (above fold)
+boxes = [("4", "evaluations run"),
+         ("3", "came back negative"),
+         ("1", "came back positive"),
+         ("0", "gene-level claims made")]
+for col, (n, lab) in zip(st.columns(4), boxes):
+    col.markdown(f"<div class='box'><div class='boxn'>{n}</div>"
                  f"<div class='boxl'>{lab}</div></div>", unsafe_allow_html=True)
 
 st.write("")
 st.divider()
 
-# ------------------------------------------------------------------ 3. FIG 1
+# ==================================================== 3. FIG 1 — the matrix
 figure("fig1_matrix.png")
 st.divider()
 
-# ------------------------------------------------------------------ 3b. FIG 3
-# Demo beat 2 calls this screen explicitly; it was written and captioned but
-# never rendered. Order on the page now matches the spoken order: 1, 3, 2, 4.
+# ============================================ 3b. FIG 3 — measurability model
+# docs/DEMO.md beat 2 says "Screen: FIG 3." The figure was written and captioned
+# but rendered nowhere, on either page. Page order now matches the spoken order.
 figure("fig3_measurability.png")
 st.divider()
 
-# ------------------------------------------------- 4. THREE NEGATIVE FINDINGS
-st.subheader("The three negative findings")
+# ==================================================== 4. THREE NEGATIVE FINDINGS
+st.subheader("Three evaluations came back negative")
 cards = [
-    ("1 · Most of it is not biology",
-     f"A model that never looks at what a program <i>does</i> predicts most of how "
-     f"reversible it appears. {int((S.n_hits_q05==0).sum())} of 50 programs return "
-     f"nothing at all. Pre-registered: we wrote down before running that if this "
-     f"cleared 60%, it becomes the finding rather than the failure. It cleared."),
-    ("2 · The obvious filter is wrong 20 of 50",
-     "We built the quality filter anyone would build. Twenty programs fail it and "
-     "produce hits anyway; only one passes it and produces nothing. The program we "
-     "held out <b>fails our own filter</b> — and "
-     "ranks 11th of 50. We built a filter that would have thrown away our best result."),
-    ("3 · Our generalisation test failed",
-     f"Ten programs from a different collection, not scored until "
-     f"the model was finished. Only 1 of 10 was even measurable, so by our own "
-     f"pre-registered rule the evaluation is <b>underpowered and inconclusive</b>. "
-     f"Binary accuracy {held['axis2_balanced_accuracy']} — worse than chance, zero true "
-     f"positives. We did not refit."),
+    ("Most of it is not biology", f"up to {hi}%",
+     "A model that never looks at what a program does explains most of how "
+     f"reversible it appears; {lo}% survives after we remove the circular feature."),
+    ("The obvious filter is wrong", f"{gate_fail_hits} of 50",
+     "The measurability filter anyone would build discards 20 programs that "
+     "produce hits anyway — including the one we sealed in git before the "
+     "scoring code existed."),
+    ("The generalisation test failed", f"{bal_acc}",
+     "On ten programs from a different collection, sealed and scored once after "
+     "the model was hashed, binary accuracy came back worse than chance — and "
+     "we did not refit."),
 ]
-for col, (h, b) in zip(st.columns(3), cards):
-    col.markdown(f"<div class='card neg'><h4>{h}</h4><p>{b}</p></div>",
-                 unsafe_allow_html=True)
+for col, (h, num, body) in zip(st.columns(3), cards):
+    col.markdown(f"<div class='card'><h4>{h}</h4><div class='cardn'>{num}</div>"
+                 f"<p>{body}</p></div>", unsafe_allow_html=True)
 
 st.write("")
 st.divider()
 
-# ------------------------------------------------------------------ 5. FIG 2
+# ==================================================== 5. FIG 2 — gate failure
 figure("fig2_gate_failure.png")
 st.divider()
 
-# ------------------------------------------------------- 6. THE ONE POSITIVE
-st.subheader("The one positive — and it is a control, not a result")
-st.markdown(
-    "<div class='card pos'><h4>The ranking recovers a pathway it was not built against.</h4>"
-    "<p>Run unchanged on a program it had not been developed on, the pipeline puts that "
-    "pathway's master regulator at <b>rank 2 of 11,258 scored perturbations</b> (11,258 "
-    "exceeds the 9,837 unique genes because some are targeted twice). It is the textbook "
-    "answer and we do not claim to have found it.<br><br>What a lucky hit does not produce "
-    "is the shape: <b>eleven of seventeen canonical pathway members land in the extreme "
-    "10%</b>, against 1.7 expected by chance, binomial p = 7.0×10⁻⁸ — with the correct sign "
-    "at <i>both</i> ends of the ranking.<br><br><b>This says the ranking works. It does not "
-    "say the ranking discovered anything, and we do not claim that it did.</b></p></div>",
-    unsafe_allow_html=True)
+# ==================================================== 6. THE ONE POSITIVE (smaller)
+# Constrained to the left ~2/5 of the width and set in a lighter, smaller card so
+# it reads as subordinate to the three negatives above. Labelled a control.
+pos_col, _ = st.columns([2, 3])
+pos_col.markdown(
+    "<div class='ctrl'><h4>Positive result — a control, not a discovery</h4>"
+    "<div class='cn'>rank 2 of 11,258</div>"
+    "<p>We sealed one program in git before the scoring code existed. Its master "
+    "regulator returns near the top of the ranking. This shows the ranking "
+    "recovers a known answer; it does not claim the ranking discovered anything, "
+    "and we make no such claim.</p></div>", unsafe_allow_html=True)
 
 st.write("")
 st.divider()
 
-# ------------------------------------------------------------------ 7. FIG 4
+# ==================================================== 7. FIG 4 — retrieval failure
 figure("fig4_retrieval.png")
 st.divider()
 
-# ------------------------------------------------------------------ 8. THE LOOP
+# ==================================================== 8. THE LOOP
 # docs/DEMO.md beat 6. Read from results/frozen/proposals.json, which is
 # generated by src/freeze_proposals.py from measured values only.
 st.subheader("The loop — same code, three results, three proposals")
@@ -270,24 +283,13 @@ lcols[2].markdown(
 st.write("")
 st.divider()
 
-# ---------------------------------------------------------- 9. PROVENANCE
-st.subheader("Provenance")
-ds = prov["deciding_statistic"]
-left, right = st.columns([3, 2])
-left.markdown(
+# ==================================================== 9. PROVENANCE FOOTER
+seal = prov["seal"]
+st.markdown(
     f"<div class='prov'>"
-    f"pre-registration &nbsp;<b>d3e24b77…</b> &nbsp;committed before the sweep<br>"
-    f"frozen predictor &nbsp;<b>610f2a75…</b> &nbsp;hashed before the held-out set was opened<br>"
-    f"held-out eval &nbsp;&nbsp;&nbsp;<b>FAILED</b> &nbsp;underpowered; balanced accuracy 0.4375<br>"
-    f"adj R² &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-    f"<b>{ds['adjusted_r2_x_independent_only']} – {ds['adjusted_r2_all_six']}</b> &nbsp;both ends reported"
+    f"pre-registration &nbsp;{prov['preregistration']['sha256'][:12]}… &nbsp;committed before the sweep<br>"
+    f"frozen predictor &nbsp;&nbsp;{held['predictor_sha256'][:12]}… &nbsp;hashed before the held-out set was opened<br>"
+    f"held-out scorer &nbsp;&nbsp;{seal['commit']} &nbsp;&nbsp;{seal['scorer_sha256_required'][:12]}… &nbsp;unchanged={seal['scorer_unchanged']}<br>"
+    f"scope &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;guide-pair concordance −0.019 · pathway-level claims only · no novel gene named<br>"
+    f"{REPO} &nbsp;·&nbsp; every number and figure on this page is read from results/frozen/ and results/figures/ · nothing is recomputed"
     f"</div>", unsafe_allow_html=True)
-right.markdown(
-    f"<div class='prov'><b>Scope limit, enforced everywhere</b><br>"
-    f"Guide-pair concordance is <b>−0.019</b>. Two independent guides against the same "
-    f"gene give uncorrelated scores, so gene-level calls are not reproducible. "
-    f"<b>Pathway-level claims only. No novel gene is named anywhere in this project.</b>"
-    f"</div>", unsafe_allow_html=True)
-st.markdown(f"<div class='prov'>{REPO} &nbsp;·&nbsp; every figure and number on this page "
-            f"is read from <code>results/frozen/</code> · nothing here is recomputed</div>",
-            unsafe_allow_html=True)

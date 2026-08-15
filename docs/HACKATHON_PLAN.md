@@ -1,6 +1,14 @@
 > ⚠ **STALE KNOCKDOWN COUNT below.** The operative figure for every reported
 > result is **9,837**. See the appended note in `docs/MATRIX_PREREG.md` for why
 > 9,823 and 9,866 also appear in this repo.
+>
+> ⚠ **STALE TOOL AVAILABILITY below.** This is the plan as written before the
+> event and is kept unedited as a record of it. Two lines are now known wrong:
+> step 5 assumed Proto needed day-of credits, and §169 says Proto and Benchflow
+> have "no discoverable public installer". Both install fine — Proto from
+> `git+https://github.com/evo-design/proto-tools.git`, Benchflow from PyPI.
+> `docs/TOOLS.md` carries the tested statuses; this file is not the source of
+> truth for them.
 
 # Hackathon plan — Track A, "Build an AI Scientist"
 

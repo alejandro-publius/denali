@@ -75,18 +75,28 @@ def main() -> None:
         "REACTOME_REGULATION_OF_LIPID_METABOLISM_BY_PPARALPHA",
         "REACTOME_G_PROTEIN_MEDIATED_EVENTS", "REACTOME_TRIGLYCERIDE_METABOLISM",
         "REACTOME_MEIOSIS", "REACTOME_REGULATION_OF_PYRUVATE_METABOLISM"]
-    pd.DataFrame({
-        "program": heldout, "listed_in": "docs/MATRIX_PREREG.md",
-        "status": "HELD OUT - not scored until Tier 3 model is frozen",
-        "R_p_observed": np.nan, "R_p_predicted": np.nan,
-        "reversibility_call": "", "scored_at": ""}).to_csv(
-        FROZEN / "heldout.csv", index=False)
+    # Write the schema ONLY if the held-out set has not been scored yet.
+    # Re-running this after src.score_heldout used to blank the results; found
+    # while regenerating outputs after the clean-clone check. Non-destructive now.
+    hpath = FROZEN / "heldout.csv"
+    scored = False
+    if hpath.exists():
+        _h = pd.read_csv(hpath)
+        scored = "R_p_observed" in _h.columns and _h.R_p_observed.notna().any()
+    if scored:
+        print("heldout.csv already scored - left untouched")
+    else:
+        pd.DataFrame({
+            "program": heldout, "listed_in": "docs/MATRIX_PREREG.md",
+            "status": "HELD OUT - not scored until the model is frozen",
+            "R_p_observed": np.nan, "R_p_predicted": np.nan,
+            "reversibility_call": "", "scored_at": ""}).to_csv(hpath, index=False)
 
     # ---------- provenance.json ----------
     prov = {
         "tier1": {
             "programs": int(len(S)), "knockdown_targets": int(M.shape[0]),
-            "wall_clock_min": 9.2, "collection": "MSigDB Hallmark v2026.1.Hs",
+            "collection": "MSigDB Hallmark v2026.1.Hs",
         },
         "preregistration": {
             "file": "docs/MATRIX_PREREG.md", "sha256": PREREG_SHA,
@@ -122,6 +132,9 @@ def main() -> None:
         },
         "scope_limit": ("Guide-pair concordance is -0.019. Gene-level calls are not "
                         "reproducible. Pathway-level claims only. No novel gene is named."),
+        "evidence_source_concentration": json.loads(
+            (FROZEN / "_concentration.json").read_text())
+        if (FROZEN / "_concentration.json").exists() else {},
         "evidence_layer": {
             "note": "Paperclip retrieval was audited, not trusted.",
             "distinct_sources_for_113_genes": 34,

@@ -42,7 +42,7 @@ ones the filter approved.
 ### Third finding — a clean negative: essentiality is not the driver
 
 At program level, `essentiality_density` is **flat: standardised coefficient
-+0.021, p = 0.90.** Essentiality dominates individual top-hit lists — the top 50
+−0.021, p = 0.90.** Essentiality dominates individual top-hit lists — the top 50
 knockdowns for any program are ~4× enriched for essential genes — but it does
 **not** predict whether a program looks reversible at all. Those are different
 questions and the field routinely conflates them.

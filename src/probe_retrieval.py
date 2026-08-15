@@ -16,8 +16,7 @@ from pathlib import Path
 import pandas as pd
 
 ANSI = re.compile(r"\x1b\[[0-9;]*m")
-OUT = Path("/private/tmp/claude-501/-Users-alexvintera/"
-           "7dc2189b-1701-4701-beee-bcd03999de85/scratchpad/probe_paperclip.json")
+OUT = Path("results/discovery/probe_retrieval.json")   # in-repo; was absolute
 
 CANONICAL = ["SREBF2", "SCAP", "INSIG1", "HMGCR", "LDLR",
              "ATF4", "XBP1", "ERN1", "EIF2AK3", "HSPA5"]

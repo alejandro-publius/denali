@@ -50,7 +50,7 @@ Each cell is one number: how strongly switching off that gene moved that program
 | `coherence` | How much the members move together. ⚠ Computed from the same data as `R_p` — see the circularity note in `provenance.json`. |
 | `passes_measurability_gate` | Did the program clear our pre-set bar for being measurable at all. |
 | `measurability_limited` | `True` = the program's result may say more about our ability to measure it than about its biology. |
-| `R_p_predicted_from_measurability` | What a model using **only** measurement quality predicts. |
+| `R_p_predicted_from_measurability` | What a model using **only** the six measurability features predicts. The column name is historical and frozen: a post-freeze split showed the variance is carried by set *construction* (chiefly size, adj R² 0.697), not measurement quality (0.152). See `LIMITATIONS.md` §0. |
 | `R_p_residual_after_measurability` | Observed minus predicted. **This is the part that might be biology.** Near zero = fully explained by measurement. |
 | `is_sealed_program_B` | `True` for the one program locked in git before the analysis existed. |
 | `is_program_A` | `True` for the program we chose first, which returned a null. |
@@ -86,7 +86,7 @@ novel gene is named anywhere.**
 
 **2. `measurability_limited` is not a footnote.** A model using only measurement
 quality explains **75%** of which programs look reversible. Most of what looks
-like biology here is measurement.
+like biology here is an artifact of how the gene sets were built — chiefly their size.
 
 **3. Blank ≠ negative.** A blank cell or an unscored program means *we could not
 check*, never *we checked and it was fine*.

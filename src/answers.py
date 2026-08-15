@@ -32,7 +32,10 @@ N_HELD = _EVAL["n_heldout"]
 SCOPE = (f"Pathway-level only. Guide-pair concordance is {CONCORDANCE:+.3f}, so "
          f"gene-level calls are not reproducible and no novel gene is named. "
          f"Between {R2_LO:.0%} and {R2_HI:.0%} of variance in apparent "
-         f"reversibility is measurement quality, not biology.")
+         f"reversibility is explained by how the programs were defined -- chiefly "
+         f"their size -- not by their biology. A post-freeze check split the "
+         f"features: measurement quality alone reaches only adj R2 0.152, set "
+         f"construction alone 0.697.")
 
 VALIDATION = (f"FAILED on held-out data: balanced accuracy {BAL:.4f}, worse than "
               f"chance, {TP} true positives. The predictor is reported, not "

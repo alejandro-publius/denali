@@ -1,0 +1,30 @@
+# --- environments ---
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+
+# --- large public raw data: re-downloadable, see docs/DATASETS.md ---
+data/raw/
+data/validation_raw/
+
+# --- OS / editor ---
+.DS_Store
+*.swp
+
+# --- secrets ---
+.env
+*.key
+*_API_KEY*
+
+# --- scratch ---
+scratch/
+tmp/
+*.log
+
+# --- large regenerable intermediates (NOT results) ---
+# atlas_obs.parquet  : regenerate with `python -m src.atlas_census`   (~2 min)
+# *__counts.parquet  : regenerate with `python -m src.pseudobulk "<cell type>"`
+data/metadata/atlas_obs.parquet
+data/processed/*__counts.parquet

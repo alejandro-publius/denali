@@ -96,7 +96,7 @@ def main() -> None:
     prov = {
         "tier1": {
             "programs": int(len(S)), "knockdown_targets": int(M.shape[0]),
-            "wall_clock_min": 9.2, "collection": "MSigDB Hallmark v2026.1.Hs",
+            "collection": "MSigDB Hallmark v2026.1.Hs",
         },
         "preregistration": {
             "file": "docs/MATRIX_PREREG.md", "sha256": PREREG_SHA,

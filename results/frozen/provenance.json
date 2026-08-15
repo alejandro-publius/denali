@@ -2,7 +2,6 @@
   "tier1": {
     "programs": 50,
     "knockdown_targets": 9837,
-    "wall_clock_min": 9.2,
     "collection": "MSigDB Hallmark v2026.1.Hs"
   },
   "preregistration": {

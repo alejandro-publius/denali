@@ -34,6 +34,12 @@ def near(a: float, b: float, tol: float = 5e-4) -> bool:
     return abs(float(a) - float(b)) <= tol
 
 
+def html_unescape_contains(page: str, s: str) -> bool:
+    """The page escapes its embedded JSON, so compare against the escaped form."""
+    from html import escape
+    return s in page or escape(s) in page or escape(s).replace("&#x27;", "'") in page
+
+
 # --------------------------------------------------------------------------
 def main() -> int:
     prov = json.loads((FROZEN / "provenance.json").read_text())
@@ -208,6 +214,43 @@ def main() -> int:
     check("scope limit is stated on the page", "-0.019" in page or "\u22120.019" in page)
     check("scope limit is stated in the captions",
           "gene-level" in caps or "0.019" in caps or "pointer layer" in caps)
+
+    # ---------------- D. the tool-chain strip ----------------
+    # The page says the callable surface reports its own failure verbatim. That
+    # is only true if the page and the server read the same string object, so
+    # check the object, not a lookalike substring.
+    sys.path.insert(0, str(ROOT))
+    from src.answers import SCOPE, VALIDATION, unscored          # noqa: E402
+    wire = unscored("HALLMARK_A_PROGRAM_WE_NEVER_SCORED", pred["residual_sd"])
+    for label, s in [("predictor_validation", VALIDATION), ("scope_limit", SCOPE)]:
+        check(f"page quotes the server's {label} verbatim",
+              html_unescape_contains(page, s), s[:52] + "\u2026")
+    check("the server volunteers its failure unasked",
+          wire["predictor_validation"] is VALIDATION and "worse than chance" in VALIDATION)
+    check("the wire example carries the frozen balanced accuracy",
+          f"{held['axis2_balanced_accuracy']:.4f}" in VALIDATION, VALIDATION)
+
+    # "Touched a number" is a claim about this repository, so run the grep the
+    # page invites a reviewer to run. If any of these ever enters the pipeline,
+    # the strip becomes false and this fails first.
+    src_text = "\n".join(f.read_text() for f in sorted((ROOT / "src").glob("*.py")))
+    for tool in ["modal", "esm", "benchflow", "benchling", "paperclip"]:
+        used = re.search(rf"^\s*(?:import|from)\s+{tool}\b", src_text, re.I | re.M)
+        check(f"no pipeline module imports {tool} -- 'touched a number: no' holds",
+              used is None, used.group(0).strip() if used else "")
+
+    # A frozen artifact with a timing field cannot be byte-compared across
+    # machines, which is exactly what the reproduction check does.
+    for jf in sorted(FROZEN.glob("*.json")):
+        txt = jf.read_text()
+        check(f"{jf.name} carries no wall-clock field",
+              "wall_clock" not in txt and "elapsed" not in txt)
+
+    # FIG 4 drew its lines in set-iteration order, so the same picture produced
+    # different bytes per process. Both orderings must now be sorted.
+    fm = (ROOT / "src" / "figures_matrix.py").read_text()
+    check("fig4 sorts before drawing (no per-process PNG drift)",
+          "sorted(gs)" in fm and "-len(kv[1]), kv[0]" in fm)
 
     # ---------------- report ----------------
     for p in PASS:

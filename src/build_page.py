@@ -8,8 +8,9 @@ Design contract, enforced below:
     traced does not appear on the page.
   * caption text is read verbatim from results/figures/CAPTIONS.md.
   * figures are inlined as base64 so index.html is genuinely standalone.
-  * white ground, ONE accent, FOUR type sizes, no gradients, no dark hero,
-    no dashboard chrome, no interactive controls.
+  * white ground, ONE accent used twice, FOUR type sizes, no gradients, no dark
+    hero, no dashboard chrome. The explorer is the only interactive element and
+    it makes no network call — everything it needs is embedded.
 """
 from __future__ import annotations
 
@@ -94,6 +95,7 @@ EV_N = V(ev["probe_genes"], "provenance.evidence_layer.probe_genes")
 # ---------------------------------------------------------------- explorer data
 # Every row and every proposal is computed at build time from results/frozen/.
 # Embedded as JSON so the page needs no network and no server.
+from src.answers import unscored as _unscored
 from src.next_experiment import propose as _propose
 
 _EXPLORER_COLS = ["program", "rank_by_R_p", "n_hits_q05", "R_p",
@@ -129,6 +131,77 @@ EXPLORER = _explorer_rows()
 V(len(EXPLORER), "program_summary.csv rows -> explorer")
 N_GATEFAIL_ROWS = V(sum(1 for r in EXPLORER if r["gate_fail_with_hits"]),
                     "computed: gate fails AND hits > 0")
+
+
+# ---------------------------------------------------------------- tool chain
+# Not results — verification facts, checked on this machine on 2026-08-15 and
+# recorded in docs/TOOLS.md. They are literals here because there is no frozen
+# file to read them from; the column that matters is the last one, and it is a
+# fact about this repository that anyone can check: `grep -r <tool> src/`.
+#
+# "Touched a number" means: something in results/frozen/ would be different if
+# this tool had not run. For all but two, the answer is no, and that is the
+# point of the section rather than an embarrassment to be padded around.
+TOOLCHAIN = [
+    ("Claude Code", "2.1.233", "Verified — wrote the pipeline",
+     "yes, as the author",
+     "Wrote every line of src/. No number is model output: each one is produced by "
+     "deterministic code from a checksummed input and re-derived by make all."),
+    ("Paperclip", "0.7.37 + MCP", "Verified — 113/113 gene queries, stored",
+     "yes, as the audited object",
+     "Ran the literature layer, then became the thing under test. Its output is "
+     "quarantined: FIG 4 is the audit of it, and nothing it returned enters the "
+     "matrix, the predictor, or any claim. The hosted MCP server is registered "
+     "and deliberately not queried — the index is live, and re-running it would "
+     "move the numbers FIG 4 cites."),
+    ("Modal", "1.5.4", "Verified — authenticated, workspace live",
+     "no", "Authenticated against api.modal.com. The matrix runs in about ten "
+     "minutes on a laptop, so nothing needed remote compute and nothing was sent."),
+    ("CZ Biohub — ESM Cambrian", "esm 3.2.3",
+     "Verified — real forward pass, embeddings (1, 67, 960)",
+     "no", "esmc_300m loaded and ran on a real sequence. The result is a protein "
+     "embedding; this project scores transcriptional movement, and no embedding "
+     "reaches any frozen file."),
+    ("Benchflow", "0.6.7", "Verified — CLI runs, no key required",
+     "no", "Installed and executed. It is an environment framework for benchmark "
+     "harnesses and we have one pipeline, not a harness."),
+    ("Benchling", "MCP endpoint live",
+     "Registered as an MCP client — OAuth pending",
+     "no", "The hosted server answers 401, so it is up and gated rather than "
+     "absent. Registered and left unauthenticated: there is no wet-lab entity in "
+     "this project to register, and pushing a CSV into a lab notebook to claim "
+     "the integration is the cosmetic kind."),
+    ("Proto — Evo Design", "proto-tools 0.1.0",
+     "Verified — 140 tools, 17 categories, doctor exits 0",
+     "no", "Installs from source and resolves against a live Modal workspace. "
+     "It serves structure and sequence-design models — AlphaFold, Boltz, ESMC, "
+     "Evo2, AlphaGenome. denali makes no structural or sequence-design claim, so "
+     "there is nothing here to run."),
+    ("Sundial", "—", "Not found — no discoverable install path",
+     "no", "The PyPI package under that name is an unrelated hobbyist progress-bar "
+     "library at v0.0.1. Installing it to raise the count would be a lie about "
+     "what ran."),
+]
+
+# Declined on purpose, with the reason. A tool we could have run and chose not to
+# is a different fact from one that would not install, and collapsing the two is
+# how a tool count stops meaning anything.
+DECLINED = [
+    ("BenchFlow", "0.6.7, CLI verified",
+     "Packaging our four pre-registered evaluations as a benchmark environment is "
+     "4–6 hours of container work. Real fit — their framing is that a benchmark is "
+     "just a frozen environment, and ours is already frozen — but not today."),
+    ("Tamarind Bio", "credits redeemed",
+     "A job runner for structure and docking workloads. We have no job of that "
+     "kind to submit."),
+    ("Boltz", "not installed",
+     "Co-folding prediction. Reachable through Proto, and still declined: this "
+     "project makes no structural claim, and running it to have run it would put "
+     "a structure on the page that no result depends on."),
+]
+N_TOOLS = len(TOOLCHAIN)
+N_TOUCHED = sum(1 for t in TOOLCHAIN if t[3] != "no")
+N_VERIFIED = sum(1 for t in TOOLCHAIN if t[2].startswith(("Verified", "Provisioned")))
 
 
 # ---------------------------------------------------------------- captions
@@ -276,12 +349,70 @@ table.ex tbody tr.sel{background:var(--fill)}
 .detail .prop b{display:block;font-size:.75rem;text-transform:uppercase;
   letter-spacing:.08em;color:var(--soft);margin-bottom:6px}
 .detail .prop p{margin:0 0 10px}
+/* tool chain — the same hairline table, one extra column that carries the point */
+table.tools{width:100%;border-collapse:collapse;font-size:.9375rem;
+  margin:0 0 6px}
+table.tools th{text-align:left;font-size:.75rem;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--soft);font-weight:600;
+  padding:0 16px 9px 0;border-bottom:1px solid var(--rule);vertical-align:bottom}
+table.tools td{padding:13px 16px 13px 0;border-bottom:1px solid var(--rule);
+  vertical-align:top}
+table.tools td:last-child,table.tools th:last-child{padding-right:0}
+table.tools .tool{font-weight:600;white-space:nowrap}
+table.tools .ver{display:block;font-weight:400;color:var(--soft);
+  font:400 .75rem/1.5 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+table.tools .stat{font-size:.875rem;color:var(--soft);max-width:20em}
+table.tools .what{font-size:.875rem;line-height:1.6;color:var(--ink)}
+table.tools tr.untouched .tool,table.tools tr.untouched .what{color:var(--soft)}
+.touch{font:400 .75rem/1.6 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  white-space:nowrap}
+.touch.no{color:var(--soft)}
+.touch.yes{color:var(--ink);font-weight:600}
+.callable{margin-top:38px;border-top:1px solid var(--rule);padding-top:30px}
+.callable h3{font-size:.8125rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--soft);margin:0 0 14px}
+.callable p{font-size:1rem;line-height:1.62;max-width:52em}
+pre.wire{margin:18px 0 0;padding:20px 24px;background:var(--fill);
+  border:1px solid var(--rule);overflow-x:auto;
+  font:400 .8125rem/1.75 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color:var(--ink);white-space:pre-wrap;word-break:break-word;max-width:100%}
+pre.wire .k{color:var(--soft)}
+p.cite{margin-top:26px;font-size:.8125rem;line-height:1.65;color:var(--soft);
+  max-width:60em}
 @media(max-width:1000px){
   .metrics,.cards,ol.limits{grid-template-columns:1fr}
+  table.tools .stat,table.tools thead th:nth-child(2){display:none}
   body{padding:0 22px}main{padding:40px 0 64px}}
 """
 
 EXPLORER_JSON = json.dumps(EXPLORER, separators=(",", ":"), default=str)
+
+
+def _tool_rows() -> str:
+    out = []
+    for name, ver, status, touched, what in TOOLCHAIN:
+        cls = "untouched" if touched == "no" else ""
+        mark = "no" if touched == "no" else "yes"
+        out.append(
+            f'<tr class="{cls}">'
+            f'<td class="tool">{html.escape(name)}<span class="ver">{html.escape(ver)}</span></td>'
+            f'<td class="stat">{html.escape(status)}</td>'
+            f'<td><span class="touch {mark}">{html.escape(touched)}</span></td>'
+            f'<td class="what">{html.escape(what)}</td></tr>')
+    return "\n".join(out)
+
+
+TOOL_ROWS = _tool_rows()
+DECLINED_ROWS = "\n".join(
+    f'<tr><td class="tool">{html.escape(n)}<span class="ver">{html.escape(v)}</span></td>'
+    f'<td class="what" colspan="3">{html.escape(w)}</td></tr>'
+    for n, v, w in DECLINED)
+
+# The literal object the MCP server returns for a program it never scored,
+# built by the same function the server calls. Not a transcription of it.
+WIRE = html.escape(json.dumps(
+    _unscored("HALLMARK_A_PROGRAM_WE_NEVER_SCORED", PRED["residual_sd"]), indent=2))
+V(PRED["residual_sd"], "predictor.residual_sd -> MCP wire example")
 
 HTML = f"""<!doctype html>
 <meta charset="utf-8">
@@ -460,7 +591,63 @@ describe it as one.</li>
 </ol>
 </section>
 
-<!-- 10. provenance -->
+<!-- 10. the tool chain -->
+<section>
+<div class="label">Tool chain</div>
+<h2>Set up is not the same as used. Here is what actually touched the result.</h2>
+<table class="tools">
+<thead><tr><th>Tool</th><th>Status, checked on the machine</th><th>Touched a number</th><th>What it did, and did not do</th></tr></thead>
+<tbody>
+{TOOL_ROWS}
+</tbody>
+</table>
+<p class="circ">{N_VERIFIED} of {N_TOOLS} were installed, authenticated and run. {N_TOUCHED}
+changed anything in <code>results/frozen/</code>. The other {N_TOOLS - N_TOUCHED} are
+listed at their real status rather than dropped, because the count that flatters us
+and the count that is true are different numbers, and a reviewer can tell them apart
+with one <code>grep</code>.</p>
+
+<h2 style="margin:38px 0 20px">Declined, with the reason</h2>
+<table class="tools"><tbody>
+{DECLINED_ROWS}
+</tbody></table>
+<p class="circ">A tool we could have run and chose not to is a different fact from one
+that would not install. Collapsing the two is how a tool count stops meaning anything.</p>
+
+<p class="circ"><b>We got one of these wrong, twice, and caught it ourselves.</b> We
+had Proto recorded as broken — <code>pip install proto-language</code> fails at
+import. Proto does not publish that package. We had tested a name collision and
+filed the result as Proto's status, which is the same mistake as the
+<code>sundial</code> collision we had already caught and warned about in the same
+document. The real install succeeds. It is the fourth error in this project found by
+us rather than by a reviewer, and it is in <code>LIMITATIONS.md</code> §7 with the
+other three.</p>
+
+<div class="callable">
+<h3>The result is callable</h3>
+<p>An MCP server exposes the frozen matrix as two tools, <code>reversibility(program)</code>
+and <code>provenance()</code>. It reads <code>results/frozen/</code> and recomputes nothing.
+Ask about one of the {N_PROGRAMS} scored programs and it returns the measured rank, the
+share of that score measurability alone predicts, the residual that could be biology,
+and a generated next experiment. Ask about anything else and it takes the third branch:</p>
+<pre class="wire">{WIRE}</pre>
+<p class="circ">No caller asked whether the predictor works. The tool says so anyway,
+in the same response as the prediction, with the number that condemns it —
+balanced accuracy {BAL} against a coin's 0.500 — and the words <i>reported, not
+endorsed</i>. That string is not written into the page; it is imported from the
+module the server answers with, so if one drifts the build fails.</p>
+</div>
+
+<p class="cite">For scale on how hard the held-out step is: Arc Institute's Virtual
+Cell Challenge wrap-up (6 December 2025, 300+ final submissions) reported that
+perturbation-prediction models are <i>&ldquo;not yet consistently outperforming naive
+baselines across all metrics&rdquo;</i>. That is a different and much larger task than
+ours — predicting expression responses, not program-level movement — so it is not
+a defence of our number. It is the reason we treated a held-out failure as the
+expected outcome to design for rather than a result to bury.</p>
+</section>
+
+<!-- 11. provenance -->
 <footer>
 pre-registration &nbsp;<b>d3e24b77…</b> committed before the sweep<br>
 frozen predictor &nbsp;<b>610f2a75…</b> hashed before the held-out set was opened<br>

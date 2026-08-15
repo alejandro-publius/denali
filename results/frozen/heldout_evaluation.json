@@ -20,6 +20,5 @@
   "axis2_specificity": 0.875,
   "axis2_balanced_accuracy": 0.4375,
   "axis2_verdict": "FAILURE",
-  "refit_after_seeing_results": false,
-  "wall_clock_min": 1.64
+  "refit_after_seeing_results": false
 }

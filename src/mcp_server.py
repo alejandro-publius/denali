@@ -15,6 +15,7 @@ from pathlib import Path
 import pandas as pd
 from mcp.server.fastmcp import FastMCP
 
+from src.answers import HELDOUT_WARNING, SCOPE, unscored
 from src.next_experiment import propose
 
 FROZEN = Path("results/frozen")
@@ -23,11 +24,6 @@ mcp = FastMCP("denali")
 _S = pd.read_csv(FROZEN / "program_summary.csv")
 _P = json.loads((FROZEN / "predictor.json").read_text())
 _H = pd.read_csv(FROZEN / "heldout.csv")
-
-SCOPE = ("Pathway-level only. Guide-pair concordance is -0.019, so gene-level "
-         "calls are not reproducible and no novel gene is named. Between 56% and "
-         "75% of variance in apparent reversibility is measurement quality, not "
-         "biology.")
 
 
 @mcp.tool()
@@ -66,22 +62,11 @@ def reversibility(program: str) -> dict:
             "predicted_R_p": float(r.R_p_predicted),
             "observed_R_p": float(r.R_p_observed),
             "knockdowns_that_moved_it": int(r.n_hits_q05),
-            "warning": ("Held-out evaluation was UNDERPOWERED AND INCONCLUSIVE "
-                        "(1/10 passed the gate). Binary recovery was worse than "
-                        "chance. Treat predictions as unvalidated."),
+            "warning": HELDOUT_WARNING,
             "scope_limit": SCOPE,
         }
 
-    return {
-        "program": program, "status": "UNSCORED",
-        "note": ("Not in the frozen matrix. Supply measurability features to get a "
-                 "prediction, or score it: ~11 s on the existing pipeline."),
-        "prediction_uncertainty_sd": _P["residual_sd"],
-        "predictor_validation": ("FAILED on held-out data: balanced accuracy 0.4375, "
-                                 "worse than chance, zero true positives. The "
-                                 "predictor is reported, not endorsed."),
-        "scope_limit": SCOPE,
-    }
+    return unscored(program, _P["residual_sd"])
 
 
 @mcp.tool()

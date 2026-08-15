@@ -112,7 +112,12 @@ def fig4():
     for r in rows:
         for c in r["claims"]:
             src.setdefault(c, set()).add(r["gene"])
-    shared = sorted(src.items(), key=lambda kv: -len(kv[1]))
+    # Sets are unordered and string hashing is salted per process, so both the
+    # tie-break between equally-shared sources and the order the lines are drawn
+    # in vary between runs. Same picture, different PNG bytes -- which makes a
+    # clean-clone byte comparison report a difference that is not one. Sort both.
+    shared = sorted(src.items(), key=lambda kv: (-len(kv[1]), kv[0]))
+    shared = [(t, sorted(gs)) for t, gs in shared]
     top_text, top_genes = shared[0]
     genes = [r["gene"] for r in rows]
 

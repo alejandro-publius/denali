@@ -267,6 +267,32 @@ def main() -> int:
         check(f"no make-all module imports {tool} -- 'touched a number: no' holds",
               used is None, used.group(0).strip() if used else "")
 
+    # ---------------- E. the post-freeze VIF check ----------------
+    # Verified twice by independent implementations; these lock the values and
+    # the framing. The check must never present itself as pre-registered, and
+    # log-VIF must only ever be compared to the UPPER bound -- it inherits
+    # coherence's partial circularity.
+    vif_p = ROOT / "results" / "sensitivity" / "vif_camera.json"
+    if vif_p.exists():
+        vif = json.loads(vif_p.read_text())
+        a = vif["adj_r2"]
+        check("VIF: log-VIF alone = 0.726", near(a["log_vif_alone"], 0.7257),
+              f"got {a['log_vif_alone']}")
+        check("VIF: all-six reference matches the frozen headline",
+              near(a["all_six_features"], ds["adjusted_r2_all_six"], 1e-3),
+              f"{a['all_six_features']} vs frozen {ds['adjusted_r2_all_six']}")
+        check("VIF: coherence-flattened bound = 0.463",
+              near(a["vif_coherence_flattened"], 0.4629),
+              f"got {a['vif_coherence_flattened']}")
+        check("VIF: labelled post-freeze, not pre-registered",
+              "NOT PRE-REGISTERED" in vif.get("status", ""))
+        check("VIF: circularity comparison rule is stated",
+              "UPPER bound" in vif.get("comparison_rule", ""))
+        check("VIF: does not claim to replace the primary",
+              "pre-registered primary" in vif.get("does_not_replace", ""))
+        check("VIF: cites the external theory (Wu & Smyth 2012)",
+              "10.1093/nar/gks461" in vif.get("citation", ""))
+
     # The Modal run's own claim is that it reproduces the frozen numbers. Do not
     # take its word for it either -- it writes a verdict and this reads it back.
     agree = ROOT / "results" / "modal" / "agreement.json"

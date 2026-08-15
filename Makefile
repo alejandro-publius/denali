@@ -68,6 +68,7 @@ all: check
 	@echo "== 9/9  figures + post-freeze sensitivity check          ~1 min"
 	$(PY) -m src.figures_matrix
 	$(PY) -m src.sensitivity_stripped
+	$(PY) -m src.vif_camera
 	@echo "== build the page from the frozen numbers"
 	$(PY) -m src.build_page
 	@echo "== invariants: every number must match the committed frozen files"

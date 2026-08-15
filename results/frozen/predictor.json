@@ -1,0 +1,70 @@
+{
+  "adjusted_r2_all_six": 0.7511,
+  "adjusted_r2_x_independent_only": 0.5606,
+  "binary_rule": {
+    "reversible_iff_hits_at_least": 100,
+    "reversible_iff_predicted_R_p_at_least": 2.0043
+  },
+  "coefficients": {
+    "coherence": 0.5825260872455826,
+    "const": 1.7702339999999999,
+    "essentiality_density": -0.02061607267141996,
+    "expr_ratio": -0.3038158489243208,
+    "frac_present": 0.2836676893996467,
+    "n_present": 0.716864692381241,
+    "sd_ratio": 0.3097729052282716
+  },
+  "coherence_circularity": "coherence is derived from the same matrix X as R_p, so part of the all-six fit is mechanical. Honest range is 0.561 to 0.751.",
+  "features": [
+    "frac_present",
+    "expr_ratio",
+    "sd_ratio",
+    "n_present",
+    "essentiality_density",
+    "coherence"
+  ],
+  "fit_on": "50 MSigDB Hallmark programs (includes programs A and B; disclosed)",
+  "frozen_before_heldout_opened": true,
+  "gate_criteria": {
+    "min_expr_ratio": 1.0,
+    "min_frac_present": 0.5,
+    "min_n_present": 25,
+    "min_sd_ratio": 1.0
+  },
+  "heldout_thresholds_from_prereg_f": {
+    "axis1_spearman": {
+      "failure": "<0.30",
+      "failure_inverted": "<0",
+      "partial": "0.30-0.60",
+      "success": ">=0.60"
+    },
+    "axis2_balanced_accuracy": {
+      "failure": "<0.55",
+      "partial": "0.55-0.75",
+      "success": ">=0.75"
+    },
+    "on_failure": "report it; do NOT refit, re-feature, re-threshold or re-draw",
+    "underpowered_if": "fewer than 8 of 10 held-out programs pass the gate"
+  },
+  "model": "OLS, R_p ~ 6 standardised measurability features",
+  "n_train": 50,
+  "residual_sd": 0.5766,
+  "standardisation": {
+    "mean": {
+      "coherence": 0.04828599999999999,
+      "essentiality_density": 0.18955199999999997,
+      "expr_ratio": 1.434296,
+      "frac_present": 0.539742,
+      "n_present": 79.3,
+      "sd_ratio": 1.04839
+    },
+    "std": {
+      "coherence": 0.028244746739302638,
+      "essentiality_density": 0.16068852014416726,
+      "expr_ratio": 1.1312634329268982,
+      "frac_present": 0.2397132760833497,
+      "n_present": 50.6489518798821,
+      "sd_ratio": 0.041266719555316515
+    }
+  }
+}

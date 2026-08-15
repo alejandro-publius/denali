@@ -122,3 +122,26 @@ was found and corrected.
 - **Not** free of essentiality enrichment: program B's top 50 is 3.32× enriched.
   SREBF2 itself is not essential (Chronos −0.024, Tier 1), which is why it
   survives the filter.
+
+## 8. ⚠ TIER CAVEAT — found in the Section 8 check, after this doc was published
+
+Tiers above use **mean DepMap Chronos across 1,178 cell lines**. Re-checked
+against **K562-specific** Chronos (`ACH-000551`), the line we actually scored in:
+
+| Gene | Mean | K562 | Tier above | Under K562 |
+|---|---:|---:|:--:|:--:|
+| **MBTPS2** | −0.492 | **−0.632** | T1 | **T2** |
+| **LDLR** | −0.215 | **−0.568** | T1 | **T2** |
+
+**Two tier labels in the table above are wrong for K562.** Corrected here rather
+than silently edited, because the table was already committed and pushed.
+
+**The headline is unaffected and slightly stronger:** SREBF2 is **−0.024 by mean
+and +0.029 in K562** — not essential by either measure, with more margin in the
+relevant cell type. Top-50 essentiality enrichment is unchanged (26 vs 25 of 50),
+so the 3.32× figure stands. Repo-wide, 555 of 9,333 genes (5.9%) disagree between
+the two measures.
+
+**Not yet done:** re-tiering all 9,837 rows on K562-specific Chronos. The frozen
+files still use the mean. If the demo shows a tier for MBTPS2 or LDLR, say
+"essential in K562" for both.

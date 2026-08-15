@@ -14,8 +14,7 @@ import h5py
 import numpy as np
 from scipy.stats import mannwhitneyu
 
-GMT_DIR = Path("/private/tmp/claude-501/-Users-alexvintera/"
-               "7dc2189b-1701-4701-beee-bcd03999de85/scratchpad")
+GMT_DIR = Path("data/genesets")   # in-repo; was an absolute scratchpad path
 FILES = {
     "K562": "data/raw/K562_gwps_normalized_bulk_01.h5ad",
     "RPE1": "data/raw/rpe1_normalized_bulk_01.h5ad",

@@ -8,7 +8,7 @@ the table rather than something to pad around.
 | Tool | Installed | Auth | Verified how | Touched a number |
 |---|:--:|:--:|---|:--:|
 | **Claude Code** | ✅ `2.1.233` | ✅ | `claude --version` | yes, as the author |
-| **Paperclip** | ✅ `0.7.37` | ✅ `thealexschroeder@gmail.com` | `paperclip config`; 113/113 gene queries stored; hosted MCP registered | yes, as the audited object |
+| **Paperclip** | ✅ `0.7.37` | ✅ account authenticated | `paperclip config`; 113/113 gene queries stored; hosted MCP registered | yes, as the audited object |
 | **Anthropic MCP** | ✅ `mcp 1.29.0` | n/a | `src/mcp_server.py` started over stdio, 2 tools listed, 3 calls returned non-empty | ships the result |
 | **Modal** | ✅ `1.5.4` | ✅ workspace `alejandro-publius` | `modal app list` answered live — 0 apps ever deployed | no |
 | **CZ Biohub / ESMC** | ✅ `esm 3.2.3` | ✅ hosted API key | verified twice — local weights **and** the hosted Biohub Platform API, both returning `(1, 67, 960)` | no |

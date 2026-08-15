@@ -169,10 +169,10 @@ TOOLCHAIN = [
      "reproduces every one",
      "Runs the real sweep, not a demo: src/modal_sweep.py imports the same frozen "
      "scorer, fans the 50 programs across containers, and returns n_hits, R_p, "
-     "n_present and the gate identical to results/frozen/ on all 50. It verifies "
-     "the result rather than producing it, and it is deliberately not a make-all "
-     "step. What it buys is that reproducing us no longer needs a 470 MB download "
-     "and twelve minutes of laptop."),
+     "n_present and the gate identical to results/frozen/ on all 50. That is "
+     "portability, not independent confirmation of the maths \u2014 the same scorer "
+     "would reproduce the same bug. What it buys is that checking us no longer "
+     "needs a 470 MB download and twelve minutes of laptop."),
     ("CZ Biohub — ESM Cambrian", "esm 3.2.3",
      "Verified twice — local weights and hosted API, both (1, 67, 960)",
      "no", "esmc_300m ran on a real sequence locally, and the same sequence ran "

@@ -1,70 +1,82 @@
 # Next
 
-**Blocked on a user decision: which candidate.** See `RESELECTION_CANDIDATES.md`
-for the full chains, verified datasets, scorecard and risks.
+**Candidate 1 (reversal map) is SELECTED. Its gate has PASSED.**
+Program: **proteostasis, UPR arm.** Decided by the user 2026-08-14.
+
+Full gate record: `GATE_C1_RESULTS.md` (results), `GATE_C1_PREREGISTRATION.md`
+(thresholds, hashed before any value was computed), commit `280c626`.
+
+The other three candidate programs — integrated stress response, senescence,
+interferon response — **FAILED the gate and are not revisited.**
+
+Execution plan and schedule: **`HACKATHON_PLAN.md`.**
+Cold-start resume: **`MORNING_HANDOFF.md`.**
 
 ---
 
-## If Candidate 1 (recommended) — the reversal map
+## The program
 
-**Do not write analysis code until the gate passes.**
+**Proteostasis, UPR arm.** Primary gene set
+`HALLMARK_UNFOLDED_PROTEIN_RESPONSE` (MSigDB v2026.1.Hs, 113 genes).
 
-### Step 0 — name the program
+Gate performance: 83–88% of members measured in both cell lines; expression
+2.25× / 1.96× background; variance across perturbations 1.05× / 1.27× background;
+all p ≤ 4.4e-06. Cell-intrinsic (ER folding, chaperones, ERAD, UPS are strictly
+intracellular). Anchor: **GSE24080, multiple myeloma, n=559**.
 
-Pick a **cell-intrinsic** disease-associated transcriptional program. Plausible:
-integrated stress response, senescence, interferon response, proteostasis
-collapse. **Not** a tissue-specific program — K562 is leukaemia and RPE1 is
-retinal epithelium, and forcing lung or liver biology onto them repeats
-Candidate 2's error.
+⚠ **Scope limit, from the gate itself.** The broad
+`GOBP_PROTEASOMAL_PROTEIN_CATABOLIC_PROCESS` set **failed** the variance test
+(R = 1.00–1.02, n.s.). The pass is specific to the **UPR / protein-folding arm**,
+not to proteostasis writ large. Every downstream claim must be scoped to the UPR.
 
-### Step 1 — the gate (pre-register it, then run it)
-
-1. **Measurability.** Are the program's genes expressed and *variable* across
-   perturbations in `K562_gwps_normalized_bulk_01.h5ad` and
-   `rpe1_normalized_bulk_01.h5ad`? A program at background is untestable.
-2. **Cell-intrinsic.** Is the program defined by cell-autonomous biology rather
-   than tissue architecture or cell-cell composition?
-3. **Anchor.** Does an independent patient-level dataset exist to connect the
-   result back to human disease later?
-
-**If any fails, the candidate dies at the gate.** Do not build around it.
-
-### Step 2 — only after the gate
+## The chain
 
 ```
-score all ~9,866 knockdowns for opposition to the program   (K562)
-  → replicate the top hits in RPE1 (different cell type, independent screen)
-  → DepMap control: is reversal real regulation, or is the gene simply essential
-    and the cell dying?
+proteostasis (UPR) program, one citation per gene
+  → score all ~9,823 K562 CRISPRi knockdowns for opposition to the program
+  → RPE1 replication arm, coverage denominator stated on screen
+  → DepMap essentiality filter (Avana + KY): is reversal regulation, or death?
   → named gene + ranked reversal map
 ```
 
-### Downloads (verified, ~470 MB for the core)
+## Substrate on disk
 
-```bash
-mkdir -p data/raw
-# Replogle genome-scale Perturb-seq pseudobulk, CC BY 4.0
-#   figshare article 20029387 -> K562_gwps_normalized_bulk_01.h5ad  (375 MB)
-#                                rpe1_normalized_bulk_01.h5ad        ( 95 MB)
-# DepMap 24Q4 Public, CC BY 4.0
-#   figshare article 27993248 -> CRISPRGeneEffect.csv, Model.csv
-# Resolve download_url via:
-#   curl -sL "https://api.figshare.com/v2/articles/<id>" | python -c "..."
-# NOTE: figshare returns 403 on HEAD but 206 on ranged GET. Use GET.
-```
+| File | Status |
+|---|---|
+| `data/raw/K562_gwps_normalized_bulk_01.h5ad` | ✅ downloaded, md5 verified, 11,258 × 8,248 |
+| `data/raw/rpe1_normalized_bulk_01.h5ad` | ✅ downloaded, md5 verified, 2,679 × 8,749 |
+| `data/genesets/*.v2026.1.Hs.symbols.gmt` | ✅ committed |
+| DepMap 24Q4 `CRISPRGeneEffect.csv`, `Model.csv` | see `MORNING_HANDOFF.md` |
 
-## If Candidate 2 or 3
+⚠ **RPE1 is not genome-scale.** 2,383 unique targets vs K562's 9,823 — **only
+24.2% of K562 perturbations are testable there**, and that quarter is the
+*essential-gene* subset, not a random sample. The replication arm is **partial
+replication with a stated, non-random denominator** — never call it independent
+replication of the map.
 
-Both are fully specified in `RESELECTION_CANDIDATES.md` with verified data and
-their own risks. Candidate 2's difficulty is lineage confounding; Candidate 3's
-is that it is closer to a methods observation than a disease discovery.
+---
 
 ## Standing prohibitions
 
+### LIFTED, 2026-08-14 — demo layer only
+
+> **The no-UI / no-frontend / no-Figma prohibition is LIFTED for the demo layer
+> only.** Frontend is authorised, to be built **Sunday morning over precomputed,
+> frozen tables** — never before the science lands. A UI that runs analysis live,
+> or that is built ahead of the result it displays, remains prohibited.
+>
+> This supersedes `CLAUDE.md` §9 for the demo layer only. Everything else in
+> §9 stands.
+
+### Still in force
+
 - **No agents or subagents without explicit authorisation**, and any authorised
   agent must be told not to spawn children.
-- No UI, Figma, frontend or demo animation.
-- No novelty/prior-art sweep beyond the targeted check already done.
-- **Do not resurrect** FigContract, RETRIAL, RescueMap/ENOUGH, or the ILD gradient
-  project.
-- Do not read `docs/archive/` unless historical context is explicitly requested.
+- **No broad prior-art or novelty sweeps** beyond the targeted checks already done.
+- **Do not resurrect** FigContract, RETRIAL, RescueMap/ENOUGH, or the ILD
+  gradient project.
+- **Do not read `docs/archive/`** unless historical context is explicitly
+  requested.
+- Do not redefine a kill criterion after seeing data.
+- Computational and high-level only: no wet-lab protocols, no dosing, no
+  clinical or therapeutic recommendations.

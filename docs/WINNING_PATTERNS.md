@@ -65,7 +65,70 @@ dataset or benchmark, or a biological hypothesis backed by external evidence.
 
 **Do not end with a report or a chatbot answer.**
 
-## 7. The general principle
+---
+
+# Event-specific evidence, added 2026-08-14
+
+> **Provenance note.** The four items below were supplied by the user on
+> 2026-08-14 and are recorded as given. They were **not independently verified
+> this session** — no prior-art sweep was run, per standing prohibition. Treat
+> the factual claims as user-sourced; treat the implications as design decisions
+> already taken.
+
+## 7. Arc Virtual Cell Challenge 2025 — and Arc co-hosts this event
+
+- **Hybrid deep learning + classical statistical features beat pure neural
+  approaches.**
+- **Pseudobulk representations carried most of the usable signal.**
+- The winner was ranked by **average rank across seven metrics**, not by one.
+
+**Implication, already acted on:** our scoring step is pseudobulk + classical
+statistics, which *matches the co-host's own published finding* rather than
+fighting it. And we **report several metrics, not one headline number** — a
+single reversal score presented alone would contradict the evidence from the
+people judging us.
+
+## 8. Bio x AI Hackathon — $125K, 11 winning teams
+
+**MCP servers won repeatedly:** Holy Bio MCP ($10K), Protein Bank MCP ($10K),
+PDB-MCP at midpoint.
+
+**Implication:** `HACKATHON_PLAN.md` step 9 — exposing the scored matrix as an
+MCP server — is not a nice-to-have. It is a **proven winning artifact** at this
+event's own format, and it is the piece that makes the result reusable by
+someone else.
+
+## 9. Owkin "Rewiring Biology" — the honesty result
+
+- **KScope won 1st** on a **frozen model with no retraining.**
+- **Discordance won 2nd** by **surviving live adversarial questioning** rather
+  than confabulating.
+- **Spatial Awareness won 3rd**, credited for answers that **went beyond the demo.**
+- Owkin's own stated takeaway: **convergence on AI that is honest about the
+  limits of its evidence.**
+
+**Implication — this is the headline, not a design requirement.** We already
+have what these three won on, and it is not something we need to build:
+
+- a **preserved null** (the ILD project, retired on its own pre-registered
+  evidence rather than rescued), and
+- **fired kill criteria** with hashes proving the thresholds preceded the data
+  (`GATE_C1_PREREGISTRATION.md`, `d7d90e41…`), and
+- **three of four programs failed** at the gate and were not revisited.
+
+Lead with that. Most teams cannot show a result they killed.
+
+## 10. MorphoLogic AI — sponsor-specific data prize at Bio x ML
+
+**Implication:** the additional awards beyond the three track prizes are a
+**second, less contested shot.** Track A is the most crowded track here
+(`HACKATHON_PLAN.md` risk 3), so sponsor-specific prizes are worth explicit
+targeting — Benchling, Modal, Biohub and Tamarind all appear in our pipeline
+already.
+
+---
+
+## 11. The general principle
 
 > **Actual biological result > agent theatrics.
 > External evidence > model self-evaluation.

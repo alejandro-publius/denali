@@ -1,0 +1,77 @@
+# Hackathon plan — Track A, "Build an AI Scientist"
+
+**Program: proteostasis, UPR arm.** Selected 2026-08-14 after the Candidate 1
+gate passed 3/3 (`GATE_C1_RESULTS.md`, commit `280c626`).
+
+| | |
+|---|---|
+| Check-in | **08:30 AM** |
+| Submission deadline | **Sunday 10:45 AM** |
+| Real build time | **~10 hours** |
+
+**The science lands before the demo. The demo is built Sunday over frozen tables.**
+
+---
+
+## Pipeline
+
+| # | Step | Purpose | Notes / risk |
+|---:|---|---|---|
+| 1 | **Paperclip builds the proteostasis gene set, one citation per gene** | This is Track A's evidence-gathering clause — it is what makes this an *agent* rather than a script | ⚠ `PAPERCLIP_API_KEY` **not set**. Fallback: ship the gate's `HALLMARK_UNFOLDED_PROTEIN_RESPONSE` (113 genes, already committed) and label it uncited |
+| 2 | **Score all ~9,823 K562 CRISPRi knockdowns for opposition to the program** | The discovery step. Pseudobulk, classical statistics | Substrate on disk and md5-verified. No neural model in the scoring path |
+| 3 | **RPE1 replication arm** | Second cell type, independently screened | ⚠ **Coverage denominator stated on screen.** Only 2,381/9,823 = **24.2%** of K562 targets exist in RPE1, and that subset is the *essential-gene* subset, not random |
+| 4 | **DepMap 24Q4 essentiality filter — Broad Avana AND Sanger KY** | Flag any hit that only scores because it kills the cell | Two independent libraries = real external adjudication. ⚠ Collides with step 3: the genes RPE1 can replicate are disproportionately the ones this filter flags |
+| 5 | **Proto on Modal — structure of the top hit** | Structural context for the named gene | Modal credits arrive day-of. Not on the critical path |
+| 6 | **Tamarind Bio — binder design if there is a pocket** | Only if step 5 yields a pocket | Conditional. Drop without hesitation if time is short |
+| 7 | **Biohub ESMC SAE — frozen-model features, no retraining** | Interpretability layer on a frozen model | Mirrors the KScope winning pattern exactly (see `WINNING_PATTERNS.md` §9) |
+| 8 | **Benchling MCP write-back** | Register the target with its evidence chain | OAuth, no key needed |
+| 9 | **Expose the scored matrix as an MCP server** | The durable, reusable artifact | One tool: query by program → ranked genes with reversal score, RPE1 rank **or "not covered"**, essentiality flag. Proven winning artifact (`WINNING_PATTERNS.md` §8) |
+| 10 | **Streamlit page, Sunday, over frozen tables** | The demo | Step timeline; target card; next-four table **including at least one gene the filter killed** |
+
+### Non-negotiables inside the pipeline
+
+- Steps 5–7 are **optional**. Steps 1–4 and 9–10 are the spine. If time
+  compresses, cut from the middle, never from the spine.
+- The "next four" table **must** include a killed gene. Showing the filter
+  working is stronger evidence than showing four survivors.
+- Report **several metrics, not one headline number** (see `WINNING_PATTERNS.md` §7).
+- Every screen that shows an RPE1 rank shows its denominator.
+
+---
+
+## Schedule
+
+| Block | Time | Work |
+|---|---|---|
+| Check-in | **08:30 AM** | — |
+| **Build I** | **1:00 – 3:30 PM** | Paperclip gene set (step 1); K562 scoring (step 2) |
+| **Build II** | **3:30 – 6:30 PM** | RPE1 arm (step 3); DepMap filter (step 4) |
+| **Build III** | **7:15 – 9:45 PM** | Hero figure; adversarial self-attack; **launch any long job at the 9:45 PM checkpoint** |
+| **Sunday** | **9:00 – 10:45 AM** | MCP server (step 9); Streamlit page (step 10); clean-clone reproduction check; **submit** |
+
+**9:45 PM is a hard checkpoint.** Anything that needs to run overnight starts
+there or does not start.
+
+**Sunday morning is 105 minutes for four items.** The reproduction check is not
+optional padding — it is the claim that the result is real. If something must be
+cut Sunday, cut demo polish, not reproduction.
+
+---
+
+## Open risks — recorded, not hidden
+
+1. **Transcriptional reversal is not phenotypic reversal.** This is the most
+   likely judge attack. A knockdown that moves the UPR signature has not been
+   shown to rescue any cellular or disease phenotype. State this on the slide
+   before a judge states it for us; do not let the demo imply otherwise.
+2. **The top hit may be a known upstream regulator.** Rediscovery is a real
+   possibility. If the top hit is a canonical UPR regulator, say so plainly and
+   treat it as a positive control that validates the method — do not present a
+   rediscovery as a discovery.
+3. **Track A is the most crowded track at this event.** Differentiation has to
+   come from the evidence chain and the honest nulls, not from novelty of concept.
+4. **`PAPERCLIP_API_KEY` is not set** — step 1's fallback is defined above.
+5. **The RPE1 arm is 24.2% partial with a non-random denominator** — if it is
+   presented as independent replication, that is the second-most-likely attack.
+6. **Scope creep into proteostasis writ large.** The gate passed the UPR/folding
+   arm only; the broad proteasomal set failed. Claims must stay scoped.

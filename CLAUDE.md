@@ -2,11 +2,12 @@
 
 ## 1. What this project is
 
-**Currently BETWEEN PROJECTS.** The ILD/IPF gradient project was retired on
-evidence (see `docs/CURRENT_STATE.md`). Three verified candidates are ranked in
-`docs/RESELECTION_CANDIDATES.md`; none is started.
+**ACTIVE: Candidate 1, the Perturb-seq reversal map. Program: proteostasis, UPR
+arm.** Selected 2026-08-14 after the pre-registered gate passed 3/3
+(`docs/GATE_C1_RESULTS.md`, commit `280c626`). Hackathon Track A, "Build an AI
+Scientist."
 
-The standing shape, whatever is chosen:
+The standing shape:
 
 ```
 real public data → real computational result → INDEPENDENT external validation
@@ -18,20 +19,25 @@ real public data → real computational result → INDEPENDENT external validati
 
 ## 2. Current phase
 
-**Reselection complete, awaiting a decision.** Recommended: Candidate 1, the
-Perturb-seq reversal map — **gated**. Nothing may be built until the user picks a
-candidate and its gate passes. See `docs/NEXT.md`.
+**Building.** Pipeline and schedule: `docs/HACKATHON_PLAN.md`. Cold-start
+resume: `docs/MORNING_HANDOFF.md`.
+
+⚠ The gate passed the **UPR / protein-folding arm only** — the broad proteasomal
+set failed its variance test. Keep every claim scoped to the UPR.
 
 ## 3. Read these, in this order
 
-1. `docs/CURRENT_STATE.md` — authoritative checkpoint
-2. `docs/RESELECTION_CANDIDATES.md` — the three candidates, verified data, scorecard
-3. `docs/NEXT.md` — the exact next action and the gate
-4. `docs/LESSONS_LEARNED.md` — the rules earned the hard way
-5. `docs/WINNING_PATTERNS.md` — active design requirements
-6. `docs/TRANSLATIONAL_CONTEXT.md` — the downstream bar, context only
+1. `docs/MORNING_HANDOFF.md` — cold-start resume, first three commands
+2. `docs/HACKATHON_PLAN.md` — pipeline, schedule, open risks
+3. `docs/NEXT.md` — selected program, substrate state, standing prohibitions
+4. `docs/GATE_C1_RESULTS.md` — why proteostasis and not the other three
+5. `docs/LESSONS_LEARNED.md` — the rules earned the hard way
+6. `docs/WINNING_PATTERNS.md` — active design requirements
+7. `docs/TRANSLATIONAL_CONTEXT.md` — the downstream bar, context only
 
-That is the whole active set — six files. Anything else is in `docs/archive/`.
+Reference, not required reading: `docs/GATE_C1_PREREGISTRATION.md`,
+`docs/CURRENT_STATE.md`, `docs/RESELECTION_CANDIDATES.md`.
+Anything else is in `docs/archive/`.
 
 ## 4. Data locations
 
@@ -39,13 +45,18 @@ That is the whole active set — six files. Anything else is in `docs/archive/`.
 |---|---|
 | `src/` | reusable analysis modules, run as `.venv/bin/python -m src.<module>` |
 | `tests/` | invariant smoke tests |
-| `data/`, `results/`, `figures/` | artifacts of the **retired** ILD project |
+| `data/genesets/` | MSigDB v2026.1.Hs GMTs, committed |
+| `data/raw/` | git-ignored substrate — see `docs/MORNING_HANDOFF.md` §5 |
+| `results/`, `figures/` | ILD nulls (retired) + `results/qc/gate_c1_criterion1.json` |
 
-`data/raw/` is git-ignored. `data/raw/natri_lung_ild.h5ad` (4.2 GB) belongs to
-the retired project and can be deleted to reclaim the space.
+Active substrate on disk: `K562_gwps_normalized_bulk_01.h5ad` (11,258 × 8,248)
+and `rpe1_normalized_bulk_01.h5ad` (2,679 × 8,749), both md5-verified.
+`data/raw/natri_lung_ild.h5ad` (4.55 GB) belongs to the **retired** ILD project
+and can be deleted to reclaim the space.
 
-Candidate datasets are **not yet downloaded**. Verified accessors are in
-`docs/NEXT.md`. ⚠ figshare returns **403 on HEAD but 206 on ranged GET** — use GET.
+⚠ figshare returns **403 on HEAD but 206 on ranged GET** — use GET.
+⚠ Replogle `X` is a perturbation-**effect** matrix, not absolute expression;
+absolute expression is `var/mean`. Non-finite entries exist — mask, do not impute.
 
 ## 5. Non-negotiable scientific rules
 
@@ -104,11 +115,15 @@ cd /Users/alexvintera/figure-contract
 Environment note: Python `urllib`'s SSL chain is intercepted on this machine.
 **Use `curl` for reachability checks.**
 
-## 9. Do not build yet
+## 9. Build order
 
-No UI, no Figma, no frontend, no demo animation, no novelty screen, no CRISPR /
-perturbation analysis, and **do not touch the validation cohorts** until a
-replicable discovery signal exists.
+**UI prohibition LIFTED 2026-08-14 — demo layer only.** Frontend is authorised,
+built **Sunday morning over frozen precomputed tables**, never before the science
+lands. A UI that runs analysis live, or that is built ahead of the result it
+displays, remains prohibited.
+
+Still deferred: no novelty screen, and **do not touch the anchor cohort
+(GSE24080)** until the K562 → RPE1 → DepMap chain produces a ranked result.
 
 ## 10. Safety and scope
 

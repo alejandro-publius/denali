@@ -3,7 +3,7 @@
 **A genome-scale CRISPRi screen, read back to ask what it can and cannot discover — and the answer is mostly measurement.**
 
 [![CI](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml/badge.svg)](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-69-brightgreen.svg)](tests/test_frozen_invariants.py)
+[![tests](https://img.shields.io/badge/tests-84-brightgreen.svg)](tests/test_frozen_invariants.py)
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](.python-version)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -30,7 +30,7 @@ Also measured: essentiality density is flat at program level, coefficient **−0
 
 ## Features
 
-- **Genome-scale sweep** — every one of 9,837 knockdown targets scored against all 50 Hallmark programs, 491,850 cells, in 9.2 minutes; the full matrix ships in the repo rather than a filtered top-N
+- **Genome-scale sweep** — every one of 9,837 knockdown targets scored against all 50 Hallmark programs, 491,850 cells; the full matrix ships in the repo rather than a filtered top-N
 - **Rank-based reversal statistic** — Mann–Whitney of program-member effects against the rest of the transcriptome, per perturbation, with cosine similarity and mean effect size reported alongside so no single number carries the claim
 - **Pre-registered thresholds, hashed before any value was computed** — the primary claim, the alternative claim, the statistic deciding between them, and the conditions for reporting neither, all fixed in advance
 - **Held-out evaluation scored only after the predictor was frozen** — the model is serialised and hashed (`610f2a75…`), the hash verified at load time, and the ten programs opened only afterwards; a mismatch aborts
@@ -41,7 +41,7 @@ Also measured: essentiality density is flat at program level, coefficient **−0
 - **Static page with every number injected from frozen files** — 31 values pass through a `V()` helper that records each source; a number that cannot be traced does not render
 - **Client-side program explorer** — all 50 programs sortable and filterable, one toggle isolating the 20 that fail the gate and produce hits anyway, held-out programs tagged, and a generated next-experiment proposal per program; embedded as JSON, zero network calls
 - **MCP server** exposing the matrix to agents, whose unscored branch reports the predictor's own failure verbatim
-- **Deterministic reproduction in nine steps** — `make all`, verified from a clean clone
+- **Deterministic reproduction in nine steps** — `make all` from a clean clone reproduces every file in `results/` byte-identical, figures included, in 12 m 05 s
 
 ## Architecture
 
@@ -140,17 +140,17 @@ Set up is not the same as used. What actually touched the result:
 
 | Tool | Status | Detail |
 |---|---|---|
-| **Paperclip / GXL** | **USED AND AUDITED** | 113/113 gene queries, authenticated. We measured its retrieval quality and found it weak — that audit is FIG 4 |
+| **Paperclip / GXL** | **USED AND AUDITED** | 113/113 gene queries, authenticated. We measured its retrieval quality and found it weak — that audit is FIG 4. Its hosted MCP server is registered and deliberately unqueried: the index is live, and re-running would move the numbers FIG 4 cites |
 | **Anthropic MCP** | **SHIPPED** | `src/mcp_server.py`, 2 tools over the frozen matrix |
-| **Modal** | Set up, not in the pipeline | Authenticated, workspace `alejandro-publius`. No file in `results/frozen/` comes from a Modal run |
-| **Biohub ESMC** | Set up, not in the pipeline | Real forward pass verified, embeddings `(1, 67, 960)`. Public MIT weights, no key needed. Nothing frozen depends on it |
-| **Benchling** | Available, nothing to register | Tenant provisioned at `hackathon.bnchdev.org`, credits applied, no code needed. Our pipeline has nothing to register to it |
-| **Benchflow** | Installed, not used | CLI 0.6.7 runs |
-| **Proto** | **Import fails** | `pip install proto-language` succeeds at 0.1.0, then `import proto_language` → `ModuleNotFoundError: No module named 'proto_tools'` |
-| **Boltz-2** | **Declined** | No gene-level or structural claims are possible at −0.019 concordance |
-| **Tamarind** | **Declined** | Same reason |
+| **Modal** | Set up, not in the pipeline | `modal app list` answered live, workspace `alejandro-publius`, **0 apps ever deployed**. No file in `results/frozen/` comes from a Modal run |
+| **Biohub ESMC** | Set up, not in the pipeline | Verified twice — local MIT weights **and** the authenticated hosted Biohub Platform API, both returning `(1, 67, 960)`. Nothing frozen depends on it |
+| **Benchling** | MCP registered, nothing to register | Hosted server at `hackathon.mcp.bnchdev.org/mcp` answers 401 — up and OAuth-gated. Our pipeline has no wet-lab entity to push into a notebook |
+| **Proto (Evo Design)** | **Installed, not used** | `pip install git+https://github.com/evo-design/proto-tools.git` succeeds. 140 tools, 17 categories, `proto-tools doctor` exits 0 against a live Modal workspace. Serves AlphaFold, Boltz, ESMC, Evo2, AlphaGenome — denali makes no structural or sequence-design claim |
+| **Benchflow** | **Declined** | CLI 0.6.7 verified. Packaging our four pre-registered evaluations as a benchmark environment is 4–6 h of container work. Real fit — their framing is that a benchmark is just a frozen environment, and ours is already frozen — but out of scope today |
+| **Boltz-2** | **Declined** | Reachable via Proto. No structural claim is possible at −0.019 concordance, and running it to have run it would put a structure on the page no result depends on |
+| **Tamarind** | **Declined** | Key authenticates — `GET /api/jobs` returns 200, **0 jobs submitted**. A job runner for structure and docking workloads; we have no job of that kind |
 
-Arc Institute co-hosts this event, and their [Virtual Cell Challenge](https://arcinstitute.org/virtual-cell-challenge) wrap-up reported that almost all submitted models performed worse than baseline and that no single metric captured model quality. Our result echoes both: a model that ignores biology outperforms our expectations of one that doesn't, and we report several statistics rather than optimising one.
+Arc Institute co-hosts this event. Their [Virtual Cell Challenge wrap-up](https://arcinstitute.org/news/virtual-cell-challenge-2025-wrap-up) (6 December 2025, 300+ final submissions) reported that perturbation-prediction models are *"not yet consistently outperforming naive baselines across all metrics"*, with almost all models below baseline on MAE specifically. That is a larger and different task than ours — predicting expression responses, not program-level movement — so it is not a defence of our held-out failure. It is why we treated that failure as the outcome to design for rather than one to bury, and why we report several statistics instead of optimising one.
 
 ## Reproduce it
 
@@ -182,7 +182,9 @@ curl -sL -o data/raw/Model.csv                          https://ndownloader.figs
 | `CRISPRGeneEffect.csv` | `6edf7ade09b9b34199210b559d4745d3` |
 | `Model.csv` | `675210d17675f3517b0ce39a3c274f16` |
 
-**A fresh clone reproduced every number byte-identical**, with two exceptions: a `wall_clock_min` timing field, and three bytes of PNG metadata in FIG 4. Neither is a scientific value. Clone to finish: 3 s clone, 1 s setup, 101 s download with all four md5s matching, **13 m 03 s** for the nine steps, 69/69 invariants passing.
+**A fresh clone reproduced every file in `results/` byte-identical, with no exceptions.** `git diff --stat results/frozen/` is empty and so is `git status --short results/` — the four figures included. Clone to finish: 140 s download with all four md5s matching, **12 m 05 s** for the nine steps, 84/84 invariants passing.
+
+An earlier run of this check had two diffs, and both were defects rather than noise. A `wall_clock_min` field was being written into a frozen artifact, which makes byte-comparison across machines impossible by construction; runtime is now printed and never stored. FIG 4 drew its lines in set-iteration order, and because Python salts string hashing per process the same picture serialised to different bytes each run — three `PYTHONHASHSEED` values gave three MD5s before the fix and one after. Neither was a scientific value, and neither should have been in a file we ask people to diff.
 
 `make all` deliberately does **not** re-run the two live-API steps (`make retrieval`). Those indexes change, so their outputs are committed as dated observations from 2026-08-15. The instability of retrieval is the finding, not a defect.
 
@@ -198,7 +200,7 @@ Each was found only by running from a clean clone, and the third only after the 
 
 ## Tests
 
-`tests/test_frozen_invariants.py` — **69 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
+`tests/test_frozen_invariants.py` — **84 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
 
 Two guards exist because each caught a real defect. The **compile guard** parses every file under `src/` and `tests/` before anything else — added after a shipped module was found not to compile. The **scope guard** builds a gene-symbol universe from the Hallmark GMT and fails the build if any symbol appears within 260 characters of verdict language in the rendered page or the captions, with an allowance for "recovered known answer" and "positive control"; it enforces the −0.019 scope limit mechanically. A third set of checks asserts the page makes **no network calls** — no `fetch`, no `XMLHttpRequest`, no external script or stylesheet — so the interactive explorer cannot break unattended.
 

@@ -154,17 +154,20 @@ TOOLCHAIN = [
      "matrix, the predictor, or any claim. The hosted MCP server is registered "
      "and deliberately not queried — the index is live, and re-running it would "
      "move the numbers FIG 4 cites."),
-    ("Modal", "1.5.4", "Verified — authenticated, workspace live",
-     "no", "Authenticated against api.modal.com. The matrix runs in about ten "
-     "minutes on a laptop, so nothing needed remote compute and nothing was sent."),
+    ("Modal", "1.5.4", "Verified — authenticated, 0 apps ever deployed",
+     "no", "`modal app list` answered live against the workspace. The matrix runs "
+     "on a laptop, so nothing needed remote compute and nothing was sent."),
     ("CZ Biohub — ESM Cambrian", "esm 3.2.3",
-     "Verified — real forward pass, embeddings (1, 67, 960)",
-     "no", "esmc_300m loaded and ran on a real sequence. The result is a protein "
-     "embedding; this project scores transcriptional movement, and no embedding "
-     "reaches any frozen file."),
+     "Verified twice — local weights and hosted API, both (1, 67, 960)",
+     "no", "esmc_300m ran on a real sequence locally, and the same sequence ran "
+     "again through the authenticated Biohub Platform API; both returned the same "
+     "embedding shape. The result is a protein embedding. This project scores "
+     "transcriptional movement, and no embedding reaches any frozen file."),
     ("Benchflow", "0.6.7", "Verified — CLI runs, no key required",
-     "no", "Installed and executed. It is an environment framework for benchmark "
-     "harnesses and we have one pipeline, not a harness."),
+     "no", "Installed and executed, then declined on cost rather than on fit. "
+     "See below."),
+    ("Tamarind Bio", "REST API", "Verified — key authenticates, 0 jobs submitted",
+     "no", "GET /api/jobs returns 200 on our key. Declined: see below."),
     ("Benchling", "MCP endpoint live",
      "Registered as an MCP client — OAuth pending",
      "no", "The hosted server answers 401, so it is up and gated rather than "
@@ -187,17 +190,20 @@ TOOLCHAIN = [
 # is a different fact from one that would not install, and collapsing the two is
 # how a tool count stops meaning anything.
 DECLINED = [
-    ("BenchFlow", "0.6.7, CLI verified",
-     "Packaging our four pre-registered evaluations as a benchmark environment is "
-     "4–6 hours of container work. Real fit — their framing is that a benchmark is "
-     "just a frozen environment, and ours is already frozen — but not today."),
-    ("Tamarind Bio", "credits redeemed",
-     "A job runner for structure and docking workloads. We have no job of that "
-     "kind to submit."),
-    ("Boltz", "not installed",
-     "Co-folding prediction. Reachable through Proto, and still declined: this "
-     "project makes no structural claim, and running it to have run it would put "
-     "a structure on the page that no result depends on."),
+    ("BenchFlow", "declined on cost",
+     "The fit is real and we say so: their framing is that a benchmark is just a "
+     "frozen environment, and ours is already frozen with pre-registered pass/fail "
+     "thresholds — so each verifier would be a threshold comparison rather than a "
+     "judgment call. Packaging all four evaluations is 4-6 hours of container work "
+     "and we did not have it."),
+    ("Tamarind Bio", "declined on fit",
+     "The key authenticates and the account is live. It is a job runner for "
+     "structure and docking workloads and we have no job of that kind, so it has "
+     "run nothing."),
+    ("Boltz", "declined on scope",
+     "Co-folding prediction, reachable through Proto without a separate install. "
+     "Declined because this project makes no structural claim: running it would "
+     "put a structure on the page that no result depends on."),
 ]
 N_TOOLS = len(TOOLCHAIN)
 N_TOUCHED = sum(1 for t in TOOLCHAIN if t[3] != "no")
@@ -601,11 +607,13 @@ describe it as one.</li>
 {TOOL_ROWS}
 </tbody>
 </table>
-<p class="circ">{N_VERIFIED} of {N_TOOLS} were installed, authenticated and run. {N_TOUCHED}
-changed anything in <code>results/frozen/</code>. The other {N_TOOLS - N_TOUCHED} are
-listed at their real status rather than dropped, because the count that flatters us
-and the count that is true are different numbers, and a reviewer can tell them apart
-with one <code>grep</code>.</p>
+<p class="circ"><b>{N_VERIFIED} of these {N_TOOLS} were installed, authenticated and
+run. {N_TOUCHED} changed anything in <code>results/frozen/</code>.</b> The gap between
+those two numbers is the honest tool count, and every row on the wrong side of it is
+still listed. A reviewer can check the whole column with one command —
+<code>grep -rn "modal\\|esm\\|benchflow\\|benchling" src/</code> returns the strings on
+this page and no import. The test suite runs that grep, so if any of them ever enters
+the pipeline this table fails the build instead of quietly becoming false.</p>
 
 <h2 style="margin:38px 0 20px">Declined, with the reason</h2>
 <table class="tools"><tbody>

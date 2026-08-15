@@ -27,17 +27,19 @@ set failed its variance test. Keep every claim scoped to the UPR.
 
 ## 3. Read these, in this order
 
-1. `docs/MORNING_HANDOFF.md` — cold-start resume, first three commands
-2. `docs/HACKATHON_PLAN.md` — pipeline, schedule, open risks
-3. `docs/NEXT.md` — selected program, substrate state, standing prohibitions
-4. `docs/GATE_C1_RESULTS.md` — why proteostasis and not the other three
-5. `docs/LESSONS_LEARNED.md` — the rules earned the hard way
-6. `docs/WINNING_PATTERNS.md` — active design requirements
-7. `docs/TRANSLATIONAL_CONTEXT.md` — the downstream bar, context only
+1. `docs/MORNING_HANDOFF.md` — **START HERE.** Zero-explanation resume: the four
+   results, every hash and seal, the partial-visibility disclosure, and explicit
+   DONE / ABANDONED / NOT STARTED lists.
+2. `REPORT.md` — the two-page finding
+3. `docs/DEMO.md` — the spoken script and the ranked adversarial answers
+4. `docs/LIMITATIONS.md` — first-class; read before defending anything
+5. `docs/DATA_DICTIONARY.md` — every frozen column in plain English
 
-Reference, not required reading: `docs/GATE_C1_PREREGISTRATION.md`,
-`docs/CURRENT_STATE.md`, `docs/RESELECTION_CANDIDATES.md`.
-Anything else is in `docs/archive/`.
+Reference: `docs/MATRIX_PREREG.md` (`d3e24b77…`), `docs/SCOPE_STATEMENT.md`,
+`results/figures/CAPTIONS.md`. Anything else is in `docs/archive/`.
+
+**ANALYSIS IS CLOSED.** No sweeps, no refits, no new features, no gene-level
+claims. Communication and hardening only.
 
 ## 4. Data locations
 

@@ -1,0 +1,11 @@
+program,sealed_in,status,R_p_observed,R_p_predicted,reversibility_call,scored_at
+REACTOME_GASTRULATION,docs/MATRIX_PREREG.md,SEALED - not scored until Tier 3 model is frozen,,,,
+REACTOME_EPH_EPHRIN_SIGNALING,docs/MATRIX_PREREG.md,SEALED - not scored until Tier 3 model is frozen,,,,
+REACTOME_FORMATION_OF_THE_CORNIFIED_ENVELOPE,docs/MATRIX_PREREG.md,SEALED - not scored until Tier 3 model is frozen,,,,
+REACTOME_SCAVENGING_OF_HEME_FROM_PLASMA,docs/MATRIX_PREREG.md,SEALED - not scored until Tier 3 model is frozen,,,,
+REACTOME_RET_SIGNALING,docs/MATRIX_PREREG.md,SEALED - not scored until Tier 3 model is frozen,,,,
+REACTOME_REGULATION_OF_LIPID_METABOLISM_BY_PPARALPHA,docs/MATRIX_PREREG.md,SEALED - not scored until Tier 3 model is frozen,,,,
+REACTOME_G_PROTEIN_MEDIATED_EVENTS,docs/MATRIX_PREREG.md,SEALED - not scored until Tier 3 model is frozen,,,,
+REACTOME_TRIGLYCERIDE_METABOLISM,docs/MATRIX_PREREG.md,SEALED - not scored until Tier 3 model is frozen,,,,
+REACTOME_MEIOSIS,docs/MATRIX_PREREG.md,SEALED - not scored until Tier 3 model is frozen,,,,
+REACTOME_REGULATION_OF_PYRUVATE_METABOLISM,docs/MATRIX_PREREG.md,SEALED - not scored until Tier 3 model is frozen,,,,

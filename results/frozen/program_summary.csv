@@ -1,0 +1,51 @@
+program,rank_by_R_p,n_declared,n_present,frac_present,expr_ratio,sd_ratio,essentiality_density,coherence,n_hits_q05,R_p,passes_measurability_gate,is_sealed_program_B,is_program_A,reversibility_call,call_plain,R_p_predicted_from_measurability,R_p_residual_after_measurability,measurability_limited
+HALLMARK_MYC_TARGETS_V1,1,200,194,0.97,6.9733,1.1064,0.6546,0.1149,5707,3.7565,True,False,False,reversible,Many knockouts measurably moved this program,4.1649,-0.4084,False
+HALLMARK_E2F_TARGETS,2,200,190,0.95,2.5679,1.0042,0.5158,0.0924,5668,3.7535,True,False,False,reversible,Many knockouts measurably moved this program,4.0543,-0.3008,False
+HALLMARK_G2M_CHECKPOINT,3,200,182,0.91,2.0771,0.9985,0.489,0.0706,5229,3.7185,False,False,False,reversible,Many knockouts measurably moved this program,3.5366,0.1819,True
+HALLMARK_OXIDATIVE_PHOSPHORYLATION,4,200,193,0.965,3.7826,1.0676,0.2798,0.0676,3321,3.5214,True,False,False,reversible,Many knockouts measurably moved this program,3.783,-0.2616,False
+HALLMARK_MYC_TARGETS_V2,5,58,55,0.9483,2.3728,1.0129,0.6727,0.1418,3012,3.479,True,False,False,reversible,Many knockouts measurably moved this program,3.258,0.221,False
+HALLMARK_TNFA_SIGNALING_VIA_NFKB,6,200,78,0.39,0.6844,1.1068,0.0897,0.1099,2635,3.4209,False,False,False,reversible,Many knockouts measurably moved this program,3.498,-0.0771,True
+HALLMARK_HEME_METABOLISM,7,200,133,0.665,1.1793,1.0681,0.0526,0.0935,2428,3.3854,True,False,False,reversible,Many knockouts measurably moved this program,3.845,-0.4596,False
+HALLMARK_MITOTIC_SPINDLE,8,199,158,0.794,1.3067,1.0088,0.2595,0.0493,1754,3.2443,True,False,False,reversible,Many knockouts measurably moved this program,2.934,0.3103,False
+HALLMARK_MTORC1_SIGNALING,9,200,176,0.88,2.235,1.0762,0.3182,0.0213,1706,3.2322,True,False,False,reversible,Many knockouts measurably moved this program,2.9622,0.27,False
+HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION,10,200,45,0.225,0.6435,1.1901,0.0889,0.08,924,2.9661,False,False,False,reversible,Many knockouts measurably moved this program,2.8554,0.1107,True
+HALLMARK_CHOLESTEROL_HOMEOSTASIS,11,74,52,0.7027,0.9205,1.0911,0.1346,0.0483,773,2.8887,False,True,False,reversible,Many knockouts measurably moved this program,2.0426,0.8461,True
+HALLMARK_UNFOLDED_PROTEIN_RESPONSE,12,113,94,0.8319,2.2515,1.0536,0.4468,0.0235,517,2.7143,True,False,True,reversible,Many knockouts measurably moved this program,1.5995,1.1148,False
+HALLMARK_APOPTOSIS,13,161,85,0.528,1.1485,1.0741,0.1647,0.0502,423,2.6274,True,False,False,reversible,Many knockouts measurably moved this program,2.1494,0.478,False
+HALLMARK_INFLAMMATORY_RESPONSE,14,200,51,0.255,0.971,1.0323,0.0392,0.0609,344,2.5378,False,False,False,reversible,Many knockouts measurably moved this program,1.3158,1.222,True
+HALLMARK_GLYCOLYSIS,15,200,117,0.585,1.2148,1.0093,0.1795,0.02,333,2.5237,True,False,False,reversible,Many knockouts measurably moved this program,1.5408,0.9829,False
+HALLMARK_COMPLEMENT,16,200,80,0.4,0.9634,1.0366,0.075,0.0544,332,2.5224,False,False,False,reversible,Many knockouts measurably moved this program,1.7935,0.7289,True
+HALLMARK_INTERFERON_GAMMA_RESPONSE,17,200,74,0.37,0.8601,1.0639,0.1081,0.0633,296,2.4728,False,False,False,reversible,Many knockouts measurably moved this program,2.0851,0.3877,True
+HALLMARK_PROTEIN_SECRETION,18,96,84,0.875,1.487,1.0303,0.2381,0.0716,266,2.4265,True,False,False,reversible,Many knockouts measurably moved this program,2.5581,-0.1316,False
+HALLMARK_ADIPOGENESIS,19,200,147,0.735,1.4095,1.0229,0.1156,0.0292,192,2.2856,True,False,False,reversible,Many knockouts measurably moved this program,2.3907,-0.1051,False
+HALLMARK_APICAL_JUNCTION,20,200,82,0.41,1.0193,1.0214,0.1098,0.0382,152,2.1847,False,False,False,reversible,Many knockouts measurably moved this program,1.366,0.8187,True
+HALLMARK_P53_PATHWAY,21,200,119,0.595,0.9672,1.0561,0.1513,0.0308,151,2.1818,False,False,False,reversible,Many knockouts measurably moved this program,2.2251,-0.0433,True
+HALLMARK_INTERFERON_ALPHA_RESPONSE,22,97,40,0.4124,0.8832,1.0637,0.1,0.0774,122,2.0899,False,False,False,reversible,Many knockouts measurably moved this program,1.9382,0.1517,True
+HALLMARK_HYPOXIA,23,200,88,0.44,1.1211,1.0885,0.0682,0.033,99,2.0,False,False,False,weak,"A few knockouts moved it, but not many",1.8608,0.1392,True
+HALLMARK_ESTROGEN_RESPONSE_LATE,24,200,76,0.38,1.0624,1.0499,0.1316,0.0155,95,1.9823,False,False,False,weak,"A few knockouts moved it, but not many",0.977,1.0053,True
+HALLMARK_TGF_BETA_SIGNALING,25,54,36,0.6667,1.2344,1.0392,0.1111,0.0738,89,1.9542,True,False,False,weak,"A few knockouts moved it, but not many",1.8286,0.1256,False
+HALLMARK_COAGULATION,26,138,34,0.2464,0.7801,1.1256,0.1176,0.0779,84,1.9294,False,False,False,weak,"A few knockouts moved it, but not many",2.1572,-0.2278,True
+HALLMARK_DNA_REPAIR,27,150,131,0.8733,1.9105,1.028,0.5267,0.0394,83,1.9243,True,False,False,weak,"A few knockouts moved it, but not many",2.3892,-0.4649,False
+HALLMARK_FATTY_ACID_METABOLISM,28,158,105,0.6646,1.6071,1.0226,0.0857,0.0233,62,1.7993,True,False,False,weak,"A few knockouts moved it, but not many",1.5397,0.2596,False
+HALLMARK_IL6_JAK_STAT3_SIGNALING,29,87,32,0.3678,0.8026,1.0236,0.0625,0.0664,44,1.6532,False,False,False,weak,"A few knockouts moved it, but not many",1.2707,0.3825,True
+HALLMARK_REACTIVE_OXYGEN_SPECIES_PATHWAY,30,49,41,0.8367,1.6816,1.0719,0.1707,0.0314,38,1.5911,True,False,False,weak,"A few knockouts moved it, but not many",1.3438,0.2473,False
+HALLMARK_UV_RESPONSE_DN,31,144,68,0.4722,0.757,1.0091,0.0441,0.0388,30,1.4914,False,False,False,weak,"A few knockouts moved it, but not many",1.2404,0.251,True
+HALLMARK_PI3K_AKT_MTOR_SIGNALING,32,105,76,0.7238,1.1476,1.02,0.2632,0.0498,20,1.3222,True,False,False,weak,"A few knockouts moved it, but not many",1.827,-0.5048,False
+HALLMARK_ALLOGRAFT_REJECTION,33,200,59,0.295,1.3409,1.0806,0.2034,0.0161,18,1.2788,False,False,False,weak,"A few knockouts moved it, but not many",0.7946,0.4842,True
+HALLMARK_ANDROGEN_RESPONSE,34,101,64,0.6337,1.6814,1.0501,0.2188,0.037,16,1.2304,True,False,False,weak,"A few knockouts moved it, but not many",1.3748,-0.1444,False
+HALLMARK_IL2_STAT5_SIGNALING,35,199,89,0.4472,1.0647,1.056,0.0787,0.026,11,1.0792,False,False,False,weak,"A few knockouts moved it, but not many",1.509,-0.4298,True
+HALLMARK_KRAS_SIGNALING_UP,36,200,52,0.26,0.8947,1.0175,0.0577,0.0472,10,1.0414,False,False,False,weak,"A few knockouts moved it, but not many",0.9604,0.081,True
+HALLMARK_ESTROGEN_RESPONSE_EARLY,37,200,76,0.38,0.9037,1.0368,0.0921,0.0182,9,1.0,False,False,False,weak,"A few knockouts moved it, but not many",0.982,0.018,True
+HALLMARK_KRAS_SIGNALING_DN,38,200,26,0.13,0.7688,1.117,0.0769,0.0412,4,0.699,False,False,False,weak,"A few knockouts moved it, but not many",1.093,-0.394,True
+HALLMARK_UV_RESPONSE_UP,39,158,104,0.6582,1.2679,1.0338,0.25,0.0278,3,0.6021,True,False,False,weak,"A few knockouts moved it, but not many",1.7649,-1.1628,False
+HALLMARK_SPERMATOGENESIS,40,135,56,0.4148,1.2463,1.0119,0.2143,0.0351,0,0.0,False,False,False,null,No knockout measurably moved this program,0.7941,-0.7941,True
+HALLMARK_WNT_BETA_CATENIN_SIGNALING,41,42,20,0.4762,0.8502,0.9838,0.15,0.0232,0,0.0,False,False,False,null,No knockout measurably moved this program,0.0154,-0.0154,True
+HALLMARK_ANGIOGENESIS,42,36,11,0.3056,0.4776,1.0805,0.1818,0.0407,0,0.0,False,False,False,null,No knockout measurably moved this program,0.869,-0.869,True
+HALLMARK_BILE_ACID_METABOLISM,43,112,42,0.375,0.9248,1.0269,0.0476,0.0258,0,0.0,False,False,False,null,No knockout measurably moved this program,0.5773,-0.5773,True
+HALLMARK_APICAL_SURFACE,44,44,12,0.2727,0.7674,1.009,0.0,0.0443,0,0.0,False,False,False,null,No knockout measurably moved this program,0.3272,-0.3272,True
+HALLMARK_PEROXISOME,45,104,66,0.6346,1.2547,1.0253,0.1212,0.0178,0,0.0,True,False,False,null,No knockout measurably moved this program,0.9492,-0.9492,False
+HALLMARK_PANCREAS_BETA_CELLS,46,40,9,0.225,4.967,1.116,0.4444,0.032,0,0.0,False,False,False,null,No knockout measurably moved this program,-0.407,0.407,True
+HALLMARK_NOTCH_SIGNALING,47,32,14,0.4375,0.6296,0.9811,0.2143,0.0384,0,0.0,False,False,False,null,No knockout measurably moved this program,0.2289,-0.2289,True
+HALLMARK_MYOGENESIS,48,200,54,0.27,0.9757,1.0851,0.0556,0.0392,0,0.0,False,False,False,null,No knockout measurably moved this program,1.3215,-1.3215,True
+HALLMARK_HEDGEHOG_SIGNALING,49,36,10,0.2778,0.5142,1.0052,0.1,0.0327,0,0.0,False,False,False,null,No knockout measurably moved this program,0.0924,-0.0924,True
+HALLMARK_XENOBIOTIC_METABOLISM,50,200,85,0.425,1.1622,1.0296,0.1059,0.0132,0,0.0,False,False,False,null,No knockout measurably moved this program,0.9343,-0.9343,True

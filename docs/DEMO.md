@@ -7,7 +7,9 @@
 
 ## Open with this sentence
 
-> ### **"Our headline number is minus zero point zero one nine — that's our own reproducibility check failing, and it's why you can trust everything else I'm about to show you."**
+> ### **"Seventy-five percent of what looks like biology in a genome-scale screen is measurement — and the second number you need is minus zero point zero one nine, our own reproducibility check failing."**
+
+*Mechanism, one line:* **bigger programs with more co-moving members return more hits regardless of what they do — program size alone explains 47% of it.**
 
 `[pause — 2 beats. Let them look confused.]`
 
@@ -47,7 +49,9 @@
 
 ## 4 · Program B — sealed, and it works
 
-> **"Before we scored anything, we sealed a second program in git. Cholesterol. Commit 9ad74a7, 8:24 in the morning."**
+> **"We sealed one row of this matrix before the matrix existed."**
+>
+> **"Cholesterol. Commit 9ad74a7, 8:24 in the morning."**
 >
 > **"The scoring code didn't exist yet. We wrote it twenty-one minutes later. There was nothing to tune."**
 
@@ -70,15 +74,35 @@
 
 > **"We used Paperclip to build the evidence layer — one citation per gene, a hundred and thirteen genes. Then we audited it instead of trusting it."**
 >
-> **"Thirty-four distinct sources cover a hundred and thirteen genes. One review is the cited evidence for fifty-seven of them — half the program. Only fourteen of a hundred and thirteen top hits even name their own gene in the title."**
+> **"Our top-cited source for ATF3 was a paper about integrating single-cell data across species. It has nothing to do with ATF3."**
+>
+> **"So we ran a blind probe on twenty more genes. Nineteen of the twenty came back with the same zebrafish methods paper. One came back with a paper about a completely different gene."**
 
 `[pause]`
 
-> **"So we ran a blind probe on twenty more genes to check whether that was our query or the tool. Nineteen of the twenty came back with the same zebrafish methods paper. For one gene it returned a paper about a different gene entirely."**
+> **"Thirty-four distinct sources cover a hundred and thirteen genes. That is not an evidence chain, it is a pointer layer, and we labelled it as one in the repo before anyone asked."**
 >
-> **"That's not an evidence chain. It's a pointer layer, and we labelled it as one in the repo before anyone asked. If you build on retrieval, measure your retrieval."**
+> **"If you build on retrieval, measure your retrieval."**
 
 *Screen: 34 / 113, the 50.4% bar, the 19-of-20 probe.*
+
+---
+
+## 4c · Same agent, three results, three different next experiments
+
+`[This is the loop. Show all three on one screen.]`
+
+> **"The agent proposes a next experiment, and it is generated from the result — not written by us. Three programs, three outcomes, three different proposals."**
+
+| Result | What it proposes | Generated from |
+|---|---|---|
+| **Null** — 0 hits | *"Program members are expressed and variable yet nothing reaches significance: this is a power limit, not a biology limit. Increase cells per perturbation."* **Falsified if** doubling depth still yields nothing. | `expr_ratio`, `sd_ratio` read off the row |
+| **Hit** — 5,707 hits | *"Validate at pathway level, both tails, second cell type, set-level enrichment — not gene lookups."* **Why not gene-level:** concordance is −0.019. | `n_hits`, residual vs. predicted |
+| **Unscored** | *"Predicted R_p 3.48, ~3,040 hits, SD 0.58. The informative part is the residual."* | six measurability features, no scoring |
+
+`[pause]`
+
+> **"Change the data and the proposal changes. No branch in that code tests a program name."**
 
 ---
 

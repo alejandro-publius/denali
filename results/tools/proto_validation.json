@@ -1,0 +1,33 @@
+{
+  "checked_at": "2026-08-15T22:07:25+00:00",
+  "install_command": "pip install git+https://github.com/evo-design/proto-tools.git",
+  "note": "Recorded because we previously published Proto as broken on the strength of `proto-language`, a package Proto does not publish. See LIMITATIONS.md section 7.",
+  "version": "0.1.0",
+  "n_tools": 140,
+  "n_categories": 17,
+  "doctor": {
+    "modal auth": "OK via /Users/alexvintera/.modal.toml",
+    "workspace": "alejandro-publius",
+    "environment": "proto-env",
+    "apps deployed": "0 of 56",
+    "PROTO_HOME": "/Users/alexvintera/.proto   writable: yes (created on first use)",
+    "temp space": "OK (/var/folders/zv/vxrp0js555l3b3vqr1m4gstw0000gn/T)",
+    "mcp extra": "not installed \u2014 `pip install \"proto-tools[mcp]\"` to run the MCP server"
+  },
+  "live_call": {
+    "tool": "ensembl-lookup",
+    "input": {
+      "symbol": "HMGCR"
+    },
+    "success": true,
+    "seconds": 47.9,
+    "source_url": "https://rest.ensembl.org/lookup/symbol/homo_sapiens/HMGCR",
+    "result": {
+      "id": "ENSG00000113161",
+      "display_name": "HMGCR",
+      "biotype": "protein_coding",
+      "seq_region_name": "5"
+    }
+  },
+  "verdict": "INSTALLED AND EXECUTING. Not used in the pipeline: Proto serves structure and sequence-design models and denali makes no structural or sequence-design claim."
+}

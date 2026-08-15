@@ -12,9 +12,9 @@ table rather than something to pad around.
 | **Anthropic MCP** | ✅ `mcp 1.29.0` | n/a | `src/mcp_server.py` started over stdio, 2 tools listed, 3 calls returned non-empty | ships the result |
 | **Modal** | ✅ `1.5.4` | ✅ workspace `alejandro-publius` | **runs the sweep**: 50 programs / 10 containers / 133 s, output identical to `results/frozen/` on all 50. Same scorer imported verbatim, run elsewhere — portability, not independent confirmation of the maths | reproduces all 50 |
 | **CZ Biohub / ESMC** | ✅ `esm 3.2.3` | ✅ hosted API key | verified twice — local weights **and** the hosted Biohub Platform API, both returning `(1, 67, 960)` | no |
-| **Proto — Evo Design** | ✅ `proto-tools 0.1.0` | ✅ via Modal | installed from git; 140 tools / 17 categories; `proto-tools doctor` exits 0 | no |
+| **Proto — Evo Design** | ✅ `proto-tools 0.1.0` | ✅ via Modal | **executed a real tool call**, recorded with timing and source URL in `results/tools/proto_validation.json`; 140 tools / 17 categories; `doctor` exits 0 | no |
 | **Benchling** | ⚠ MCP endpoint live | ⏳ OAuth pending | `hackathon.mcp.bnchdev.org/mcp` returns 401 — up and gated | no |
-| **Benchflow** | ✅ `0.6.7` | not required | `bench --help` runs; scaffolded a task to size the work | no — **declined** |
+| **Benchflow** | ✅ `0.6.7` | not required | **task authored and validated**: `bench tasks check` passes, container builds, verifier grades oracle 0.7413 vs naive 0.6981 | no — grades others, not us |
 | **Tamarind Bio** | — | ✅ key authenticates | `GET /api/jobs` → 200, 0 jobs submitted | no — **declined** |
 | **Boltz** | ❌ standalone | n/a | reachable through Proto | no — **declined** |
 | **Sundial** | ❌ | ❌ | no discoverable install path | no |
@@ -24,11 +24,10 @@ table rather than something to pad around.
 A tool we could have run and chose not to is a different fact from one that would
 not install. Collapsing the two is how a tool count stops meaning anything.
 
-- **Benchflow — 4–6 hours, out of scope today.** The fit is real: their framing is
-  that *a benchmark is just a frozen environment*, and ours is already frozen with
-  pre-registered pass/fail thresholds, so each `verifier/test.sh` would be a
-  threshold comparison rather than a judgment call. The cost is container work —
-  one shared Dockerfile, four task dirs, and a `bench eval run` per task.
+- **Benchflow — one of four built.** Their framing is that *a benchmark is just a
+  frozen environment*, and ours was already frozen, so `benchmarks/tasks/denali-gate-trap`
+  got built and validated end to end. The remaining three pre-registered
+  evaluations are another 3–4 hours of container work and were not attempted.
 - **Tamarind Bio — nothing to submit.** The key authenticates (`GET /api/jobs`
   returns 200) and the account is live. It is a job runner for structure and
   docking workloads and we have no job of that kind, so it has run nothing.
@@ -81,6 +80,17 @@ one. The second was **our own published error** and is recorded in
 - **`benchflow` on PyPI IS the right package** — benchflow.ai, "the universal
   environment framework". No key needed for local use; the key references inside
   it are for LLM providers via litellm, not for BenchFlow itself.
+
+## Upstream outage recorded, 15 Aug 2026
+
+Ensembl's REST endpoint returned **503 to plain `curl` in 20.7 s** during this
+session, and Proto's `ensembl-lookup` failed with it before succeeding on retry
+at 47.9 s. The failure was upstream, not in `proto-tools`. It is recorded because
+it is the reason a larger sequence-model analysis was not attempted: every route
+to Evo2 or AlphaGenome runs through per-gene sequence retrieval, and at 25–48 s
+per gene with intermittent 503s, that is not a study anyone can run in an evening.
+This is the same lesson as FIG 4 — public infrastructure fails in ways you only
+see if you check.
 
 ## One question left for the organisers
 

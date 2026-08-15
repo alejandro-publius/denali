@@ -1,6 +1,6 @@
 # denali 🏔
 
-**A genome-scale CRISPRi screen, read back to ask what it can and cannot discover — and the answer is mostly measurement.**
+**A genome-scale CRISPRi screen, read back to ask what it can and cannot discover — and the answer is mostly an artifact of how the programs are defined, not their biology.**
 
 [![CI](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml/badge.svg)](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml)
 [![tests](https://img.shields.io/badge/tests-84-brightgreen.svg)](tests/test_frozen_invariants.py)
@@ -146,7 +146,7 @@ Set up is not the same as used. What actually touched the result:
 | **Biohub ESMC** | Set up, not in the pipeline | Verified twice — local MIT weights **and** the authenticated hosted Biohub Platform API, both returning `(1, 67, 960)`. Nothing frozen depends on it |
 | **Benchling** | MCP registered, nothing to register | Hosted server at `hackathon.mcp.bnchdev.org/mcp` answers 401 — up and OAuth-gated. Our pipeline has no wet-lab entity to push into a notebook |
 | **Proto (Evo Design)** | **Installed, not used** | `pip install git+https://github.com/evo-design/proto-tools.git` succeeds. 140 tools, 17 categories, `proto-tools doctor` exits 0 against a live Modal workspace. Serves AlphaFold, Boltz, ESMC, Evo2, AlphaGenome — denali makes no structural or sequence-design claim |
-| **Benchflow** | **Declined** | CLI 0.6.7 verified. Packaging our four pre-registered evaluations as a benchmark environment is 4–6 h of container work. Real fit — their framing is that a benchmark is just a frozen environment, and ours is already frozen — but out of scope today |
+| **Benchflow** | **USED** | `benchmarks/tasks/denali-gate-trap` — our finding turned into an agent benchmark. An agent sees only measurability features for 50 programs and predicts which returned a result; the naive quality filter scores **0.6981** balanced accuracy with 20 false negatives, our reference solution **0.7413**. `bench tasks check` passes, container builds, verifier discriminates (no answer → 0.0, always-true → 0.0) |
 | **Boltz-2** | **Declined** | Reachable via Proto. No structural claim is possible at −0.019 concordance, and running it to have run it would put a structure on the page no result depends on |
 | **Tamarind** | **Declined** | Key authenticates — `GET /api/jobs` returns 200, **0 jobs submitted**. A job runner for structure and docking workloads; we have no job of that kind |
 
@@ -253,9 +253,9 @@ The list is less trustworthy than it looks, for three reasons a newcomer would n
 
 ## What did we build?
 
-denali reads a finished screen back and estimates **how much of the apparent signal is explained by measurement quality rather than biology**, before anyone commits to a candidate.
+denali reads a finished screen back and estimates **how much of the apparent signal is explained by how the programs were defined — chiefly their size — rather than biology**, before anyone commits to a candidate.
 
-The answer, on a published genome-scale screen: **between 56% and 75%**. A model that never looks at what a single gene *does* — only at how well each pathway was measured — predicts most of what looks like discovery. Pathway size alone explains **46.5%**.
+The answer, on a published genome-scale screen: **between 56% and 75%**. A model that never looks at what a single gene *does* — only at how each pathway was defined, chiefly its size — predicts most of what looks like discovery. Pathway size alone explains **46.5%**.
 
 We also checked the obvious fix. If you filter out poorly-measured pathways, you throw away **20 of 50** pathways that produce real results anyway. The quality filter a careful person would build is wrong 40% of the time.
 

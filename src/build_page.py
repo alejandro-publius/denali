@@ -168,9 +168,13 @@ TOOLCHAIN = [
      "again through the authenticated Biohub Platform API; both returned the same "
      "embedding shape. The result is a protein embedding. This project scores "
      "transcriptional movement, and no embedding reaches any frozen file."),
-    ("Benchflow", "0.6.7", "Verified — CLI runs, no key required",
-     "no", "Installed and executed, then declined on cost rather than on fit. "
-     "See below."),
+    ("Benchflow", "0.6.7", "Used — one task authored, container builds, verifier grades",
+     "no", "benchmarks/tasks/denali-gate-trap turns our own finding into an agent "
+     "benchmark: an agent sees only measurability features for 50 programs and "
+     "must predict which returned a result. The naive quality filter scores 0.6981 "
+     "balanced accuracy with 20 false negatives, our reference solution 0.7413. "
+     "It grades no denali result — it asks whether anyone else falls for the same "
+     "trap we did."),
     ("Tamarind Bio", "REST API", "Verified — key authenticates, 0 jobs submitted",
      "no", "GET /api/jobs returns 200 on our key. Declined: see below."),
     ("Benchling", "MCP endpoint live",
@@ -197,12 +201,11 @@ TOOLCHAIN = [
 # is a different fact from one that would not install, and collapsing the two is
 # how a tool count stops meaning anything.
 DECLINED = [
-    ("BenchFlow", "declined on cost",
-     "The fit is real and we say so: their framing is that a benchmark is just a "
-     "frozen environment, and ours is already frozen with pre-registered pass/fail "
-     "thresholds — so each verifier would be a threshold comparison rather than a "
-     "judgment call. Packaging all four evaluations is 4-6 hours of container work "
-     "and we did not have it."),
+    ("BenchFlow", "one task built, three declined",
+     "Their framing is that a benchmark is just a frozen environment, and ours was "
+     "already frozen — so one task got built and validated end to end. The other "
+     "three pre-registered evaluations are still 3-4 hours of container work and "
+     "were not attempted."),
     ("Tamarind Bio", "declined on fit",
      "The key authenticates and the account is live. It is a job runner for "
      "structure and docking workloads and we have no job of that kind, so it has "

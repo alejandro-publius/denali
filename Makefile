@@ -3,7 +3,7 @@
 #   make setup     create the venv and install pinned deps
 #   make data      print the ONE manual step (470 MB substrate download)
 #   make all       reproduce everything deterministic   (~22 min)
-#   make page      serve the expo page
+#   make page      rebuild index.html from the frozen numbers
 #   make clean     remove generated outputs (keeps data/raw)
 #
 # `make all` is deterministic: fixed seeds, checksummed inputs. It reproduces
@@ -66,6 +66,8 @@ all: check
 	@echo "== 9/9  figures + post-freeze sensitivity check          ~1 min"
 	$(PY) -m src.figures_matrix
 	$(PY) -m src.sensitivity_stripped
+	@echo "== build the page from the frozen numbers"
+	$(PY) -m src.build_page
 	@echo "== invariants: every number must match the committed frozen files"
 	@$(MAKE) --no-print-directory test
 	@echo ""
@@ -84,8 +86,9 @@ retrieval:
 	$(PY) -m src.paperclip_program
 
 page:
-	$(PY) -m streamlit run app.py
+	$(PY) -m src.build_page
+	@echo "open index.html"
 
 clean:
-	rm -rf results/frozen results/figures/*.png results/sensitivity/stripped_model.json
+	rm -rf results/frozen results/figures/*.png results/sensitivity/stripped_model.json index.html
 	@echo "removed generated outputs. data/raw kept."

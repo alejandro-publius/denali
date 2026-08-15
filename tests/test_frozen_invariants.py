@@ -114,7 +114,11 @@ def main() -> int:
 
     # ---------------- B. docs trace to frozen files ----------------
     report = (ROOT / "REPORT.md").read_text()
-    page = (ROOT / "app.py").read_text()
+    page = (ROOT / "index.html").read_text()
+    check("index.html is standalone (figures inlined as base64)",
+          "base64," in page, "figures must be embedded, not linked")
+    check("no interactive controls on the page",
+          not re.search(r"<(button|input|select|form)\b", page, re.I))
     caps = (FIGS / "CAPTIONS.md").read_text()
     both = report + page + caps
 
@@ -165,11 +169,20 @@ def main() -> int:
               hits[0] if hits else "")
 
     # page text = the literal strings app.py renders
-    page_text = " ".join(re.findall(r'"((?:[^"\\]|\\.){12,})"', page))
-    scan("the page (app.py)", page_text)
+    page_text = re.sub(r"<[^>]+>", " ", re.sub(r"<style.*?</style>|<img[^>]*>", " ", page, flags=re.S))
+    scan("the page (index.html)", page_text)
     scan("results/figures/CAPTIONS.md", caps)
 
-    check("scope limit is stated on the page", "-0.019" in page or "−0.019" in page)
+    # framing rule: the project does not lead with commit ordering
+    SEAL = re.compile(r"\bseal(ed|ing)?\b|before the scoring code existed|"
+                      r"\d+ minutes? before", re.I)
+    for label, txt in [("index.html", page), ("CAPTIONS.md", caps),
+                       ("REPORT.md", report)]:
+        hit = SEAL.search(txt)
+        check(f"no seal framing in {label}", hit is None,
+              txt[max(0, hit.start()-60):hit.end()+60].replace("\n", " ") if hit else "")
+
+    check("scope limit is stated on the page", "-0.019" in page or "\u22120.019" in page)
     check("scope limit is stated in the captions",
           "gene-level" in caps or "0.019" in caps or "pointer layer" in caps)
 

@@ -13,8 +13,5 @@ pyarrow==24.0.0
 scipy==1.18.0
 statsmodels==0.14.6
 
-# expo page
-streamlit==1.61.1
-
 # MCP server (optional — only for src/mcp_server.py)
 mcp==1.29.0

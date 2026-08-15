@@ -51,7 +51,7 @@ reproducible bit-for-bit — seeds are fixed and inputs are checksummed.
 make setup     # venv + pinned deps from requirements.txt
 make data      # prints the ONE manual step, below
 make all       # ~22 min, reproduces everything deterministic
-make page      # serve the expo page
+make page      # rebuild index.html from the frozen numbers
 ```
 
 ### The one manual step — 470 MB substrate

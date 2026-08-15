@@ -127,6 +127,17 @@ def _explorer_rows():
     return rows
 
 
+# The agent's running statistic is goodness-of-fit of the FROZEN measurability
+# prediction against the FROZEN observation, on whatever subset it has read. That
+# is not the same quantity as the pre-registered adj R2 (which is an OLS fit on
+# all 50, penalised for six parameters), so the page must not imply it converges
+# to it. This is the honest reference: the identical statistic over all 50 rows.
+_pr = SUMMARY.dropna(subset=["R_p", "R_p_predicted_from_measurability"])
+ALL50_R2 = V(round(float(
+    1 - ((_pr.R_p - _pr.R_p_predicted_from_measurability) ** 2).sum()
+    / ((_pr.R_p - _pr.R_p.mean()) ** 2).sum()), 4),
+    "computed: frozen prediction vs frozen observation, all 50")
+
 EXPLORER = _explorer_rows()
 V(len(EXPLORER), "program_summary.csv rows -> explorer")
 N_GATEFAIL_ROWS = V(sum(1 for r in EXPLORER if r["gate_fail_with_hits"]),
@@ -365,6 +376,40 @@ table.ex tbody tr.sel{background:var(--fill)}
 .detail .prop b{display:block;font-size:.75rem;text-transform:uppercase;
   letter-spacing:.08em;color:var(--soft);margin-bottom:6px}
 .detail .prop p{margin:0 0 10px}
+/* the agent — same hairline grammar, nothing new introduced */
+.btn{font:600 .8125rem/1 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  padding:9px 16px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);
+  cursor:pointer;letter-spacing:.02em}
+.btn:hover{opacity:.84}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
+.btn.ghost:hover{border-color:var(--ink);opacity:1}
+.btn:disabled{opacity:.32;cursor:default}
+.ctl select{font:400 .8125rem/1 "JetBrains Mono",ui-monospace,monospace;
+  padding:5px 7px;border:1px solid var(--rule);background:var(--paper);
+  color:var(--ink);cursor:pointer}
+.agwrap{display:grid;grid-template-columns:270px 1fr;border:1px solid var(--rule);
+  background:var(--rule);gap:1px}
+.agstate{background:var(--paper);padding:22px 24px;display:flex;
+  flex-direction:column;gap:26px}
+.agmetric .n{font-size:1.6rem;font-weight:600;line-height:1;margin-bottom:8px;
+  font-variant-numeric:tabular-nums}
+.agmetric .l{font-size:.75rem;line-height:1.5;color:var(--soft)}
+.aglog{background:var(--paper);padding:0;max-height:430px;overflow-y:auto}
+.agempty{padding:24px;font-size:.875rem;color:var(--soft);font-style:italic}
+.agstep{padding:14px 22px;border-bottom:1px solid var(--rule);
+  display:grid;grid-template-columns:30px 1fr;gap:14px}
+.agstep:last-child{border-bottom:0}
+.agstep .i{font:400 .75rem/1.6 "JetBrains Mono",ui-monospace,monospace;
+  color:var(--faint,var(--soft));font-variant-numeric:tabular-nums}
+.agstep .nm{font-size:.9375rem;font-weight:600;margin-bottom:3px}
+.agstep .ev{font:400 .75rem/1.7 "JetBrains Mono",ui-monospace,monospace;
+  color:var(--soft);font-variant-numeric:tabular-nums}
+.agstep .vd{font-size:.875rem;line-height:1.55;margin-top:7px}
+.agstep .nx{font-size:.8125rem;line-height:1.55;color:var(--soft);margin-top:6px;
+  border-left:2px solid var(--accent);padding-left:12px}
+.agstep.halt{background:var(--fill)}
+.agstep.halt .nm{color:var(--accent)}
+
 /* tool chain — the same hairline table, one extra column that carries the point */
 table.tools{width:100%;border-collapse:collapse;font-size:.9375rem;
   margin:0 0 6px}
@@ -485,6 +530,62 @@ return more hits regardless of what they do — <b>program size alone explains
 </div>
 </section>
 
+<!-- 4a. the agent -->
+<section>
+<div class="label">The loop, running</div>
+<h2>The agent chooses what to look at next, and decides when it has seen enough.</h2>
+<p class="claim">It starts knowing nothing. At each step it picks a program by a
+stated policy, reads that program's frozen evidence, updates its estimate of how
+much of apparent reversibility is explained by measurability, and emits a next
+experiment. It halts on its own when the estimate stops moving. Nothing here is
+scripted to a fixed answer &mdash; change the policy or the halt rule and it visits
+different programs and stops somewhere else.</p>
+
+<div class="ctl">
+  <button id="agRun" class="btn">Run the agent</button>
+  <button id="agStep" class="btn ghost">Step once</button>
+  <button id="agReset" class="btn ghost">Reset</button>
+  <label>policy
+    <select id="agPolicy">
+      <option value="coverage">cover the size range</option>
+      <option value="uncertain">largest model error first</option>
+      <option value="order">alphabetical (no policy)</option>
+    </select>
+  </label>
+  <label>halt when &Delta;R&sup2; &lt;
+    <select id="agTol">
+      <option value="0.02">0.02</option>
+      <option value="0.01" selected>0.01</option>
+      <option value="0.005">0.005</option>
+    </select>
+    for 3 steps</label>
+  <span class="count" id="agCount">0 of {N_PROGRAMS} visited</span>
+</div>
+
+<div class="agwrap">
+  <div class="agstate">
+    <div class="agmetric"><div class="n" id="agR2">&mdash;</div>
+      <div class="l">running R&sup2;: how much of what it has seen is explained by
+      measurability alone</div></div>
+    <div class="agmetric"><div class="n" id="agN">0</div>
+      <div class="l">programs examined</div></div>
+    <div class="agmetric"><div class="n" id="agStatus">idle</div>
+      <div class="l">halt condition</div></div>
+  </div>
+  <div class="aglog" id="agLog"><div class="agempty">No steps taken. The agent has
+  read nothing yet.</div></div>
+</div>
+<p class="circ">The running R&sup2; is computed in the browser from two frozen columns
+&mdash; observed R<sub>p</sub> and the measurability model's prediction &mdash; over
+exactly the programs the agent has chosen to read. It is not fitted here and no
+value is pre-computed for it. It is <b>not</b> the pre-registered statistic: that
+one is an OLS fit over all {N_PROGRAMS} programs, penalised for six parameters,
+and it is {R_LO}&ndash;{R_HI}. This is a plain goodness-of-fit on a subset, which
+over all {N_PROGRAMS} rows comes to {ALL50_R2}. The agent reports both when it
+halts, and names the gap, because a number from an early stop is worth less than
+a number from a full read and it should say so itself.</p>
+</section>
+
 <!-- 4b. explorer -->
 <section>
 <h2>All {N_PROGRAMS} programs</h2>
@@ -553,6 +654,170 @@ document.querySelectorAll("table.ex th").forEach(th=>th.onclick=()=>{{
   const k=th.dataset.k; sortAsc=(k===sortK)?!sortAsc:(k==="short"); sortK=k; draw();}});
 $("fGate").onchange=$("fHeld").onchange=draw;
 draw();
+
+/* ---------------- the agent ----------------------------------------------
+   A deterministic loop over the frozen table. It is autonomous in the sense
+   that matters here: it chooses which program to read next, and it decides
+   for itself when to stop. Both decisions are policies you can change from
+   the controls, and changing them changes the trace.
+
+   No network, no model call, no pre-computed answer. The running R2 is
+   ordinary least-squares goodness-of-fit between two frozen columns over
+   exactly the rows the agent has chosen so far. */
+const ALL50={ALL50_R2};   /* same statistic over all 50, from the frozen file */
+const AG={{seen:[],r2hist:[],halted:false,reason:""}};
+
+/* R2 of the frozen measurability prediction against the frozen observation,
+   on the visited subset only. */
+function runR2(rows){{
+  if(rows.length<3) return null;
+  const y=rows.map(d=>d.R_p), p=rows.map(d=>d.R_p_predicted_from_measurability);
+  if(p.some(v=>v===null||v===undefined)) return null;
+  const mean=y.reduce((a,b)=>a+b,0)/y.length;
+  const ssTot=y.reduce((a,v)=>a+(v-mean)**2,0);
+  const ssRes=y.reduce((a,v,i)=>a+(v-p[i])**2,0);
+  return ssTot===0?null:1-ssRes/ssTot;
+}}
+
+/* The exploration policy. This is the autonomous choice -- which evidence to
+   look at next, given only what has already been read. */
+function pick(){{
+  const left=DATA.filter(d=>!AG.seen.includes(d));
+  if(!left.length) return null;
+  const pol=$("agPolicy").value;
+  if(pol==="order")
+    return left.slice().sort((a,b)=>a.program<b.program?-1:1)[0];
+  if(pol==="uncertain")   /* read where the model is currently worst */
+    return left.slice().sort((a,b)=>
+      Math.abs(b.R_p_residual_after_measurability||0)-
+      Math.abs(a.R_p_residual_after_measurability||0))[0];
+  /* default: cover the size range, so the estimate is not built from one
+     end of it. Furthest unvisited program from everything seen so far. */
+  if(!AG.seen.length)
+    return left.slice().sort((a,b)=>a.n_present-b.n_present)[Math.floor(left.length/2)];
+  return left.slice().sort((a,b)=>
+    Math.min(...AG.seen.map(s=>Math.abs(b.n_present-s.n_present)))-
+    Math.min(...AG.seen.map(s=>Math.abs(a.n_present-s.n_present))))[0];
+}}
+
+/* The verdict is about the MODEL, not about the program. The agent is auditing
+   its own explanation, which is why nothing here reads as a recommendation. */
+function verdict(d){{
+  const r=d.R_p_residual_after_measurability;
+  if(d.n_hits_q05===0)
+    return ["Nothing moved it. Measurability alone predicted "+
+      (d.R_p_predicted_from_measurability||0).toFixed(2)+
+      ", so this is a program my model expected to be quiet.", false];
+  if(!d.passes_measurability_gate && d.n_hits_q05>0)
+    return ["Fails the quality gate and returns "+d.n_hits_q05.toLocaleString()+
+      " hits anyway. The gate would have discarded this. That is evidence "+
+      "against the filter, not against the program.", true];
+  if(Math.abs(r)>0.8)
+    return ["Sits "+(r>0?"+":"")+r.toFixed(2)+" from what measurability predicts. "+
+      "My model is weakest here, which is where anything that is not size would "+
+      "have to show up.", true];
+  return ["Observed "+d.R_p.toFixed(2)+" against a predicted "+
+    (d.R_p_predicted_from_measurability||0).toFixed(2)+
+    ". Measurability accounts for it; there is nothing here my model misses.", false];
+}}
+
+function agStep(){{
+  if(AG.halted) return false;
+  const d=pick();
+  if(!d){{ AG.halted=true; AG.reason="all "+DATA.length+" read"; return true; }}
+  AG.seen.push(d);
+  const r2=runR2(AG.seen);
+  if(r2!==null) AG.r2hist.push(r2);
+
+  /* the halt decision: stop when reading more stops changing the estimate */
+  const tol=parseFloat($("agTol").value), h=AG.r2hist;
+  if(AG.seen.length>=8 && h.length>=4){{
+    const d1=Math.abs(h[h.length-1]-h[h.length-2]);
+    const d2=Math.abs(h[h.length-2]-h[h.length-3]);
+    const d3=Math.abs(h[h.length-3]-h[h.length-4]);
+    if(d1<tol&&d2<tol&&d3<tol){{
+      AG.halted=true;
+      AG.reason="estimate stable within "+tol+" for 3 steps";
+    }}
+  }}
+  render(d,r2);
+  return true;
+}}
+
+function render(d,r2){{
+  const [vd,flag]=verdict(d);
+  const pr=d.proposal||{{}};
+  const i=AG.seen.length;
+  const el=document.createElement("div");
+  el.className="agstep";
+  el.innerHTML='<div class="i">'+i+'</div><div><div class="nm">'+d.short+
+    (d.is_held_out_program?' <span class="tag held">held out</span>':'')+'</div>'+
+    '<div class="ev">n='+d.n_present+' members &middot; hits '+
+    d.n_hits_q05.toLocaleString()+' &middot; R_p '+d.R_p.toFixed(3)+
+    ' &middot; predicted '+(d.R_p_predicted_from_measurability||0).toFixed(3)+
+    (r2!==null?' &middot; running R² '+r2.toFixed(3):'')+'</div>'+
+    '<div class="vd">'+vd+'</div>'+
+    (pr.next_experiment?'<div class="nx"><b>next:</b> '+pr.next_experiment+'</div>':'')+
+    '</div>';
+  const log=$("agLog");
+  if(AG.seen.length===1) log.innerHTML="";
+  log.appendChild(el);
+  log.scrollTop=log.scrollHeight;
+
+  $("agN").textContent=AG.seen.length;
+  $("agR2").textContent=r2===null?"—":r2.toFixed(3);
+  $("agCount").textContent=AG.seen.length+" of "+DATA.length+" visited";
+  $("agStatus").textContent=AG.halted?"HALTED":"running";
+
+  if(AG.halted){{
+    const f=document.createElement("div");
+    f.className="agstep halt";
+    const fr=AG.r2hist.length?AG.r2hist[AG.r2hist.length-1]:0;
+    const gap=fr-ALL50, over=gap>0.02;
+    f.innerHTML='<div class="i">&#9632;</div><div><div class="nm">Halted &mdash; '+
+      AG.reason+'</div><div class="vd">Read '+AG.seen.length+' of '+DATA.length+
+      ' programs and stopped, because reading more stopped changing the answer. '+
+      'On what it read, measurability alone explains R\u00b2 '+fr.toFixed(3)+'. '+
+      'The same statistic over all '+DATA.length+' is '+ALL50.toFixed(3)+'.</div>'+
+      '<div class="vd"><b>'+(over
+        ? 'So stopping early overstated it by '+gap.toFixed(3)+'.'
+        : (gap<-0.02 ? 'So stopping early understated it by '+Math.abs(gap).toFixed(3)+'.'
+                     : 'The two agree to within 0.02.'))+'</b> '+
+      (Math.abs(gap)>0.02
+        ? 'The halt rule is a real decision and this is what it cost. A subset '+
+          'chosen to span the size range has more spread in it than the full set, '+
+          'which flatters the fit. We report the gap rather than the flattering '+
+          'half of it &mdash; that is the same reason our headline is a range.'
+        : 'The subset it chose was representative of the whole.')+'</div>'+
+      '<div class="nx"><b>next:</b> the same audit on a '+
+      'second, independently screened cell line &mdash; if the size effect '+
+      'reproduces there, it is a property of screens rather than of this one.'+
+      '</div></div>';
+    log.appendChild(f); log.scrollTop=log.scrollHeight;
+    $("agRun").disabled=$("agStep").disabled=true;
+  }}
+}}
+
+let agTimer=null;
+$("agStep").onclick=()=>agStep();
+$("agRun").onclick=()=>{{
+  if(agTimer){{clearInterval(agTimer);agTimer=null;$("agRun").textContent="Run the agent";return;}}
+  $("agRun").textContent="Pause";
+  agTimer=setInterval(()=>{{ if(!agStep()||AG.halted){{
+    clearInterval(agTimer);agTimer=null;$("agRun").textContent="Run the agent";}} }},420);
+}};
+$("agReset").onclick=()=>{{
+  if(agTimer){{clearInterval(agTimer);agTimer=null;}}
+  AG.seen=[];AG.r2hist=[];AG.halted=false;AG.reason="";
+  $("agLog").innerHTML='<div class="agempty">No steps taken. The agent has read '+
+    'nothing yet.</div>';
+  $("agN").textContent="0";$("agR2").textContent="—";
+  $("agStatus").textContent="idle";
+  $("agCount").textContent="0 of "+DATA.length+" visited";
+  $("agRun").disabled=$("agStep").disabled=false;
+  $("agRun").textContent="Run the agent";
+}};
+$("agPolicy").onchange=$("agTol").onchange=()=>$("agReset").click();
 </script>
 
 {figure("fig2_gate_failure.png")}

@@ -3,11 +3,19 @@
 **A genome-scale CRISPRi screen, read back to ask what it can and cannot discover — and the answer is mostly an artifact of how the programs are defined, not their biology.**
 
 [![CI](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml/badge.svg)](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-127-brightgreen.svg)](tests/test_frozen_invariants.py)
+[![tests](https://img.shields.io/badge/tests-133-brightgreen.svg)](tests/test_frozen_invariants.py)
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](.python-version)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+A genetic screen hands a lab a ranked list of thousands of hits, and validating the top of it costs a year and six figures. **denali is the check you run before that decision.** It reads a finished screen back and estimates how much of the ranking is explained by how the gene sets were built rather than by any biology — so you can tell which parts of your list are worth chasing.
+
+It ships as a tool, not only as a result. `src/audit_screen.py` takes the table any gene-set analysis already produces — set, size, hits — and reports the same estimate for **your** screen. What follows is that check applied once, to ours.
+
+---
+
 We scored all **50 MSigDB Hallmark gene programs** against **9,837 CRISPRi knockdowns** in K562 and asked which programs are *reversible* — which have many knockdowns that measurably move them. Then we asked the question underneath it: how much of that is biology at all. **Between 56% and 75% of the variance in apparent reversibility is explained by a model that never looks at what a program does.** It is a range and not a point because one of our six features is computed from the same matrix as the outcome, so part of the upper figure is arithmetic rather than discovery; **0.561** is the number that survives that objection and we never quote the top alone. The mechanism is size — bigger programs with more co-moving members return more hits regardless of their function, and **program size alone explains 46.5%**.
+
+**New to CRISPR screens?** [Start with the plain-language section](#in-plain-language) — no jargon, and it explains why any of this matters before the method does.
 
 There is no hosted instance. `index.html` is a single self-contained file — open it by double-clicking, no server, no network. Everything in it is injected from `results/frozen/` at build time. A Streamlit view of the same frozen data lives in `app.py` (`streamlit run app.py`); both read `results/frozen/` and neither recomputes.
 
@@ -18,6 +26,44 @@ There is no hosted instance. `index.html` is a single self-contained file — op
 ![denali results page](docs/img/page-full.png)
 
 ![Program explorer](docs/img/table-detail.png)
+
+## What we chose, and why
+
+Stated up front because every one of these is attackable, and a reader should not
+have to infer that we picked well.
+
+1. **MSigDB Hallmark, not our own gene sets.** This is the field's own curated
+   standard, so the size critique cannot be dismissed as an artifact of how *we*
+   drew the boundaries — the sets were drawn by someone else, for other purposes,
+   before we existed. Hallmark also spans a 6× size range (32 to 200 declared members), which is what makes the size effect visible at all. A collection of
+   uniformly-sized sets would have hidden it.
+
+2. **K562, because the screen exists.** Replogle et al. published a genome-scale
+   CRISPRi Perturb-seq screen covering 9,837 knockdowns; nothing at that scale was
+   going to be generated here. The cost is real and we state it rather than bury
+   it: K562 is an unstressed leukemia line, and our own first program failed its
+   known-regulator control for exactly that reason.
+
+3. **Four evaluations, three of which could only come back negative.** The
+   pre-registration named the alternative claim before any value was computed, so
+   a null was a publishable outcome rather than a failure. Three did come back
+   negative. The fourth is a positive control, and it is labelled a control
+   because that is what it is.
+
+4. **Program level, never gene level.** Guide-pair concordance is −0.019: two
+   independent reagents against the same gene disagree. That forbids any
+   single-gene claim in this dataset, including a flattering one, and it is
+   enforced by a test that fails the build rather than by our good intentions.
+
+**What we deliberately did not attempt.** No structural or sequence-design claim,
+because the concordance figure above forbids the gene-level claim one would have
+to rest on. No candidate list and no ranked "top programs" table, because that is
+the nomination the pre-registration refuses to make. No second cell line: RPE1 was
+available and we checked it, but it covers only 24.3% of K562's targets and that
+quarter is disproportionately the essential-gene subset — a control we ran and
+published as a **FAIL** (94.1% vs 11.3% coverage, essential vs non-essential).
+Running it anyway and calling it replication would have been the easiest available
+overstatement.
 
 ## Findings
 
@@ -34,6 +80,9 @@ Also measured: essentiality density is flat at program level, coefficient **−0
 
 ## Features
 
+- **An agent that chooses its own next step and halts on its own** — it picks which program to read by a stated policy, updates a running estimate, emits a next experiment, and stops when the estimate stops moving. Change the policy or the halt rule and it visits different programs and stops elsewhere. On halting it reports that stopping early **overstated its own answer by 0.081**, and names the gap
+- **A next experiment that changes when the results change** — zero hits proposes raising statistical power and re-running; a strong result proposes pathway-level validation in a second cell type. No branch tests a program name
+- **The check runs on other people's screens** — `src/audit_screen.py` takes any gene-set results table and reports the same estimate; validated against synthetic screens with known answers, and it reproduces our own figure exactly
 - **Genome-scale sweep** — every one of 9,837 knockdown targets scored against all 50 Hallmark programs, 491,850 cells; the full matrix ships in the repo rather than a filtered top-N
 - **Rank-based reversal statistic** — Mann–Whitney of program-member effects against the rest of the transcriptome, per perturbation, with cosine similarity and mean effect size reported alongside so no single number carries the claim
 - **Pre-registered thresholds, hashed before any value was computed** — the primary claim, the alternative claim, the statistic deciding between them, and the conditions for reporting neither, all fixed in advance
@@ -214,7 +263,7 @@ Each was found only by running from a clean clone, and the third only after the 
 
 ## Tests
 
-`tests/test_frozen_invariants.py` — **127 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
+`tests/test_frozen_invariants.py` — **133 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
 
 Two guards exist because each caught a real defect. The **compile guard** parses every file under `src/` and `tests/` before anything else — added after a shipped module was found not to compile. The **scope guard** builds a gene-symbol universe from the Hallmark GMT and fails the build if any symbol appears within 260 characters of verdict language in the rendered page or the captions, with an allowance for "recovered known answer" and "positive control"; it enforces the −0.019 scope limit mechanically. A third set of checks asserts the page makes **no network calls** — no `fetch`, no `XMLHttpRequest`, no external script or stylesheet — so the interactive explorer cannot break unattended.
 
@@ -289,7 +338,7 @@ This is the part we care most about, so it is built into the code rather than pr
 - **We held ten pathways back** and only opened them after the model was frozen and hashed. The model **failed** on them — worse than a coin flip, zero true positives. We published that instead of quietly refitting.
 - **Three of our four evaluations came back negative.** All four are reported.
 - **The one positive is a control, not a discovery.** Run unchanged on a pathway it was never tuned for, the ranking puts that pathway's known master switch at **rank 2 of 11,258**. So the machinery works — it just is not finding what people assume it is finding.
-- **127 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
+- **133 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
 
 ---
 

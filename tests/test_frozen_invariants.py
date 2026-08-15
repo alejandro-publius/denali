@@ -422,6 +422,30 @@ def main() -> int:
               str(int(a.n_hits_q05)) in report and str(int(a.n_hits_q05)) in readme_txt,
               f"expected {int(a.n_hits_q05)} in both")
 
+    # ---------------- K. the selection-criteria section ----------------
+    # Every number in "What we chose, and why" is checkable, so check it. This
+    # section exists to preempt a reviewer; if it drifts from the frozen files it
+    # does the opposite.
+    rd = (ROOT / "README.md").read_text()
+    if "## What we chose, and why" in rd:
+        sel = rd.split("## What we chose, and why")[1].split("## Findings")[0]
+        lo, hi = int(summary.n_declared.min()), int(summary.n_declared.max())
+        check("selection: declared-size range matches program_summary",
+              f"{lo} to {hi} declared members" in sel, f"frozen {lo}-{hi}")
+        check("selection: the size ratio is stated correctly",
+              f"{round(hi / lo)}\u00d7 size range" in sel,
+              f"frozen ratio {hi / lo:.1f}x")
+        check("selection: knockdown count matches provenance",
+              f"{prov['tier1']['knockdown_targets']:,} knockdowns" in sel)
+        check("selection: concordance matches controls.csv",
+              f"{float(gp.value.iloc[0])}" in sel.replace("\u2212", "-"))
+        rc = controls[controls.control == "rpe1_coverage_collision"]
+        check("selection: the RPE1 decline cites the control that justifies it",
+              len(rc) == 1 and rc.verdict.iloc[0] == "FAIL"
+              and "94.1% vs 11.3%" in sel, "RPE1 coverage control")
+        check("selection: states what was NOT attempted",
+              "did not attempt" in sel.lower())
+
     # ---------------- F. the docs' own self-description ----------------
     report_readme = (ROOT / "README.md").read_text()
     # These are hand-typed and therefore drift: the badge said 84, the Tests

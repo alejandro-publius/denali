@@ -161,7 +161,8 @@ TOOLCHAIN = [
      "n_present and the gate identical to results/frozen/ on all 50. It verifies "
      "the result rather than producing it, and it is deliberately not a make-all "
      "step. What it buys is that reproducing us no longer needs a 470 MB download "
-     "and twelve minutes of laptop."),
+     "and twelve minutes of laptop. Being the same scorer run elsewhere, this "
+     "establishes portability, not independent confirmation of the maths."),
     ("CZ Biohub — ESM Cambrian", "esm 3.2.3",
      "Verified twice — local weights and hosted API, both (1, 67, 960)",
      "no", "esmc_300m ran on a real sequence locally, and the same sequence ran "

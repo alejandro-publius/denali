@@ -69,6 +69,7 @@ all: check
 	$(PY) -m src.figures_matrix
 	$(PY) -m src.sensitivity_stripped
 	$(PY) -m src.vif_camera
+	$(PY) -m src.engagement_bound
 	@echo "== build the page from the frozen numbers"
 	$(PY) -m src.build_page
 	@echo "== invariants: every number must match the committed frozen files"
@@ -93,5 +94,5 @@ page:
 	@echo "open index.html"
 
 clean:
-	rm -rf results/frozen results/figures/*.png results/sensitivity/stripped_model.json index.html
+	rm -rf results/frozen results/figures/*.png results/sensitivity/*.json index.html
 	@echo "removed generated outputs. data/raw kept."

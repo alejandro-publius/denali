@@ -347,6 +347,28 @@ def main() -> int:
     check("audit needs enough sets to say anything",
           _raises(audit, [10, 20, 30], [1, 2, 3]))
 
+    # ---------------- H. the unstressed-cell-line bound ----------------
+    # The sharpest question asked of this project: is the headline really the
+    # unstressed-K562 problem wearing the size problem's clothes? These lock the
+    # answer and, more importantly, the honesty of its scope.
+    eb_p = ROOT / "results" / "sensitivity" / "engagement_bound.json"
+    if eb_p.exists():
+        eb = json.loads(eb_p.read_text())
+        mb = eb["measurable_but_not_engaged"]
+        recomputed = int((summary.passes_measurability_gate
+                          & (summary.n_hits_q05 == 0)).sum())
+        check("engagement: measurable-but-not-engaged count matches the frozen table",
+              mb["n"] == recomputed == gap["gate_pass_but_zero_hits"],
+              f"json {mb['n']}, recomputed {recomputed}")
+        check("engagement: removing them does not rescue the result",
+              abs(eb["delta"]) < 0.02, f"delta {eb['delta']}")
+        check("engagement: the size effect is the larger one",
+              eb["size_alone_r2_all_programs"] > 4 * abs(eb["delta"]))
+        check("engagement: labelled post-freeze",
+              "NOT PRE-REGISTERED" in eb.get("status", ""))
+        check("engagement: states what it cannot settle",
+              "cannot bound it across screens" in eb.get("what_this_does_not_settle", ""))
+
     # ---------------- F. the docs' own self-description ----------------
     report_readme = (ROOT / "README.md").read_text()
     # These are hand-typed and therefore drift: the badge said 84, the Tests

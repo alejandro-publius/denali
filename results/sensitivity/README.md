@@ -122,3 +122,35 @@ CAMERA; we recovered its inflation term from data. That is validation against
 a standard outside this project's own reasoning — and it names the next
 experiment: **re-run the sweep with a VIF-corrected set statistic and measure
 how much of the size effect collapses.**
+
+---
+
+# Third post-freeze check — the unstressed-cell-line bound (also NOT pre-registered)
+
+**Run 2026-08-15, evening. Prompted by a reviewer question, not by our plan.**
+
+## The question, which is a fair one
+
+Our first program returned a null because it was *measurable* in K562 but not
+*engaged* — an unstressed cell line does not run a stress program. That is
+written up as a design failure in `LIMITATIONS.md` §3. So: how much of the
+56–75% headline is actually that problem rather than the size problem?
+
+## The two are separable in the frozen data
+
+| Failure mode | Signature | Count |
+|---|---|--:|
+| Measurable but not engaged | passes the gate, returns zero hits | **1 of 50** |
+| The size effect | bigger sets return more hits regardless | **46.5% of variance, all 50** |
+
+Removing the affected program changes adjusted R² from **0.7511 to 0.7549** —
+a move of **+0.0038**, and in the direction that makes the result *stronger*,
+not weaker. If the unstressed line were carrying the headline, that number would
+have collapsed. It did not move.
+
+## What this does not settle
+
+K562 could still make some programs look flat in a way a second cell line would
+reveal. This bounds the effect **inside our own screen**; it cannot bound it
+across screens. That is exactly what the RPE1 arm would test, and it is why RPE1
+is the named next experiment rather than a nice-to-have.

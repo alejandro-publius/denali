@@ -1,0 +1,74 @@
+{
+  "generated_by": "src/freeze.py",
+  "seal": {
+    "commit": "9ad74a7",
+    "commit_time": "2026-08-15T08:24:14-07:00",
+    "what": "HALLMARK_CHOLESTEROL_HOMEOSTASIS sealed as program B before any scoring",
+    "file": "docs/HELDOUT_PROGRAM.md"
+  },
+  "preregistration_sha256": "d7d90e41332a7c70cf7a5b2d2678ceb9be85d153e0185be2f110e0e3f448d915",
+  "gate_script_sha256": "f543b22efe075d034575e105f7a1e5aa31616b4280e302053e7a3967aacb7c55",
+  "commit_timeline": [
+    {
+      "commit": "280c626",
+      "time": "2026-08-15T08:05:08-07:00",
+      "subject": "Gate C1 PASSES for proteostasis (UPR); three of four programs FAIL"
+    },
+    {
+      "commit": "9ad74a7",
+      "time": "2026-08-15T08:24:14-07:00",
+      "subject": "Seal held-out program before any scoring: HALLMARK_CHOLESTEROL_HOMEOSTASIS"
+    },
+    {
+      "commit": "dcea614",
+      "time": "2026-08-15T08:44:46-07:00",
+      "subject": "Pre-commit the UPR program gene set with per-gene citations, BEFORE scoring"
+    },
+    {
+      "commit": "73d4c33",
+      "time": "2026-08-15T08:52:32-07:00",
+      "subject": "Build I+II: primary program FAILS, sealed held-out program SUCCEEDS"
+    },
+    {
+      "commit": "7681bc5",
+      "time": "2026-08-15T08:59:46-07:00",
+      "subject": "Re-run step 1 with authenticated Paperclip; the evidence chain is weaker than claimed"
+    }
+  ],
+  "pipeline_untouched_between_runs": true,
+  "pipeline_evidence": {
+    "score_k562.py_sha256": "2abfdc6f730d786180e37f73e2951c303c5a7b42caa27dc3394c74c323d7bbfa",
+    "build2.py_sha256": "a695db0d41ccab705479668f133540ccd49a36b4ceb987faf89ea9ae3bd9be38",
+    "note": "Both scripts are byte-identical between the program A and program B runs and to the committed copies. The seal commit (08:24:14) predates the creation of score_k562.py (08:45:15), so the held-out program was fixed before the scoring code existed."
+  },
+  "data_checksums_sha256": {
+    "data/raw/K562_gwps_normalized_bulk_01.h5ad": "37e48c474d8b5dead4151f96ea8f5fe7bbe6beb10eeea48685b740c3f74490a2",
+    "data/raw/rpe1_normalized_bulk_01.h5ad": "a3c5bfd0f15d63938bc80c9b8874b9cd761e3a23caf5ffe7966bae4e887ec89d",
+    "data/raw/CRISPRGeneEffect.csv": "3d8f3ec6dbf2db7ff834b79b508622ec0b226f3518003fe96ecf5a4fcf167e3b",
+    "data/raw/Model.csv": "b7a0c1385e6cef30132b56aff61f1261d11e3f490490b355c430d32ee0dbdcfa"
+  },
+  "gene_sets": {
+    "program_a": "HALLMARK_UNFOLDED_PROTEIN_RESPONSE (MSigDB v2026.1.Hs, 113 genes)",
+    "program_b": "HALLMARK_CHOLESTEROL_HOMEOSTASIS (MSigDB v2026.1.Hs, sealed)",
+    "hallmark_gmt_sha256": "eecaf6dad908334ae885406ec72bdc0646d8917588ed7c219fac92fc5363f596"
+  },
+  "evidence_source_concentration": {
+    "paperclip_genes_with_a_source": 113,
+    "paperclip_distinct_sources": 34,
+    "paperclip_sources_per_gene": 0.3009,
+    "paperclip_max_genes_on_one_source": 57,
+    "paperclip_max_share_one_source": 0.5044,
+    "paperclip_top_source_id": "PMC12242609",
+    "paperclip_sources_used_for_exactly_one_gene": 25,
+    "paperclip_genes_resting_on_exactly_one_source": 113,
+    "epmc_genes_with_a_source": 113,
+    "epmc_distinct_sources": 75,
+    "epmc_sources_per_gene": 0.6637,
+    "epmc_max_genes_on_one_source": 10,
+    "epmc_max_share_one_source": 0.0885,
+    "epmc_top_source_id": "26799652",
+    "epmc_sources_used_for_exactly_one_gene": 58,
+    "epmc_genes_resting_on_exactly_one_source": 113
+  },
+  "scope_limit": "Guide-pair concordance is -0.019. Gene-level calls are not reproducible. Pathway-level claims only. No novel gene is named."
+}

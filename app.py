@@ -1,12 +1,15 @@
-"""Expo page. Reads results/frozen/ and results/figures/ only. Computes nothing.
+"""Expo page. Reads results/frozen/, results/figures/ and docs/TOOLS.md only.
+Computes nothing.
 
     .venv/bin/streamlit run app.py
 
 Every number on screen is read from a frozen file. Every figure caption is read
 from results/figures/CAPTIONS.md, verbatim, so the page and the report cannot
-drift apart. No interactive controls: nothing here can be broken by someone
-clicking on it while nobody is standing at the screen. No gene is named anywhere
-on this page — the data supports pathway-level claims only (concordance -0.019).
+drift apart. The sponsor tool-chain strip reads its status verbatim from
+docs/TOOLS.md — no tool status is inferred here. No interactive controls: nothing
+here can be broken by someone clicking on it while nobody is standing at the
+screen. No gene is named anywhere on this page — the data supports pathway-level
+claims only (concordance -0.019).
 """
 from __future__ import annotations
 
@@ -19,6 +22,7 @@ import streamlit as st
 
 FROZEN = Path("results/frozen")
 FIGS = Path("results/figures")
+TOOLS = Path("docs/TOOLS.md")
 REPO = "https://github.com/alejandro-publius/reversal-map"
 
 st.set_page_config(page_title="reversal-map", layout="wide",
@@ -56,6 +60,17 @@ html, body, .stApp {background:#ffffff !important; color:#111827 !important;}
 .captitle {font-size:1.0rem; font-weight:700; color:#111827; margin-top:.4rem;}
 .prov {font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.78rem;
        color:#6b7280; line-height:1.9;}
+/* Sponsor tool-chain strip. Status colour keys off the ✅/⚠/❌ in docs/TOOLS.md,
+   so unavailable/blocked tools are shown honestly, not hidden. */
+.tools {display:flex; flex-wrap:wrap; gap:.55rem; margin-top:.3rem;}
+.tchip {flex:1 1 250px; border:1px solid #d1d5db; border-left-width:5px;
+        border-radius:9px; padding:.7rem .85rem; background:#fff;}
+.tchip .tn {font-size:1.0rem; font-weight:700; color:#111827; margin:0;}
+.tchip .tv {font-size:.8rem; color:#6b7280; font-weight:500;}
+.tchip .td {font-size:.82rem; color:#4b5563; line-height:1.4; margin:.3rem 0 0 0;}
+.ok {border-left-color:#1a7f37;}
+.warn {border-left-color:#9a6700;}
+.fail {border-left-color:#b2182b;}
 </style>""", unsafe_allow_html=True)
 
 
@@ -86,6 +101,55 @@ def load():
     return (pd.read_csv(FROZEN / "program_summary.csv"),
             json.loads((FROZEN / "provenance.json").read_text()),
             json.loads((FROZEN / "heldout_evaluation.json").read_text()))
+
+
+@st.cache_data
+def toolchain():
+    """Sponsor tools + status, read verbatim from docs/TOOLS.md's table.
+
+    Status is never inferred here: the ✅/⚠/❌ and the text come from the file.
+    When a row's 'Verified how' cell points to the notes ('...below'), the
+    matching notes bullet is substituted so the real gotcha (e.g. Proto's import
+    failure) is what shows, still sourced from the same file."""
+    txt = TOOLS.read_text()
+    m = re.search(r"verified (\d{4}-\d{2}-\d{2})", txt)
+    verified_on = m.group(1) if m else ""
+    # Notes bullets, markdown stripped, keyed by their leading tool word.
+    # Bullets can wrap onto indented continuation lines — join those in.
+    notes, cur = {}, None
+    for line in txt.splitlines():
+        s = line.strip()
+        if s.startswith("- ") and ":" in s:
+            plain = re.sub(r"[*`~]", "", s[2:]).strip()
+            cur = plain.split(":")[0].split()[0].lower()
+            notes[cur] = plain
+        elif cur and s and line[:1] in " \t" and not s.startswith(("|", "#", "-")):
+            notes[cur] += " " + re.sub(r"[*`~]", "", s).strip()
+        else:
+            cur = None
+    rows = []
+    for line in txt.splitlines():
+        if not line.startswith("| **"):
+            continue
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) < 4:
+            continue
+        name = re.sub(r"\*\*", "", cells[0]).strip()
+        installed, how = cells[1], cells[3]
+        emoji = next((e for e in ("✅", "⚠", "❌") if e in installed), "")
+        ver = re.search(r"`([^`]+)`", installed)
+        detail = re.sub(r"[*`]", "", how).strip()
+        if "below" in detail.lower():                 # the file says: look here
+            first = name.split()[0]
+            note = notes.get(first.lower(), "")
+            if note.lower().startswith(first.lower() + ":"):
+                note = note[len(first) + 1:].strip()   # drop redundant "Proto:" label
+            detail = note or detail
+        if len(detail) > 132:
+            detail = detail[:129].rstrip() + "…"
+        rows.append({"name": name, "emoji": emoji,
+                     "ver": ver.group(1) if ver else "", "detail": detail})
+    return rows, verified_on
 
 
 S, prov, held = load()
@@ -183,7 +247,22 @@ st.divider()
 figure("fig4_retrieval.png")
 st.divider()
 
-# ==================================================== 8. PROVENANCE FOOTER
+# ============ 8. SPONSOR TOOL-CHAIN — status read verbatim from docs/TOOLS.md ==
+tool_rows, tools_verified = toolchain()
+st.subheader("Sponsor tool-chain — status checked against this machine")
+_scls = {"✅": "ok", "⚠": "warn", "❌": "fail"}
+_chips = "".join(
+    f"<div class='tchip {_scls.get(r['emoji'], '')}'>"
+    f"<p class='tn'>{r['emoji']} {r['name']} <span class='tv'>{r['ver']}</span></p>"
+    f"<p class='td'>{r['detail']}</p></div>"
+    for r in tool_rows)
+st.markdown(f"<div class='tools'>{_chips}</div>", unsafe_allow_html=True)
+st.markdown(
+    f"<div class='cap'>Every row verified {tools_verified} against this machine, "
+    f"not recalled. Full detail in docs/TOOLS.md.</div>", unsafe_allow_html=True)
+st.divider()
+
+# ==================================================== 9. PROVENANCE FOOTER
 seal = prov["seal"]
 st.markdown(
     f"<div class='prov'>"

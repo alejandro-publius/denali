@@ -124,11 +124,10 @@ def main() -> None:
     pc = pd.read_csv(DISC / "upr_program_paperclip.csv")
     dv = dv.merge(pc[["gene", "paperclip_pmcid", "paperclip_year", "paperclip_title"]]
                   .rename(columns={"gene": "gene_symbol"}), on="gene_symbol", how="left")
-    dv["verdict_plain"] = dv.verdict.map({
-        "AGREES": "Literature says it matters; knocking it out does move the program",
-        "DISAGREES": "Literature says it matters; knocking it out does NOT move the program",
-        "UNTESTED": "In the program but never perturbed in the screen"})
-    dv.to_csv(OUT / "divergence_table.csv", index=False)
+    # NOTE: per-gene verdicts were removed 2026-08-15. -0.019 concordance does not
+    # support judging an individual gene. Detail goes to results/discovery/ and the
+    # claim-bearing aggregate is written by src/divergence_repair.py.
+    dv.to_csv(DISC / "divergence_gene_detail_raw.csv", index=False)
     counts = dv.verdict.value_counts().to_dict()
     print(f"divergence_table.csv  {len(dv)} rows  {counts}")
 

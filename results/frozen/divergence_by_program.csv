@@ -1,0 +1,2 @@
+program,n_members_declared,n_members_with_literature,n_members_never_perturbed,n_members_perturbed,n_members_screen_concordant,n_members_screen_discordant,frac_never_perturbed,frac_concordant_of_perturbed,distinct_literature_sources,max_share_one_source,coverage_note
+HALLMARK_UNFOLDED_PROTEIN_RESPONSE,113,113,12,101,11,90,0.1062,0.1089,34,0.5044,"12 of 113 members were never perturbed in the screen. Of the 101 that were, 11 moved the program at q<0.05. These are COUNTS over program members, not verdicts on individual genes."

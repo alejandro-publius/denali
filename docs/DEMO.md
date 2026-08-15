@@ -64,6 +64,24 @@
 
 ---
 
+## 4b · We audited our own literature tool, and it failed
+
+`[This is a named result, not a caveat. Say it as a finding.]`
+
+> **"We used Paperclip to build the evidence layer — one citation per gene, a hundred and thirteen genes. Then we audited it instead of trusting it."**
+>
+> **"Thirty-four distinct sources cover a hundred and thirteen genes. One review is the cited evidence for fifty-seven of them — half the program. Only fourteen of a hundred and thirteen top hits even name their own gene in the title."**
+
+`[pause]`
+
+> **"So we ran a blind probe on twenty more genes to check whether that was our query or the tool. Nineteen of the twenty came back with the same zebrafish methods paper. For one gene it returned a paper about a different gene entirely."**
+>
+> **"That's not an evidence chain. It's a pointer layer, and we labelled it as one in the repo before anyone asked. If you build on retrieval, measure your retrieval."**
+
+*Screen: 34 / 113, the 50.4% bar, the 19-of-20 probe.*
+
+---
+
 ## 5 · The scope statement — as a choice, not a confession
 
 > **"So back to minus zero one nine. Two independent guides aimed at the same gene give uncorrelated scores. Gene-level calls are not reproducible in this data."**

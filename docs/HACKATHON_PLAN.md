@@ -100,7 +100,7 @@ coverage). RPE1 is a generalisation check, never "the replication arm".
 **The collision, quantified:** RPE1 covers **94.1%** of essential genes and
 **11.3%** of non-essential ones.
 
-**Divergence counts (113 UPR genes):** DISAGREES 90 / UNTESTED 12 / AGREES 11.
+**Divergence, PROGRAM-LEVEL (UPR, 113 members):** 12 never perturbed; of the 101 perturbed, 11 moved the program. Counts only — **no per-gene verdicts**, per the −0.019 scope limit.
 
 **Controls:** nonsense program 0 survivors (vs 517/773) ✅ · cholesterol
 regulators recovered at both tails ✅ · UPR regulators not recovered ❌ ·

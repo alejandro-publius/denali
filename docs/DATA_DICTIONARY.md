@@ -74,26 +74,34 @@ killing the cell, and a dying cell's genes all move. Tiers separate those cases.
 
 ---
 
-## `divergence_table.csv`
+## `divergence_by_program.csv`
 
-113 rows — one per gene in Program A's list. Asks: *the literature says this gene
-matters; does our data agree?*
+**One row per program.** Replaces the old per-gene `divergence_table.csv`, which
+made 113 individual verdicts — a claim guide-pair concordance of −0.019 does not
+support. **Counting members in each class is an aggregate and is supported;
+judging any one gene is not.**
 
 | Column | Plain English |
 |---|---|
-| `gene_symbol` | The gene. |
-| `verdict` | `AGREES` / `DISAGREES` / `UNTESTED`. |
-| `verdict_plain` | The same as a sentence. **Use this on screen.** |
-| `reversal_score_wilcoxon`, `q_value`, `average_rank` | This gene's own switch-off result. |
-| `paperclip_pmcid`, `paperclip_year`, `paperclip_title` | The paper Paperclip returned as evidence for this gene. ⚠ See the concentration warning below. |
-| `epmc_pmid`, `epmc_year`, `epmc_title` | Europe PMC's top-cited matching paper. |
-| `epmc_cited_by` | How many times **that paper** was cited. ⚠ **A property of the paper, not the gene.** |
-| `epmc_paper_count` | How many papers mention this gene alongside the program. **This is the better measure of how well-studied a gene is.** |
+| `program` | The gene program. |
+| `n_members_declared` | Genes the program is defined to contain. |
+| `n_members_with_literature` | Members for which a citation was retrievable. |
+| `n_members_never_perturbed` | **Members never switched off in the experiment. We have no opinion on these, not a negative one.** |
+| `n_members_perturbed` | Members that were switched off. |
+| `n_members_screen_concordant` | Of those, how many moved the program at q<0.05. |
+| `n_members_screen_discordant` | Of those, how many did not detectably move it. |
+| `frac_never_perturbed` | Coverage gap as a fraction. |
+| `frac_concordant_of_perturbed` | Concordance rate among testable members. |
+| `distinct_literature_sources` | How many separate papers cover the whole program. |
+| `max_share_one_source` | Largest fraction of members resting on a single paper. |
+| `coverage_note` | The above as a sentence. **Use this on screen.** |
 
-**Counts: DISAGREES 90 · UNTESTED 12 · AGREES 11.**
+**UPR program: 12 of 113 members never perturbed; of the 101 that were, 11 moved
+the program.** 34 distinct sources cover it; one review holds 50.4%.
 
-`UNTESTED` means the gene is in the program but **was never switched off in the
-experiment** — we have no opinion, not a negative one.
+⚠ Per-gene detail lives at `results/discovery/divergence_gene_detail.csv`, is
+**outside** the frozen interface, carries a `NOT_A_VERDICT` column on every row,
+and **must not be rendered as per-gene conclusions.**
 
 ---
 

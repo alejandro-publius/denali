@@ -210,7 +210,7 @@ coverage). RPE1 is a generalisation check, never "the replication arm".
 **The collision, quantified:** RPE1 covers **94.1%** of essential genes and
 **11.3%** of non-essential ones.
 
-**Divergence counts (113 UPR genes):** DISAGREES 90 / UNTESTED 12 / AGREES 11.
+**Divergence, PROGRAM-LEVEL (UPR, 113 members):** 12 never perturbed; of the 101 perturbed, 11 moved the program. Counts only — **no per-gene verdicts**, per the −0.019 scope limit.
 
 **Controls:** nonsense program 0 survivors (vs 517/773) ✅ · cholesterol
 regulators recovered at both tails ✅ · UPR regulators not recovered ❌ ·
@@ -294,7 +294,7 @@ we are allowed to claim.
    |---|---|
    | `program_a_scores.csv` | 9,837 rows. The null. |
    | `program_b_scores.csv` | 9,837 rows. The sealed run. SREBF2 is rank 1. |
-   | `divergence_table.csv` | 113 rows. DISAGREES 90 / UNTESTED 12 / AGREES 11. |
+   | `divergence_by_program.csv` | One row per program. Aggregate counts, no per-gene verdicts. |
    | `controls.csv` | 7 rows. **3 are FAIL and must be shown.** |
    | `provenance.json` | Seal commit, timestamps, checksums, concentration stats. |
 

@@ -58,11 +58,15 @@ flags. SREBF2, MYLIP, INSIG1 and LDLR — the most interpretable hits — are al
 
 113 UPR program genes, cross-referenced against their own knockdown scores:
 
-| Class | n |
+⚠ **Reframed 2026-08-15 to program level.** The original table issued 113
+per-gene verdicts, which −0.019 concordance does not support. Counts retained,
+verdicts withdrawn.
+
+| Member class (COUNTS, not verdicts) | n |
 |---|---:|
-| DISAGREES | **90** |
-| UNTESTED | **12** |
-| AGREES | 11 |
+| Never perturbed in the screen | **12** |
+| Perturbed, no detected move | **90** |
+| Perturbed, moved the program | 11 |
 
 **🔴 12 of 113 UPR program genes were never perturbed in the screen:**
 CCL2, CKS1B, DNAJA4, ERO1A, H2AX, IARS1, IFIT1, IGFBP1, SKIC3, SRPRA, TARS1, WFS1.

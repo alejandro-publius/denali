@@ -21,7 +21,7 @@ gate passed 3/3 (`GATE_C1_RESULTS.md`, commit `280c626`).
 | 2 | **Score all ~9,823 K562 CRISPRi knockdowns for opposition to the program** | The discovery step. Pseudobulk, classical statistics | Substrate on disk and md5-verified. No neural model in the scoring path |
 | 3 | **RPE1 replication arm** | Second cell type, independently screened | ⚠ **Coverage denominator stated on screen.** Only 2,381/9,823 = **24.2%** of K562 targets exist in RPE1, and that subset is the *essential-gene* subset, not random |
 | 4 | **DepMap 24Q4 essentiality filter — Broad Avana AND Sanger KY** | Flag any hit that only scores because it kills the cell | Two independent libraries = real external adjudication. ⚠ Collides with step 3: the genes RPE1 can replicate are disproportionately the ones this filter flags |
-| 5 | **Proto on Modal — structure of the top hit** | Structural context for the named gene | Modal credits arrive day-of. Not on the critical path |
+| 5 | **Proto on Modal — structure of the top hit** | Structural context for the top-ranked recovered known gene | Modal credits arrive day-of. Not on the critical path |
 | 6 | **Tamarind Bio — binder design if there is a pocket** | Only if step 5 yields a pocket | Conditional. Drop without hesitation if time is short |
 | 7 | **Biohub ESMC SAE — frozen-model features, no retraining** | Interpretability layer on a frozen model | Mirrors the KScope winning pattern exactly (see `WINNING_PATTERNS.md` §9) |
 | 8 | **Benchling MCP write-back** | Register the target with its evidence chain | OAuth, no key needed |

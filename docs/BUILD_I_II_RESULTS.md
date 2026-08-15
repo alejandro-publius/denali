@@ -101,11 +101,15 @@ not produce correct signs at opposite ends of a ranking.
 PERK, ATF4, BiP, CHOP. **Overlap: zero.** With the 4.09× essentiality enrichment,
 **this divergence is a failure, not a discovery.**
 
-**Cholesterol top 5** — SREBF2, SCAP, SPATA5L1, TTC4, NOLC1. An expert names
-SREBF2, SCAP, INSIG1, HMGCR, LDLR. **Top 2 match exactly**; the other three are
-recovered at the opposite tail with correct sign. Genuine divergence:
-**SPATA5L1, TTC4, NOLC1** — the only place the pipeline claims to exceed the
-expert, and the guide-pair result applies to them.
+**Cholesterol top 5** — SREBF2 and SCAP, then three genes not canonical to the
+pathway. An expert names SREBF2, SCAP, INSIG1, HMGCR, LDLR. **Top 2 match
+exactly**; INSIG1/HMGCR/LDLR are recovered at the opposite tail with correct sign.
+
+⚠ **The three non-canonical entries are NOT named as candidates and no claim is
+made for them.** Guide-pair concordance is −0.019, so a gene-level call at those
+ranks is not reproducible. See `SCOPE_STATEMENT.md`. The pipeline's demonstrated
+capability is **pathway-level**: 11 of 17 canonical members in the extreme 10%,
+binomial p = 7.0 × 10⁻⁸.
 
 ## Section 8 — scbench: ABANDONED, no number
 

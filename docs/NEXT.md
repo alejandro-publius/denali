@@ -36,7 +36,7 @@ proteostasis (UPR) program, one citation per gene
   → score all ~9,823 K562 CRISPRi knockdowns for opposition to the program
   → RPE1 replication arm, coverage denominator stated on screen
   → DepMap essentiality filter (Avana + KY): is reversal regulation, or death?
-  → named gene + ranked reversal map
+  → ranked reversal map, PATHWAY-LEVEL claims only (see SCOPE_STATEMENT.md)
 ```
 
 ## Substrate on disk

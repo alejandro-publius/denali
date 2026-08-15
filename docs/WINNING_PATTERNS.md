@@ -1,5 +1,12 @@
 # Winning patterns — ACTIVE design DNA
 
+> ⚠ **SUPERSEDED IN PART, 2026-08-15.** This document predates the
+> Build II result. Where it describes the deliverable as **"a named gene"**,
+> that is no longer in scope: guide-pair concordance is −0.019 and gene-level
+> calls are not reproducible. **Pathway-level claims only; no novel gene is
+> named.** See `SCOPE_STATEMENT.md`, which governs.
+
+
 Distilled from prior winning hackathon projects. These are **intentional design
 choices for this project**, not history. The raw scouting notes are archived; the
 mechanics live here.

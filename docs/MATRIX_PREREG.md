@@ -130,6 +130,45 @@ with a **1,000-resample bootstrap CI**.
 on the held-out set. Anyone reading ρ as a significant result is misreading it,
 and we say so first.
 
+## 6f. (f) WHAT COUNTS AS SUCCESS AND WHAT COUNTS AS FAILURE
+
+Fixed now, before the sweep. Two independent axes; **both are reported whatever
+they say.**
+
+### Axis 1 — rank recovery (primary)
+
+Spearman ρ between predicted and observed R_p across the 10 held-out programs:
+
+| ρ | Verdict |
+|---|---|
+| **≥ 0.60** | **SUCCESS.** The predictor generalises to unseen programs from an unseen collection. |
+| **0.30 – 0.60** | **PARTIAL.** Reported as a weak, directional effect with the CI. No generalisation claim. |
+| **< 0.30** | **FAILURE.** Reported as failure to generalise, in those words. |
+| **< 0** | **FAILURE, inverted.** Reported as such, not as "near zero". |
+
+### Axis 2 — binary reversible/null recovery (secondary)
+
+Each held-out program is predicted reversible or null by the frozen Tier 3 model,
+then compared to its measured call. **Balanced accuracy** across the 10:
+
+| Balanced accuracy | Verdict |
+|---|---|
+| **≥ 0.75** | SUCCESS |
+| 0.55 – 0.75 | PARTIAL |
+| **< 0.55** | FAILURE — no better than guessing at n=10 |
+
+### Binding conditions
+
+- **Both axes are reported.** Reporting only the more flattering one is
+  prohibited.
+- **A failure is a result, not a retry.** If either axis fails we report it and
+  do **not** refit, re-feature, re-threshold, or re-draw the held-out set.
+- The **n=10 CI will be shown next to every number**, so "SUCCESS" is always read
+  against its own imprecision.
+- If **fewer than 8 of the 10** held-out programs pass the Gate C1 measurability
+  criteria, the held-out evaluation is reported as **UNDERPOWERED AND
+  INCONCLUSIVE** rather than as success or failure.
+
 ## 7. Standing rules
 
 - Tier 1 must call the **byte-identical committed scoring function**

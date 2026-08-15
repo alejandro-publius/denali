@@ -180,11 +180,13 @@ TOOLCHAIN = [
      "this project to register, and pushing a CSV into a lab notebook to claim "
      "the integration is the cosmetic kind."),
     ("Proto — Evo Design", "proto-tools 0.1.0",
-     "Verified — 140 tools, 17 categories, doctor exits 0",
-     "no", "Installs from source and resolves against a live Modal workspace. "
-     "It serves structure and sequence-design models — AlphaFold, Boltz, ESMC, "
-     "Evo2, AlphaGenome. denali makes no structural or sequence-design claim, so "
-     "there is nothing here to run."),
+     "Executed — live tool call recorded, 140 tools, doctor exits 0",
+     "no", "Installs from source, resolves against a live Modal workspace, and "
+     "returns a real result: the receipt in results/tools/proto_validation.json "
+     "carries the call, the timing and the upstream source URL. It serves "
+     "structure and sequence-design models — AlphaFold, Boltz, ESMC, Evo2, "
+     "AlphaGenome — and denali makes no structural or sequence-design claim, so "
+     "nothing it offers enters a result."),
     ("Sundial", "—", "Not found — no discoverable install path",
      "no", "The PyPI package under that name is an unrelated hobbyist progress-bar "
      "library at v0.0.1. Installing it to raise the count would be a lie about "

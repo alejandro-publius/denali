@@ -12,7 +12,7 @@ table rather than something to pad around.
 | **Anthropic MCP** | ✅ `mcp 1.29.0` | n/a | `src/mcp_server.py` started over stdio, 2 tools listed, 3 calls returned non-empty | ships the result |
 | **Modal** | ✅ `1.5.4` | ✅ workspace `alejandro-publius` | **runs the sweep**: 50 programs / 10 containers / 133 s, output identical to `results/frozen/` on all 50 | reproduces all 50 |
 | **CZ Biohub / ESMC** | ✅ `esm 3.2.3` | ✅ hosted API key | verified twice — local weights **and** the hosted Biohub Platform API, both returning `(1, 67, 960)` | no |
-| **Proto — Evo Design** | ✅ `proto-tools 0.1.0` | ✅ via Modal | installed from git; 140 tools / 17 categories; `proto-tools doctor` exits 0 | no |
+| **Proto — Evo Design** | ✅ `proto-tools 0.1.0` | ✅ via Modal | **executed a real tool call**, recorded with timing and source URL in `results/tools/proto_validation.json`; 140 tools / 17 categories; `doctor` exits 0 | no |
 | **Benchling** | ⚠ MCP endpoint live | ⏳ OAuth pending | `hackathon.mcp.bnchdev.org/mcp` returns 401 — up and gated | no |
 | **Benchflow** | ✅ `0.6.7` | not required | `bench --help` runs; scaffolded a task to size the work | no — **declined** |
 | **Tamarind Bio** | — | ✅ key authenticates | `GET /api/jobs` → 200, 0 jobs submitted | no — **declined** |
@@ -81,6 +81,17 @@ one. The second was **our own published error** and is recorded in
 - **`benchflow` on PyPI IS the right package** — benchflow.ai, "the universal
   environment framework". No key needed for local use; the key references inside
   it are for LLM providers via litellm, not for BenchFlow itself.
+
+## Upstream outage recorded, 15 Aug 2026
+
+Ensembl's REST endpoint returned **503 to plain `curl` in 20.7 s** during this
+session, and Proto's `ensembl-lookup` failed with it before succeeding on retry
+at 47.9 s. The failure was upstream, not in `proto-tools`. It is recorded because
+it is the reason a larger sequence-model analysis was not attempted: every route
+to Evo2 or AlphaGenome runs through per-gene sequence retrieval, and at 25–48 s
+per gene with intermittent 503s, that is not a study anyone can run in an evening.
+This is the same lesson as FIG 4 — public infrastructure fails in ways you only
+see if you check.
 
 ## One question left for the organisers
 

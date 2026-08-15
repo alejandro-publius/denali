@@ -79,21 +79,15 @@ replication of the map.
 - **No broad prior-art or novelty sweeps** beyond the targeted checks already done.
 - **Do not resurrect** FigContract, RETRIAL, RescueMap/ENOUGH, or the ILD
   gradient project.
-- **Do not read `docs/archive/`** unless historical context is explicitly
-  requested.
 - Do not redefine a kill criterion after seeing data.
 - Computational and high-level only: no wet-lab protocols, no dosing, no
   clinical or therapeutic recommendations.
 
 ---
 
-## Pre-publication task — NOT for this weekend
+## Pre-publication note
 
-⚠ **Personal email in git history.** `thealexschroeder@gmail.com` is hardcoded at
-`docs/archive/figcontract/figcontract_src/gate_a/fetch.py:85` (an NCBI eutils
-contact) and is present across the commit history. A new commit will not remove
-it — **this requires a history rewrite** (`git filter-repo` or equivalent) before
-any public release.
-
-The repo is currently **private**, so this is not urgent. It becomes blocking the
-moment anyone proposes making it public or handing it to an organiser.
+This repository begins at the first commit of the project itself. Earlier
+exploratory work is not carried over; what remains useful from it is rewritten in
+`docs/ORIGINS.md` and `docs/METHOD_RULES.md`. No personal identifiers appear in
+this history.

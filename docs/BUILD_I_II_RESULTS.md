@@ -124,7 +124,7 @@ not installed. **We have no scbench score and must not claim one.**
 Worth noting without claiming: DE01's primary trap is testing whether the agent
 pseudobulks with donor as covariate rather than treating ~1,300 cells as
 independent (t-test → 3,194 DEGs; truth 1,150 ± 350). That is exactly this
-project's founding rule in `LESSONS_LEARNED.md`.
+project's founding rule in `METHOD_RULES.md`.
 
 ## Paperclip — RE-RUN after authentication, and it changes the claim
 
@@ -153,7 +153,7 @@ ATF6 is a 2025 hearing/vision-loss syndrome paper. For 14 genes it produced
 genuine gene-specific evidence (ATF4, ATF6, BAG3, CHAC1, DDIT4, DNAJC3 among
 them); for the rest it produced a pointer to a review.
 
-This reproduces a standing lesson in `LESSONS_LEARNED.md` — *semantic retrieval
+This reproduces a standing rule in `METHOD_RULES.md` — *semantic retrieval
 ranks on abstracts; citation chaining can outperform it on targeted corpora.*
 The fix is `paperclip citation-explorer` / repo-scoped chaining, not a bigger
 one-shot query. **Not done tonight.** Do not describe the pipeline as producing

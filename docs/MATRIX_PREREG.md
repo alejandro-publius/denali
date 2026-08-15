@@ -194,7 +194,7 @@ Three figures exist in this repository and each was correct for its own stage:
 
 | Figure | Where it came from | Status |
 |---|---|---|
-| **9,866** | A planning-stage approximation in `docs/GATE_C1_RESULTS.md` and `docs/CURRENT_STATE.md`, from before any target-parsing was implemented | **Superseded.** Approximate; never a measured count |
+| **9,866** | A planning-stage approximation in `docs/GATE_C1_RESULTS.md`, from before any target-parsing was implemented | **Superseded.** Approximate; never a measured count |
 | **9,823** | An early Build-II parse using an **ENSG-anchored** regex, which silently drops rows whose ENSG field is `nan` or multi-transcript | **Superseded.** Correct for that regex, not for the analysis |
 | **9,837** | The regex actually used by `src/score_k562.load_k562`, which does not require a well-formed ENSG suffix. This is the row count of `results/frozen/matrix.csv` | ✅ **Operative.** Every reported result uses this |
 

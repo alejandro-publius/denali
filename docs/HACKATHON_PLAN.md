@@ -27,9 +27,9 @@ gate passed 3/3 (`GATE_C1_RESULTS.md`, commit `280c626`).
 | 4 | **DepMap 24Q4 essentiality filter — Broad Avana AND Sanger KY** | Flag any hit that only scores because it kills the cell | Two independent libraries = real external adjudication. ⚠ Collides with step 3: the genes RPE1 can replicate are disproportionately the ones this filter flags |
 | 5 | **Proto on Modal — structure of the top hit** | Structural context for the top-ranked recovered known gene | Modal credits arrive day-of. Not on the critical path |
 | 6 | **Tamarind Bio — binder design if there is a pocket** | Only if step 5 yields a pocket | Conditional. Drop without hesitation if time is short |
-| 7 | **Biohub ESMC SAE — frozen-model features, no retraining** | Interpretability layer on a frozen model | Mirrors the KScope winning pattern exactly (see `WINNING_PATTERNS.md` §9) |
+| 7 | **Biohub ESMC SAE — frozen-model features, no retraining** | Interpretability layer on a frozen model | Mirrors the KScope winning pattern exactly (see `ORIGINS.md`, design principles) |
 | 8 | **Benchling MCP write-back** | Register the target with its evidence chain | OAuth, no key needed |
-| 9 | **Expose the scored matrix as an MCP server** | The durable, reusable artifact | One tool: query by program → ranked genes with reversal score, RPE1 rank **or "not covered"**, essentiality flag. Proven winning artifact (`WINNING_PATTERNS.md` §8) |
+| 9 | **Expose the scored matrix as an MCP server** | The durable, reusable artifact | One tool: query by program → ranked genes with reversal score, RPE1 rank **or "not covered"**, essentiality flag. Proven winning artifact (`ORIGINS.md`, design principles) |
 | 10 | **Streamlit page, Sunday, over frozen tables** | The demo | Step timeline; target card; next-four table **including at least one gene the filter killed** |
 
 ### Non-negotiables inside the pipeline
@@ -38,7 +38,7 @@ gate passed 3/3 (`GATE_C1_RESULTS.md`, commit `280c626`).
   compresses, cut from the middle, never from the spine.
 - The "next four" table **must** include a killed gene. Showing the filter
   working is stronger evidence than showing four survivors.
-- Report **several metrics, not one headline number** (see `WINNING_PATTERNS.md` §7).
+- Report **several metrics, not one headline number** (see `ORIGINS.md`, design principles).
 - Every screen that shows an RPE1 rank shows its denominator.
 
 ---

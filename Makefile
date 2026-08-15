@@ -53,9 +53,8 @@ all: check
 	$(PY) -m src.score_k562 HALLMARK_CHOLESTEROL_HOMEOSTASIS results/discovery/k562_chol_reversal.csv
 	@echo "== 4/9  program B: RPE1 arm, DepMap filter, 4 controls  ~4 min"
 	$(PY) -m src.build2 HALLMARK_CHOLESTEROL_HOMEOSTASIS results/discovery/k562_chol_reversal.csv results/discovery/chol
-	@echo "== 5/9  freeze A/B + divergence                         ~1 min"
+	@echo "== 5/9  freeze programs A and B                         ~1 min"
 	$(PY) -m src.freeze
-	$(PY) -m src.divergence_repair
 	@echo "== 6/9  sweep all 50 Hallmark programs                  ~9 min"
 	$(PY) -m src.sweep
 	@echo "== 7/9  freeze the matrix, then the predictor           ~1 min"

@@ -15,10 +15,10 @@
     "commit": "63596b5",
     "time": "2026-08-15T08:24:14-07:00",
     "program": "HALLMARK_CHOLESTEROL_HOMEOSTASIS",
-    "framing": "We sealed one row of this matrix before the matrix existed.",
+    "note": "held-out list and thresholds were committed before the corresponding results existed; methods provenance, not a claim",
     "scorer_sha256_required": "2abfdc6f730d786180e37f73e2951c303c5a7b42caa27dc3394c74c323d7bbfa",
     "scorer_sha256_actual": "2abfdc6f730d786180e37f73e2951c303c5a7b42caa27dc3394c74c323d7bbfa",
-    "seal_intact": true
+    "scorer_unchanged": true
   },
   "deciding_statistic": {
     "definition": "OLS of R_p on six measurability features, 50 Hallmark programs",
@@ -55,6 +55,24 @@
     "gate_pass_but_zero_hits": 1
   },
   "scope_limit": "Guide-pair concordance is -0.019. Gene-level calls are not reproducible. Pathway-level claims only. No novel gene is named.",
+  "evidence_source_concentration": {
+    "paperclip_genes_with_a_source": 113,
+    "paperclip_distinct_sources": 34,
+    "paperclip_sources_per_gene": 0.3009,
+    "paperclip_max_genes_on_one_source": 57,
+    "paperclip_max_share_one_source": 0.5044,
+    "paperclip_top_source_id": "PMC12242609",
+    "paperclip_sources_used_for_exactly_one_gene": 25,
+    "paperclip_genes_resting_on_exactly_one_source": 113,
+    "epmc_genes_with_a_source": 113,
+    "epmc_distinct_sources": 75,
+    "epmc_sources_per_gene": 0.6637,
+    "epmc_max_genes_on_one_source": 10,
+    "epmc_max_share_one_source": 0.0885,
+    "epmc_top_source_id": "26799652",
+    "epmc_sources_used_for_exactly_one_gene": 58,
+    "epmc_genes_resting_on_exactly_one_source": 113
+  },
   "evidence_layer": {
     "note": "Paperclip retrieval was audited, not trusted.",
     "distinct_sources_for_113_genes": 34,

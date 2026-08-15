@@ -191,46 +191,14 @@ def main() -> None:
     ctrl.to_csv(OUT / "controls.csv", index=False)
     print(f"controls.csv  {len(ctrl)} rows")
 
-    # ---- provenance ----
-    data_files = ["data/raw/K562_gwps_normalized_bulk_01.h5ad",
-                  "data/raw/rpe1_normalized_bulk_01.h5ad",
-                  "data/raw/CRISPRGeneEffect.csv", "data/raw/Model.csv"]
-    prov = {
-        "generated_by": "src/freeze.py",
-        "seal": {
-            "commit": SEAL_COMMIT,
-            "commit_time": git("show", "-s", "--format=%cI", SEAL_COMMIT),
-            "what": "HALLMARK_CHOLESTEROL_HOMEOSTASIS sealed as program B before any scoring",
-            "file": "docs/HELDOUT_PROGRAM.md",
-        },
-        "preregistration_sha256": PREREG_SHA,
-        "gate_script_sha256": GATE_SHA,
-        "commit_timeline": [
-            {"commit": c, "time": git("show", "-s", "--format=%cI", c),
-             "subject": git("show", "-s", "--format=%s", c)}
-            for c in ["dc6252e", "63596b5", "81d877c", "bad2388", "863af0c"]
-        ],
-        "pipeline_untouched_between_runs": True,
-        "pipeline_evidence": {
-            "score_k562.py_sha256": sha256(Path("src/score_k562.py")),
-            "build2.py_sha256": sha256(Path("src/build2.py")),
-            "note": ("Both scripts are byte-identical between the program A and "
-                     "program B runs and to the committed copies. The seal commit "
-                     "(08:24:14) predates the creation of score_k562.py (08:52:32), "
-                     "so the held-out program was fixed before the scoring code existed."),
-        },
-        "data_checksums_sha256": {f: sha256(Path(f)) for f in data_files if Path(f).exists()},
-        "gene_sets": {
-            "program_a": "HALLMARK_UNFOLDED_PROTEIN_RESPONSE (MSigDB v2026.1.Hs, 113 genes)",
-            "program_b": "HALLMARK_CHOLESTEROL_HOMEOSTASIS (MSigDB v2026.1.Hs, sealed)",
-            "hallmark_gmt_sha256": sha256(Path("data/genesets/h.all.v2026.1.Hs.symbols.gmt")),
-        },
-        "evidence_source_concentration": concentration,
-        "scope_limit": ("Guide-pair concordance is -0.019. Gene-level calls are not "
-                        "reproducible. Pathway-level claims only. No novel gene is named."),
-    }
-    (OUT / "provenance.json").write_text(json.dumps(prov, indent=2))
-    print("provenance.json written")
+    # ---- concentration stats, handed to freeze_matrix ----
+    # NOTE: provenance.json is written by src/freeze_matrix.py and ONLY by it.
+    # This module used to write it too, which meant an interrupted run left the
+    # file in a half-migrated state that looked like numeric drift. Found by the
+    # clean-clone reproduction check. Single writer now.
+    (OUT / "_concentration.json").write_text(json.dumps(concentration, indent=2))
+    print("_concentration.json written (consumed by freeze_matrix)")
+
     for f in sorted(OUT.iterdir()):
         print(f"  {f.name:26s} {f.stat().st_size/1024:8.1f} KB")
 

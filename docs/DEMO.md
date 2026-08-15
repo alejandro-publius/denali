@@ -1,184 +1,148 @@
-# Demo spine — under 3 minutes, spoken
+# Demo — under 3 minutes spoken
 
-**Read the bold. The rest is stage direction.**
-`[pause]` = stop talking, let the screen carry it.
-
----
-
-## Open with this sentence
-
-> ### **"Between fifty-six and seventy-five percent of what looks like biology in a genome-scale screen is measurement — the range is that wide because one of our own features is partly circular, and we report both ends."**
-
-*Mechanism, one line:* **bigger programs with more co-moving members return more hits regardless of what they do — program size alone explains 47% of it.**
-
-`[pause — 2 beats. Let them look confused.]`
+**Read the bold. The rest is stage direction.** `[pause]` = stop, let the screen carry it.
+**The repeated number is THREE OF FOUR.** Say it in the first sentence and the last.
 
 ---
 
-## 1 · The graveyard — 10 seconds, brisk, no apology
+## OPEN
 
-> **"Four projects died to get here. A cross-paper conflict engine that turned out to be a parsing artifact. A figure-certification thesis our own measurements falsified. A lung fibrosis program that returned zero genes across seven cell populations. And three of the four cell programs we gated last night."**
+> ### **"We ran four evaluations on this project. Three of them came back negative. We're reporting all four, and the three negatives are the reason the fourth is worth anything."**
+
+`[pause — 2 beats]`
+
+---
+
+## 1 · What it is — one sentence
+
+> **"It takes a biological program — a named list of genes that do one job — and asks which of nine thousand eight hundred genetic knockouts pushes that whole program the other way. We ran all fifty programs in a standard public collection, so we couldn't cherry-pick."**
+
+*Screen: **FIG 1**, the matrix.*
+
+---
+
+## 2 · NEGATIVE ONE — most of what looks like biology is measurement
+
+> **"Between fifty-six and seventy-five percent of the variance in which programs look reversible is explained by measurement quality alone, not biology."**
 >
-> **"All of it is in the repo with the kill criteria that fired."**
+> **"The range is wide because one of our own features is partly circular — computed from the same matrix as the outcome. Fifty-six is the number that survives that objection. We report both ends."**
+>
+> **"The mechanism is size. Bigger programs with more co-moving members return more hits regardless of what they do. Program size alone explains forty-seven percent."**
+>
+> **"We pre-registered this. Before the sweep we wrote down that if measurability cleared sixty percent, that becomes the finding, not the failure. It cleared."**
 
-*Screen: commit graph, or the four names struck through.*
+*Screen: **FIG 3**.*
 `[pause]`
 
 ---
 
-## 2 · What we built — one sentence
+## 3 · NEGATIVE TWO — the filter anyone would build is wrong
 
-> **"We built something that takes a biological program — a named list of genes that do one job — and asks which of nine thousand eight hundred genetic knockouts pushes that whole program the other way."**
-
-*Screen: program in → ranked knockouts out.*
-
----
-
-## 3 · Program A returns nothing, and we can name the mechanism
-
-> **"We chose the unfolded protein response — how cells handle badly-folded protein. It returns nothing. PERK, IRE1, XBP1 — the three textbook sensors — all sit at q of about 0.8. Dead."**
+> **"We built the obvious quality filter: enough members measured, expressed above background, variable above background. Across fifty programs it's wrong twenty times. Twenty fail the filter and produce hits anyway."**
 >
-> **"And here's the mechanism, not an excuse: the cells were never stressed. Unstimulated K562 has no ER stress, so the program was switched off. Knocking out the sensors of an alarm that isn't ringing moves nothing."**
->
-> **"Our gate tested whether the program was measurable. It should have tested whether it was engaged. That's on us, and it's written down."**
-
-*Screen: PERK / IRE1 / XBP1 with their q-values. Big.*
-`[pause — this is the honesty beat. Do not rush it.]`
-
----
-
-## 4 · Program B — sealed, and it works
-
-> **"We sealed one row of this matrix before the matrix existed."**
->
-> **"Cholesterol. Commit 9ad74a7, 8:24 in the morning."**
->
-> **"The scoring code didn't exist yet. We wrote it twenty-one minutes later. There was nothing to tune."**
-
-`[pause]`
-
-> **"SREBF2 comes back rank one of nine thousand eight hundred and thirty-seven. It's the master regulator of cholesterol synthesis — the textbook answer. We are not claiming we discovered it. It's the positive control that says the ranking works."**
->
-> **"The real result is the shape. Seventeen canonical pathway members were in the screen. Eleven land in the extreme ten percent. Expected by chance: one point seven. p equals seven times ten to the minus eight."**
->
-> **"And the signs are right at both ends. Knock out the activators, the program goes down. Knock out INSIG1 — the brake — and it goes up, rank nine thousand eight hundred and fifteen. Seventy-nine percent sign-correct across both tails. A fitness artifact does not do that."**
-
-*Screen: the 17-gene rank distribution, both tails highlighted.*
-`[pause]`
-
----
-
-## 4b · We audited our own literature tool, and it failed
-
-`[This is a named result, not a caveat. Say it as a finding.]`
-
-> **"We used Paperclip to build the evidence layer — one citation per gene, a hundred and thirteen genes. Then we audited it instead of trusting it."**
->
-> **"Our top-cited source for ATF3 was a paper about integrating single-cell data across species. It has nothing to do with ATF3."**
->
-> **"So we ran a blind probe on twenty more genes. Nineteen of the twenty came back with the same zebrafish methods paper. One came back with a paper about a completely different gene."**
-
-`[pause]`
-
-> **"Thirty-four distinct sources cover a hundred and thirteen genes. That is not an evidence chain, it is a pointer layer, and we labelled it as one in the repo before anyone asked."**
->
-> **"If you build on retrieval, measure your retrieval."**
-
-*Screen: 34 / 113, the 50.4% bar, the 19-of-20 probe.*
-
----
-
-## 4c · Same agent, three results, three different next experiments
-
-`[This is the loop. Show all three on one screen.]`
-
-> **"The agent proposes a next experiment, and it is generated from the result — not written by us. Three programs, three outcomes, three different proposals."**
-
-| Result | What it proposes | Generated from |
-|---|---|---|
-| **Null** — 0 hits | *"Program members are expressed and variable yet nothing reaches significance: this is a power limit, not a biology limit. Increase cells per perturbation."* **Falsified if** doubling depth still yields nothing. | `expr_ratio`, `sd_ratio` read off the row |
-| **Hit** — 5,707 hits | *"Validate at pathway level, both tails, second cell type, set-level enrichment — not gene lookups."* **Why not gene-level:** concordance is −0.019. | `n_hits`, residual vs. predicted |
-| **Unscored** | *"Predicted R_p 3.48, ~3,040 hits, SD 0.58. The informative part is the residual."* | six measurability features, no scoring |
-
-`[pause]`
-
-> **"Change the data and the proposal changes. No branch in that code tests a program name."**
-
----
-
-## 4d · We built the filter anyone would build, and it was wrong
-
-`[Named finding. This is the one that lands hardest.]`
-
-> **"We built the obvious quality filter: enough members measured, expressed above background, variable above background. Anyone would build it."**
->
-> **"Across fifty programs it is wrong twenty times. Twenty programs fail the filter and produce hits anyway. Only one passes it and produces nothing."**
-
-`[pause]`
-
-> **"And here is why the seal matters. The program we locked in git before the scoring code existed — cholesterol — fails our own filter. Expression ratio zero point nine two, just under the line. It ranks eleventh of fifty with seven hundred and seventy-three hits."**
+> **"And this is why the seal matters. The program we locked in git before the scoring code existed fails our own filter. Expression ratio zero-point-nine-two, just under the line. It ranks eleventh of fifty with seven hundred and seventy-three hits."**
 >
 > **"We built a filter that would have thrown away our best result. We could only find that out because we sealed the program before we could know."**
 
-*Screen: 20/50 wrong · sealed program at 11/50, gate = FAIL.*
+*Screen: **FIG 2**.*
+`[pause]`
 
 ---
 
-## 4e · A clean negative worth stating
+## 4 · NEGATIVE THREE — the held-out test failed
 
-> **"One more, because negatives are results. Essentiality — whether the cell dies without the gene — dominates every individual hit list we produce. At program level it predicts nothing. Coefficient plus zero point zero two, p equals zero point nine."**
+> **"Ten programs from a different collection, chosen by a public rule, sealed before the sweep, scored only after we hashed the model."**
 >
-> **"Whether a program looks reversible and which genes top its list are different questions. The field routinely runs them together."**
+> **"One of the ten was even measurable. By our own pre-registered rule — written before any number was visible — that makes the whole evaluation underpowered and inconclusive. Binary accuracy came back below chance. Zero true positives."**
+>
+> **"And the clearest illustration is a single row. Scavenging of heme from plasma drew the highest prediction of all ten. It has one measured gene. It returned zero hits."**
+>
+> **"That's the measurability finding reappearing in held-out data we hadn't touched. The failure and the finding are the same fact."**
+
+`[pause — strongest beat in the talk]`
 
 ---
 
-## 5 · The scope statement — as a choice, not a confession
+## 5 · THE POSITIVE — the machinery works
 
-> **"So back to minus zero one nine. Two independent guides aimed at the same gene give uncorrelated scores. Gene-level calls are not reproducible in this data."**
+> **"So here's the one that worked, and it's a control, not a headline."**
 >
-> **"So we made a choice. We make pathway-level claims only, and we name no novel gene anywhere in this project. Not one. We could have put a novel gene on this slide and most of you would not have caught it tonight."**
+> **"We sealed one row of this matrix before the matrix existed. Cholesterol, commit 9ad74a7, twenty-one minutes before the scoring code was written."**
 >
-> **"We also report that one review paper is the entire cited evidence for fifty-seven of our hundred and thirteen genes. That's a real weakness. You didn't have to find it."**
+> **"SREBF2 comes back rank two of eleven thousand. It's the textbook answer — we're not claiming we found it. Eleven of seventeen canonical pathway members land in the extreme ten percent, p equals seven times ten to the minus eight, and the signs are right at both ends."**
+>
+> **"That tells you the ranking works. It does not tell you the ranking is discovering anything, and we don't say that it does."**
+
+---
+
+## 6 · THE LOOP — same agent, three results, three proposals
+
+*Screen: all three side by side. Point at it; don't read it aloud.*
+
+| Result | Proposal it generates | Read from |
+|---|---|---|
+| **Null**, 0 hits | *"Members expressed and variable, nothing significant → power limit, not biology. Raise depth."* **Falsified if** doubling depth still yields nothing. | `expr_ratio`, `sd_ratio` |
+| **Hit**, 5,707 | *"Validate pathway-level, both tails, second cell type."* **Not gene-level, because concordance is −0.019.** | hits, residual |
+| **Unscored** | *"Predicted R_p 3.48, SD 0.58. The informative part is the residual."* | 6 features, no scoring |
+
+> **"Same code, three results, three different proposals. No branch in it tests a program name."**
 
 `[pause]`
 
-> **"And the held-out test failed. Ten programs sealed before the sweep, scored only after we hashed the model. One of ten was even measurable, so by our own pre-registered rule the whole evaluation is underpowered and inconclusive. Binary accuracy came in below chance. We did not refit. The commit history shows we didn't."**
+---
 
-`[pause]`
+## CLOSE
 
-> **"Everything is frozen in results/frozen with a data dictionary. The kill criteria are hashed. The seal timestamp is in the commit log. Take it apart."**
+> **"Three of four evaluations negative. Every one pre-registered, every one reported. Scope is pathway-level only — concordance is minus nought-one-nine, so we name no novel gene anywhere in this project. Everything's frozen with a data dictionary and two hashes that predate the work they validate. Take it apart."**
 
 ---
 
-## Cut list — did not survive compression
+# PREPARED RESPONSES
 
-| Cut | Why |
-|---|---|
-| RPE1 24.2% / 94.1%-vs-11.3% collision | Real and quantified, but needs 40s to land. **Answer live if asked.** |
-| The divergence table (90/12/11) | Great artifact, competes with §4 for attention. **Put on screen, don't narrate.** |
-| scbench, Sanger KY | Not done. Don't raise; answer honestly if asked. |
-| Tier system detail | `tier_label` on screen does the work. |
-| Paperclip / Europe PMC mechanics | Only the 57-of-113 number survives. |
-| Multiple myeloma anchor | Never reached. Don't imply we did. |
+## ⚠ Partial visibility of the held-out set — lead with point 1
 
-## If asked — one line each
+*If asked: "Three rows printed before you patched the crash. You saw part of the held-out set."*
 
-- **"Does −0.019 kill the pathway claim too?"** → *"No. Ranking noise moves individual positions; it doesn't move seventeen genes to both tails at p equals seven-e-minus-eight. Gene-level is dead, pathway-level survives, and that's exactly where we drew the line."*
-- **"Isn't SREBF2 obvious?"** → *"Completely. Guessing SREBF2 is easy. Guessing INSIG1 at rank 9,815 is not."*
-- **"Could the null be a bug?"** → *"Same code, same session, produced a clean positive on program B. A bug that nulls one gene set and recovers a seventeen-member pathway in another doesn't exist."*
-- **"Did you replicate?"** → *"No. RPE1 covers 24% of our genes and none of the headline ones. We call it a generalization check, never replication."*
-- **"Your essentiality filter uses an average across a thousand cell lines. Isn't that the wrong number?"** → *"It was, for two genes, and we found that by checking rather than inheriting it. We pulled the K562-specific value — the line we actually ran in — and MBTPS2 and LDLR both cross the essentiality line there when the average said they didn't. Those two rows carry a note that overrides the tier. SREBF2 goes the other way: minus zero-two-four on the average, plus zero-two-nine in K562 — not essential by either measure, with more margin in the cell line that matters."*
+> **1. "The result was a FAILURE. Contamination biases toward looking good. It came back worse than chance with zero true positives — you can't peek your way to that."**
+>
+> **2. "The frozen predictor, hash 610f2a75, was never touched. Only feature extraction changed, and the hash is verified at load time."**
+>
+> **3. "The guards are neutral by construction — undefined features fall back to the training mean, so they contribute zero."**
+>
+> **4. "And the inconclusive verdict fired on a pre-registered rule — one of ten, below the eight-of-ten threshold — before any number was visible."**
+>
+> **"It's in LIMITATIONS section seven because we wrote it down, not because you found it."**
+
+## Six adversarial questions, ranked by how badly they land
+
+| # | Question | Verdict and answer |
+|---|---|---|
+| **1** | **"The held-out failed. Why should I believe the predictor?"** | **Fatal to the predictor, survivable for the work.** *"Don't believe it. It failed, we report it as failure, we didn't refit. What survives is descriptive: across the fifty we did score, measurability explains most of the variance. The predictor was the test of whether that generalises, and at n=10 it didn't."* |
+| **2** | **"You saw part of the held-out set before patching."** | **Survivable — pre-empt it.** See above; lead with "the result was a failure." |
+| **3** | **"Is 0.751 inflated by circular features?"** | **Already answered.** *"Yes, partly, and it's in our first sentence. That's why it's a range. 0.561 excludes the circular feature. We never quote the top alone."* |
+| **4** | **"−0.019 — doesn't that kill the pathway claims too?"** | **Survivable.** *"Ranking noise moves individual positions; it doesn't move seventeen genes to both tails at p = 7e-8. Gene-level is dead, pathway-level survives, and that's exactly where we drew the line."* |
+| **5** | **"SREBF2 at rank 2 is just the obvious answer."** | **Already answered.** *"Completely. It's labelled a recovered known answer everywhere. Guessing SREBF2 is easy; guessing INSIG1 at rank 9,815 with the correct sign isn't."* |
+| **6** | **"One review covers 50.4% — is the evidence layer real?"** | **Fatal to calling it an evidence chain; we don't.** *"It's a pointer layer and we labelled it one. Our top source for ATF3 was a paper on integrating single-cell data across species. Nineteen of twenty probe genes returned the same zebrafish methods paper."* Screen: **FIG 4**. |
+
+> ### Pre-empt **#1** in the opening.
+> "Three of four came back negative" defuses it before it is asked. If a judge raises the held-out failure first, everything after reads as damage control.
+
+## Cut — answer live if asked, do not narrate
+
+RPE1 24.2% coverage collision · tier detail · Sanger KY and scbench (not done, claim nothing) · myeloma anchor (never reached) · essentiality null (+0.021, p=0.90 — only if asked).
 
 ## Timing
 
-| Section | Target |
+| Beat | Target |
 |---|---:|
-| Opening line | 0:10 |
-| 1 Graveyard | 0:20 |
-| 2 What we built | 0:15 |
-| 3 Program A null | 0:40 |
-| 4 Program B sealed | 0:55 |
-| 5 Scope statement | 0:35 |
-| **Total** | **2:55** |
+| Open | 0:12 |
+| 1 What it is | 0:15 |
+| 2 Negative one | 0:35 |
+| 3 Negative two | 0:35 |
+| 4 Negative three | 0:35 |
+| 5 The positive | 0:30 |
+| 6 The loop | 0:20 |
+| Close | 0:15 |
+| **Total** | **2:57** |
 
-**If you run long, cut the graveyard to one sentence.** Never cut §5.
+**If long, cut beat 1.** Never cut beat 4 or the close.

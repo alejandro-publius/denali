@@ -103,14 +103,35 @@ Both axes reported anyway, as required:
 | Rank recovery | Spearman ρ = **+0.526**, 95% CI **[−0.101, +0.913]**, p = 0.119 | **PARTIAL** — CI crosses zero |
 | Binary recovery | balanced accuracy **0.4375** (tp 0, tn 7, fp 1, fn 2) | **FAILURE** — worse than chance, zero true positives |
 
-Worst single miss: `REACTOME_SCAVENGING_OF_HEME_FROM_PLASMA` drew the **highest**
-prediction of the ten (R_p 5.26) and returned **0 hits**. It has one measured
-member.
+### The single clearest illustration of the whole result
+
+`REACTOME_SCAVENGING_OF_HEME_FROM_PLASMA` drew the **highest prediction of all
+ten** (R_p 5.26) and returned **0 hits**. It has **one measured member**.
+
+The model predicted strongly *because* the program looked measurable on the
+features it could see, and the program returned nothing *because* it was not
+measurable at all. **This is the measurability finding reappearing in held-out
+data the model had never touched — the failure and the finding are the same
+fact.** It is the clearest single example in the project of why we report claim
+(b) rather than a reversibility atlas.
 
 **We did not refit.** The pre-registration forbids it and the commit history shows
 we didn't.
 
 ---
+
+## Figures
+
+All from data measured here. No protein renders, no borrowed model outputs — a
+structure on screen would imply a gene-level claim our concordance forbids.
+Captions in `results/figures/CAPTIONS.md`, worded identically wherever used.
+
+| | |
+|---|---|
+| `fig1_matrix.png` | The reversal matrix, 9,837 × 50, sealed program marked |
+| `fig2_gate_failure.png` | Gate pass/fail vs hits; the 20-of-50 failure quadrant shaded |
+| `fig3_measurability.png` | Program size vs hits, both R² shown as a range |
+| `fig4_retrieval.png` | 20 probe genes → sources; 19 converge on one paper |
 
 ## Limitations
 

@@ -211,6 +211,21 @@ def main() -> int:
         check(f"no seal framing in {label}", hit is None,
               txt[max(0, hit.start()-60):hit.end()+60].replace("\n", " ") if hit else "")
 
+    # The seal guard above scans rendered TEXT. Two figures had "SEALED program"
+    # drawn into the PNG, where no text scan can reach it -- the guard passed for
+    # weeks while the framing sat in the two most prominent images on the page.
+    # Pixels cannot be scanned, so scan the code that draws them.
+    figsrc = (ROOT / "src" / "figures_matrix.py").read_text()
+    for m in re.finditer(r'["\']([^"\']*)["\']', figsrc):
+        if SEAL.search(m.group(1)):
+            check("no seal framing baked into a figure label", False, m.group(1)[:70])
+            break
+    else:
+        check("no seal framing baked into a figure label", True)
+    check("figure inputs are in-repo, not absolute paths",
+          not re.search(r'Path\(\s*["\']/', figsrc),
+          "an absolute path breaks make all on every other machine")
+
     check("scope limit is stated on the page", "-0.019" in page or "\u22120.019" in page)
     check("scope limit is stated in the captions",
           "gene-level" in caps or "0.019" in caps or "pointer layer" in caps)

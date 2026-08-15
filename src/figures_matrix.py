@@ -20,10 +20,13 @@ from matplotlib.colors import TwoSlopeNorm
 
 OUT = Path("results/figures")
 FROZEN = Path("results/frozen")
-PROBE = Path("/private/tmp/claude-501/-Users-alexvintera/"
-             "7dc2189b-1701-4701-beee-bcd03999de85/scratchpad/probe_paperclip.json")
+# In-repo, deliberately. This pointed at an absolute scratchpad path that existed
+# only on the machine the figures were first drawn on, so `make all` step 9 would
+# have died on anyone else's clone. The clean-clone check did not catch it because
+# the clone ran on that same machine. The bytes are identical (md5 4b8712c7).
+PROBE = Path("results/discovery/probe_retrieval.json")
 DPI = 150
-SEALED = "HALLMARK_CHOLESTEROL_HOMEOSTASIS"
+HELDOUT = "HALLMARK_CHOLESTEROL_HOMEOSTASIS"
 plt.rcParams.update({"font.size": 9, "axes.spines.top": False,
                      "axes.spines.right": False, "figure.dpi": DPI})
 
@@ -41,9 +44,9 @@ def fig1(S, M):
     ax.set_yticks([])
     ax.set_xticks(range(0, 50, 5))
     ax.set_xticklabels([str(i) for i in range(0, 50, 5)])
-    si = order.index(SEALED)
+    si = order.index(HELDOUT)
     ax.axvline(si, color="k", lw=1.4, ls="--")
-    ax.text(si + 0.7, A.shape[0] * 0.045, f"sealed program\n(rank {si+1}/50)",
+    ax.text(si + 0.7, A.shape[0] * 0.045, f"held-out program\n(rank {si+1}/50)",
             fontsize=8, va="top")
     cb = fig.colorbar(im, ax=ax, pad=0.015, fraction=0.03)
     cb.set_label("program pushed DOWN  ←    reversal score    →  pushed UP", fontsize=8)
@@ -64,11 +67,11 @@ def fig2(S):
             fontsize=9, color="#b2182b", weight="bold", va="top")
     ax.scatter(x, y, s=34, c=np.where(S.n_hits_q05 > 0, "#2166ac", "#999999"),
                alpha=0.85, edgecolor="white", lw=0.6, zorder=3)
-    srow = S[S.program == SEALED].iloc[0]
+    srow = S[S.program == HELDOUT].iloc[0]
     sx = 1 if srow.passes_measurability_gate else 0
     ax.scatter([sx], [srow.n_hits_q05 + 1], s=190, facecolor="none",
                edgecolor="#b2182b", lw=2.2, zorder=5)
-    ax.annotate(f"SEALED program\nfails the gate (expr_ratio {srow.expr_ratio:.2f})\n"
+    ax.annotate(f"HELD-OUT program\nfails the gate (expr_ratio {srow.expr_ratio:.2f})\n"
                 f"rank {int(srow.rank_by_R_p)}/50, {int(srow.n_hits_q05)} hits",
                 xy=(sx, srow.n_hits_q05 + 1), xytext=(0.28, 1400),
                 fontsize=8.5, color="#b2182b",

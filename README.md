@@ -11,6 +11,10 @@ We scored all **50 MSigDB Hallmark gene programs** against **9,837 CRISPRi knock
 
 There is no hosted instance. `index.html` is a single self-contained file — open it by double-clicking, no server, no network. Everything in it is injected from `results/frozen/` at build time. A Streamlit view of the same frozen data lives in `app.py` (`streamlit run app.py`); both read `results/frozen/` and neither recomputes.
 
+![The agent choosing what to read next and halting on its own](docs/img/agent-loop.png)
+
+*The loop, mid-run. It picks each program by a stated policy, halts when its estimate stops moving, and reports that stopping early overstated its own answer by 0.081.*
+
 ![denali results page](docs/img/page-full.png)
 
 ![Program explorer](docs/img/table-detail.png)

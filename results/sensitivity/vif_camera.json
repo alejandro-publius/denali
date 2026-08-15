@@ -1,0 +1,32 @@
+{
+  "formula": "VIF = 1 + (m-1)*rho_bar; m=n_present, rho_bar=coherence",
+  "citation": "Wu & Smyth 2012, Camera: a competitive gene set test accounting for inter-gene correlation. Nucleic Acids Research 40(17):e133. doi:10.1093/nar/gks461",
+  "vif_range": [
+    1.26,
+    23.18
+  ],
+  "adj_r2": {
+    "log_vif_alone": 0.7257,
+    "vif_raw_alone": 0.5124,
+    "n_present_alone": 0.4538,
+    "coherence_alone": 0.3603,
+    "all_six_features": 0.7511,
+    "log_vif_plus_other_four": 0.7536,
+    "vif_coherence_flattened": 0.4629
+  },
+  "spearman_log_vif_vs_R_p": {
+    "rho": 0.8532,
+    "p": 3.62e-15,
+    "n": 50
+  },
+  "frozen_headline_range": [
+    0.5606,
+    0.7511
+  ],
+  "comparison_rule": "log_vif_alone inherits coherence's partial circularity: compare it to the UPPER bound only. vif_coherence_flattened is the circularity-free statement and pairs with the LOWER bound.",
+  "independent_implementations_agree": true,
+  "next_experiment": "Re-run the 50-program sweep with a VIF-corrected set statistic (CAMERA-style variance adjustment) and measure how much of the size effect collapses.",
+  "status": "POST-FREEZE, NOT PRE-REGISTERED",
+  "prompted_by": "an external reviewer session's observation, verified here by a second independent implementation",
+  "does_not_replace": "the pre-registered primary in results/frozen/"
+}

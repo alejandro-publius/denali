@@ -68,6 +68,7 @@ all: check
 	@echo "== 9/9  figures + post-freeze sensitivity check          ~1 min"
 	$(PY) -m src.figures_matrix
 	$(PY) -m src.sensitivity_stripped
+	$(PY) -m src.vif_camera
 	@echo "== freeze the three proposals the page renders          ~1 s"
 	$(PY) -m src.freeze_proposals
 	@echo "== build the page from the frozen numbers"

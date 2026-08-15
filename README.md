@@ -36,7 +36,7 @@ it does not.
    as the finding, not as a failure. It cleared.
 2. **The obvious measurability filter is wrong 20 times out of 50** — and it would
    have discarded our own best result, which fails the gate yet ranks 11/50.
-3. **Essentiality is not the driver at program level** — coefficient +0.021,
+3. **Essentiality is not the driver at program level** — coefficient −0.021,
    p = 0.90. It dominates individual hit lists and predicts nothing about whether
    a program is reversible at all.
 

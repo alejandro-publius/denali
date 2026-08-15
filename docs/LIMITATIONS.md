@@ -147,6 +147,15 @@ we didn't.
 
 ## 7. Disclosed process failures
 
+- **We published the essentiality coefficient with the wrong sign.** It is
+  **−0.021**, not +0.021. The magnitude and the p-value (0.90) were right and the
+  conclusion — essentiality does not predict program-level reversibility — is
+  unaffected, but the sign was wrong in four documents. **Caught by
+  `tests/test_frozen_invariants.py`, which asserts the value against
+  `provenance.json` rather than against our memory.**
+- **We said "three of seven controls are FAIL."** It is **four** of seven, plus
+  one CAVEAT. Also caught by the test suite.
+
 - **The "21-minute gap" was filesystem mtime, not git.** `score_k562.py` was
   *created* on disk at 08:45:15 but first *committed* at 08:52:32. Git stores the
   latter. Every claim now states the **git-checkable 28 minutes** (held-out list committed 08:24:14 →

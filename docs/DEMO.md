@@ -159,7 +159,7 @@ alternative is being walked into it.
 
 ## Cut — answer live if asked, do not narrate
 
-RPE1 24.2% coverage collision · tier detail · Sanger KY and scbench (not done, claim nothing) · myeloma anchor (never reached) · essentiality null (+0.021, p=0.90 — only if asked).
+RPE1 24.2% coverage collision · tier detail · Sanger KY and scbench (not done, claim nothing) · myeloma anchor (never reached) · essentiality null (−0.021, p=0.90 — only if asked).
 
 ## Timing
 

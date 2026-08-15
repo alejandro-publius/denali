@@ -16,7 +16,7 @@
 PY := .venv/bin/python
 RAW := data/raw
 
-.PHONY: all setup data check retrieval page clean
+.PHONY: all setup data check test retrieval page clean
 
 setup:
 	uv venv --python 3.12 .venv
@@ -66,9 +66,14 @@ all: check
 	@echo "== 9/9  figures + post-freeze sensitivity check          ~1 min"
 	$(PY) -m src.figures_matrix
 	$(PY) -m src.sensitivity_stripped
+	@echo "== invariants: every number must match the committed frozen files"
+	@$(MAKE) --no-print-directory test
 	@echo ""
-	@echo "DONE. Compare against the committed results/frozen/ — they should be identical."
-	@echo "     git diff --stat results/frozen/"
+	@echo "DONE. Every number reproduced and every invariant held."
+	@echo "     git diff --stat results/frozen/   # should be empty"
+
+test:
+	@$(PY) tests/test_frozen_invariants.py
 
 retrieval:
 	@echo "LIVE API — will NOT reproduce the committed numbers. The indexes change."

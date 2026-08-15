@@ -1,3 +1,7 @@
+> ⚠ **STALE KNOCKDOWN COUNT below.** The operative figure for every reported
+> result is **9,837**. See the appended note in `docs/MATRIX_PREREG.md` for why
+> 9,823 and 9,866 also appear in this repo.
+
 # Next
 
 **Candidate 1 (reversal map) is SELECTED. Its gate has PASSED.**

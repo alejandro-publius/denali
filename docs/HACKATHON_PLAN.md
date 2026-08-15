@@ -1,3 +1,7 @@
+> ⚠ **STALE KNOCKDOWN COUNT below.** The operative figure for every reported
+> result is **9,837**. See the appended note in `docs/MATRIX_PREREG.md` for why
+> 9,823 and 9,866 also appear in this repo.
+
 # Hackathon plan — Track A, "Build an AI Scientist"
 
 **Program: proteostasis, UPR arm.** Selected 2026-08-14 after the Candidate 1

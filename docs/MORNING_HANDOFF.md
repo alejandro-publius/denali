@@ -20,10 +20,10 @@ reported.
 
 | | Result | Verdict |
 |---|---|---|
-| **NEG 1** | Measurability explains **56–75%** of variance in apparent reversibility (adj R² 0.561 X-independent / 0.751 all-six). Pre-registered claim **(b)** fired against a 0.60 threshold fixed before the sweep. Program size alone = 47%. | Reported as the finding |
+| **NEG 1** | Measurability explains **56–75%** of variance in apparent reversibility (adj R² 0.561 X-independent / 0.751 all-six). Pre-registered claim **(b)** fired against a 0.60 threshold fixed before the sweep. Program size alone = 46.5%. | Reported as the finding |
 | **NEG 2** | The measurability gate is **wrong 20 of 50**. Only 1/50 passes with zero hits. The **sealed** program fails the gate (`expr_ratio` 0.92) and ranks **11/50 with 773 hits**. | Our own filter would have discarded our best result |
 | **NEG 3** | Held-out: **UNDERPOWERED AND INCONCLUSIVE** (1/10 passed the gate; rule fired below 8/10 before any number was seen). Axis 1 ρ = +0.526, CI **[−0.101, +0.913]** → PARTIAL. Axis 2 balanced accuracy **0.4375**, zero true positives → **FAILURE**. | Not refit |
-| **POS** | Sealed SREBF2 recovery, rank 2/11,258. 11 of 17 canonical members in the extreme 10%, p = 7.0×10⁻⁸, 79% sign-correct both tails. | A **control**, not the headline |
+| **POS** | Sealed SREBF2 recovery, rank 2 of 11,258 scored perturbations (larger than 9,837 unique genes; some are targeted twice). 11 of 17 canonical members in the extreme 10%, p = 7.0×10⁻⁸, 79% sign-correct both tails. | A **control**, not the headline |
 
 Also: **essentiality density is flat at program level**, +0.021, p = 0.90.
 

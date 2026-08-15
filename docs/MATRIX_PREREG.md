@@ -182,3 +182,29 @@ then compared to its measured call. **Balanced accuracy** across the 10:
   not half-built.
 - Tier 4 results arrive after the 6:30 PM hard freeze and therefore **cannot
   enter `results/frozen/`**; they may only be reported verbally or as an appendix.
+
+---
+
+## APPENDED NOTE — knockdown count discrepancy (added after the sweep, original text above unchanged)
+
+**The original prose above says "9,823 knockdowns". The analysis actually covers
+9,837. Neither number has been edited above; this note explains the difference.**
+
+Three figures exist in this repository and each was correct for its own stage:
+
+| Figure | Where it came from | Status |
+|---|---|---|
+| **9,866** | A planning-stage approximation in `docs/GATE_C1_RESULTS.md` and `docs/CURRENT_STATE.md`, from before any target-parsing was implemented | **Superseded.** Approximate; never a measured count |
+| **9,823** | An early Build-II parse using an **ENSG-anchored** regex, which silently drops rows whose ENSG field is `nan` or multi-transcript | **Superseded.** Correct for that regex, not for the analysis |
+| **9,837** | The regex actually used by `src/score_k562.load_k562`, which does not require a well-formed ENSG suffix. This is the row count of `results/frozen/matrix.csv` | ✅ **Operative.** Every reported result uses this |
+
+The 14-gene gap is entirely rows like `10269_ZNF286B_P1P2_nan`, `1069_C22orf46_P1P2_nan`
+and `1125_C8orf44_P1P2_nan` — real perturbations whose ENSG annotation is missing.
+The stricter parse excluded them; the analysis included them.
+
+**This note is appended rather than substituted because a pre-registration that is
+edited to match its result is not a pre-registration.** The original figure stays
+visible above, wrong, with the correction beneath it.
+
+No threshold, claim, statistic or held-out selection in this document is altered
+by this note.

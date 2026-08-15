@@ -4,7 +4,7 @@
 reversible in a genome-scale CRISPRi screen is measurement quality, not biology —
 the range depends on whether a partly-circular feature is included, and we report
 both.** The mechanism is size: bigger programs with more co-moving members return
-more hits regardless of what they do, and program size alone explains 47%. Two
+more hits regardless of what they do, and program size alone explains 46.5%. Two
 things were sealed in git before the work that validates them — the held-out
 program at commit `9ad74a7`, twenty-one minutes before the scoring code existed,
 and the predictor at `d902803`, before the held-out set was opened. **We do not

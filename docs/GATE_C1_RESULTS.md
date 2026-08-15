@@ -1,3 +1,7 @@
+> ⚠ **SUPERSEDED COUNT.** The figure ~9,866 knockdowns below was a
+> planning-stage approximation. The operative count for every reported
+> result is **9,837**. See the appended note in `docs/MATRIX_PREREG.md`.
+
 # Gate C1 — Candidate 1 (reversal map) measurability gate. RESULTS.
 
 **Run 2026-08-14.** This is the gate pre-registered in `NEXT.md`, not the project.

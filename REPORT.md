@@ -15,7 +15,7 @@
 > pre-registered decision used the six-feature model, as written before the sweep.
 
 **Mechanism, one line: bigger programs with more co-moving members return more
-hits regardless of what they do — program size alone explains 47%.**
+hits regardless of what they do — program size alone explains 46.5%.**
 
 We swept **all 50 programs** in MSigDB Hallmark against **9,837 CRISPRi
 knockdowns** in K562 (9.2 min). We pre-registered, before running anything, that
@@ -23,7 +23,7 @@ if a measurability model explained ≥60% of the variance we would report
 *"K562 reversibility is mostly measurability"* as the finding rather than as a
 failure. Adjusted R² came back at **0.751**. The pre-registered branch fired.
 
-### Second finding — the obvious filter is wrong 40% of the time
+### Second finding — the obvious filter is wrong 20 of 50 times
 
 We built the measurability gate anyone would build: enough members present,
 expressed above background, variable above background. Across 50 programs:
@@ -80,7 +80,7 @@ neural approaches there.
 | Control | Result |
 |---|---|
 | **Nonsense program** — 41 random genes, seed pre-committed | **0 hits** vs 517 and 773 for real programs. ✅ The method does not manufacture signal. |
-| **Known-regulator recovery** (sealed program) | SREBF2 rank 1/9,837; 11 of 17 canonical members in the extreme 10%, binomial **p = 7.0×10⁻⁸**; **79% sign-correct** at both tails. ✅ |
+| **Known-regulator recovery** (sealed program) | SREBF2 rank 2 of 11,258 scored perturbations (perturbation frame, larger than the 9,837 unique genes because some are targeted twice); 11 of 17 canonical members in the extreme 10%, binomial **p = 7.0×10⁻⁸**; **79% sign-correct** at both tails. ✅ |
 | **Known-regulator recovery** (program A) | Not recovered. PERK/IRE1/XBP1 at q≈0.8–1.0. ❌ **This is the null.** |
 | **Guide-pair concordance** | **−0.019**, flat at every effect-size cut. ❌ Gene-level calls are not reproducible. |
 | **Essentiality-matched null** | Top-50 4.09× enriched (p<0.001). ❌ for program A. |

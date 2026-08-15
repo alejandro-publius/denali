@@ -27,7 +27,7 @@
 >
 > **"The range is wide because one of our own features is partly circular — computed from the same matrix as the outcome. Fifty-six is the number that survives that objection. We report both ends."**
 >
-> **"The mechanism is size. Bigger programs with more co-moving members return more hits regardless of what they do. Program size alone explains forty-seven percent."**
+> **"The mechanism is size. Bigger programs with more co-moving members return more hits regardless of what they do. Program size alone explains forty-six and a half percent."**
 >
 > **"We pre-registered this. Before the sweep we wrote down that if measurability cleared sixty percent, that becomes the finding, not the failure. It cleared."**
 
@@ -69,7 +69,7 @@
 >
 > **"We sealed one row of this matrix before the matrix existed. Cholesterol, commit 9ad74a7, twenty-one minutes before the scoring code was written."**
 >
-> **"SREBF2 comes back rank two of eleven thousand. It's the textbook answer — we're not claiming we found it. Eleven of seventeen canonical pathway members land in the extreme ten percent, p equals seven times ten to the minus eight, and the signs are right at both ends."**
+> **"SREBF2 comes back rank two of eleven thousand two hundred and fifty-eight scored perturbations — more than the nine thousand eight hundred genes, because some get targeted twice. It's the textbook answer — we're not claiming we found it. Eleven of seventeen canonical pathway members land in the extreme ten percent, p equals seven times ten to the minus eight, and the signs are right at both ends."**
 >
 > **"That tells you the ranking works. It does not tell you the ranking is discovering anything, and we don't say that it does."**
 
@@ -113,6 +113,16 @@
 >
 > **"It's in LIMITATIONS section seven because we wrote it down, not because you found it."**
 
+
+## ⚠ The question we cannot answer well — say it straight
+
+*If asked: "Three of your six 'measurability' features are properties of the gene set, not of your measurement. Strip them and what's left?"*
+
+> **"You're right that three of the six are set-construction properties, and size is the dominant one. We didn't run the stripped model, so I can't tell you what survives — that's the first thing I'd run next. What I can say is that the pre-registration fixed those six before the sweep, so we're stuck reporting what we committed to rather than the version that flatters us. If the finding collapses to 'bigger sets give more hits,' that's still worth knowing, but it's a smaller claim than the one on our slide."**
+
+**Do not soften this.** The honest version is stronger than a hedge, and the
+alternative is being walked into it.
+
 ## Six adversarial questions, ranked by how badly they land
 
 | # | Question | Verdict and answer |
@@ -121,7 +131,7 @@
 | **2** | **"You saw part of the held-out set before patching."** | **Survivable — pre-empt it.** See above; lead with "the result was a failure." |
 | **3** | **"Is 0.751 inflated by circular features?"** | **Already answered.** *"Yes, partly, and it's in our first sentence. That's why it's a range. 0.561 excludes the circular feature. We never quote the top alone."* |
 | **4** | **"−0.019 — doesn't that kill the pathway claims too?"** | **Survivable.** *"Ranking noise moves individual positions; it doesn't move seventeen genes to both tails at p = 7e-8. Gene-level is dead, pathway-level survives, and that's exactly where we drew the line."* |
-| **5** | **"SREBF2 at rank 2 is just the obvious answer."** | **Already answered.** *"Completely. It's labelled a recovered known answer everywhere. Guessing SREBF2 is easy; guessing INSIG1 at rank 9,815 with the correct sign isn't."* |
+| **5** | **"SREBF2 at rank 2 is just the obvious answer."** | **Already answered.** *"Completely — and it is labelled a recovered known answer everywhere. What a guess does not produce is the shape: eleven of seventeen canonical pathway members landing in the extreme ten percent with the correct sign at both ends. That is a pathway-level pattern, and it is the only part we claim."* |
 | **6** | **"One review covers 50.4% — is the evidence layer real?"** | **Fatal to calling it an evidence chain; we don't.** *"It's a pointer layer and we labelled it one. Our top source for ATF3 was a paper on integrating single-cell data across species. Nineteen of twenty probe genes returned the same zebrafish methods paper."* Screen: **FIG 4**. |
 
 > ### Pre-empt **#1** in the opening.

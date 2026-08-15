@@ -107,9 +107,14 @@ Two denominators exist and both are correct:
 - **`average_rank`: over 11,258 perturbation rows** (some genes tested twice).
   SREBF2 = **rank 2**.
 
-**Quote "rank 1 of 9,837" or "rank 2 of 11,258" — never mix them.** An earlier
-draft of Build II reported percentages using the wrong denominator; that error
-was found and corrected.
+> ## CANONICAL FRAME: **rank 2 of 11,258 scored perturbations.**
+> Use this everywhere — report, demo, page, captions. State the denominator when
+> you say it: 11,258 is larger than 9,837 because some genes are targeted twice.
+> `rank 1 of 9,837` is the same result in the unique-gene frame and is retained
+> here for completeness only. **Do not quote it; do not mix them.**
+
+An earlier draft of Build II reported percentages using the wrong denominator;
+that error was found and corrected.
 
 ## 7. What this does not show
 

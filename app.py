@@ -283,6 +283,32 @@ lcols[2].markdown(
 st.write("")
 st.divider()
 
+# ==================================================== 8b. ALL 50 PROGRAMS
+st.subheader("All 50 programs")
+st.write(
+    "Sorted by how many knockdowns moved the program. **Hits are knockdowns, not "
+    "pathway members** — they are counted out of all 9,837 switch-offs, which is why "
+    "a 200-gene program can show thousands. The gate is the measurability filter: "
+    "programs that fail it were never scoreable, whatever their biology."
+)
+
+_tbl = (S.assign(program=S["program"].str.removeprefix("HALLMARK_"))
+         .sort_values("n_hits_q05", ascending=False)
+         [["program", "n_declared", "n_hits_q05", "R_p", "passes_measurability_gate"]])
+
+st.dataframe(
+    _tbl, width="stretch", hide_index=True,
+    column_config={
+        "program": st.column_config.TextColumn("Pathway"),
+        "n_declared": st.column_config.NumberColumn("Genes in pathway"),
+        "n_hits_q05": st.column_config.NumberColumn("Knockdowns that moved it"),
+        "R_p": st.column_config.NumberColumn("R_p", format="%.4f"),
+        "passes_measurability_gate": st.column_config.CheckboxColumn("Gate"),
+    })
+
+st.write("")
+st.divider()
+
 # ==================================================== 9. PROVENANCE FOOTER
 seal = prov["seal"]
 st.markdown(

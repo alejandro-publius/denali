@@ -34,6 +34,15 @@ def near(a: float, b: float, tol: float = 5e-4) -> bool:
     return abs(float(a) - float(b)) <= tol
 
 
+def _raises(fn, *args) -> bool:
+    """True if fn refuses the input. A guard that never fires is not a guard."""
+    try:
+        fn(*args)
+        return False
+    except Exception:
+        return True
+
+
 def html_unescape_contains(page: str, s: str) -> bool:
     """The page escapes its embedded JSON, so compare against the escaped form."""
     from html import escape
@@ -314,6 +323,29 @@ def main() -> int:
     fm = (ROOT / "src" / "figures_matrix.py").read_text()
     check("fig4 sorts before drawing (no per-process PNG drift)",
           "sorted(gs)" in fm and "-len(kv[1]), kv[0]" in fm)
+
+    # ---------------- G. the portable audit ----------------
+    # audit_screen.py runs this project's check on somebody else's screen. It is
+    # the only thing here that claims to generalise, so it is tested on data it
+    # has never seen: two synthetic screens with known answers, one confounded by
+    # construction and one clean. If it cannot tell those apart it is useless.
+    from src.audit_screen import audit                          # noqa: E402
+    rng = __import__("numpy").random.default_rng(20260815)
+    sz = rng.integers(10, 300, 60)
+    conf = audit(sz, (sz * rng.uniform(1.5, 3.0, 60)).astype(int))
+    clean = audit(sz, rng.integers(0, 400, 60))
+    check("audit flags a size-confounded screen", conf["verdict"] == "CONFOUNDED",
+          f"r2={conf['r2_size_alone']}")
+    check("audit clears a screen that is not size-driven",
+          clean["verdict"] == "NOT SIZE-DOMINATED", f"r2={clean['r2_size_alone']}")
+    check("audit reproduces our own frozen size-alone value",
+          near(audit(summary.n_present, summary.n_hits_q05)["r2_size_alone"],
+               sens["set_size_alone"]["r2"], 5e-3))
+    check("audit refuses to rank or recommend",
+          "not a candidate list" in conf["what_this_is_not"].lower()
+          and not any("rank_" in k or k == "top" for k in conf))
+    check("audit needs enough sets to say anything",
+          _raises(audit, [10, 20, 30], [1, 2, 3]))
 
     # ---------------- F. the docs' own self-description ----------------
     report_readme = (ROOT / "README.md").read_text()

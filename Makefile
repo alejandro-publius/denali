@@ -13,7 +13,10 @@
 # retrieval). Those indexes change, so their outputs are committed as dated
 # observations. See `make retrieval` and docs/PRIOR_WORK.md.
 
-PY := .venv/bin/python
+# Overridable so CI can run the suite against the runner's interpreter:
+#   make test PY=python
+# It was hardcoded, which is why the CI badge was red from the day it was added.
+PY ?= .venv/bin/python
 RAW := data/raw
 
 .PHONY: all setup data check test retrieval page clean

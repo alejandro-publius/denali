@@ -26,4 +26,4 @@ jobs:
       # contents of results/frozen/, so it needs no raw data — that is the point
       # of freezing the interface.
       - name: Run invariants
-        run: make test
+        run: make test PY=python

@@ -4,7 +4,7 @@
 
 # Hackathon plan — Track A, "Build an AI Scientist"
 
-**Program: proteostasis, UPR arm.** Selected 2026-08-14 after the Candidate 1
+**Program: proteostasis, UPR arm.** Selected 2026-08-15 after the Candidate 1
 gate passed 3/3 (`GATE_C1_RESULTS.md`, commit `280c626`).
 
 | | |

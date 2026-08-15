@@ -114,11 +114,13 @@
 > **"It's in LIMITATIONS section seven because we wrote it down, not because you found it."**
 
 
-## ⚠ The question we cannot answer well — say it straight
+## ⚠ The question that broke our headline — say it straight
 
 *If asked: "Three of your six 'measurability' features are properties of the gene set, not of your measurement. Strip them and what's left?"*
 
-> **"You're right that three of the six are set-construction properties, and size is the dominant one. We didn't run the stripped model, so I can't tell you what survives — that's the first thing I'd run next. What I can say is that the pre-registration fixed those six before the sweep, so we're stuck reporting what we committed to rather than the version that flatters us. If the finding collapses to 'bigger sets give more hits,' that's still worth knowing, but it's a smaller claim than the one on our slide."**
+> **"You're right, and we ran it after someone made exactly that point. It collapses. Measurement features alone give adjusted R-squared of fifteen percent. Set-construction features alone give seventy percent. Set size by itself beats all three measurement features combined, three times over."**
+>
+> **"So our headline attributed the variance to measurement, and it's carried by how the gene set was built. The number stands — the word 'measurement' doesn't. That check is post-freeze, it's not pre-registered, and it's in the repo under results slash sensitivity with a note saying a critique prompted it, not our plan."**
 
 **Do not soften this.** The honest version is stronger than a hedge, and the
 alternative is being walked into it.

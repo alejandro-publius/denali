@@ -1,0 +1,30 @@
+{
+  "all_six": {
+    "adj_r2": 0.7511,
+    "n_features": 6
+  },
+  "x_independent_five": {
+    "adj_r2": 0.5606,
+    "n_features": 5
+  },
+  "measurement_only_three": {
+    "adj_r2": 0.152,
+    "n_features": 3
+  },
+  "construction_only_three": {
+    "adj_r2": 0.6965,
+    "n_features": 3
+  },
+  "set_size_alone": {
+    "r2": 0.4649
+  },
+  "measurement_only_pvalues": {
+    "expr_ratio": 0.8695,
+    "sd_ratio": 0.1071,
+    "essentiality_density": 0.03931
+  },
+  "run_at": "2026-08-15T11:11:26.537406-07:00",
+  "prompted_by": "adversarial self-critique naming this as the weakest point; NOT in the plan",
+  "status": "POST-FREEZE SENSITIVITY CHECK, NOT PRE-REGISTERED",
+  "does_not_replace": "the pre-registered primary, adj R2 0.561-0.751, stands as reported"
+}

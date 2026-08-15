@@ -133,6 +133,22 @@ Captions in `results/figures/CAPTIONS.md`, worded identically wherever used.
 | `fig3_measurability.png` | Program size vs hits, both R² shown as a range |
 | `fig4_retrieval.png` | 20 probe genes → sources; 19 converge on one paper |
 
+## Post-freeze sensitivity check, not pre-registered
+
+Run after the hard freeze, prompted by an adversarial self-critique rather than
+by the plan. It does not enter `results/frozen/` and does not revise the
+pre-registered primary.
+
+**Splitting our six features into measurement vs. gene-set construction:
+measurement-only reaches adj R² 0.152; construction-only reaches 0.697.** Set
+size alone (0.465) beats all three measurement features combined.
+
+**The pre-registered range 0.561–0.751 stands. The attribution does not.** The
+variance is carried by how programs are defined, chiefly their size — not by how
+well their genes were measured. Better instrumentation would not change it.
+
+Full record: `results/sensitivity/README.md`.
+
 ## Limitations
 
 Full document: **`docs/LIMITATIONS.md`**. In brief:

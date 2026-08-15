@@ -4,7 +4,7 @@
 
 # Gate C1 — Candidate 1 (reversal map) measurability gate. RESULTS.
 
-**Run 2026-08-14.** This is the gate pre-registered in `NEXT.md`, not the project.
+**Run 2026-08-15.** This is the gate pre-registered in `NEXT.md`, not the project.
 No pipeline code was written; no program was chosen.
 
 > **VERDICT: 1 of 4 programs passes all three criteria — P4 proteostasis (UPR

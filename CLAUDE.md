@@ -3,7 +3,7 @@
 ## 1. What this project is
 
 **ACTIVE: Candidate 1, the Perturb-seq reversal map. Program: proteostasis, UPR
-arm.** Selected 2026-08-14 after the pre-registered gate passed 3/3
+arm.** Selected 2026-08-15 after the pre-registered gate passed 3/3
 (`docs/GATE_C1_RESULTS.md`, commit `280c626`). Hackathon Track A, "Build an AI
 Scientist."
 
@@ -119,7 +119,7 @@ Environment note: Python `urllib`'s SSL chain is intercepted on this machine.
 
 ## 9. Build order
 
-**UI prohibition LIFTED 2026-08-14 — demo layer only.** Frontend is authorised,
+**UI prohibition LIFTED 2026-08-15 — demo layer only.** Frontend is authorised,
 built **Sunday morning over frozen precomputed tables**, never before the science
 lands. A UI that runs analysis live, or that is built ahead of the result it
 displays, remains prohibited.

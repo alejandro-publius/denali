@@ -5,6 +5,37 @@ found by us before anyone asked.
 
 ---
 
+## 0. ⚠ THE HEADLINE MAY SUBSTANTIALLY REDUCE TO "LARGER GENE SETS RETURN MORE HITS"
+
+**Post-freeze sensitivity check, not pre-registered. Run after an adversarial
+self-critique named this as our weakest point. It was not in the plan.**
+
+Three of our six "measurability" features are properties of **how the gene set
+was constructed**, not of measurement. We split them:
+
+| Model | features | adj R² |
+|---|---:|---:|
+| All six — **the pre-registered primary** | 6 | **0.751** |
+| Outcome-independent five | 5 | 0.561 |
+| **Measurement only** (`expr_ratio`, `sd_ratio`, `essentiality_density`) | 3 | **0.152** |
+| **Set construction only** (`n_present`, `frac_present`, `coherence`) | 3 | **0.697** |
+| Set size alone | 1 | 0.465 |
+
+**The finding is carried by set construction, not by measurement.** Set size by
+itself beats all three measurement features combined, three times over.
+
+**We attributed the variance to the wrong thing.** The corrected reading is that
+how many knockdowns appear to move a program is mostly a function of **how the
+program was defined — chiefly how many genes are in it** — rather than how well
+those genes were measured, and not of the program's biology.
+
+The pre-registered range 0.561–0.751 **stands as reported** and is not revised;
+what changes is the word *"measurement"* in its interpretation. Better
+instrumentation would not move this number, because the dominant term is a
+property of the gene-set catalogue.
+
+Full record: `results/sensitivity/README.md`.
+
 ## 1. The headline number is partly mechanical — 0.561, not 0.751, is the floor
 
 The deciding statistic is adjusted R² of program reversibility on six

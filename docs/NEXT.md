@@ -5,7 +5,7 @@
 # Next
 
 **Candidate 1 (reversal map) is SELECTED. Its gate has PASSED.**
-Program: **proteostasis, UPR arm.** Decided by the user 2026-08-14.
+Program: **proteostasis, UPR arm.** Decided by the user 2026-08-15.
 
 Full gate record: `GATE_C1_RESULTS.md` (results), `GATE_C1_PREREGISTRATION.md`
 (thresholds, hashed before any value was computed), commit `280c626`.
@@ -62,7 +62,7 @@ replication of the map.
 
 ## Standing prohibitions
 
-### LIFTED, 2026-08-14 — demo layer only
+### LIFTED, 2026-08-15 — demo layer only
 
 > **The no-UI / no-frontend / no-Figma prohibition is LIFTED for the demo layer
 > only.** Frontend is authorised, to be built **Sunday morning over precomputed,

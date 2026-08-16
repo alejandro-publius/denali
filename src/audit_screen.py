@@ -21,6 +21,24 @@ WHAT IT WILL NOT DO. It does not rank the sets, name a candidate, or tell anyone
 what to chase. Guide-pair concordance in our own data is -0.019, and a tool that
 turned a confound estimate into a recommendation would be making exactly the
 error it exists to detect.
+
+WHERE THE ARITHMETIC LIVES. `audit()` is imported from `denali_audit.core`, the
+packaged tool in `packages/denali-audit/`. It used to be a second copy of the
+same forty lines here. The two copies agreed on the day they were written and
+nothing enforced that they would keep agreeing -- the anti-drift test checked the
+PACKAGE against the published 0.4649 and never checked the package against this
+file. Importing removes the second copy, so the divergence has nowhere to happen,
+and it means the study runs on its own product rather than on a private fork of
+it. If the packaged maths ever moves, every number in `audits/external/` and the
+`--self-test` below move with it and the invariant suite says so.
+
+NOT TO BE CONFUSED WITH the second implementation in `results/independent/`.
+`src/independent_recompute.py` is DELIBERATELY a separate implementation of the
+headline statistic, written from the method section without reading the original,
+using different libraries at every step. It exists precisely to be different --
+agreement between it and the frozen path is evidence. The duplication removed
+here was the other kind: two copies of the same code with nothing checking them
+against each other, where agreement was evidence of nothing.
 """
 from __future__ import annotations
 
@@ -32,86 +50,15 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+# The package is vendored in this repository, not installed. A clean clone can
+# run `python -m src.audit_screen` with no install step, which is the whole point
+# of `make judge-check` needing no network. Anchored to this file rather than the
+# caller's cwd for the same reason src/mcp_server.py anchors FROZEN.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "packages" / "denali-audit"))
 
-def audit(sizes, hits, corr=None) -> dict:
-    """How much of a set-level hit ranking is explained by set size alone?
+from denali_audit.core import audit                             # noqa: E402
 
-    sizes : genes measured per set        hits : significant results per set
-    corr  : optional mean inter-gene correlation per set
-
-    Returns plain numbers. No verdict about any individual set.
-    """
-    s = np.asarray(sizes, dtype=float)
-    h = np.asarray(hits, dtype=float)
-    ok = np.isfinite(s) & np.isfinite(h)
-    s, h = s[ok], h[ok]
-    n = len(s)
-    if n < 8:
-        raise ValueError(f"need at least 8 sets to say anything; got {n}")
-
-    # log1p(hits) is the scale a hit count actually lives on: the difference
-    # between 0 and 10 hits matters more than between 500 and 510.
-    y = np.log10(1.0 + h)
-
-    def r2(x, y):
-        x = np.asarray(x, dtype=float)
-        if np.std(x) == 0:
-            return float("nan")
-        b = np.polyfit(x, y, 1)
-        pred = np.polyval(b, x)
-        ss_res = float(((y - pred) ** 2).sum())
-        ss_tot = float(((y - y.mean()) ** 2).sum())
-        return float("nan") if ss_tot == 0 else 1 - ss_res / ss_tot
-
-    out = {
-        "n_sets": int(n),
-        "size_range": [int(s.min()), int(s.max())],
-        "r2_size_alone": round(r2(s, y), 4),
-        "spearman_size_vs_hits": round(float(
-            pd.Series(s).corr(pd.Series(y), method="spearman")), 4),
-        "sets_with_zero_hits": int((h == 0).sum()),
-    }
-
-    if corr is not None:
-        c = np.asarray(corr, dtype=float)[ok]
-        if np.isfinite(c).all():
-            vif = 1.0 + (s - 1.0) * c
-            out["vif_range"] = [round(float(vif.min()), 2), round(float(vif.max()), 2)]
-            out["r2_vif"] = round(r2(np.log10(vif), y), 4)
-
-    share = out.get("r2_vif", out["r2_size_alone"])
-    out["share_explained_without_biology"] = share
-    out["reading"] = (
-        f"{share:.0%} of the variance in this ranking is predicted by how the "
-        f"sets were built, with no reference to what any gene does."
-    )
-    if share >= 0.40:
-        out["verdict"] = "CONFOUNDED"
-        out["what_to_do"] = (
-            "Do not read the top of this ranking as biology. Before committing to "
-            "any candidate, re-rank with a size-aware statistic -- a competitive "
-            "test that accounts for inter-gene correlation (CAMERA and its "
-            "relatives), or a permutation null that preserves set size -- and see "
-            "which entries survive. The ones that move most are the ones your "
-            "current ranking is least able to justify.")
-    elif share >= 0.20:
-        out["verdict"] = "PARTIALLY CONFOUNDED"
-        out["what_to_do"] = (
-            "Size is a visible but not dominant driver here. Report it alongside "
-            "the ranking, and check that your leading entries are not simply your "
-            "largest sets.")
-    else:
-        out["verdict"] = "NOT SIZE-DOMINATED"
-        out["what_to_do"] = (
-            "Set size does not explain much of this ranking. That is the good "
-            "case, and it is worth stating explicitly -- most published set-level "
-            "rankings never check.")
-    out["what_this_is_not"] = (
-        "Not a candidate list and not a recommendation. This measures a property "
-        "of the ranking, not of any gene or pathway in it.")
-    out["method"] = ("VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, "
-                     "Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461")
-    return out
+__all__ = ["audit", "audit_replication", "self_test", "main"]
 
 
 def audit_replication(sizes, hits_a, hits_b) -> dict:
@@ -124,6 +71,22 @@ def audit_replication(sizes, hits_a, hits_b) -> dict:
 
     sizes : genes measured per set (shared)
     hits_a, hits_b : significant results per set, from two independent screens
+
+    THIS ONE IS NOT IMPORTED FROM THE PACKAGE, and that is deliberate. Unlike
+    `audit()`, the package's `audit_replication()` is not a copy of this function
+    -- it is a leaner one that residualises on log10(size) where this residualises
+    on raw size, and the two therefore return DIFFERENT NUMBERS on the same input:
+    agreement-after-removing-size 0.4934 here against 0.4507 there, 26% of the
+    agreement against 32%. Neither is wrong; they answer slightly different
+    questions and they were written months apart for different callers.
+
+    They are kept apart because each is load-bearing for a surface that is already
+    frozen. This one produced evaluation 6's published 26% and feeds
+    `src/offtarget_audit.py`; the packaged one is what `denali audit --hits-b`
+    has always returned to users. Unifying them would silently move a published
+    number, and the analysis is closed. So both are pinned instead: the invariant
+    suite asserts both values on the frozen paired data, which turns a difference
+    that nothing was watching into one that cannot move without failing the build.
     """
     import statsmodels.api as sm
     from scipy.stats import spearmanr

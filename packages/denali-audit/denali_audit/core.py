@@ -1,10 +1,19 @@
 """How much of a set-level ranking is explained by how the sets were built?
 
-The maths here is VENDORED VERBATIM from src/audit_screen.py in the denali research
-repository -- the code that produced the published figures. It is not a
-reimplementation and it must not drift: tests/test_core.py asserts that this package
-reproduces the published headline of 0.4649 on the frozen research data, so a change
-that moves a number fails the build.
+`audit()` here is THE definition, not a copy of one. It began as a verbatim vendoring
+of src/audit_screen.py in the denali research repository -- the code that produced the
+published figures -- and for a while both files carried the same forty lines with
+nothing checking them against each other. That is now the other way round: the study's
+src/audit_screen.py imports this function, so the research and the shipped tool run the
+same bytes and there is no second copy to drift from.
+
+It must not move: packages/denali-audit/tests/test_core.py asserts that this reproduces
+the published headline of 0.4649 on the frozen research data, so a change that moves a
+number fails the build.
+
+`audit_replication()` below is the exception -- see its docstring. It is genuinely a
+different function from the study's, returns different numbers, and is deliberately
+left that way.
 
 Reference: VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research
 40(17):e133, doi:10.1093/nar/gks461.
@@ -89,11 +98,11 @@ def audit(sizes, hits, corr=None) -> dict:
     # A non-finite share means the question could not be ASKED -- every set is the
     # same size, so size has no variance to explain anything with. Falling through
     # to the final branch would report that as "not size-dominated, the good case",
-    # which is a reassurance the data does not support. This branch is the one
-    # place this file departs from src/audit_screen.py, and it changes no number:
-    # it only stops a NaN from being read as an all-clear. Screen-level inputs
+    # which is a reassurance the data does not support. It changes no number: it
+    # only stops a NaN from being read as an all-clear. Screen-level inputs
     # (MAGeCK, BAGEL, drugZ) hit it routinely, because most libraries build every
-    # gene with the same number of guides.
+    # gene with the same number of guides. The study gets this branch too now,
+    # since src/audit_screen.py imports this function rather than copying it.
     if not np.isfinite(share):
         out["verdict"] = "UNDETERMINED"
         out["reading"] = (
@@ -162,6 +171,19 @@ def audit_replication(sizes, hits_a, hits_b) -> dict:
     The question a biologist actually has when a hit list "replicated": both screens
     are confounded the same way, so agreeing for the same wrong reason looks exactly
     like agreeing for the right one.
+
+    THE ONE PLACE THIS PACKAGE AND THE STUDY DIVERGE. `audit()` is shared -- the
+    study imports it from here. This function is not, and it is not a copy either:
+    it residualises on log10(size) where src/audit_screen.py residualises on raw
+    size, so on the same input the two return different numbers (0.4507 here
+    against 0.4934 there; 32% of the agreement against 26%). Neither is wrong,
+    but they are not interchangeable and the difference is not rounding.
+
+    They stay apart because each already carries a frozen surface: the study's
+    produced evaluation 6's published 26%, this one is what `denali audit --hits-b`
+    has always returned. Collapsing them would move a published number after the
+    fact. Both are pinned by the research repo's invariant suite instead, so the
+    gap cannot widen unnoticed.
     """
     s = np.asarray(sizes, dtype=float)
     a = np.asarray(hits_a, dtype=float)

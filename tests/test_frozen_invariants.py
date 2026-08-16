@@ -427,6 +427,67 @@ def main() -> int:
           near(audit(summary.n_present, summary.n_hits_q05)["r2_size_alone"],
                sens["set_size_alone"]["r2"], 5e-3))
 
+    # ---------------- G1. the study and the product are ONE implementation ----
+    # There used to be two copies of audit(): this file's and the package's. They
+    # agreed on the day they were written and nothing checked that they still did
+    # -- the package's anti-drift test pinned the package against 0.4649 and never
+    # against src/. src/audit_screen.py now IMPORTS the packaged function, so the
+    # study runs on its own product. These checks assert that structurally, so a
+    # future edit that re-copies the forty lines back into src/ fails here rather
+    # than passing quietly and diverging later.
+    import denali_audit.core as _pkg_core                       # noqa: E402
+    from src import audit_screen as _as                         # noqa: E402
+    check("the study's audit() IS the packaged audit(), not a copy of it",
+          _as.audit is _pkg_core.audit,
+          f"{_as.audit.__module__} vs {_pkg_core.audit.__module__}")
+    check("src/audit_screen.py defines no second audit()",
+          "def audit(" not in (ROOT / "src" / "audit_screen.py").read_text())
+    # Belt and braces: even if someone reintroduces a copy, the outputs must match
+    # key-for-key on the frozen data. The packaged one may add keys (corpus
+    # context); it may not disagree on one they share.
+    _a = _as.audit(summary.n_present, summary.n_hits_q05, summary.coherence)
+    _b = _pkg_core.audit(summary.n_present, summary.n_hits_q05, summary.coherence)
+    _differ = [k for k in _a if k in _b and _a[k] != _b[k]]
+    check("study and package agree on every shared key of audit()", not _differ,
+          f"disagree on {_differ}" if _differ else f"{len(set(_a) & set(_b))} keys identical")
+
+    # The ONE deliberate second implementation is results/independent/ --
+    # src/independent_recompute.py, written from the method section without
+    # reading the original and using different libraries at every step. It exists
+    # to be different; agreement with it is evidence. That is the opposite of the
+    # duplication removed above, and both files must keep saying so, because a
+    # reader who confuses the two will "helpfully" delete the wrong one.
+    _ind = (ROOT / "src" / "independent_recompute.py").read_text()
+    check("the independent reimplementation still declares itself deliberate",
+          "INDEPENDENT second implementation" in _ind and "were not read" in _ind)
+    check("audit_screen.py distinguishes itself from that reimplementation",
+          "independent_recompute.py" in (ROOT / "src" / "audit_screen.py").read_text())
+
+    # audit_replication() is the exception, and it is pinned rather than shared.
+    # The two are NOT copies: the study residualises on raw size, the package on
+    # log10(size), so they return different numbers on the same input. Each
+    # already carries a frozen surface (evaluation 6's published 26% here,
+    # `denali audit --hits-b` there), so unifying them would move a published
+    # number after the fact. Pinning both is what stops the gap widening unseen.
+    _pp = pd.read_csv(ROOT / "results" / "concordance" / "paired_programs.csv")
+    _rs = _as.audit_replication(_pp.n_present_k562, _pp.n_hits_q05_k562,
+                                _pp.n_hits_q05_rpe1)
+    _rp = _pkg_core.audit_replication(_pp.n_present_k562, _pp.n_hits_q05_k562,
+                                      _pp.n_hits_q05_rpe1)
+    check("both replication auditors still agree on RAW agreement",
+          near(_rs["raw_agreement_spearman"], _rp["agreement_raw"], 1e-4),
+          f"{_rs['raw_agreement_spearman']} vs {_rp['agreement_raw']}")
+    check("study replication auditor pinned at its published value",
+          near(_rs["agreement_after_removing_size"], 0.4934, 1e-3),
+          f"{_rs['agreement_after_removing_size']}")
+    check("packaged replication auditor pinned at its own, different value",
+          near(_rp["agreement_after_removing_size"], 0.4507, 1e-3),
+          f"{_rp['agreement_after_removing_size']}")
+    check("the divergence between them is documented in both files",
+          "0.4507" in (ROOT / "src" / "audit_screen.py").read_text()
+          and "0.4934" in (ROOT / "packages" / "denali-audit" / "denali_audit"
+                           / "core.py").read_text())
+
     # ---------------- G2. evaluation 8, the off-target arm ----------------
     # Two published datasets, neither ours. The source workbooks are git-ignored,
     # so these checks are skipped on a clone that has not fetched them -- but the

@@ -319,6 +319,92 @@ pre-registered K562 primary.
 
 Full record: `results/offtarget/offtarget_evaluation.json`, `docs/OFFTARGET.md`.
 
+## Does the confound survive when the program is actually switched on?
+
+**Evaluation 9. Pre-registered** (`docs/ADAMSON_PREREG.md`, `b83e7308…`, committed
+`7a98d4d` before the substrate was opened). The standing objection to everything
+above is that K562 is unstressed, so the UPR was never engaged and a null is
+unsurprising. Adamson 2016 is a targeted UPR Perturb-seq library, which makes it
+the one substrate where engagement can be established rather than assumed.
+
+**Engagement first, as a gate.** Against 1,000 null gene sets matched on set size
+and control-expression decile, the observed mean absolute effect is **0.0551**
+against a null 99th percentile of **0.0487** (null mean 0.0422), empirical
+**p = 0.001**. The program is engaged. Only then was the size question asked.
+
+| | |
+|---|---|
+| Size alone, in Adamson | **R² 0.2685**, p = 1.2×10⁻⁴ |
+| Scoreable | **50 of 50**; 39 return at least one hit, 11 return none |
+| Verdict | **PERSISTS UNDER ENGAGEMENT** — claim (a) |
+| K562 reference | 0.4649 |
+
+**Amendment 1, appended rather than rewritten.** The original pre-registration did
+not say which construct was the control. That was resolved by a rule about
+construct identity — `(mod)` and `_pBA`, pooled, 7,293 cells — written into an
+amendment appended *below* the original text, with **no threshold changed**: P0,
+P1, P2 and the R² bands are untouched and the original is diffable at `7a98d4d`.
+Because the control definition was the one real degree of freedom, the arm
+reports what the other choices would have given: **0.2398** and **0.2699** for the
+two single controls, against 0.2685 pooled. The definition did not manufacture
+the result.
+
+**The honest scope limit, stated by the arm itself.** This is **not a
+replication**. Adamson is a targeted library of 103 retained perturbations
+deliberately enriched for regulators of the program under test, against K562's
+9,837 genome-scale knockdowns. It is the worst available substrate for a claim
+about unbiased screens and the best available one for a claim about engagement,
+and it is used only for the second. The single-cell → perturbation-effect
+construction is **new code and is not covered by the frozen scorer's hash** — the
+arm says so rather than implying the whole pipeline was byte-frozen.
+
+Full record: `results/adamson/adamson_evaluation.json`, `docs/ADAMSON_RESULTS.md`.
+
+## Does our headline describe the field, or just our screen?
+
+**Evaluation 10. POST-HOC, exploratory, not pre-registered.** BioGRID ORCS 2.0.18
+ships 1,952 curated human CRISPR screens with an explicit `HIT` column; **1,272**
+meet the stated inclusion rule (≥20 hits, ≥10,000 genes measured, ≥8 usable sets;
+680 excluded, 0 unparseable).
+
+| Screen-level | R² |
+|---|---:|
+| p10 / p25 | 0.103 / 0.186 |
+| **median** | **0.224** |
+| p75 / p90 | 0.269 / 0.455 |
+| mean | 0.253 |
+| Share reaching our 0.465 | **9.6%** |
+
+**Our screen sits above the field's 90th percentile.** Quoting 46.5% as though it
+described screens generally would overstate the field by roughly 2×. The effect
+also grows monotonically with hit-list size — **0.056 → 0.184 → 0.226 → 0.263**
+across the four bins — which is the uncomfortable direction, because permissive
+hit lists are what genome-scale screens produce and what labs mine.
+
+**The arm then audited itself and lost the headline.** The screen is not the
+independent unit: those 1,272 screens come from **187 publications**, one
+contributes **340 screens (26.7% of the corpus)** and the top five contribute
+**58.9%**, while the median publication contributes two. Collapsing each
+publication to its median screen first moves the share reaching 0.465 from 9.6%
+to **26.7%**, and the median from 0.224 to **0.246** — denali sits above roughly
+the 73rd percentile of the literature, not the 90th. The publication-level
+distribution is also far wider (0.043–0.654 against 0.103–0.455), so the
+tightness of the screen-level distribution was itself an artifact of counting.
+**This is the project's own thesis occurring inside the project's own audit**, and
+it leads the writeup rather than sitting in a caveats list.
+
+**Two disclosures this arm does not ship without.** First, **0.224 and 0.465 are
+not the same estimand** — different unit, outcome and predictor — so a smaller
+field median does not falsify ours; it bounds how far ours travels. Second, **an
+independent execution of the same idea landed near 0.10 over ~1,673 screens with
+non-monotonic strata and could not be reconciled.** We report ours because its
+code and inclusion rule are in this repository, and **neither number should be
+quoted as "the field's value."** The predictor transform is a known contributor
+and is measured, not waved at: the raw-size predictor moves the median to
+**0.192**. No screen and no publication is named as confounded.
+
+Full record: `results/corpus/corpus_audit.json`, `docs/CORPUS.md`.
+
 ## Limitations
 
 Full document: **`docs/LIMITATIONS.md`**. In brief:

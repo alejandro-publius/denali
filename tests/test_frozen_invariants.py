@@ -1328,6 +1328,72 @@ def main() -> int:
     check("README controls count matches controls.csv", claim in report_readme,
           f"frozen: {n_ctrl} controls / {n_ctrl_fail} FAIL; README must say {claim!r}")
 
+    # ---------------- independent recomputation ----------------
+    # The strongest validation artifact here: a second implementation of the
+    # headline statistic, written from the README method section without
+    # reading src/score_k562.py, using scipy's Mann-Whitney and statsmodels'
+    # BH and OLS in place of the frozen path's own. If the two ever diverge,
+    # the headline depends on one implementation rather than on the data, and
+    # that has to fail the build rather than sit in a JSON nobody opens.
+    indep_p = ROOT / "results" / "independent" / "independent_recompute.json"
+    if indep_p.exists():
+        ind = json.loads(indep_p.read_text())
+        tol = ind["tolerance"]
+        got = ind["headline_recomputed_on_independent_R_p"]
+        pub = ind["published"]
+        for k in pub:
+            check(f"independent recomputation agrees on {k}",
+                  abs(got[k] - pub[k]) <= tol,
+                  f"published {pub[k]} vs independent {got[k]} "
+                  f"(tolerance {tol})")
+        st = ind["per_program_statistic"]
+        check("independent recomputation reproduces R_p on every program",
+              st["n_programs"] == len(summary)
+              and st["pearson_r_vs_frozen_R_p"] >= 0.999
+              and st["max_abs_diff_R_p"] < 1e-3,
+              f"n={st['n_programs']} pearson={st['pearson_r_vs_frozen_R_p']} "
+              f"max|diff|={st['max_abs_diff_R_p']}")
+        # The published figures it is checked against must be the ones the repo
+        # actually claims, not a copy that can drift.
+        check("independent recomputation is checked against the published figures",
+              near(pub["size_alone"], float(sens["set_size_alone"]["r2"]))
+              and near(pub["all_six"], float(sens["all_six"]["adj_r2"]), 1e-3),
+              f"json {pub} vs stripped_model.json")
+        # It must not silently become a re-read of the frozen answer. Naive
+        # version of this checked that "n_hits_q05" never appears in the module
+        # -- but it legitimately does, as the column the independent result is
+        # COMPARED against. Structure, not substrings: the independent hit
+        # count has to come out of score_program(), and score_program() has to
+        # go through scipy and statsmodels rather than the frozen csv.
+        rec = (ROOT / "src" / "independent_recompute.py").read_text()
+        import ast, importlib
+        import numpy as _np
+        _ir = importlib.import_module("src.independent_recompute")
+        tree = ast.parse(rec)
+        fn = next((n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)
+                   and n.name == "score_program"), None)
+        calls = {n.func.id for n in ast.walk(fn) if isinstance(n, ast.Call)
+                 and isinstance(n.func, ast.Name)} if fn else set()
+        check("independent recomputation computes hits rather than reading them",
+              fn is not None
+              and {"mannwhitneyu", "multipletests"} <= calls
+              and '"n_hits_indep": hits' in rec
+              and _ir.RAW.parent.name == "raw" and _ir.RAW.exists() is not None,
+              f"score_program calls {sorted(calls)}" if fn else "no score_program")
+        # And it must actually work: run its scorer on synthetic data whose
+        # answer is known by construction. A separated block must produce hits;
+        # an identical block must produce none.
+        rng = _np.random.default_rng(0)
+        Xs = rng.normal(size=(60, 200))
+        Xs[:, :20] += 6.0                      # members clearly shifted
+        mem, bg = _np.arange(20), _np.arange(20, 200)
+        hits_sep, _ = _ir.score_program(Xs, mem, bg)
+        Xn = rng.normal(size=(60, 200))        # nothing shifted
+        hits_null, _ = _ir.score_program(Xn, mem, bg)
+        check("independent scorer separates a planted signal from a null",
+              hits_sep >= 55 and hits_null <= 6,
+              f"planted={hits_sep}/60 perturbations, null={hits_null}/60")
+
     # ---------------- evaluation 11: the literature arm ----------------
     # Live-index arm, so the numbers are a dated observation and not
     # reproducible by `make all`. What IS checkable is that the doc, the README

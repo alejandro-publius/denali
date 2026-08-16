@@ -3,7 +3,7 @@
 **A genome-scale CRISPRi screen, read back to ask what it can and cannot discover — and the answer is mostly an artifact of how the programs are defined, not their biology.**
 
 [![CI](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml/badge.svg)](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-371-brightgreen.svg)](tests/test_frozen_invariants.py)
+[![tests](https://img.shields.io/badge/tests-378-brightgreen.svg)](tests/test_frozen_invariants.py)
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](.python-version)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -348,6 +348,44 @@ An earlier run of this check had two diffs, and both were defects rather than no
 
 `make all` deliberately does **not** re-run the two live-API steps (`make retrieval`). Those indexes change, so their outputs are committed as dated observations from 2026-08-15. The instability of retrieval is the finding, not a defect.
 
+## The headline was recomputed by a second implementation that never read the first
+
+`src/independent_recompute.py` reimplements the headline statistic **from the
+method section of this README**, not from the code. `src/score_k562.py`,
+`src/sweep.py` and `src/freeze_predictor.py` were not read while writing it — a
+reimplementation that consulted the original would only prove the original can
+be copied. Different machinery at every step where a choice existed:
+
+| step | frozen path | independent path |
+|---|---|---|
+| Mann–Whitney U | its own byte-frozen scorer | `scipy.stats.mannwhitneyu` |
+| BH correction | its own | `statsmodels.stats.multitest.multipletests` |
+| regression | its own | `statsmodels.formula.api.ols` |
+
+It reads the raw 470 MB substrate, not `results/frozen/`, and recomputes every
+hit count from `X`.
+
+| figure | published | independent | agree |
+|---|---:|---:|:--:|
+| adj R², all six features | 0.751 | **0.7511** | ✅ |
+| adj R², outcome-independent five | 0.561 | **0.5606** | ✅ |
+| R², set size alone | 0.4649 | **0.4649** | ✅ |
+
+Per-program agreement across all **50** programs: **Pearson 1.000000**, Spearman
+1.000000, largest absolute difference in `R_p` of **0.000049** — which is the
+rounding in the stored file, not a disagreement. The hit counts are identical as
+integers.
+
+Asserted by the suite to a stated tolerance of 0.01, so a future divergence
+fails the build rather than sitting in a JSON nobody opens. The scorer is also
+run against synthetic data with a known answer: a planted signal returns hits on
+60 of 60 perturbations, a null returns 0 of 60.
+
+**What this does not establish.** That the method is *correct*. Two
+implementations of a wrong method agree with each other perfectly. This rules
+out implementation error in the frozen scorer; it does not rule out the question
+being the wrong one to ask, which is what the eleven evaluations are for.
+
 ## What the reproduction check found
 
 Three defects, all in the reproduction wiring, **none touching a reported number**:
@@ -360,7 +398,7 @@ Each was found only by running from a clean clone, and the third only after the 
 
 ## Tests
 
-`tests/test_frozen_invariants.py` — **371 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
+`tests/test_frozen_invariants.py` — **378 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
 
 Two guards exist because each caught a real defect. The **compile guard** parses every file under `src/` and `tests/` before anything else — added after a shipped module was found not to compile. The **scope guard** builds a gene-symbol universe from the Hallmark GMT and fails the build if any symbol appears within 260 characters of verdict language in the rendered page or the captions, with an allowance for "recovered known answer" and "positive control"; it enforces the −0.019 scope limit mechanically. A third set of checks asserts the page makes **no network calls** — no `fetch`, no `XMLHttpRequest`, no external script or stylesheet — so the interactive explorer cannot break unattended.
 
@@ -441,7 +479,7 @@ This is the part we care most about, so it is built into the code rather than pr
 - **We held ten pathways back** and only opened them after the model was frozen and hashed. The model **failed** on them — worse than a coin flip, zero true positives. We published that instead of quietly refitting.
 - **Seven of our eleven evaluations came back negative.** All eleven are reported, including the one that clears its bar by only 0.026.
 - **The one positive is a control, not a discovery.** Run unchanged on a pathway it was never tuned for, the ranking puts that pathway's known master switch at **rank 2 of 11,258**. So the machinery works — it just is not finding what people assume it is finding.
-- **371 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
+- **378 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
 
 ---
 

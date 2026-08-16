@@ -1,0 +1,34 @@
+{
+  "what_this_is": "A second implementation of the headline statistic, written from the README method section without reading src/score_k562.py, src/sweep.py or src/freeze_predictor.py. Different Mann-Whitney (scipy), different BH (statsmodels), different regression (statsmodels OLS).",
+  "tolerance": 0.01,
+  "per_program_statistic": {
+    "pearson_r_vs_frozen_R_p": 1.0,
+    "spearman_r_vs_frozen_R_p": 1.0,
+    "max_abs_diff_R_p": 4.9e-05,
+    "mean_abs_diff_R_p": 2e-05,
+    "n_programs": 50
+  },
+  "headline_recomputed_on_independent_R_p": {
+    "all_six": 0.7511,
+    "x_independent_five": 0.5606,
+    "size_alone": 0.4649
+  },
+  "same_regressions_on_frozen_R_p": {
+    "all_six": 0.7511,
+    "x_independent_five": 0.5606,
+    "size_alone": 0.4649
+  },
+  "published": {
+    "all_six": 0.751,
+    "x_independent_five": 0.561,
+    "size_alone": 0.4649
+  },
+  "agrees_within_tolerance": {
+    "all_six": true,
+    "x_independent_five": true,
+    "size_alone": true
+  },
+  "all_agree": true,
+  "what_would_falsify_this": "Any of the three published figures differing from the independent recomputation by more than 0.01. That would mean the headline depends on one implementation of the statistic rather than on the data, and it would have to be reported as such rather than reconciled.",
+  "what_this_does_not_establish": "That the METHOD is correct. Two implementations of a wrong method agree with each other. This rules out implementation error in the frozen scorer; it does not rule out the method being the wrong question to ask, which is what evaluations 1-11 are for."
+}

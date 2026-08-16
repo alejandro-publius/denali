@@ -1,0 +1,148 @@
+set,size,hits
+GO:0006357~regulation of transcription by RNA polymerase II,1721,809
+GO:0000978~RNA polymerase II cis-regulatory region sequence-specific DNA binding,1198,637
+"GO:0000981~DNA-binding transcription factor activity, RNA polymerase II-specific",1285,639
+"GO:0000398~mRNA splicing, via spliceosome",196,94
+GO:0005681~spliceosomal complex,139,56
+GO:0071013~catalytic step 2 spliceosome,96,44
+hsa03040:Spliceosome,217,60
+GO:0060261~positive regulation of transcription initiation by RNA polymerase II,60,44
+GO:0070847~core mediator complex,26,25
+GO:0032968~positive regulation of transcription elongation by RNA polymerase II,50,33
+GO:0016592~mediator complex,40,28
+GO:0051123~RNA polymerase II preinitiation complex assembly,62,35
+hsa03420:Nucleotide excision repair,63,33
+GO:0006289~nucleotide-excision repair,42,20
+GO:0003684~damaged DNA binding,70,24
+GO:0006367~transcription initiation at RNA polymerase II promoter,50,26
+hsa03022:Basal transcription factors,44,21
+GO:0016251~RNA polymerase II general transcription initiation factor activity,54,21
+GO:0005669~transcription factor TFIID complex,47,18
+GO:0006383~transcription by RNA polymerase III,30,26
+GO:0003899~DNA-directed 5'-3' RNA polymerase activity,26,23
+hsa03020:RNA polymerase,34,26
+GO:0005666~RNA polymerase III complex,18,17
+GO:0001056~RNA polymerase III activity,14,14
+GO:0000428~DNA-directed RNA polymerase complex,23,17
+GO:0001054~RNA polymerase I activity,15,14
+GO:0006360~transcription by RNA polymerase I,21,15
+GO:0001055~RNA polymerase II activity,16,13
+GO:0005736~RNA polymerase I complex,13,10
+"GO:0005665~RNA polymerase II, core complex",17,11
+hsa04623:Cytosolic DNA-sensing pathway,83,24
+GO:0042793~plastid transcription,7,7
+GO:0001059~transcription by RNA polymerase IV,7,7
+GO:0001060~transcription by RNA polymerase V,7,7
+GO:0001057~RNA polymerase IV activity,7,7
+GO:0001058~RNA polymerase V activity,7,7
+GO:0001065~mitochondrial single subunit type RNA polymerase activity,7,7
+GO:0001066~plastid single subunit type RNA polymerase activity,7,7
+GO:0006390~mitochondrial transcription,17,9
+GO:0071667~DNA/RNA hybrid binding,5,4
+GO:0004402~histone acetyltransferase activity,32,20
+GO:0036408~histone H3K14 acetyltransferase activity,28,18
+GO:0043992~histone H3K9 acetyltransferase activity,22,16
+GO:0043993~histone H3K18 acetyltransferase activity,22,16
+GO:0043994~histone H3K23 acetyltransferase activity,22,16
+GO:0043999~histone H2AK5 acetyltransferase activity,22,16
+GO:0044012~histone H2AK9 acetyltransferase activity,22,16
+GO:0044014~histone H2BK5 acetyltransferase activity,22,16
+GO:0044015~histone H2BK12 acetyltransferase activity,22,16
+GO:0044016~histone H3K4 acetyltransferase activity,22,16
+GO:0044017~histone H3K27 acetyltransferase activity,22,16
+GO:0044018~histone H3K36 acetyltransferase activity,22,16
+GO:0032931~histone H3K56 acetyltransferase activity,22,16
+GO:0140908~histone H3K122 acetyltransferase activity,22,16
+GO:0043995~histone H4K5 acetyltransferase activity,30,18
+GO:0043996~histone H4K8 acetyltransferase activity,30,18
+GO:0043997~histone H4K12 acetyltransferase activity,30,18
+GO:0046972~histone H4K16 acetyltransferase activity,22,15
+GO:0000123~histone acetyltransferase complex,27,14
+GO:0010484~histone H3 acetyltransferase activity,8,7
+GO:0006473~protein acetylation,13,8
+GO:0016407~acetyltransferase activity,15,8
+GO:0061733~peptide-lysine-N-acetyltransferase activity,12,7
+GO:0042797~tRNA transcription by RNA polymerase III,12,12
+GO:0000995~RNA polymerase III general transcription initiation factor activity,12,11
+GO:0000127~transcription factor TFIIIC complex,6,6
+GO:0042791~5S class rRNA transcription by RNA polymerase III,6,6
+GO:0006384~transcription initiation at RNA polymerase III promoter,7,6
+GO:0032452~histone demethylase activity,21,17
+GO:0051864~histone H3K36 demethylase activity,10,7
+GO:0071005~U2-type precatalytic spliceosome,50,24
+GO:0005686~U2 snRNP,29,14
+GO:1903241~U2-type prespliceosome assembly,25,13
+GO:0030532~small nuclear ribonucleoprotein complex,15,8
+GO:0005684~U2-type spliceosomal complex,30,11
+hsa03082:ATP-dependent chromatin remodeling,117,41
+GO:0071564~npBAF complex,14,11
+GO:2000819~regulation of nucleotide-excision repair,27,15
+GO:0006337~nucleosome disassembly,21,13
+GO:0070316~regulation of G0 to G1 transition,25,14
+GO:0016514~SWI/SNF complex,30,15
+GO:0016586~RSC-type complex,16,11
+GO:2000045~regulation of G1/S transition of mitotic cell cycle,54,20
+GO:0035060~brahma complex,14,10
+GO:0045582~positive regulation of T cell differentiation,38,16
+GO:0071565~nBAF complex,16,10
+GO:2000781~positive regulation of double-strand break repair,42,16
+GO:0140092~bBAF complex,10,8
+GO:0045597~positive regulation of cell differentiation,60,19
+GO:0030071~regulation of mitotic metaphase/anaphase transition,34,14
+GO:0045663~positive regulation of myoblast differentiation,46,15
+GO:0000776~kinetochore,160,27
+hsa05225:Hepatocellular carcinoma,170,29
+GO:0004386~helicase activity,94,31
+GO:0140849~ATP-dependent H2AZ histone chaperone activity,152,38
+GO:0003689~DNA clamp loader activity,160,39
+GO:0140588~chromatin looping,167,39
+GO:0140584~chromatin extrusion motor activity,151,37
+GO:0140665~ATP-dependent H3-H4 histone complex chaperone activity,151,37
+GO:0061775~cohesin loader activity,154,37
+GO:0003724~RNA helicase activity,75,23
+GO:0000118~histone deacetylase complex,43,26
+GO:0004407~histone deacetylase activity,19,14
+"GO:0032129~histone H3K9 deacetylase activity, hydrolytic mechanism",11,10
+"GO:0180033~histone H4K8 deacetylase activity, hydrolytic mechanism",10,9
+"GO:0034739~histone H4K16 deacetylase activity, hydrolytic mechanism",10,9
+"GO:1990162~histone H3K4 deacetylase activity, hydrolytic mechanism",10,9
+"GO:0031078~histone H3K14 deacetylase activity, hydrolytic mechanism",10,9
+"GO:0180032~histone H4K5 deacetylase activity, hydrolytic mechanism",10,9
+GO:0033558~protein lysine deacetylase activity,13,10
+"GO:0140937~histone H4K12 deacetylase activity, hydrolytic mechanism",11,9
+GO:0040029~epigenetic regulation of gene expression,54,16
+GO:0042903~tubulin deacetylase activity,7,6
+GO:0000956~nuclear-transcribed mRNA catabolic process,26,16
+GO:0000177~cytoplasmic exosome (RNase complex),15,12
+GO:0101019~nucleolar exosome (RNase complex),10,10
+hsa03018:RNA degradation,78,27
+GO:0000175~3'-5'-RNA exonuclease activity,34,16
+GO:0034475~U4 snRNA 3'-end processing,9,8
+GO:0000178~exosome (RNase complex),17,10
+GO:0071028~nuclear mRNA surveillance,10,8
+GO:0000176~nuclear exosome (RNase complex),18,10
+"GO:0000288~nuclear-transcribed mRNA catabolic process, deadenylation-dependent decay",19,10
+GO:0071051~poly(A)-dependent snoRNA 3'-end processing,9,7
+"GO:0000467~exonucleolytic trimming to generate mature 3'-end of 5.8S rRNA from tricistronic rRNA transcript (SSU-rRNA, 5.8S rRNA, LSU-rRNA)",9,7
+GO:0006401~RNA catabolic process,35,13
+GO:0071035~nuclear polyadenylation-dependent rRNA catabolic process,7,6
+GO:0071038~TRAMP-dependent tRNA surveillance pathway,7,6
+GO:0140658~ATP-dependent chromatin remodeler activity,34,14
+"GO:0008094~ATP-dependent activity, acting on DNA",32,12
+GO:0140750~nucleosome array spacer activity,5,5
+GO:0032454~histone H3K9 demethylase activity,14,11
+GO:0140685~FAD-dependent histone H3K9me/H3K9me2 demethylase activity,4,4
+GO:0140683~histone H3K9me/H3K9me2 demethylase activity,5,4
+GO:0000387~spliceosomal snRNP assembly,30,14
+GO:0034719~SMN-Sm protein complex,18,10
+GO:0030532~small nuclear ribonucleoprotein complex,15,8
+GO:0032797~SMN complex,11,7
+GO:0097504~Gemini of coiled bodies,12,7
+GO:0005683~U7 snRNP,7,5
+GO:0005685~U1 snRNP,34,10
+GO:0001188~RNA polymerase I preinitiation complex assembly,11,8
+GO:0001164~RNA polymerase I core promoter sequence-specific DNA binding,10,7
+GO:0000109~nucleotide-excision repair complex,6,5
+GO:0006283~transcription-coupled nucleotide-excision repair,10,6
+GO:0042659~regulation of cell fate specification,14,7
+GO:2000736~regulation of stem cell differentiation,24,9

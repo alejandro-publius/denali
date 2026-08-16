@@ -11,6 +11,17 @@ A genetic screen hands a lab a ranked list of thousands of hits, and validating 
 
 It ships as a tool, not only as a result. `src/audit_screen.py` takes the table any gene-set analysis already produces — set, size, hits — and reports the same estimate for **your** screen. What follows is that check applied once, to ours.
 
+**And to seven other people's.** We ran the identical command on the published
+supplementary tables of seven external studies — CRISPR knockout, CRISPRi/a,
+single-cell CRISPRa, organoid, primary-T-cell, and bulk RNA-seq screens — and
+**36–88% of each ranking is explained by set construction alone.** Every input,
+provenance, and rerun command is in [`audits/external/`](audits/external/README.md);
+each number was verified against the source document and re-derived against this
+repo's own `src/audit_screen.py`. One study comes back only partially confounded
+and one candidate table was refused for having no true hit count — the auditor
+discriminates rather than flagging everything. The confound is not ours; it is the
+field's, and it is arithmetic.
+
 ---
 
 We scored all **50 MSigDB Hallmark gene programs** against **9,837 CRISPRi knockdowns** in K562 and asked which programs are *reversible* — which have many knockdowns that measurably move them. Then we asked the question underneath it: how much of that is biology at all. **Between 56% and 75% of the variance in apparent reversibility is explained by a model that never looks at what a program does.** It is a range and not a point because one of our six features is computed from the same matrix as the outcome, so part of the upper figure is arithmetic rather than discovery; **0.561** is the number that survives that objection and we never quote the top alone. The mechanism is size — bigger programs with more co-moving members return more hits regardless of their function, and **program size alone explains 46.5%**.

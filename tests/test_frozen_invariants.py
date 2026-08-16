@@ -716,6 +716,20 @@ def main() -> int:
         check("the bar's post-freeze provenance is disclosed",
               "NOT PRE-REGISTERED" in rec["provenance_of_the_0_4649_bar"])
 
+        # the two medians must come from the SAME subset. Pairing declared-over-all
+        # with measured-over-scoreable produced "20 declared, 30 measured" for
+        # GO-BP, which is impossible and shipped to the page for a few minutes.
+        _raw = pd.read_csv(ROOT / "results" / "annotation" / "sets_scored.csv")
+        for _c, _v in d.items():
+            _sub = _raw[_raw.collection == _c]
+            check(f"annotation: {_c} medians are both over all sampled sets",
+                  _v["median_genes_declared"] == int(_sub.n_declared.median())
+                  and _v["median_genes_measured_in_screen"] == int(_sub.n_present.median()),
+                  f"json {_v['median_genes_declared']}/{_v['median_genes_measured_in_screen']}")
+            check(f"annotation: {_c} cannot measure more genes than it declares",
+                  _v["median_genes_measured_in_screen"] <= _v["median_genes_declared"],
+                  f"{_v['median_genes_measured_in_screen']} > {_v['median_genes_declared']}")
+
         # recompute the headline descriptive number from the raw scored table
         sc = pd.read_csv(ROOT / "results" / "annotation" / "sets_scored.csv")
         g = sc[sc.collection == "go_bp"]

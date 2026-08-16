@@ -716,6 +716,45 @@ these two screens rather than a general estimate of anything. Both run on anyone
 else&rsquo;s paired screens: <code>audit_screen.py --hits-b</code>.</p>
 </section>
 
+<!-- 5c. annotation -->
+<section>
+<div class="label">Added after the freeze &middot; and it failed twice</div>
+<h2>Everything above used the cleanest annotation in biology. Most people use the
+messiest one.</h2>
+
+<p class="claim">Hallmark is 50 hand-curated sets spanning 6&times; in size. Gene
+Ontology Biological Process is 7,538 sets spanning 398&times;, and it is the
+most-used gene-set collection there is. We pre-registered a prediction: the size
+confound should get <i>worse</i> as the annotation gets looser. 793 sets across
+four collections, scored on Modal.</p>
+
+<div class="metrics" style="margin-top:26px">
+  <div class="metric"><div class="n">98%</div>
+    <div class="l">of Hallmark sets can be scored against a genome-scale screen</div></div>
+  <div class="metric"><div class="n">46%</div>
+    <div class="l">of GO Biological Process sets can. The median GO-BP set declares
+    20 genes and has 8 measured</div></div>
+  <div class="metric"><div class="n">wrong</div>
+    <div class="l">our prediction, in direction. GO-BP 0.2905 and Reactome 0.1846
+    are <b>below</b> Hallmark, not above</div></div>
+  <div class="metric"><div class="n">none</div>
+    <div class="l">verdict issued. Our own power rule &mdash; 150 of 250 sets
+    scoreable &mdash; fired on three of four collections</div></div>
+</div>
+
+<blockquote style="margin-top:30px"><p>More than half of the most-used gene-set
+collection in biology cannot be evaluated against this screen at all. That is the
+annotation meeting the assay, not the biology.</p></blockquote>
+
+<p class="circ">Two failures and we are reporting both. The prediction was wrong in
+direction, which we state rather than let an underpowered result quietly bury. And
+the power rule fired before the deciding statistic could be applied, so no verdict
+is issued and those R&sup2; figures carry none &mdash; the rule was fixed before the
+run for exactly this case and it cost us the headline. What survives is
+descriptive, was not the question we asked, and is labelled so wherever it
+appears.</p>
+</section>
+
 <!-- 6. the heme example -->
 <section>
 <blockquote><p>One held-out row carries the whole result. <b>REACTOME_SCAVENGING_OF_HEME_FROM_PLASMA</b> drew

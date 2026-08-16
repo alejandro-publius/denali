@@ -81,37 +81,50 @@
         "scoreable": 49,
         "scoreable_fraction": 0.98,
         "median_genes_declared": 180,
-        "median_genes_measured_in_screen": 76,
-        "r2_no_verdict_attached": 0.4464
+        "median_genes_measured_in_screen": 75,
+        "r2_no_verdict_attached": 0.4464,
+        "_both_medians_over": "all sampled sets in the collection",
+        "median_declared_among_scoreable_only": 199,
+        "median_measured_among_scoreable_only": 76
       },
       "wikipathways": {
         "sampled": 246,
         "scoreable": 149,
         "scoreable_fraction": 0.606,
         "median_genes_declared": 27,
-        "median_genes_measured_in_screen": 22,
-        "r2_no_verdict_attached": 0.1017
+        "median_genes_measured_in_screen": 12,
+        "r2_no_verdict_attached": 0.1017,
+        "_both_medians_over": "all sampled sets in the collection",
+        "median_declared_among_scoreable_only": 44,
+        "median_measured_among_scoreable_only": 22
       },
       "reactome": {
         "sampled": 248,
         "scoreable": 138,
         "scoreable_fraction": 0.556,
         "median_genes_declared": 23,
-        "median_genes_measured_in_screen": 30,
-        "r2_no_verdict_attached": 0.1846
+        "median_genes_measured_in_screen": 11,
+        "r2_no_verdict_attached": 0.1846,
+        "_both_medians_over": "all sampled sets in the collection",
+        "median_declared_among_scoreable_only": 44,
+        "median_measured_among_scoreable_only": 30
       },
       "go_bp": {
         "sampled": 249,
         "scoreable": 115,
         "scoreable_fraction": 0.462,
         "median_genes_declared": 20,
-        "median_genes_measured_in_screen": 30,
-        "r2_no_verdict_attached": 0.2905
+        "median_genes_measured_in_screen": 8,
+        "r2_no_verdict_attached": 0.2905,
+        "_both_medians_over": "all sampled sets in the collection",
+        "median_declared_among_scoreable_only": 67,
+        "median_measured_among_scoreable_only": 30
       }
     },
     "spearman_size_range_vs_scoreable_fraction": -0.8,
     "p": 0.2,
-    "reading": "98% of Hallmark sets can be scored against a genome-scale screen. For GO Biological Process -- the most-used gene-set collection in biology -- it is 46%. The median GO-BP set has 20 declared genes and 8 of them measured. More than half of that collection cannot be evaluated against this screen at all, which is a property of the annotation meeting the assay, not of the biology."
+    "reading": "98% of Hallmark sets can be scored against a genome-scale screen. For GO Biological Process -- the most-used gene-set collection in biology -- it is 46%. Across all sampled GO-BP sets the median declares 20 genes and has 8 measured in this screen. More than half of that collection cannot be evaluated against it at all, which is a property of the annotation meeting the assay, not of the biology.",
+    "subset_note": "Both medians are computed over ALL sampled sets in a collection. An earlier draft paired declared-over-all with measured-over-scoreable, which produced the impossible reading of 20 declared and 30 measured for GO-BP. Caught by reading the rendered page. Scoreable-only medians are kept alongside, named as such."
   },
   "hallmark_bar_reconciliation": {
     "why_this_is_here": "This arm reports Hallmark at 0.4464 against a bar of 0.4649 -- our own baseline collection appearing to fail its own bar. It does not. Recorded because an unexplained discrepancy in a baseline is exactly the kind of thing that should not sit in an artifact unaddressed.",

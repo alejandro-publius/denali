@@ -95,6 +95,8 @@ EV_N = V(ev["probe_genes"], "provenance.evidence_layer.probe_genes")
 # ---------------- the two arms added after the freeze ----------------
 _rp = ROOT / "results" / "rpe1" / "rpe1_evaluation.json"
 _cc = ROOT / "results" / "concordance" / "cross_screen.json"
+_an = ROOT / "results" / "annotation" / "annotation_evaluation.json"
+ANNOT = json.loads(_an.read_text()) if _an.exists() else None
 RPE1 = json.loads(_rp.read_text()) if _rp.exists() else None
 CONC = json.loads(_cc.read_text()) if _cc.exists() else None
 
@@ -114,6 +116,18 @@ if CONC:
                 "cross_screen.top_10_from_size_alone")
     CC_CHANCE = V(CONC["raw_agreement"]["top_k_overlap_expected_by_chance"]["top_10"],
                   "cross_screen.top_10_by_chance")
+
+if ANNOT:
+    _d = ANNOT["descriptive_not_preregistered"]["per_collection"]
+    AN_HALL = V(round(_d["hallmark"]["scoreable_fraction"] * 100),
+                "annotation.hallmark.scoreable_fraction")
+    AN_GO = V(round(_d["go_bp"]["scoreable_fraction"] * 100),
+              "annotation.go_bp.scoreable_fraction")
+    AN_GO_DECL = V(_d["go_bp"]["median_genes_declared"],
+                   "annotation.go_bp.median_genes_declared")
+    AN_GO_MEAS = V(_d["go_bp"]["median_genes_measured_in_screen"],
+                   "annotation.go_bp.median_genes_measured")
+    AN_N = V(ANNOT["sets_scored"], "annotation.sets_scored")
 
 # ---------------------------------------------------------------- explorer data
 # Every row and every proposal is computed at build time from results/frozen/.
@@ -1025,6 +1039,45 @@ coverage control, which <b>fails</b> at 94.1% versus 11.3%. So this is a
 generalisation test, not a replication, and the number above is a measurement on
 these two screens rather than a general estimate of anything. Both run on anyone
 else&rsquo;s paired screens: <code>audit_screen.py --hits-b</code>.</p>
+</section>
+
+<!-- 5c. annotation -->
+<section>
+<div class="label">Added after the freeze &middot; and it failed twice</div>
+<h2>Everything above used the cleanest annotation in biology. Most people use the
+messiest one.</h2>
+
+<p class="claim">Hallmark is 50 hand-curated sets spanning 6&times; in size. Gene
+Ontology Biological Process is 7,538 sets spanning 398&times;, and it is the
+most-used gene-set collection there is. We pre-registered a prediction: the size
+confound should get <i>worse</i> as the annotation gets looser. {AN_N} sets across
+four collections, scored on Modal.</p>
+
+<div class="metrics" style="margin-top:26px">
+  <div class="metric"><div class="n">{AN_HALL}%</div>
+    <div class="l">of Hallmark sets can be scored against a genome-scale screen</div></div>
+  <div class="metric"><div class="n">{AN_GO}%</div>
+    <div class="l">of GO Biological Process sets can. The median GO-BP set declares
+    {AN_GO_DECL} genes and has {AN_GO_MEAS} measured</div></div>
+  <div class="metric"><div class="n">wrong</div>
+    <div class="l">our prediction, in direction. GO-BP 0.2905 and Reactome 0.1846
+    are <b>below</b> Hallmark, not above</div></div>
+  <div class="metric"><div class="n">none</div>
+    <div class="l">verdict issued. Our own power rule &mdash; 150 of 250 sets
+    scoreable &mdash; fired on three of four collections</div></div>
+</div>
+
+<blockquote style="margin-top:30px"><p>More than half of the most-used gene-set
+collection in biology cannot be evaluated against this screen at all. That is the
+annotation meeting the assay, not the biology.</p></blockquote>
+
+<p class="circ">Two failures and we are reporting both. The prediction was wrong in
+direction, which we state rather than let an underpowered result quietly bury. And
+the power rule fired before the deciding statistic could be applied, so no verdict
+is issued and those R&sup2; figures carry none &mdash; the rule was fixed before the
+run for exactly this case and it cost us the headline. What survives is
+descriptive, was not the question we asked, and is labelled so wherever it
+appears.</p>
 </section>
 
 <!-- 6. the heme example -->

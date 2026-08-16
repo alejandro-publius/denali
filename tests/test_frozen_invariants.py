@@ -239,8 +239,22 @@ def main() -> int:
                                            app_src, flags=re.S))))
     page_text = re.sub(r"<[^>]+>", " ", re.sub(r"<style.*?</style>|<img[^>]*>", " ", page, flags=re.S))
 
+    # audit.html is the drop-a-CSV surface. It is scanned for what a reader sees:
+    # <script> goes with <style> because the largest script on that page is the
+    # denali_audit source inlined verbatim so the browser can run the real
+    # package, and that source is code the machine executes, not prose an
+    # audience reads -- the same reason app.py above is stripped of its
+    # f-string expressions. The inlined copy is guarded for drift instead, by
+    # tests/test_cross_surface.py, which requires it byte-identical to the
+    # package.
+    audit_page = (ROOT / "audit.html")
+    audit_text = re.sub(r"<[^>]+>", " ",
+                        re.sub(r"<style.*?</style>|<script.*?</script>", " ",
+                               audit_page.read_text(), flags=re.S)) if audit_page.exists() else ""
+
     SURFACES = {
         "index.html": page_text,
+        "audit.html": audit_text,
         "app.py": app_text,
         "results/figures/CAPTIONS.md": caps,
         "REPORT.md": report,

@@ -260,6 +260,26 @@ def main() -> int:
                   "; ".join(bad[:3]) if bad
                   else f"{len(rows)} rows x 5 cells re-derived from `denali rerank`")
 
+    # ---- the web surface must be the package, not a copy of it ------------
+    # audit.html runs denali_audit in the browser by carrying its source inline.
+    # That is the only way the page can claim to be "the same code"; it is also
+    # a second copy, and a second copy goes stale. The builder is re-run here and
+    # the committed page must match it byte for byte.
+    page = ROOT / "audit.html"
+    if page.exists():
+        sys.path.insert(0, str(ROOT / "web"))
+        import build_audit_page
+        check("cross-surface: audit.html carries the CURRENT package source",
+              build_audit_page.build() == page.read_text(),
+              "stale — run: python3 web/build_audit_page.py")
+        inlined = json.loads(re.search(
+            r'<script id="denali-src" type="application/json">(.*?)</script>',
+            page.read_text(), re.S).group(1).replace("<\\/", "</"))
+        pkg = ROOT / "packages" / "denali-audit" / "denali_audit"
+        drift = [n for n, src in inlined.items() if (pkg / n).read_text() != src]
+        check("cross-surface: every module inlined in audit.html is byte-identical "
+              "to the packaged one", not drift, ", ".join(drift))
+
     for p in passed:
         print(f"PASS  {p}")
     for f in failed:

@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>denali · audit a hit list</title>
+<meta name="description" content="Drop the table your screen produced. How much of that ranking is explained by how the sets were built, rather than by biology?">
+<style>
+/* Palette lifted from index.html so the two pages read as one project. That page
+   commits to a single light look and has no dark mode; this one matches it
+   rather than inventing a second scheme. */
+:root{
+  --ink:#1a1a1a; --soft:#6B7280; --rule:rgba(27,42,74,.14); --fill:#f5f7f9;
+  --accent:#1D7C65; --navy:#1B2A4A; --tint:#E6F7F2; --paper:#fff; --radius:8px;
+  /* Status, reserved -- never reused as a series colour, and never shown
+     without the verdict word beside it. Contrast checked on --paper. */
+  --stat-bad:#9B2C2C;      /* CONFOUNDED            6.2:1 */
+  --stat-warn:#8A5A00;     /* PARTIALLY CONFOUNDED  5.1:1 */
+  --stat-ok:#1D7C65;       /* NOT SIZE-DOMINATED    5.1:1 */
+  --stat-unk:#4B5563;      /* UNDETERMINED          7.6:1 */
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);padding:0 20px;
+  font:400 16px/1.62 "Source Serif 4",Georgia,"Times New Roman",serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:760px;margin:0 auto;padding:48px 0 96px}
+h1{font:600 30px/1.2 var(--sans,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif);
+  color:var(--navy);margin:0 0 10px;letter-spacing:-.01em}
+h2{font:600 15px/1.3 var(--sans,ui-sans-serif,system-ui,-apple-system,sans-serif);
+  color:var(--navy);text-transform:uppercase;letter-spacing:.09em;
+  margin:40px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--rule)}
+p{margin:0 0 14px}
+a{color:var(--accent)}
+.lede{color:var(--soft);margin:0 0 28px;font-size:17px}
+code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+
+/* ---- the drop target ---------------------------------------------------- */
+#drop{border:2px dashed var(--rule);border-radius:var(--radius);background:var(--fill);
+  padding:44px 24px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s}
+#drop:hover,#drop:focus-visible{border-color:var(--accent);background:var(--tint);outline:none}
+#drop.over{border-color:var(--accent);background:var(--tint)}
+#drop b{display:block;font:600 18px/1.4 var(--sans,ui-sans-serif,system-ui,sans-serif);
+  color:var(--navy);margin-bottom:6px}
+#drop span{color:var(--soft);font-size:14px}
+.privacy{margin-top:14px;font-size:13px;color:var(--soft);text-align:center}
+.privacy b{color:var(--ink)}
+
+/* ---- progress ----------------------------------------------------------- */
+#progress{display:none;margin-top:22px;padding:16px 18px;background:var(--fill);
+  border:1px solid var(--rule);border-radius:var(--radius);font-size:14px;color:var(--soft)}
+#progress.on{display:block}
+#progress .step{margin:3px 0}
+#progress .step.done::before{content:"✓ ";color:var(--accent)}
+#progress .step.now::before{content:"· "}
+
+/* ---- verdict ------------------------------------------------------------ */
+#out{display:none}
+#out.on{display:block}
+.verdict{border:1px solid var(--rule);border-left:5px solid var(--vc,var(--stat-unk));
+  border-radius:var(--radius);padding:22px 24px;background:var(--fill)}
+.chip{display:inline-block;font:700 12px/1 var(--sans,ui-sans-serif,system-ui,sans-serif);
+  letter-spacing:.1em;color:var(--vc,var(--stat-unk));border:1px solid currentColor;
+  border-radius:100px;padding:6px 12px;margin-bottom:12px}
+.reading{font-size:19px;line-height:1.45;color:var(--navy);margin:0 0 12px}
+.todo{font-size:15px;color:var(--ink);margin:0}
+.meta{margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);
+  font-size:13px;color:var(--soft)}
+.warn{margin-top:16px;padding:13px 16px;border:1px solid #E4C07A;background:#FDF6E7;
+  border-radius:var(--radius);font-size:14px;color:#6b4e00}
+.warn b{color:#5a4100}
+
+/* ---- the distribution strip --------------------------------------------- */
+/* Position within a reference distribution: magnitude, so one hue, light to
+   dark. Not categorical -- there are no series here to tell apart. */
+.dist{margin-top:6px}
+.bars{display:flex;align-items:flex-end;gap:2px;height:76px;margin:0 0 2px}
+.bars i{flex:1 1 0;background:var(--accent);opacity:.28;border-radius:3px 3px 0 0;min-height:1px}
+.axis{position:relative;height:1px;background:var(--rule)}
+/* The two markers live in SEPARATE BANDS -- the reader's value above the axis,
+   the field median below it -- so neither line can ever strike through the
+   other's label, whatever value the reader's file produces. Trying to solve
+   this with stacking order or label direction only moved the collision to a
+   different input. */
+.mark{position:absolute;width:2px;transform:translateX(-1px)}
+.mark label{position:absolute;white-space:nowrap;
+  font:600 11px/1.4 var(--sans,ui-sans-serif,system-ui,sans-serif);
+  background:var(--paper);padding:1px 4px;border-radius:3px}
+.mark.you{top:-84px;bottom:0;width:3px;background:var(--vc,var(--ink))}
+.mark.you label{top:-2px;left:6px;color:var(--vc,var(--ink))}
+.mark.med{top:0;bottom:-24px;background:var(--soft);opacity:.7}
+.mark.med label{bottom:-2px;left:6px;color:var(--soft)}
+.axlabels{display:flex;justify-content:space-between;margin-top:30px;
+  font:400 12px/1 var(--sans,ui-sans-serif,system-ui,sans-serif);color:var(--soft)}
+
+/* ---- rerank table ------------------------------------------------------- */
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:520px}
+th{text-align:left;font:600 11px/1.3 var(--sans,ui-sans-serif,system-ui,sans-serif);
+  text-transform:uppercase;letter-spacing:.07em;color:var(--soft);
+  border-bottom:1px solid var(--rule);padding:0 10px 7px 0}
+td{padding:8px 10px 8px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.name{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;
+  color:var(--navy);word-break:break-all}
+.fall{color:var(--stat-bad);font-weight:600;font-variant-numeric:tabular-nums}
+.nomove{color:var(--soft);font-style:italic}
+
+.notthis{margin-top:20px;padding:15px 18px;background:var(--tint);
+  border-radius:var(--radius);font-size:14px;color:var(--navy)}
+.notthis b{display:block;margin-bottom:4px}
+.err{border:1px solid var(--stat-bad);border-radius:var(--radius);padding:18px 20px;
+  background:#fdf3f3;white-space:pre-wrap;font-size:14px}
+.err h3{margin:0 0 8px;font:600 15px/1.3 var(--sans,ui-sans-serif,system-ui,sans-serif);
+  color:var(--stat-bad)}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--rule);
+  font-size:13px;color:var(--soft)}
+.btn{display:inline-block;margin-top:14px;font:600 14px/1 var(--sans,ui-sans-serif,system-ui,sans-serif);
+  color:var(--accent);background:none;border:1px solid var(--accent);border-radius:100px;
+  padding:9px 16px;cursor:pointer}
+.btn:hover{background:var(--tint)}
+@media (max-width:560px){
+  .wrap{padding:30px 0 64px}
+  h1{font-size:24px}
+  .reading{font-size:17px}
+  #drop{padding:32px 16px}
+  /* The median label sits below the axis and collided with the scale row at
+     this width; give it clearance, and drop the middle caption -- the section
+     heading above already says what the distribution is. */
+  .axlabels{margin-top:44px}
+  .axlabels span:nth-child(2){display:none}
+  table{min-width:470px;font-size:13px}
+  td,th{padding-right:7px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Is your ranking biology, or arithmetic?</h1>
+<p class="lede">Drop the table your screen produced. This measures how much of its
+order is explained by how the gene sets were <em>built</em> — chiefly their size —
+with no reference to what any gene does.</p>
+
+<div id="drop" tabindex="0" role="button" aria-label="Choose a results file to audit">
+  <b>Drop your results file here</b>
+  <span>or click to choose · CSV, TSV or TXT<br>
+  MAGeCK · BAGEL2 · drugZ · g:Profiler · DAVID · clusterProfiler · Enrichr · fgsea · GSEA</span>
+</div>
+<input type="file" id="file" accept=".csv,.tsv,.txt,.tab" hidden>
+<p class="privacy"><b>Your file never leaves this browser.</b> There is no server and no
+upload: the Python that runs the check is downloaded to your machine and runs there.
+You can disconnect after the page loads and it still works.</p>
+
+<div id="progress" aria-live="polite"></div>
+
+<div id="out">
+  <h2>The verdict</h2>
+  <div class="verdict" id="verdict"></div>
+  <div id="approx"></div>
+
+  <h2>Against the field</h2>
+  <p id="corpusreading" style="margin-bottom:18px"></p>
+  <div class="dist" id="dist"></div>
+  <p class="meta" id="corpuscaveat"></p>
+
+  <h2>What moves when the correction is applied</h2>
+  <p id="rrreading"></p>
+  <div class="scroll" id="rrtable"></div>
+  <div class="notthis" id="notthis"></div>
+  <button class="btn" id="again">Audit another file</button>
+</div>
+
+<div id="error"></div>
+
+<footer>
+  <p>This page runs <code>denali-audit</code> — the same code as the command line
+  tool and the same code that produced the study — compiled to WebAssembly. It is a
+  separate surface from the <a href="index.html">results page</a>, which makes no
+  network calls at all and is meant to keep working unattended.</p>
+  <p>Prefer the terminal? <code class="mono">pip install denali-audit</code> once it is
+  published, or <code class="mono">pip install -e packages/denali-audit</code> from a
+  clone. Source and full study:
+  <a href="https://github.com/alejandro-publius/denali">github.com/alejandro-publius/denali</a>.</p>
+</footer>
+</div>
+
+<script id="denali-src" type="application/json">__DENALI_SOURCES__</script>
+<script>
+(function(){
+"use strict";
+var PYODIDE = "https://cdn.jsdelivr.net/pyodide/v0.28.3/full/";
+var SRC = JSON.parse(document.getElementById("denali-src").textContent);
+var STATUS = {"CONFOUNDED":"var(--stat-bad)","PARTIALLY CONFOUNDED":"var(--stat-warn)",
+              "NOT SIZE-DOMINATED":"var(--stat-ok)","UNDETERMINED":"var(--stat-unk)"};
+var pyodide=null, loading=null;
+var $=function(id){return document.getElementById(id)};
+var esc=function(s){return String(s).replace(/[&<>"]/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]})};
+
+var steps=[];
+function say(text, done){
+  $("progress").className="on";
+  if(done && steps.length){ steps[steps.length-1].state="done"; }
+  if(text) steps.push({text:text,state:"now"});
+  $("progress").innerHTML = steps.map(function(s){
+    return '<div class="step '+s.state+'">'+esc(s.text)+'</div>'}).join("");
+}
+/* Once the verdict is on screen the loading trace is noise, so it goes away
+   rather than fading on a timer -- a timer raced the render and sometimes left
+   it sitting above the answer. */
+function endProgress(){ steps=[]; $("progress").innerHTML=""; $("progress").className=""; }
+
+/* Pyodide is ~14 MB and is fetched only once the user actually has a file, so
+   the page itself is instant and nobody pays for a download they did not ask
+   for. The browser caches it, so a second file is a few seconds. */
+function boot(){
+  if(loading) return loading;
+  loading = new Promise(function(resolve,reject){
+    say("Downloading a Python runtime (about 14 MB, once — your browser caches it)");
+    var s=document.createElement("script");
+    s.src=PYODIDE+"pyodide.js";
+    s.onerror=function(){reject(new Error(
+      "Could not reach the Pyodide CDN. This page needs one network fetch to get the "+
+      "Python runtime; after that it runs entirely offline. If you are behind a strict "+
+      "network, use the command line tool instead."))};
+    s.onload=function(){
+      loadPyodide({indexURL:PYODIDE}).then(function(py){
+        pyodide=py;
+        say("Loading numpy and pandas", true);
+        return py.loadPackage(["numpy","pandas"]);
+      }).then(function(){
+        say("Starting denali-audit", true);
+        pyodide.FS.mkdirTree("/lib/denali_audit");
+        Object.keys(SRC).forEach(function(name){
+          pyodide.FS.writeFile("/lib/denali_audit/"+name, SRC[name]);
+        });
+        pyodide.runPython("import sys\nsys.path.insert(0,'/lib')\nimport denali_audit");
+        pyodide.runPython(DRIVER);
+        resolve(pyodide);
+      }).catch(reject);
+    };
+    document.head.appendChild(s);
+  });
+  return loading;
+}
+
+var DRIVER = [
+"import io, json, math",
+"import pandas as pd",
+"from denali_audit.adapters import detect, describe_failure",
+"from denali_audit.core import audit, rerank",
+"from denali_audit.reference import CORPUS, N_SCREENS",
+"",
+"def _clean(o):",
+"    if isinstance(o, dict):  return {k: _clean(v) for k, v in o.items()}",
+"    if isinstance(o, list):  return [_clean(v) for v in o]",
+"    if isinstance(o, float) and not math.isfinite(o): return None",
+"    return o",
+"",
+"def _hist(nbins=44):",
+"    lo, hi = 0.0, max(CORPUS)",
+"    w = (hi - lo) / nbins",
+"    counts = [0] * nbins",
+"    for v in CORPUS:",
+"        i = min(int((v - lo) / w), nbins - 1)",
+"        counts[i] += 1",
+"    return {'counts': counts, 'lo': lo, 'hi': hi, 'n': N_SCREENS}",
+"",
+"def run(text, filename):",
+"    try:",
+"        sep = '\\t' if filename.lower().endswith(('.tsv', '.tab', '.txt')) else None",
+"        df = pd.read_csv(io.StringIO(text), sep=sep, engine='python')",
+"    except Exception as e:",
+"        return json.dumps({'ok': False, 'message': 'Could not read that file as a table.\\n\\n' + str(e)})",
+"    if df.shape[1] < 2:",
+"        return json.dumps({'ok': False, 'message': 'That file parsed as a single column. If it is tab separated, save it with a .tsv extension.'})",
+"    m = detect(df)",
+"    if m is None:",
+"        return json.dumps({'ok': False, 'message': describe_failure(df)})",
+"    try:",
+"        res = audit(m.size, m.hits)",
+"        names = df[m.set_col] if m.set_col in df.columns else None",
+"        rr = rerank(m.size, m.hits, names, top=10)",
+"    except ValueError as e:",
+"        return json.dumps({'ok': False, 'message': str(e)})",
+"    return json.dumps(_clean({'ok': True, 'fmt': m.fmt, 'note': m.note,",
+"                              'approximate': bool(m.approximate), 'rows': int(len(df)),",
+"                              'audit': res, 'rerank': rr, 'hist': _hist()}))"
+].join("\n");
+
+function fail(msg){
+  endProgress();
+  $("out").className="";
+  $("error").innerHTML='<div class="err"><h3>That did not work</h3>'+esc(msg)+'</div>';
+  $("error").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+function render(r){
+  endProgress();
+  $("error").innerHTML="";
+  var a=r.audit, rr=r.rerank;
+  var colour = STATUS[a.verdict] || "var(--stat-unk)";
+  var v=$("verdict");
+  v.style.setProperty("--vc", colour);
+
+  /* 1. the verdict */
+  v.innerHTML =
+    '<div class="chip">'+esc(a.verdict)+'</div>'+
+    '<p class="reading">'+esc(a.reading)+'</p>'+
+    '<p class="todo">'+esc(a.what_to_do)+'</p>'+
+    '<div class="meta">read as <b>'+esc(r.fmt)+'</b> · '+a.n_sets+' sets · '+
+    'size range '+a.size_range[0]+'–'+a.size_range[1]+
+    (a.r2_size_alone==null?'':' · R² size-alone '+a.r2_size_alone)+'</div>';
+
+  $("approx").innerHTML = r.approximate
+    ? '<div class="warn"><b>Approximate input — the verdict inherits it.</b><br>'+esc(r.note)+'</div>'
+    : '';
+
+  /* 2. the percentile against the corpus */
+  if(a.corpus_percentile==null){
+    $("corpusreading").textContent =
+      "No percentile: this ranking has no size-alone R² to compare, so there is "+
+      "nothing to place against the field.";
+    $("dist").innerHTML=""; $("corpuscaveat").textContent="";
+  } else {
+    $("corpusreading").textContent = a.corpus_reading;
+    $("corpuscaveat").textContent = a.corpus_caveat;
+    var h=r.hist, max=Math.max.apply(null,h.counts);
+    var pos=function(x){return Math.max(0,Math.min(100,(x-h.lo)/(h.hi-h.lo)*100))};
+    $("dist").innerHTML =
+      '<div class="bars" aria-hidden="true">'+
+        h.counts.map(function(c){
+          return '<i style="height:'+(c/max*100).toFixed(1)+'%"></i>'}).join("")+
+      '</div>'+
+      '<div class="axis">'+
+        '<div class="mark med" style="left:'+pos(0.224)+'%"><label>field median 0.224</label></div>'+
+        '<div class="mark you" style="left:'+pos(a.r2_size_alone)+'%">'+
+          '<label>yours '+a.r2_size_alone+'</label></div>'+
+      '</div>'+
+      '<div class="axlabels"><span>0.0</span><span>'+
+        h.n.toLocaleString()+' published CRISPR screens</span><span>'+
+        h.hi.toFixed(2)+'</span></div>';
+    $("dist").querySelector(".mark.you").style.setProperty("--vc", colour);
+  }
+
+  /* 3. rerank -- what the decision actually turns on */
+  $("rrreading").textContent = rr.reading;
+  if(rr.size_is_constant || !rr.left_the_top.length){
+    $("rrtable").innerHTML = rr.size_is_constant ? ""
+      : '<p class="nomove">Nothing left the top. This ranking survives its own size correction.</p>';
+  } else {
+    $("rrtable").innerHTML =
+      '<table><thead><tr><th>entry</th><th class="n">size</th><th class="n">hits</th>'+
+      '<th class="n">rank</th><th class="n">size-aware</th><th class="n">moved</th></tr></thead><tbody>'+
+      rr.left_the_top.map(function(x){
+        return '<tr><td class="name">'+esc(x.name)+'</td>'+
+          '<td class="n">'+x.size+'</td><td class="n">'+x.hits+'</td>'+
+          '<td class="n">'+x.rank_original+'</td><td class="n">'+x.rank_size_aware+'</td>'+
+          '<td class="n fall">'+x.moved+'</td></tr>'}).join("")+
+      '</tbody></table>';
+  }
+  $("notthis").innerHTML='<b>What this is not</b>'+esc(rr.what_this_is_not);
+  $("out").className="on";
+  $("out").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function handle(file){
+  if(!file) return;
+  $("out").className=""; $("error").innerHTML=""; steps=[];
+  say("Reading "+file.name);
+  var reader=new FileReader();
+  reader.onerror=function(){fail("Could not read that file off disk.")};
+  reader.onload=function(){
+    var text=reader.result;
+    boot().then(function(py){
+      say("Auditing "+file.name, true);
+      var out=py.globals.get("run")(text, file.name);
+      var parsed=JSON.parse(out);
+      if(!parsed.ok) fail(parsed.message); else render(parsed);
+    }).catch(function(e){ fail(e && e.message ? e.message : String(e)); });
+  };
+  reader.readAsText(file);
+}
+
+$("drop").addEventListener("click",function(){$("file").click()});
+$("drop").addEventListener("keydown",function(e){
+  if(e.key==="Enter"||e.key===" "){e.preventDefault();$("file").click()}});
+$("file").addEventListener("change",function(e){handle(e.target.files[0])});
+["dragenter","dragover"].forEach(function(ev){
+  $("drop").addEventListener(ev,function(e){e.preventDefault();$("drop").classList.add("over")})});
+["dragleave","drop"].forEach(function(ev){
+  $("drop").addEventListener(ev,function(e){e.preventDefault();$("drop").classList.remove("over")})});
+$("drop").addEventListener("drop",function(e){
+  if(e.dataTransfer && e.dataTransfer.files.length) handle(e.dataTransfer.files[0])});
+$("again").addEventListener("click",function(){
+  $("out").className=""; $("file").value=""; $("file").click()});
+})();
+</script>
+</body>
+</html>

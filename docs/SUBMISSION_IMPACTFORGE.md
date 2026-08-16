@@ -70,7 +70,7 @@ Deliberately boring where it touches a number.
 |---|---|---|
 | Statistics | Mann–Whitney signed-z, Benjamini–Hochberg FDR, OLS | No neural model anywhere in the scoring path. Every quantitative claim is owned by deterministic code. |
 | Runtime | Python 3.12.0, **exact** pins (numpy 2.5.2, pandas 3.0.5, scipy 1.18.0, h5py 3.16.0, statsmodels 0.14.6) | Not floors. numpy 2.x and pandas 3.x both changed default behaviour that moves results. |
-| Package | `packages/denali-audit`, deps `numpy>=1.24, pandas>=1.5` | Loose on purpose — the tool must install next to whatever a stranger already has. The *study* is pinned; the *tool* is portable. |
+| Package | `packages/denali-audit`, deps `numpy>=1.26, pandas>=2.1.1, scipy>=1.11` | Loose on purpose — the tool must install next to whatever a stranger already has. The *study* is pinned; the *tool* is portable. The floors are **tested**, not declared: the full suite runs green at exactly those versions, three majors below what the study pins. |
 | Distribution | Static page with every asset inlined; MCP server; Streamlit view | The page makes **zero network calls** and renders offline from one file. |
 | Compute | Modal for the 50-program sweep across 10 containers | Reproduces the frozen numbers rather than producing them — deliberately not a `make all` step, and a test asserts that. |
 | Verification | 384 invariants + 23 cross-surface checks, CI on every push | The suite counts itself; four surfaces state that count and all four fail the build on disagreement. |

@@ -24,15 +24,43 @@ table rather than something to pad around.
 |---|:--:|:--:|---|:--:|
 | **Claude Code** | ✅ `2.1.233` | ✅ | `claude --version` | yes, as the author |
 | **Paperclip** | ✅ `0.7.37` | ✅ account authenticated | `paperclip config`; 113/113 gene queries stored; hosted MCP registered | yes, as the audited object |
-| **Anthropic MCP** | ✅ `mcp 1.29.0` | n/a | `src/mcp_server.py` started over stdio, 2 tools listed, 3 calls returned non-empty | ships the result |
+| **Anthropic MCP** | ✅ `mcp 1.29.0` | n/a | `src/mcp_server.py` started over stdio **from `/tmp`, not the repo root**, 4 tools listed, 12 calls returned non-empty — both refusal paths, and `audit`/`rerank` on caller-supplied data, on a file path, and on three malformed inputs | ships the result **and the tool** |
 | **Modal** | ✅ `1.5.4` | ✅ workspace `alejandro-publius` | **runs the sweep**: 50 programs / 10 containers / 133 s, output identical to `results/frozen/` on all 50. Same scorer imported verbatim, run elsewhere — portability, not independent confirmation of the maths. **Second entry point** `src/modal_corpus_rerank.py` fans the corpus rerank over 1,272 published screens, the one embarrassingly-parallel workload in the project | reproduces all 50; corrects the literature |
 | **CZ Biohub / ESMC** | ✅ `esm 3.2.3` | ✅ hosted API key | verified twice — local weights **and** the hosted Biohub Platform API, both returning `(1, 67, 960)` | no |
 | **Proto — Evo Design** | ✅ `proto-tools 0.1.0` | ✅ via Modal | **executed a real tool call**, recorded with timing and source URL in `results/tools/proto_validation.json`; 140 tools / 17 categories; `doctor` exits 0 | no |
 | **Benchling** | ⚠ MCP endpoint live | ⏳ OAuth pending | `hackathon.mcp.bnchdev.org/mcp` returns 401 — up and gated | no |
-| **Benchflow** | ✅ `0.6.7` | not required | **task authored and validated**: `bench tasks check` passes, container builds, verifier grades oracle 0.7413 vs naive 0.6981 | no — grades others, not us |
+| **Benchflow** | ✅ `0.6.7` | not required | **three tasks authored and validated**: `bench tasks check` passes, containers build, verifiers grade oracle-to-verifier at 0.7413 / 1.0000 / 1.0000. The third, `denali-size-carried`, scores the product rather than a finding | no — grades others, not us |
 | **Tamarind Bio** | — | ✅ key authenticates | `GET /api/jobs` → 200, 0 jobs submitted | no — **declined** |
 | **Boltz** | ❌ standalone | n/a | reachable through Proto | no — **declined** |
 | **Sundial** | ❌ | ❌ | no discoverable install path | no |
+
+## What each one does for the PRODUCT, not the study
+
+The table above answers "did this touch a number", which is a question about the
+study. This one answers a different question: **does this integration do anything
+for `packages/denali-audit`, the tool other people can actually run?** For a while
+the honest answer was no for every row — the package was an island, and every
+integration served the paper. Four of them now reach the tool. The rest do not,
+and saying so is the point of the section.
+
+| Tool | What it does for the product |
+|---|---|
+| **Anthropic MCP** | **It is the product's remote surface.** `audit` and `rerank` are the packaged functions, exposed to any agent that speaks MCP, run against the caller's own table — not a lookup into our result. The two study tools sit beside them and the refusals are unchanged, which is what makes the shape unusual: it will correct your ranking and will not nominate from ours. |
+| **Modal** | **It runs the product at scale.** `src/modal_corpus_rerank.py` applies the packaged correction to 1,272 published screens across containers — the one embarrassingly-parallel workload here — and turns the tool's claim from a property of our screen into a property of the literature. The sweep entry point stays a verification pass and is still barred from producing the frozen result. |
+| **Benchflow** | **It makes other agents answerable to the product's central claim.** `denali-size-carried` hands an agent a ranked hit list and scores whether it can identify which entries are size-carried, graded deterministically against the size-aware residual `rerank` computes. The other two tasks grade findings; this one grades a capability. |
+| **Claude Code** | Wrote the package, and the study that imports it. Not an integration so much as the author. |
+| **Paperclip / GXL** | **Nothing, by design — and this is the row worth reading.** Paperclip is an *audited object* here: FIG 4 measures its retrieval quality and finds it weak, and evaluation 11 uses it properly over 187 publications. Neither of those is a use *of* it *by* the tool, and wiring one in to make the row look busy would cost more credibility than it earns. Available, used honestly, and doing nothing for the product is the accurate status. |
+| **CZ Biohub / ESMC** | Nothing. The tool takes set sizes and hit counts; there is no sequence in it. |
+| **Proto — Evo Design** | Nothing. Same reason, one layer out: no structural or sequence claim exists to serve. |
+| **Benchling** | Nothing. There is no wet-lab entity to register, for the study or the tool. |
+| **Tamarind Bio · Boltz · Sundial** | Nothing — declined or not found, for the reasons below. Unchanged. |
+
+**Set up is not the same as used, and used by the study is not the same as used by
+the product.** Both distinctions are kept here rather than blurred. The four rows
+that do something for the product do it because the tool was the natural thing to
+put there; the five that do nothing are left saying nothing, because a forced
+integration is a claim that has to be defended later and does not survive being
+asked what it is for.
 
 ## Declined on purpose, with the reason
 

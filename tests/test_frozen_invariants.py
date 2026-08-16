@@ -1112,6 +1112,41 @@ def main() -> int:
     check("the nomination refusal cites the predictor's own failure",
           str(held["axis2_balanced_accuracy"]) in _refuse("top hits")["reason"])
 
+    # ---------------- R0. TOOLS.md says what each tool does for the PRODUCT ---
+    # The status table answers "did this touch a number", which is a question
+    # about the study. For a while every integration served the paper and none
+    # touched packages/denali-audit. The product column is the claim that changed,
+    # so it is checked rather than asserted: each tool that CLAIMS to serve the
+    # product must be reachable from the product's code, and the tools that
+    # claim to do nothing must keep saying so.
+    _tools = (ROOT / "docs" / "TOOLS.md").read_text()
+    check("TOOLS.md has a product column, not just a study one",
+          "What each one does for the PRODUCT" in _tools)
+    _srv_txt = (ROOT / "src" / "mcp_server.py").read_text()
+    check("TOOLS.md's MCP claim is true: the server imports the packaged tool",
+          "from denali_audit.core import audit" in _srv_txt
+          and "from denali_audit.core import rerank" in _srv_txt)
+    _mcr_py = ROOT / "src" / "modal_corpus_rerank.py"
+    check("TOOLS.md's Modal claim is true: a corpus arm exists and is not make-all",
+          _mcr_py.exists() and "modal_corpus_rerank" not in pipeline_mods)
+    check("TOOLS.md's Benchflow claim is true: the product task exists",
+          (ROOT / "benchmarks" / "tasks" / "denali-size-carried" / "task.md").exists())
+    # Paperclip is the honest negative and the most valuable row in the table.
+    # If someone later wires it in to make the row look busy, this fails and they
+    # have to say so on purpose.
+    check("TOOLS.md still reports Paperclip as doing nothing for the product",
+          "Nothing, by design" in _tools)
+    _pkg_src = "\n".join(
+        p.read_text() for p in
+        sorted((ROOT / "packages" / "denali-audit" / "denali_audit").glob("*.py")))
+    for _t in ("paperclip", "modal", "benchflow", "esm", "benchling", "mcp"):
+        _hit = re.search(rf"^\s*(?:import|from)\s+{_t}\b", _pkg_src, re.I | re.M)
+        check(f"the package itself depends on no sponsor tool: {_t}",
+              _hit is None, _hit.group(0).strip() if _hit else "")
+    check("TOOLS.md keeps the declined tools declined",
+          "Declined on purpose" in _tools
+          and "Set up is not the same as used" in _tools)
+
     # ---------------- R1. no git-tracked symlinks into an absolute path -------
     # A worktree linked data/raw at the primary tree to share the git-ignored
     # substrate. `.gitignore` said `data/raw/` -- with a trailing slash, which

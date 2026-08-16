@@ -1,7 +1,7 @@
 # Documentation index
 
-Eighteen files is a lot to land in. Read in this order depending on what you came
-to check.
+Twenty-three files is a lot to land in. Read in this order depending on what you
+came to check.
 
 ## If you have five minutes
 
@@ -19,6 +19,7 @@ to check.
 | [`../results/sensitivity/README.md`](../results/sensitivity/README.md) | Three post-freeze checks, none pre-registered and all labelled so: the measurement/construction split, the VIF identity recovering CAMERA's 2012 result from data, and the unstressed-cell-line bound. |
 | [`RPE1_PREREG.md`](RPE1_PREREG.md) | The second-cell-line arm, pre-registered and hashed (`ae62feda…`) before it ran. It cleared its bar by 0.026 and the doc says why that is thin. |
 | [`ANNOTATION_PREREG.md`](ANNOTATION_PREREG.md) | The annotation-scaling arm (`ec5edb90…`). Our prediction was wrong in direction **and** the power rule fired — both failures are in the result, not softened here. |
+| [`OFFTARGET.md`](OFFTARGET.md) | The confound taken outside our own data, into two published clinical-adjacent off-target datasets. Post-hoc and thresholds swept, labelled so. Includes the tautology the arm refused to report and the threefold overstatement we caught ourselves making. |
 | [`SCOPE_STATEMENT.md`](SCOPE_STATEMENT.md) | What is and is not claimed. |
 | [`DATA_DICTIONARY.md`](DATA_DICTIONARY.md) | Every column in every frozen file. |
 

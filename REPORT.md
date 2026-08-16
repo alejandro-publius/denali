@@ -78,7 +78,7 @@ underpowered and inconclusive by a rule set in advance, balanced accuracy 0.4375
 worse than chance, zero true positives. **A system that only reports its
 successes has no external standard by definition.** We did not refit.
 
-**2. Four controls, all reported, three of them failing.** A pre-committed
+**2. Seven controls, all reported, four of them failing.** A pre-committed
 nonsense program of 41 random genes returns zero hits against 517 and 773 for the
 real programs. Canonical regulators are recovered on one program and not on the
 other — that second one is our null. Guide-pair concordance is −0.019. Top-50
@@ -108,7 +108,9 @@ own code.
 | **Known-regulator recovery** (held-out program) | SREBF2 rank 2 of 11,258 scored perturbations (perturbation frame, larger than the 9,837 unique genes because some are targeted twice); 11 of 17 canonical members in the extreme 10%, binomial **p = 7.0×10⁻⁸**; **79% sign-correct** at both tails. ✅ |
 | **Known-regulator recovery** (program A) | Not recovered. PERK/IRE1/XBP1 at q≈0.8–1.0. ❌ **This is the null.** |
 | **Guide-pair concordance** | **−0.019**, flat at every effect-size cut. ❌ Gene-level calls are not reproducible. |
-| **Essentiality-matched null** | Top-50 4.09× enriched (p<0.001). ❌ for program A. |
+| **Essentiality-matched null** (program A) | Top-50 4.09× enriched (p<0.001). ❌ for program A. |
+| **Essentiality-matched null** (program B) | Top-50 3.32× enriched (p<0.001), but the headline hit is not essential and sits in Tier 1. ⚠️ **CAVEAT**, recorded as such. |
+| **RPE1 coverage collision** | 94.1% vs 11.3% coverage, essential vs non-essential. ❌ The replication arm mostly reaches genes the toxicity filter flags. |
 | **Held-out ten** | See below. |
 
 ### Held-out evaluation — reported as measured, not refit
@@ -210,6 +212,112 @@ unless someone checks.
 
 Limits: 50 programs, two cell lines, one lab, one assay. A measurement on these
 two screens, not a general estimate of cross-screen reproducibility.
+
+## The annotation arm — pre-registered, and it stopped itself
+
+**Evaluation 7. Pre-registered** (`docs/ANNOTATION_PREREG.md`, `ec5edb90…`,
+committed `10a82a7` before the run). 793 sets across four collections, same
+byte-frozen scorer, seed 20260815.
+
+> **VERDICT: UNDERPOWERED ON 3 OF 4 COLLECTIONS — NO VERDICT ISSUED.** The rule
+> — fewer than 150 of 250 sets scoreable — was fixed before the run and fired
+> before the deciding statistic could be applied. Claim (a) and claim (b) are
+> both unresolved.
+
+| Collection | Scoreable | Size-alone R², **carries no verdict** |
+|---|---:|---:|
+| Hallmark (the comparator, not a candidate) | 49 / 50 | 0.4464 |
+| WikiPathways | 149 / 246 | 0.1017 |
+| Reactome | 138 / 248 | 0.1846 |
+| GO Biological Process | 115 / 249 | 0.2905 |
+
+**Our predicted direction was wrong, and we state it rather than let an
+underpowered result hide it.** We predicted the confound would worsen in looser,
+larger collections. Had the arm been powered, the numbers would have supported
+the opposite: GO-BP 0.2905 and Reactome 0.1846 both sit **below** Hallmark's
+0.4649. Two failures in one arm — the power rule fired *and* the prediction was
+backwards — and both are in the result file.
+
+**The Hallmark bar, reconciled.** This arm reports Hallmark at **0.4464** against
+a bar of **0.4649**, which reads as our own baseline failing its own bar. It is
+not. Same predictor, same statistic, same byte-frozen scorer; the arm applies a
+stricter scoreability gate than the original sweep, so one set drops out and 49
+are scored instead of 50. Delta **0.0186**, attributable to
+`HALLMARK_PANCREAS_BETA_CELLS` (40 declared, 9 present). Both runs agree it
+produced nothing — the frozen sweep records it as 0 hits, the arm excludes it as
+unscoreable. **Sample size, not drift**, and the direction comparison is
+unaffected under either bar. The 0.4649 figure itself is post-freeze and not
+pre-registered (`results/sensitivity/stripped_model.json`).
+
+**What survives is descriptive, and it was not the question we asked.**
+Scoreability falls monotonically as a collection gets larger and less curated:
+**98% of Hallmark sets can be scored against a genome-scale screen; for GO
+Biological Process it is 46%.** Across all sampled GO-BP sets the median declares
+**20 genes and has 8 measured** in this screen. More than half of the most-used
+gene-set collection in biology cannot be evaluated against this screen at all —
+a property of the annotation meeting the assay, not of the biology. No threshold
+was set for this and none is applied; it carries no verdict either.
+
+Full record: `results/annotation/annotation_evaluation.json`.
+
+## The confound outside our own data — off-target nomination
+
+**Evaluation 8. POST-HOC, NOT PRE-REGISTERED. Thresholds swept, not chosen** —
+the same labelling as the cross-screen arm above, for the same reason. Neither
+dataset is ours; both are published supplementary tables.
+
+**Arm 1 — CHANGE-seq vs GUIDE-seq.** Lazzarotto et al., *Nat Biotechnol* 2020,
+doi:10.1038/s41587-020-0555-7. 202,043 biochemically nominated sites over 110
+guides, with a cellular assay on **56 of the same guides**. Two assays, same
+guides, different physical principle. The confound is the one this project keeps
+finding in different clothes: in our data a set's **size** inflated its hit
+count; here a guide's **search yield** does the same job, and it ranges from 20
+to 13,499 sites per guide — a **675×** spread. **85.2%** of nominated sites sit
+at 5 or 6 mismatches, the permissive tail the mismatch budget creates.
+
+| | |
+|---|---|
+| Share of biochemical–cellular agreement explained by search yield, 7 read thresholds | **17.6% – 33.9%**, median **31.2%** |
+| R² of search yield against **cellular** hit count | 0.36 – 0.55 |
+| Our own cross-screen figure, for comparison | **26%** |
+
+Same direction, modestly stronger. **Not dramatically so, and we do not say
+dramatically.** The objection to it: 56 paired guides, one lab, two assays, and
+the cellular assay detects far fewer sites by construction, so the agreement
+estimate is noisy. No threshold is privileged, which is why all seven are
+reported rather than the best one.
+
+**A tautology this arm refused to report.** Regressing search yield on the
+**biochemical** hit count gives R² **0.83 – 1.00**, and exactly **1.0000** at the
+two lowest thresholds. That is an identity, not a finding — every nominated site
+has at least one read, so at those rules the hit count *is* the yield. The
+reported figure is the cellular direction, the only one that can carry
+information. The tautological number is kept in the output because it is the one
+this arm would have overstated itself with.
+
+**Arm 2 — CRISPRme.** Cancellieri et al., *Nat Genet* 2022,
+doi:10.1038/s41588-022-01257-y. Top 1,000 sites by CFD for each of 14 therapeutic
+guides. **Not a discovery** — that variants create off-target sites is the
+CRISPRme paper's own finding, and recovering it only confirms the pipeline reads
+the data correctly.
+
+| Quantity | n / 14,000 | Share | Per guide |
+|---|--:|--:|---|
+| Best alignment comes from an **alt allele** | 6,179 | **44.1%** | 40.1% – 52.1% |
+| Site is **absent from the reference** | 1,737 | **12.4%** | 8.5% – 20.2% |
+
+These are not the same statement, and **quoting 44.1% while describing the second
+overstates the effect roughly threefold.** We made exactly that error while
+building the arm; it is recorded rather than quietly corrected. The denominator
+is also not the genome — it is a shortlist already ranked by predicted activity.
+
+**Scope.** No guide is named safe or unsafe and none is ranked. These are
+properties of how off-target lists are **constructed**, not verdicts on any
+guide — the same rule that stops `src/audit_screen.py` naming a gene set, applied
+to a domain with a patient at the end of it. This arm does not revise the
+pre-registered K562 primary.
+
+Full record: `results/offtarget/offtarget_evaluation.json`, `docs/OFFTARGET.md`.
 
 ## Limitations
 

@@ -31,23 +31,32 @@ scipy happened to be installed for other reasons on every machine it had been tr
 on. A first user installing from PyPI into a clean environment would have hit this on
 their first command.
 
-Fixed by computing Spearman from its definition — Pearson on average ranks — in
-`core.py::_spearman`. Verified to agree with `scipy.stats.spearmanr` to 5.6e-17 over
-500 deliberately tie-heavy trials and exactly on the frozen study data. Adding scipy
-as a dependency would also have worked, and was rejected: it is a large dependency for
-one rank correlation in a tool whose entire argument is that running it should be
+Two sessions hit this the same day from opposite ends, and the fix keeps both halves.
+One declared scipy; the other removed the need for it. `core.py::_spearman` now
+computes Spearman from its definition — Pearson on average ranks — agreeing with
+`scipy.stats.spearmanr` to 5.6e-17 over 500 deliberately tie-heavy trials and exactly
+on the frozen study data. So scipy is **not** a dependency: it is a large install for
+one rank correlation, in a tool whose entire argument is that running it should be
 trivial.
 
-Verified after the fix, each in a fresh venv with the built wheel and nothing else:
+The second finding stands regardless: `numpy>=1.24` alongside `requires-python >=3.9`
+advertised support that does not exist. numpy 1.24 predates Python 3.12 and cannot
+build on it, and pandas 2.0.3 fails the same way. Floors are now `numpy>=1.26`,
+`pandas>=2.1.1` — the oldest versions that actually install and pass.
 
-| Python | numpy / pandas resolved | suite | published headline |
-|---|---|---|---|
-| 3.9 | 2.0.2 / 2.2.3 | 33 passed | 0.4649 ✓ |
-| 3.11 | 2.4.6 / 3.0.5 | 33 passed | — |
-| 3.12 | 2.5.2 / 3.0.5 | 33 passed | 0.4649 ✓ |
+Verified after the fix, each in a fresh venv with the built wheel and nothing else,
+suite run from a directory outside the repository so imports resolve to the installed
+wheel rather than the source tree:
 
-The suite was run from a directory outside the repository, so the imports resolve to
-the installed wheel rather than the source tree.
+| Python | numpy / pandas | scipy | suite | published headline |
+|---|---|---|---|---|
+| 3.9 | 2.0.2 / 2.2.3 (resolved) | present | 33 passed | 0.4649 ✓ |
+| 3.11 | 2.4.6 / 3.0.5 (resolved) | present | 33 passed | — |
+| 3.12 | 2.5.2 / 3.0.5 (resolved) | present | 33 passed | 0.4649 ✓ |
+| 3.12 | **1.26.0 / 2.1.1 (the declared floors)** | **absent** | 34 passed | 0.4649 ✓ |
+
+The last row is the one that matters: the declared floor, on the newest supported
+interpreter, in an environment where scipy does not exist at all.
 
 ## Upload
 

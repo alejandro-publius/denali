@@ -134,7 +134,7 @@ Also measured: essentiality density is flat at program level, coefficient **−0
 - **Client-side program explorer** — all 50 programs sortable and filterable, one toggle isolating the 20 that fail the gate and produce hits anyway, held-out programs tagged, and a generated next-experiment proposal per program; embedded as JSON, zero network calls
 - **MCP server** exposing the matrix to agents, whose unscored branch reports the predictor's own failure verbatim
 - **The loop is drawn and falsifiable** — [`docs/LOOP.md`](docs/LOOP.md) shows the measure → model → gate → propose → audit cycle, names the file behind each stage, and publishes the one-line grep that would prove the claim false
-- **Deterministic reproduction in nine steps** — `make all` from a clean clone reproduces every file in `results/` byte-identical, figures included, in 12 m 05 s
+- **Deterministic reproduction in ten steps** — `make all` from a clean clone reproduces every file in `results/` byte-identical, figures included, in 12 m 05 s; re-verified after the night's merges with an empty diff
 
 ## Architecture
 
@@ -287,7 +287,7 @@ Python 3.12.0. Every number in `results/frozen/` and every figure is reproducibl
 ```bash
 make setup     # venv + pinned dependencies
 make data      # prints the one manual step, below
-make all       # nine steps, ~13 min, ends by running the invariants
+make all       # ten steps, ~13 min, ends by running the invariants
 make page      # rebuild index.html from the frozen numbers
 ```
 
@@ -310,7 +310,9 @@ curl -sL -o data/raw/Model.csv                          https://ndownloader.figs
 | `CRISPRGeneEffect.csv` | `6edf7ade09b9b34199210b559d4745d3` |
 | `Model.csv` | `675210d17675f3517b0ce39a3c274f16` |
 
-**A fresh clone reproduced every file in `results/` byte-identical, with no exceptions.** `git diff --stat results/frozen/` is empty and so is `git status --short results/` — the four figures included. Clone to finish: 140 s download with all four md5s matching, **12 m 05 s** for the nine steps, 84/84 invariants passing.
+**A fresh clone reproduced every file in `results/` byte-identical, with no exceptions.** `git diff --stat results/frozen/` is empty and so is `git status --short results/` — the four figures included. Clone to finish: 140 s download with all four md5s matching, **12 m 05 s** for the ten steps on an unloaded machine.
+
+**Re-verified after the night's merges**, because roughly thirty commits landed and a claim like this goes stale silently. Same result: **`git status --short results/` empty, `git diff --stat results/frozen/` empty**, with 10 frozen files and all 4 figures actually rewritten by the run rather than left untouched. That run also **failed at the final invariant step, and the failure was real**: a fresh clone counted 350 assertions against a badge claiming 351, because the Adamson provenance guard shelled out to `git show` on a commit that tonight's rebases had erased, so it silently skipped wherever that object was missing — including CI, whose shallow checkout means the guard had never once run there. It is now content-addressed against the sha256 the amendment itself cites, needs no history, and a fresh clone of current `main` runs **355/355 green** with that commit still absent.
 
 An earlier run of this check had two diffs, and both were defects rather than noise. A `wall_clock_min` field was being written into a frozen artifact, which makes byte-comparison across machines impossible by construction; runtime is now printed and never stored. FIG 4 drew its lines in set-iteration order, and because Python salts string hashing per process the same picture serialised to different bytes each run — three `PYTHONHASHSEED` values gave three MD5s before the fix and one after. Neither was a scientific value, and neither should have been in a file we ask people to diff.
 

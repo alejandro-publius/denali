@@ -1,9 +1,11 @@
-"""Expo page. Reads results/frozen/, results/figures/ and docs/TOOLS.md only.
-Computes nothing.
+"""Expo page. Reads results/, results/figures/, docs/TOOLS.md and README.md's
+findings table. Computes nothing.
 
     .venv/bin/streamlit run app.py
 
-Every number on screen is read from a frozen file. Every figure caption is read
+Every number on screen is read from a frozen file, or derived — never typed as a
+literal: the evaluation counts come from README's findings table, the single
+source of truth the tests check. Every figure caption is read
 from results/figures/CAPTIONS.md, verbatim, so the page and the report cannot
 drift apart. The sponsor tool-chain strip reads its status verbatim from
 docs/TOOLS.md — no tool status is inferred here. No interactive controls: nothing
@@ -37,11 +39,8 @@ html, body, .stApp {background:#ffffff !important; color:#111827 !important;}
 .sub {font-size:1.34rem; line-height:1.4; color:#374151; margin:.5rem 0 0 0;}
 .circ {font-size:1.06rem; line-height:1.45; color:#4b5563; margin:.5rem 0 0 0;}
 .size {font-size:1.06rem; color:#111827; margin:.3rem 0 0 0;}
-/* Four boxes: identical weight, no warning colour on any of them. */
-.box {border:1px solid #d1d5db; border-radius:10px; padding:1rem 1.1rem;
-      height:100%; background:#fff;}
-.boxn {font-size:2.9rem; font-weight:800; line-height:1; margin:0; color:#111827;}
-.boxl {font-size:.9rem; color:#6b7280; margin:.35rem 0 0 0;}
+.count {font-size:1.3rem; line-height:1.45; color:#111827; font-weight:600;
+        margin:.55rem 0 0 0; max-width:46em;}
 .card {border:1px solid #d1d5db; border-radius:10px; padding:1.05rem 1.2rem;
        background:#fff; height:100%;}
 .card h4 {margin:0 0 .55rem 0; font-size:1.02rem; color:#111827;}
@@ -195,6 +194,21 @@ cc_raw = conc["raw_agreement"]["spearman_rho"]                          # +0.663
 cc_par = conc["how_much_is_size"]["spearman_after_removing_size"]       # +0.493
 cc_share = round(abs(cc_raw - cc_par) / abs(cc_raw) * 100)              # 26
 
+# Evaluation counts DERIVED from README's findings table — the single source of
+# truth that src/build_page.py and tests/test_frozen_invariants.py both parse.
+# A number nobody derives goes stale silently; this one cannot.
+_findings = re.findall(r"^\|\s*(\d+)\s*\|.*\|\s*\*\*([A-Z][A-Z ]+)\*\*",
+                       Path("README.md").read_text(), re.M)
+_verdicts = [v.strip() for _, v in _findings]
+N_EVALS = len(_findings)
+N_NEG = _verdicts.count("NEGATIVE")
+N_NOV = _verdicts.count("NO VERDICT")
+_WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six",
+          7: "seven", 8: "eight", 9: "nine", 10: "ten"}
+def _w(n, cap=False):
+    s = _WORDS.get(n, str(n))
+    return s.capitalize() if cap else s
+
 
 def figure(name: str):
     # width="stretch", not use_container_width: the latter is deprecated in
@@ -221,14 +235,15 @@ st.markdown(
 
 st.write("")
 
-# ==================================================== 2. FOUR BOXES (above fold)
-boxes = [("4", "evaluations run"),
-         ("3", "came back negative"),
-         ("1", "came back positive"),
-         ("0", "gene-level claims made")]
-for col, (n, lab) in zip(st.columns(4), boxes):
-    col.markdown(f"<div class='box'><div class='boxn'>{n}</div>"
-                 f"<div class='boxl'>{lab}</div></div>", unsafe_allow_html=True)
+# ============================ 2. THE COUNT (above fold) — derived, not typed ===
+# index.html renders this same sentence from the same source; four stat tiles
+# were the old, silently-stale version. Counts derived above from the README table.
+_nov = (f"{_w(N_NOV)} returned no verdict when our own power rule fired against "
+        f"us, ") if N_NOV else ""
+st.markdown(
+    f"<div class='count'>{_w(N_EVALS, True)} evaluations. {_w(N_NEG, True)} came "
+    f"back negative, {_nov}and all {_w(N_EVALS)} are reported here.</div>",
+    unsafe_allow_html=True)
 
 st.write("")
 st.divider()

@@ -238,6 +238,90 @@ It is animated because the *sequence* is the point — you are watching it decid
 
 Nothing else moves. No scroll reveals, no fades, no hover transforms.
 
+## Interaction — the page as a product, not only a paper
+
+Added 2026-08-16. Everything above this section covers a page you READ. The
+audit runner (drop a CSV, get a verdict) makes it a page you USE, and a used
+page has states a read page does not. The rules below extend the system; they
+change nothing above.
+
+### The accent budget — the decision, written down
+
+The accent's declared job is "things you can act on or read a number off".
+The budget was described as at its edge, and the honest question was whether
+interactive elements justify raising it. **Decision: raised by exactly one
+named use — `.btn.primary`, the accent-filled button, at most ONE instance on
+the page.** The page now exists to get one action taken (run the audit); a
+page with one purpose may mark that one purpose with its one saturated colour.
+This is g:Profiler's exact spend — one orange Run button on an otherwise grey
+surface — observed in docs/RESEARCH_UX.md, and it is where the budget stops:
+every other new control is ink or ghost, verdict and percentile numerals reuse
+the metric-numeral rule that already exists, and if a second accent button
+ever appears the budget is broken, not stretched. White-on-accent measures
+5.09:1 (`#1D7C65` under white text, same ratio as accent-on-paper by symmetry),
+clearing AA for the button label.
+
+### Buttons — the vocabulary, three levels and no fourth
+
+The explorer already had `.btn` and `.btn.ghost`; this names them, adds the
+one primary, and closes the set.
+
+| Class | Ground / text | Job | Allowed |
+|---|---|---|---|
+| `.btn.primary` | `--accent` / `--paper` | THE page action — run the audit | exactly one on the page |
+| `.btn` | `--ink` / `--paper` | a section's default action ("Run the agent") | one per section |
+| `.btn.ghost` | transparent / `--ink`, `--rule` border | everything else: Step, Reset, Export, "use the example" | unlimited |
+
+All three: mono at `.8125rem/600`, `9px 16px` padding, no radius override (the
+`--radius` rule applies), no shadow, no gradient, no transform on hover.
+Hover: solid buttons drop to `opacity:.84`; ghost sharpens its border to
+`--ink`. Focus: the existing `:focus-visible` accent ring, 2px, offset 2px.
+Active: no separate style — the state change the click causes IS the feedback.
+Disabled: `opacity:.32`, `cursor:default`, and a disabled control must never
+be the only path — something nearby says what enables it.
+
+**There is deliberately no destructive level.** The page holds no user data
+beyond the current in-memory run, so nothing on it can destroy anything worth
+a warning colour. Reset (explorer or audit) discards an ephemeral run and
+stays ghost. If the page ever gains an action that discards something a user
+typed or built, that action gets a confirmation sentence, not a red button —
+red stays reserved for data semantics inside figures.
+
+### Forms and upload
+
+- **The drop zone is the input.** One surface accepts click-to-browse, drag
+  and drop, and paste — Morpheus's pattern. 1px dashed `--rule` border,
+  `--paper` ground; on dragover the ground moves one step to `--fill` and the
+  border to solid `--ink`. No icon library, no cloud glyph.
+- **The no-upload sentence sits inside the drop zone**, not in a footnote:
+  the file is read in the browser, nothing leaves the page. Stating the
+  page's strongest property at the exact point of hesitation.
+- **Formats are named before the file is chosen** — the tool names (Enrichr,
+  g:Profiler, MAGeCK…) are the recognition trigger and belong on or beside
+  the zone in `--soft` small text.
+- Native `<input type=file>` is visually hidden but focusable; the zone is a
+  `<label>` for it, so keyboard and screen-reader users get the native
+  affordance. `<select>` controls reuse the explorer's `.ctl select` style.
+
+### Feedback — how results, errors, and waits read
+
+- **A result appears in place, below the input that produced it**, input
+  still visible (g:Profiler). Verdict first, at metric-numeral scale; the
+  percentile sentence second; the rerank table third. That order is fixed —
+  it is the argument's order (what / compared to what / so what).
+- **Errors are sentences, not colours.** The CLI's own strings (near-miss
+  messages, the MIN_SETS refusal, UNDETERMINED) render verbatim, ink on
+  `--fill`, mono, prefixed the way the CLI prefixes them. No red, no warning
+  triangle iconography beyond the ⚠ the CLI itself prints. UNDETERMINED is a
+  finding, not a failure, and renders at full verdict weight.
+- **Empty states name their exits** (Galaxy's history panel, per the
+  research): the pre-run state of the result area says what will appear and
+  which two actions produce it.
+- **No spinners.** Client-side parsing of a realistic CSV is far under 150ms;
+  a flash-frame spinner is noise. The one operation that can take visible
+  time (a many-MB file) gets a mono "reading <filename>…" line, static. The
+  agent's 420ms step remains the only animated thing on the page.
+
 ## Writing
 
 The visual restraint is worth nothing if the copy oversells.

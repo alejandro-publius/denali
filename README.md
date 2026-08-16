@@ -121,7 +121,7 @@ Also measured: essentiality density is flat at program level, coefficient **−0
 
 - **An agent that chooses its own next step and halts on its own** — it picks which program to read by a stated policy, updates a running estimate, emits a next experiment, and stops when the estimate stops moving. Change the policy or the halt rule and it visits different programs and stops elsewhere. On halting it reports that stopping early **overstated its own answer by 0.081**, and names the gap
 - **A next experiment that changes when the results change** — zero hits proposes raising statistical power and re-running; a strong result proposes pathway-level validation in a second cell type. No branch tests a program name
-- **The check runs on other people's screens** — `src/audit_screen.py` takes any gene-set results table and reports the same estimate; validated against synthetic screens with known answers, and it reproduces our own figure exactly
+- **The check runs on other people's screens, and here it is doing so** — `src/audit_screen.py` takes any gene-set results table and reports the same estimate; validated against synthetic screens with known answers, and it reproduces our own figure exactly. [`audits/external/`](audits/external/README.md) is the same command run unchanged on the published supplementary tables of **seven studies we did not run and did not choose** — CRISPR-KO, CRISPRi/a, single-cell CRISPRa, organoid, primary T cell and bulk RNA-seq — where **36–88%** of each ranking is explained by set construction alone. One comes back only partially confounded and one candidate table was refused for having no true hit count, so the auditor discriminates rather than flagging everything
 - **Genome-scale sweep** — every one of 9,837 knockdown targets scored against all 50 Hallmark programs, 491,850 cells; the full matrix ships in the repo rather than a filtered top-N
 - **Rank-based reversal statistic** — Mann–Whitney of program-member effects against the rest of the transcriptome, per perturbation, with cosine similarity and mean effect size reported alongside so no single number carries the claim
 - **Pre-registered thresholds, hashed before any value was computed** — the primary claim, the alternative claim, the statistic deciding between them, and the conditions for reporting neither, all fixed in advance
@@ -336,7 +336,7 @@ The suite has caught, in order: a stat bug reporting 5 evidence sources instead 
 
 ## Repo map
 
-**[`docs/README.md`](docs/README.md) is the documentation index** — eighteen files, ordered by what you came to check.
+**[`docs/README.md`](docs/README.md) is the documentation index** — twenty-seven files, ordered by what you came to check.
 
 
 | Path | Contents |
@@ -346,6 +346,7 @@ The suite has caught, in order: a stat bug reporting 5 evidence sources instead 
 | `results/figures/` | Four figures + `CAPTIONS.md`, the single source of caption wording |
 | `results/prior_work/` | Pre-event ILD evidence — the positive control returning 481–6,532 genes. Not reproducible here |
 | `results/discovery/` | Intermediate scoring outputs |
+| `audits/external/` | The audit run unchanged on seven **other people's** published screens — standardized inputs, provenance and rerun command per entry |
 | `src/` | Pipeline modules, run as `python -m src.<module>` |
 | `tests/` | Invariants over the frozen interface |
 | `docs/` | Report, limitations, method rules, origins, prior work, data dictionary, pre-registrations |

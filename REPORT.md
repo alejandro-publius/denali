@@ -49,6 +49,65 @@ questions and the field routinely conflates them.
 
 ---
 
+## What ships — the finding, as a command anyone can run
+
+The three findings above are measurements on one screen. The same arithmetic is
+packaged as `packages/denali-audit`, so a reader can point it at their own
+ranking rather than take ours on trust:
+
+```bash
+pip install -e packages/denali-audit
+denali audit my_results.csv
+```
+
+**It reads ten table formats without a flag.** Six are read exactly as exported —
+this project's own output, g:Profiler, DAVID, clusterProfiler, Enrichr/GSEApy and
+MAGeCK `gene_summary`. The other four — fgsea, GSEA desktop, drugZ and BAGEL2 —
+are read with an **APPROXIMATE flag that the verdict itself carries**, because
+none of them reports a per-set count of significant members, so the hit count has
+to be stood in for: the leading-edge subset for fgsea, the full set size for the
+rest. That flag prints above the verdict rather than living in the
+documentation, and the note names the substitution. `denali formats` lists all
+ten; anything else is `--set/--size/--hits`. The reason this matters is not
+convenience. A check that asks a biologist to reshape their data first is a check
+that never gets run, and the confound survives precisely because nobody runs one.
+
+**What comes back is a verdict, a percentile, and a correction.** The percentile
+is against the **1,272** published screens of evaluation 10, embedded in the
+package: an R² is not a judgement until you know what normal looks like, and the
+field's **median is 0.224**. Run on our own screen it returns 46%, and reports
+that this is worse than nine in ten published screens — the tool says our
+headline is atypical, unprompted.
+
+**`denali rerank` applies the correction the audit names**, which until it
+existed the tool only recommended. `log10(1 + hits)` is regressed on set size and
+entries are ranked by the residual, so a set is scored on how far it beats what
+its size alone predicts. On our own screen, **3 of the top 10 hold their place
+and 7 do not**; the largest set in the collection falls from 1st to 24th.
+
+**The objection is that a tool shipped alongside a paper will agree with the
+paper.** That is why the agreement is a test rather than a claim:
+`packages/denali-audit/tests/test_core.py::test_reproduces_published_headline`
+runs the packaged `audit()` against the frozen research data and requires
+exactly **0.4649**, the published figure. `core.py` is this repository's own
+maths vendored verbatim, not a reimplementation. If the tool and the paper ever
+diverge, CI fails — rather than the report continuing to cite a number the
+shipped code no longer produces.
+
+**A second objection is fair and unresolved: residuals are not CAMERA.** The
+correction is the cheapest one that works on a table a reader already has, and
+the tool prints the formula in its own output so it can be disagreed with. It
+also refuses the obvious next step — it does not tell you the survivors are
+real, and it hands back no shortened list to chase. **It reports which entries a
+ranking cannot justify, which is the opposite of a candidate list**, and that
+refusal is the same −0.019 scope limit applied to a stranger's data.
+
+**Eleven evaluations stand behind it. Seven came back negative**, one issued no
+verdict when its own power rule fired, and all eleven are reported below and in
+`README.md`.
+
+---
+
 ## Method
 
 ```

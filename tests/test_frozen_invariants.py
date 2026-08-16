@@ -1151,8 +1151,14 @@ def main() -> int:
          (n_eval, n_neg), "the demo open"),
         ("docs/DEMO.md", r"(\w+) of (\w+) evaluations negative\.",
          (n_neg, n_eval), "the demo close"),
-        ("app.py", r'st\.subheader\("(\w+) evaluations came back negative"\)',
-         (n_neg,), "the streamlit negatives heading"),
+        # Now states BOTH counts. "Seven evaluations came back negative" was
+        # correct English for seven negatives but read as a total to anyone
+        # skimming, and the cross-surface guard flagged it as a disagreement
+        # with the eleven every other surface states. Naming both numbers is
+        # unambiguous and gives this check two things to hold.
+        ("app.py",
+         r'st\.subheader\("(\w+) of (\w+) evaluations came back negative"\)',
+         (n_neg, n_eval), "the streamlit negatives heading"),
         # index.html was the one rendered surface this registry never named, and
         # it drifted exactly the way app.py did before it was added: the page
         # still said "4 evaluations / 3 came back negative / The three negative

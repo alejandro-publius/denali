@@ -53,3 +53,33 @@ fails the build rather than shipping two arms with the same number.
 
 Adding an arm therefore means: append the row, and let the guard tell you which
 prose has gone stale.
+
+---
+
+# Branch disposition, 2026-08-16
+
+Eleven branches existed; the repo now carries `main` alone. Recorded here so a
+deleted branch is a decision with a reason rather than a gap.
+
+| branch | tip | disposition |
+|---|---|---|
+| `adamson-arm` | `816c500` | **merged** — evaluation 9 |
+| `corpus-arm` | `6edd2b0` | **merged** — evaluation 10, renumbered from 8 |
+| `fulcher-prior-art` | `09fb5e0` | **merged** — kept as the base of §2b |
+| `fulcher-landscape` | `a36ca0e` | **folded in**, then deleted — its three best points grafted onto §2b; merging both would have cited Fulcher twice in two voices |
+| `validation/external-gallery` | `54469a3` | **merged** — seven external screens |
+| `copy/page-accuracy` | `8e94b98` | **merged** — fonts and design invariants kept, its stale copy discarded |
+| `offtarget-arm` | `a372aa2` | **deleted, not merged** — a parallel preservation of the same arm already on `main` (identical JSON, script, both CSVs). Three of its invariants were ported first |
+| `style/denali-brand` | `d963f30` | **deleted, not merged** — see below |
+| `frontend-demo-layer` | `f9054c6` | deleted — 0 ahead, fully contained in `main` |
+| `loop-diagram` | `7aa1cec` | deleted — 0 ahead, fully contained in `main` |
+
+**Why `style/denali-brand` was not merged.** Its work *is* on `main`: the brand
+palette (`#1B2A4A`, `#2EC4A0`), all four inlined webfonts, and the mark arrived
+via `copy/page-accuracy`, which reimplemented them on a far newer base — renaming
+`--teal` to `--accent` and documenting the radius decision. The branch itself sat
+42 commits behind and still contained the pre-`60fd349` hero and five hardcoded
+metric tiles (`7/4/2/1/0`) that the tracer now derives from the README findings
+table. Merging it would have reverted the headline and reintroduced hand-typed
+counts — the exact failure `60fd349` existed to remove. Its tip `d963f30` remains
+recoverable by SHA if any of that judgement turns out to be wrong.

@@ -130,32 +130,44 @@ flowchart TB
     CIT --> AUD["retrieval audit<br/>34 sources · 19 of 20 · FIG 4"]
   end
 
-  REP["Replogle K562 Perturb-seq<br/>11,258 × 8,248 · CC BY 4.0"] --> SW
-  GMT["MSigDB Hallmark<br/>50 programs"] --> SW
+  REP["Replogle K562 Perturb-seq<br/>11,258 × 8,248 · CC BY 4.0"] --> SC
+  GMT["MSigDB Hallmark<br/>50 programs"] --> SC
+  SC["src/score_k562.py 🔒<br/>byte-frozen scorer · sha256 2abfdc6f…<br/>every arm asserts this hash before it runs"] --> SW
   SW["src/sweep.py<br/>rank-based reversal, 50 × 9,837"] --> MAT
 
   DEP["DepMap 24Q4 Chronos<br/>1,178 lines · CC BY 4.0"] --> FM
   MAT["matrix.csv"] --> FM["src/freeze_matrix.py"]
   FM --> FROZEN
 
-  FROZEN["results/frozen/ 🔒<br/>matrix · program_summary · provenance"] --> PRED
+  FROZEN["results/frozen/ 🔒<br/>matrix · program_summary<br/>provenance · proposals"] --> PRED
   PRED["src/freeze_predictor.py<br/>OLS on 6 features → predictor.json 🔒"] --> FREEZE
 
   FREEZE{{"FREEZE BOUNDARY<br/>predictor hashed"}} --> HO
   HO["src/score_heldout.py<br/>10 Reactome programs, opened after the freeze"] --> FROZEN
 
+  FROZEN --> NEXT["src/next_experiment.py<br/>proposal + what would change my mind<br/>no branch tests a program name"]
+  NEXT --> FZP["src/freeze_proposals.py<br/>the only writer of proposals.json"]
+  FZP -->|"a test asserts the committed<br/>file still matches this"| FROZEN
+
   FROZEN --> PAGE["src/build_page.py → index.html<br/>+ the agent loop, in-browser"]
+  FROZEN --> APP["app.py → Streamlit<br/>renders proposals.json"]
   FROZEN --> MCP["src/mcp_server.py → 2 tools"]
   FROZEN --> VIF["src/vif_camera.py<br/>post-freeze: VIF = 1+(m−1)ρ̄"]
   FROZEN --> BENCH["benchmarks/denali-gate-trap<br/>our finding, as a task for other agents"]
   FROZEN --> AUD2["src/audit_screen.py<br/>the same check, on anyone's screen"]
-  FROZEN --> RP["src/rpe1_arm.py 🔒<br/>2nd cell line, pre-registered"]
-  RP --> CONC["src/concordance.py<br/>26% of 'it replicated' is set size"]
+  FROZEN --> RP["src/rpe1_arm.py 🔒<br/>eval 5 · 2nd cell line, pre-registered"]
+  RP --> CONC["src/concordance.py<br/>eval 6 · 26% of 'it replicated' is set size"]
   FROZEN --> CONC
+
+  SC --> ANN["src/annotation_arm.py 🔒<br/>eval 7 · 793 sets, 4 collections, Modal"]
+  GO["WikiPathways · Reactome · GO-BP<br/>10,352 sets"] --> ANN
+  ANN --> ARES["results/annotation/<br/>UNDERPOWERED on 3 of 4"]
+
+  EXT["CHANGE-seq · CRISPRme<br/>two published datasets, neither ours"] --> OT
+  OT["src/offtarget_audit.py<br/>eval 8 · post-hoc, thresholds swept"] --> ORES["results/offtarget/"]
 
   MOD["src/modal_sweep.py<br/>50 programs / 10 containers"] -.->|"reproduces, does not produce"| FROZEN
   VIF -.->|"external theory<br/>Wu &amp; Smyth 2012"| CAM(["CAMERA"])
-
   AUD -.->|"audit only — never feeds the matrix"| PAGE
 
   style FROZEN fill:#f2f2f0,stroke:#1a4d7a,stroke-width:2px
@@ -163,10 +175,19 @@ flowchart TB
   style sub fill:#fff,stroke:#e3e3e3,stroke-dasharray:3 3
   style MOD fill:#fff,stroke:#8c8c89,stroke-dasharray:4 3
   style CAM fill:#f2f2f0,stroke:#1a4d7a
+  style SC fill:#fff,stroke:#1a4d7a,stroke-width:2px
+  style FZP fill:#fff,stroke:#1a4d7a,stroke-width:2px
   style RP fill:#fff,stroke:#1a4d7a,stroke-width:2px
+  style ANN fill:#fff,stroke:#1a4d7a,stroke-width:2px
+  style ARES fill:#f7f7f8,stroke:#8c8c89
+  style ORES fill:#f7f7f8,stroke:#8c8c89
 ```
 
 **The freeze boundary is the load-bearing part.** `results/frozen/` is written once per run and read by everything downstream; nothing after it recomputes. The predictor is fit on the 50 scored programs, serialised, and **hashed** — and only then are the ten held-out programs scored, with `src/score_heldout.py` verifying the hash at load and aborting on mismatch. Scoring them before the freeze would have let the model see its own test set; scoring them after means the failure it produced is a real failure.
+
+**Evaluations 5–8 point sideways, and that is the whole discipline.** `src/annotation_arm.py`, `src/concordance.py`, `src/rpe1_arm.py` and `src/offtarget_audit.py` each write their own directory — `results/annotation/`, `results/concordance/`, `results/rpe1/`, `results/offtarget/` — and **not one of them has an edge back into `results/frozen/`.** That is deliberate. Every one of those arms was built after the primary was frozen, so any of them could have been used to quietly improve the headline: re-score with a looser gate, fold the second cell line in, let a 793-set sweep redefine the comparator. Pointing them sideways makes that impossible to do by accident rather than merely against the rules. What they are allowed to change is the *scope* of the claim — evaluation 7 narrowed it by showing more than half of GO Biological Process cannot be evaluated against this screen at all, and evaluation 8 widened it by finding the same confound in two clinical off-target datasets that have nothing to do with gene sets. Neither moved a number inside the freeze. The two arms that read the byte-frozen scorer, `src/annotation_arm.py` and `src/rpe1_arm.py`, assert its sha256 before they run and abort rather than proceed against a modified scorer.
+
+**`src/freeze_proposals.py` is drawn as the only writer of `proposals.json` because that turned out to matter.** The three generated proposals the page renders are produced by `src/next_experiment.py` and serialised once by that script. It went stale — the generator gained a falsification field and the artifact was never rewritten — and because nothing checked the artifact against its generator, `make all` on a clean clone silently rewrote it and made the byte-identical reproduction claim false while every other test stayed green. The edge back into `results/frozen/` now carries that check.
 
 **Two edges are dashed on purpose, and both are claims you can check.** Modal points *into* `results/frozen/` rather than out of it: `src/modal_sweep.py` re-runs the sweep across ten containers and reproduces all 50 programs identically, so it verifies the frozen result without being allowed to produce it — it is deliberately not a `make all` step, and a test asserts that. The VIF edge points *outward*, to a statistical result published in 2012: our two dominant features turn out to be the two terms of CAMERA's variance-inflation factor, which we recovered from data rather than fitted to.
 

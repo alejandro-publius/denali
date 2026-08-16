@@ -25,6 +25,22 @@ It reads the table your tool already produced. No column renaming:
 
 Anything else: `denali audit FILE --set <col> --size <col> --hits <col>`.
 
+## Where does your ranking sit?
+
+An R² is not a judgement until you know what normal looks like. Every audit reports a
+percentile against **1,272 published CRISPR screens** (BioGRID ORCS), so a number comes
+back with a reference class attached:
+
+```
+AGAINST THE FIELD
+This ranking is unusually confounded — worse than nine in ten published screens:
+90% of 1272 published CRISPR screens are less explained by set size than yours.
+```
+
+The field's median is **0.224**. That output is this project's own screen at **0.465** —
+the tool says it about us. The reference was built against MSigDB Hallmark; if your sets
+come from a different collection the percentile is indicative, not exact, and it says so.
+
 ## The correction, applied
 
 Knowing a ranking is confounded is not the same as knowing what to do about it. This
@@ -63,3 +79,17 @@ programs against 9,837 CRISPRi knockdowns) so it cannot drift.
 
 Method: VIF = 1 + (m−1)ρ̄ — Wu & Smyth 2012, *NAR* 40(17):e133.
 Full study: https://alejandro-publius.github.io/denali/
+
+## Where this comes from
+
+This is not a tool that resembles a study — it is the study's own code, packaged.
+`core.py` is vendored verbatim from the research repository, and a test in this package
+runs it against the frozen research data and requires exactly **0.4649**, the published
+headline. If the tool and the paper ever disagree, CI fails rather than the two quietly
+diverging.
+
+The study behind it ran **eleven evaluations** against its own headline. **Seven came
+back negative**, one returned no verdict when its own pre-registered power rule fired,
+and all eleven are reported — including the one where the same check was run on 1,272
+published screens and found this project's own number atypical of the field. Full
+writeup, data and provenance: [github.com/alejandro-publius/denali](https://github.com/alejandro-publius/denali).

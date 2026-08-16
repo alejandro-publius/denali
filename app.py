@@ -237,6 +237,17 @@ st.markdown(
     f"looks like discovery, and {lo}–{hi}% of the variance in apparent "
     f"reversibility is explained without reference to what any program does.</div>",
     unsafe_allow_html=True)
+# The tool, before the study that justifies it. This page described only the
+# finding for weeks; the thing a reader can actually run was absent from it.
+st.markdown(
+    "<div class='sub'><b>You can run this on your own screen.</b> "
+    "<code>pip install -e packages/denali-audit</code> then "
+    "<code>denali audit my_results.csv</code> — it reads g:Profiler, DAVID, "
+    "clusterProfiler, Enrichr, fgsea and GSEA desktop output without renaming "
+    "a column, reports where your ranking sits against 1,272 published screens, "
+    "and <code>denali rerank</code> shows what leaves your top ten. On our own "
+    "screen 3 of the top 10 hold and 7 do not — our number one falls to "
+    "twenty-fourth.</div>", unsafe_allow_html=True)
 st.markdown(
     f"<div class='size'>A range, not a point: one of our six features is computed "
     f"from the same matrix as the outcome, so part of "

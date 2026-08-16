@@ -23,9 +23,9 @@ import streamlit as st
 FROZEN = Path("results/frozen")
 FIGS = Path("results/figures")
 TOOLS = Path("docs/TOOLS.md")
-REPO = "https://github.com/alejandro-publius/reversal-map"
+REPO = "https://github.com/alejandro-publius/denali"
 
-st.set_page_config(page_title="reversal-map", layout="wide",
+st.set_page_config(page_title="denali", layout="wide",
                    initial_sidebar_state="collapsed")
 
 st.markdown("""<style>
@@ -127,6 +127,12 @@ def load():
 
 
 @st.cache_data
+def concordance():
+    """The cross-screen arm. Post-freeze, so it lives outside results/frozen/."""
+    return json.loads(Path("results/concordance/cross_screen.json").read_text())
+
+
+@st.cache_data
 def toolchain():
     """Sponsor tools + status, read verbatim from docs/TOOLS.md's table.
 
@@ -184,6 +190,10 @@ lo = round(ds["adjusted_r2_x_independent_only"] * 100)   # 56
 hi = round(ds["adjusted_r2_all_six"] * 100)              # 75
 gate_fail_hits = prov["gap_numbers"]["gate_fail_but_has_hits"]   # 20
 bal_acc = held["axis2_balanced_accuracy"]                        # 0.4375
+conc = concordance()
+cc_raw = conc["raw_agreement"]["spearman_rho"]                          # +0.663
+cc_par = conc["how_much_is_size"]["spearman_after_removing_size"]       # +0.493
+cc_share = round(abs(cc_raw - cc_par) / abs(cc_raw) * 100)              # 26
 
 
 def figure(name: str):
@@ -233,22 +243,24 @@ st.divider()
 figure("fig3_measurability.png")
 st.divider()
 
-# ==================================================== 4. THREE NEGATIVE FINDINGS
-st.subheader("Three evaluations came back negative")
+# ==================================================== 4. FOUR NEGATIVE FINDINGS
+st.subheader("Four evaluations came back negative")
 cards = [
     ("Most of it is not biology", f"up to {hi}%",
      "A model that never looks at what a program does explains most of how "
      f"reversible it appears; {lo}% survives after we remove the circular feature."),
     ("The obvious filter is wrong", f"{gate_fail_hits} of 50",
      "The measurability filter anyone would build discards 20 programs that "
-     "produce hits anyway — including the one we sealed in git before the "
-     "scoring code existed."),
+     "produce hits anyway — including a pre-registered one."),
     ("The generalisation test failed", f"{bal_acc}",
-     "On ten programs from a different collection, sealed and scored once after "
-     "the model was hashed, binary accuracy came back worse than chance — and "
-     "we did not refit."),
+     "On ten programs from a different collection, pre-registered and scored "
+     "once, binary accuracy came back worse than chance — and we did not refit."),
+    ("Replication is worth less than it looks", f"{cc_share}%",
+     f"Two independently screened cell lines agree at ρ {cc_raw:+.3f}. Remove set "
+     f"size from both and it falls to {cc_par:+.3f} — that share of the apparent "
+     "replication is how the gene lists were built. Post-freeze, not pre-registered."),
 ]
-for col, (h, num, body) in zip(st.columns(3), cards):
+for col, (h, num, body) in zip(st.columns(len(cards)), cards):
     col.markdown(f"<div class='card'><h4>{h}</h4><div class='cardn'>{num}</div>"
                  f"<p>{body}</p></div>", unsafe_allow_html=True)
 
@@ -266,7 +278,7 @@ pos_col, _ = st.columns([2, 3])
 pos_col.markdown(
     "<div class='ctrl'><h4>Positive result — a control, not a discovery</h4>"
     "<div class='cn'>rank 2 of 11,258</div>"
-    "<p>We sealed one program in git before the scoring code existed. Its master "
+    "<p>One program was pre-registered before it was scored. Its master "
     "regulator returns near the top of the ranking. This shows the ranking "
     "recovers a known answer; it does not claim the ranking discovered anything, "
     "and we make no such claim.</p></div>", unsafe_allow_html=True)
@@ -389,12 +401,12 @@ st.markdown(
 st.divider()
 
 # ==================================================== 9. PROVENANCE FOOTER
-seal = prov["seal"]
+prereg = prov["seal"]          # frozen key name; the framing is pre-registration
 st.markdown(
     f"<div class='prov'>"
     f"pre-registration &nbsp;{prov['preregistration']['sha256'][:12]}… &nbsp;committed before the sweep<br>"
     f"frozen predictor &nbsp;&nbsp;{held['predictor_sha256'][:12]}… &nbsp;hashed before the held-out set was opened<br>"
-    f"held-out scorer &nbsp;&nbsp;{seal['commit']} &nbsp;&nbsp;{seal['scorer_sha256_required'][:12]}… &nbsp;unchanged={seal['scorer_unchanged']}<br>"
+    f"held-out scorer &nbsp;&nbsp;{prereg['commit']} &nbsp;&nbsp;{prereg['scorer_sha256_required'][:12]}… &nbsp;unchanged={prereg['scorer_unchanged']}<br>"
     f"scope &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;guide-pair concordance −0.019 · pathway-level claims only · no novel gene named<br>"
     f"{REPO} &nbsp;·&nbsp; every number and figure on this page is read from results/frozen/ and results/figures/ · nothing is recomputed"
     f"</div>", unsafe_allow_html=True)

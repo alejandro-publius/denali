@@ -211,11 +211,26 @@ def main() -> int:
     scan("the page (index.html)", page_text)
     scan("results/figures/CAPTIONS.md", caps)
 
+    # app.py is the OTHER surface an audience sees, and until now no scope guard
+    # read it: the scan above covers index.html and the captions only. A gene
+    # named as a finding in the Streamlit page would have passed every check.
+    # Scan what the audience READS, not the Python. Two things are stripped
+    # first, because neither reaches the screen: f-string expressions, since
+    # {seal['commit']} renders a commit hash; and dict-subscript keys, since
+    # prov["seal"] is a lookup into a frozen file whose key we do not rename.
+    app_src = (ROOT / "app.py").read_text()
+    app_text = re.sub(r"<[^>]+>", " ",
+                      re.sub(r"\[\s*['\"][^'\"]*['\"]\s*\]", " ",
+                             re.sub(r"\{[^{}]*\}", " ",
+                                    re.sub(r"<style.*?</style>", " ",
+                                           app_src, flags=re.S))))
+    scan("the expo app (app.py)", app_text)
+
     # framing rule: the project does not lead with commit ordering
     SEAL = re.compile(r"\bseal(ed|ing)?\b|before the scoring code existed|"
                       r"\d+ minutes? before", re.I)
     for label, txt in [("index.html", page), ("CAPTIONS.md", caps),
-                       ("REPORT.md", report)]:
+                       ("REPORT.md", report), ("app.py", app_text)]:
         hit = SEAL.search(txt)
         check(f"no seal framing in {label}", hit is None,
               txt[max(0, hit.start()-60):hit.end()+60].replace("\n", " ") if hit else "")
@@ -738,6 +753,87 @@ def main() -> int:
 
     # ---------------- F. the docs' own self-description ----------------
     report_readme = (ROOT / "README.md").read_text()
+
+    # -- F0. PROSE DRIFT. Numbers were guarded; sentences were not, and that is
+    # exactly how three self-contradictions reached the first screen a reader
+    # sees: "Six evaluations ... Three did come back negative" sat two paragraphs
+    # above a seven-row findings table, "Four of our six evaluations" repeated it
+    # 300 lines later, and the traced-value count said 32 in one place and 47 in
+    # another. Seven further copies were stale in CLAUDE.md, the docs and the
+    # spoken demo script. A number that only lives in a sentence drifts silently.
+    #
+    # The findings table in README.md is the ONLY source of truth for how many
+    # evaluations exist and how many were negative; src/build_page.py's own TRACE
+    # is the only source of truth for how many values are traced. Every prose
+    # restatement of either is checked against its source, so rewording a claim
+    # without rewording its siblings fails the build.
+    rows = re.findall(r"^\|\s*(\d+)\s*\|.*\|\s*\*\*([A-Z][A-Z ]+)\*\*",
+                      report_readme, re.M)
+    n_eval = len(rows)
+    n_neg = [v.strip() for _, v in rows].count("NEGATIVE")
+    check("README findings table is numbered 1..n with one verdict each",
+          n_eval >= 4 and [int(i) for i, _ in rows] == list(range(1, n_eval + 1)),
+          f"parsed {[i for i, _ in rows]}")
+
+    from src.build_page import TRACE                              # noqa: E402
+    n_traced = len(TRACE)
+    check("build_page traces at least one value per frozen source", n_traced > 0)
+
+    _WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six",
+              7: "seven", 8: "eight", 9: "nine", 10: "ten"}
+
+    def _count(tok: str) -> int:
+        """'Seven' | 'seven' | '7' -> 7.  -1 if the token is not a count."""
+        t = tok.strip().lower()
+        return int(t) if t.isdigit() else next(
+            (k for k, v in _WORDS.items() if v == t), -1)
+
+    # (file, pattern, expected group values in order, what the sentence is)
+    prose_claims = [
+        ("README.md", r"(\w+) evaluations\. (\w+) negative,",
+         (n_eval, n_neg), "the findings header"),
+        ("README.md", r"\*\*(\w+) evaluations, (\w+) of them negative\.\*\*",
+         (n_eval, n_neg), "the what-we-chose list"),
+        ("README.md", r"\*\*(\w+) of our (\w+) evaluations came back negative\.\*\*"
+                      r" All (\w+) are reported",
+         (n_neg, n_eval, n_eval), "the not-fooling-ourselves list"),
+        ("CLAUDE.md", r"\*\*(\w+) evaluations\. (\w+) negative\. All (\w+) reported\.\*\*",
+         (n_eval, n_neg, n_eval), "the operational contract"),
+        ("docs/METHOD_RULES.md",
+         r"(\w+) of (\w+) evaluations here are negative and all (\w+)\s+are reported",
+         (n_neg, n_eval, n_eval), "the preserve-negatives rule"),
+        ("docs/ORIGINS.md",
+         r"(\w+) of this project's (\w+) evaluations came\s+back negative and all (\w+) are reported",
+         (n_neg, n_eval, n_eval), "the negatives-kept note"),
+        ("docs/MORNING_HANDOFF.md",
+         r"(\w+) evaluations were run, (\w+) came back negative, and all (\w+) are\s+reported",
+         (n_eval, n_neg, n_eval), "the handoff summary"),
+        ("docs/MORNING_HANDOFF.md", r"##\s*2\.\s*The (\w+) results",
+         (n_eval,), "the handoff results heading"),
+        ("docs/DEMO.md", r"The repeated number is (\w+) OF (\w+)\.",
+         (n_neg, n_eval), "the demo motif"),
+        ("docs/DEMO.md",
+         r"We ran (\w+) evaluations on this project\. (\w+) of them came back negative\.",
+         (n_eval, n_neg), "the demo open"),
+        ("docs/DEMO.md", r"(\w+) of (\w+) evaluations negative\.",
+         (n_neg, n_eval), "the demo close"),
+        ("app.py", r'st\.subheader\("(\w+) evaluations came back negative"\)',
+         (n_neg,), "the streamlit negatives heading"),
+        ("README.md", r"(\d+) values pass through a `V\(\)` helper",
+         (n_traced,), "the traced-value feature bullet"),
+        ("README.md", r"\*\*(\d+)\*\* values are traced",
+         (n_traced,), "the inspectability criterion"),
+        ("docs/DESIGN.md", r"`V\(\)` in `src/build_page\.py`, (\d+) values",
+         (n_traced,), "the design contract table"),
+    ]
+    for rel, pat, expect, what in prose_claims:
+        m = re.search(pat, (ROOT / rel).read_text())
+        got = tuple(_count(g) for g in m.groups()) if m else None
+        check(f"prose agrees with the source: {rel} — {what}",
+              got == tuple(expect),
+              f"expected {tuple(expect)}, got {got}" if m
+              else "phrase not found — prose was reworded without updating this check")
+
     # These are hand-typed and therefore drift: the badge said 84, the Tests
     # section said 84, and the plain-language section said 86, while the suite
     # was at 99. A judge who finds a stale test count stops trusting every other
@@ -756,8 +852,10 @@ def main() -> int:
     words = {3: "three", 4: "four", 5: "five", 6: "six", 7: "Seven", 8: "eight"}
     claim = (f"**{words[n_ctrl]} controls with published outcomes, "
              f"{words[n_ctrl_fail]} of them failing**")
+    # Detail is printed on PASS lines too, so word it as a statement of fact
+    # rather than as a failure: "README lacks ..." on a PASS line reads as a bug.
     check("README controls count matches controls.csv", claim in report_readme,
-          f"frozen: {n_ctrl} controls / {n_ctrl_fail} FAIL; README lacks {claim!r}")
+          f"frozen: {n_ctrl} controls / {n_ctrl_fail} FAIL; README must say {claim!r}")
 
     # ---------------- report ----------------
     for p in PASS:

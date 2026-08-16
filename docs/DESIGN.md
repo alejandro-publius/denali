@@ -114,7 +114,7 @@ Not aspiration — the build fails on these:
 | Figures inlined as base64, page is standalone | same |
 | No gene symbol near verdict language | the scope guard |
 | No seal framing, in text **or** in a figure label | text scan + figure-source scan |
-| Every displayed number traces to a frozen file | `V()` in `src/build_page.py`, 32 values |
+| Every displayed number traces to a frozen file | `V()` in `src/build_page.py`, 47 values |
 | No broken relative link | both READMEs |
 
 ## Known drift

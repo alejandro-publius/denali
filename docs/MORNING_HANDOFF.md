@@ -13,10 +13,10 @@ claims. Remaining work is communication and hardening only.
 We scored all 50 MSigDB Hallmark gene programs against 9,837 CRISPRi knockdowns
 in K562 and asked which programs are "reversible" — i.e. which have many
 knockdowns that move them. **Most of the answer turns out to be measurement, not
-biology.** Four evaluations were run, three came back negative, and all four are
+biology.** Seven evaluations were run, four came back negative, and all seven are
 reported.
 
-## 2. The four results
+## 2. The seven results
 
 | | Result | Verdict |
 |---|---|---|
@@ -24,6 +24,9 @@ reported.
 | **NEG 2** | The measurability gate is **wrong 20 of 50**. Only 1/50 passes with zero hits. The **held-out** program fails the gate (`expr_ratio` 0.92) and ranks **11/50 with 773 hits**. | Our own filter would have discarded our best result |
 | **NEG 3** | Held-out: **UNDERPOWERED AND INCONCLUSIVE** (1/10 passed the gate; rule fired below 8/10 before any number was seen). Axis 1 ρ = +0.526, CI **[−0.101, +0.913]** → PARTIAL. Axis 2 balanced accuracy **0.4375**, zero true positives → **FAILURE**. | Not refit |
 | **POS** | Held out SREBF2 recovery, rank 2 of 11,258 scored perturbations (larger than 9,837 unique genes; some are targeted twice). 11 of 17 canonical members in the extreme 10%, p = 7.0×10⁻⁸, 79% sign-correct both tails. | A **control**, not the headline |
+| **POS 2** | Second cell line. RPE1, independently screened: size alone **R² 0.2758**, slope **+0.0116**, p = 1.07×10⁻⁴, **49 of 50** scoreable. Pre-registered at ≥0.25 (`docs/RPE1_PREREG.md`, `ae62feda…`, committed `f509baa`); cleared by **0.026**. | Pre-registered positive. A **generalisation** test, **not** a replication — RPE1 covers 24.3% of K562 targets and that subset is disproportionately essential |
+| **NEG 4** | Cross-screen concordance. Raw agreement between the two screens ρ **+0.663**; after removing set size, **+0.493** — so **26%** of the apparent replication is set size. Size alone predicts **6 of the top 10** programs in the second screen. | **Post-freeze, not pre-registered** — labelled as such. "It replicated" is worth less than it looks |
+| **NO VERDICT** | Four annotation collections, 793 sets, Modal, 522 s. The pre-registered power rule (150/250 scoreable) **fired on 3 of 4**, so no verdict issues and the R² values carry none. Our direction prediction was also **wrong**: GO-BP 0.2905 and Reactome 0.1846, both *below* Hallmark's 0.4649. Descriptive: **98%** of Hallmark sets are scoreable, **46.2%** of GO-BP. | Failed twice, both reported. The 0.4649 bar is post-freeze (`results/sensitivity/stripped_model.json`) |
 
 Also: **essentiality density is flat at program level**, −0.021, p = 0.90.
 

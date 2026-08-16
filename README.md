@@ -3,7 +3,7 @@
 **A genome-scale CRISPRi screen, read back to ask what it can and cannot discover — and the answer is mostly an artifact of how the programs are defined, not their biology.**
 
 [![CI](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml/badge.svg)](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-272-brightgreen.svg)](tests/test_frozen_invariants.py)
+[![tests](https://img.shields.io/badge/tests-291-brightgreen.svg)](tests/test_frozen_invariants.py)
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](.python-version)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -50,11 +50,12 @@ have to infer that we picked well.
    it: K562 is an unstressed leukemia line, and our own first program failed its
    known-regulator control for exactly that reason.
 
-3. **Six evaluations, four of which could only come back negative.** The
-   pre-registration named the alternative claim before any value was computed, so
-   a null was a publishable outcome rather than a failure. Three did come back
-   negative. The fourth is a positive control, and it is labelled a control
-   because that is what it is.
+3. **Seven evaluations, four of them negative.** Where an evaluation was
+   pre-registered, the alternative claim was named before any value was computed,
+   so a null was a publishable outcome rather than a failure. Four came back
+   negative, one returned no verdict at all because our own power rule fired, and
+   two came back positive — one of which is a control, and it is labelled a
+   control because that is what it is.
 
 4. **Program level, never gene level.** Guide-pair concordance is −0.019: two
    independent reagents against the same gene disagree. That forbids any
@@ -286,7 +287,7 @@ Each was found only by running from a clean clone, and the third only after the 
 
 ## Tests
 
-`tests/test_frozen_invariants.py` — **272 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
+`tests/test_frozen_invariants.py` — **291 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
 
 Two guards exist because each caught a real defect. The **compile guard** parses every file under `src/` and `tests/` before anything else — added after a shipped module was found not to compile. The **scope guard** builds a gene-symbol universe from the Hallmark GMT and fails the build if any symbol appears within 260 characters of verdict language in the rendered page or the captions, with an allowance for "recovered known answer" and "positive control"; it enforces the −0.019 scope limit mechanically. A third set of checks asserts the page makes **no network calls** — no `fetch`, no `XMLHttpRequest`, no external script or stylesheet — so the interactive explorer cannot break unattended.
 
@@ -362,9 +363,9 @@ This is the part we care most about, so it is built into the code rather than pr
 
 - **We wrote down what would prove us wrong, hashed it, and committed it before running anything.** The pre-registration is recoverable at a named commit.
 - **We held ten pathways back** and only opened them after the model was frozen and hashed. The model **failed** on them — worse than a coin flip, zero true positives. We published that instead of quietly refitting.
-- **Four of our six evaluations came back negative.** All six are reported, including the one that clears its bar by only 0.026.
+- **Four of our seven evaluations came back negative.** All seven are reported, including the one that clears its bar by only 0.026.
 - **The one positive is a control, not a discovery.** Run unchanged on a pathway it was never tuned for, the ranking puts that pathway's known master switch at **rank 2 of 11,258**. So the machinery works — it just is not finding what people assume it is finding.
-- **272 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
+- **291 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
 
 ---
 
@@ -372,7 +373,7 @@ This is the part we care most about, so it is built into the code rather than pr
 
 **1 · Closing the loop.** Ten pathways were named and committed as a held-out set before the code that scores them existed. The predictor was frozen and hashed first; the scorer verifies that hash on load and aborts if it changed. It failed on the held-out set — balanced accuracy **0.4375**, zero true positives — and we reported it. For the second half, hold a pathway fixed and change only its result: the proposed experiment flips from *"validate in a second cell type"* to *"raise power and re-run."* No branch in that code tests a pathway's name. → `src/next_experiment.py`, `src/score_heldout.py`, `results/frozen/heldout_evaluation.json`
 
-**2 · Inspectability.** Every number on the results page passes through a helper that records the frozen file it came from; **32** values are traced and an untraceable number does not render. The pre-registration is hashed and diffable against what we reported. Four self-found errors are written into the limitations, including one where we blamed a sponsor tool that in fact works. → `src/build_page.py`, `docs/MATRIX_PREREG.md`, `docs/LIMITATIONS.md` §7
+**2 · Inspectability.** Every number on the results page passes through a helper that records the frozen file it came from; **47** values are traced and an untraceable number does not render. The pre-registration is hashed and diffable against what we reported. Four self-found errors are written into the limitations, including one where we blamed a sponsor tool that in fact works. → `src/build_page.py`, `docs/MATRIX_PREREG.md`, `docs/LIMITATIONS.md` §7
 
 **3 · Validation.** Judged against standards outside our own reasoning: a published Perturb-seq screen, MSigDB pathway definitions, and DepMap gene-fitness data across 1,178 cell lines. The positive control recovers a known master regulator at rank 2 of 11,258, with 11 of 17 canonical members in the extreme 10% (p = 7.0×10⁻⁸) and the correct sign at both tails. Four of seven controls fail and are kept. → `results/frozen/controls.csv`, `REPORT.md`
 

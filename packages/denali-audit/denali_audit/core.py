@@ -99,6 +99,17 @@ def audit(sizes, hits, corr=None) -> dict:
         "of the ranking, not of any gene or pathway in it.")
     out["method"] = ("VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, "
                      "Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461")
+
+    # Context, added after the fact and never feeding it: an R^2 is not a judgement
+    # until you know what a normal screen looks like. Size-alone is used for the
+    # comparison even when a VIF figure exists, because the reference distribution
+    # was built size-alone -- comparing a VIF number against it would be a category
+    # error dressed as a percentile.
+    try:
+        from .reference import context
+        out.update(context(out["r2_size_alone"]))
+    except Exception:
+        pass
     return out
 
 
@@ -141,4 +152,80 @@ def audit_replication(sizes, hits_a, hits_b) -> dict:
         "what_this_is_not": (
             "Not a claim about any individual set, and not a claim that either screen "
             "is wrong. It measures what the replication is worth as evidence."),
+    }
+
+
+def rerank(sizes, hits, names=None, top=20) -> dict:
+    """Apply the correction this tool has always only named.
+
+    `audit()` tells you a ranking is size-confounded and then says: re-rank with a
+    size-aware statistic and see which entries survive. Until now it did not do that,
+    which left the user holding a diagnosis and no treatment.
+
+    The correction is the one the concordance arm already uses -- regress log10(1+hits)
+    on set size and rank by the residual, so a set is scored on how far it beats what
+    its size alone predicts. A large set with many hits is unremarkable; a small set
+    with the same count is not.
+
+    THIS DOES NOT NOMINATE ANYTHING. It reports which entries the ORIGINAL ranking is
+    least able to justify -- the ones whose position was carried by size. That is the
+    inverse of a candidate list and it is the only direction this tool moves in.
+    """
+    s = np.asarray(sizes, dtype=float)
+    h = np.asarray(hits, dtype=float)
+    ok = np.isfinite(s) & np.isfinite(h)
+    idx = np.flatnonzero(ok)
+    s, h = s[ok], h[ok]
+    n = len(s)
+    if n < MIN_SETS:
+        raise ValueError(f"need at least {MIN_SETS} sets to say anything; got {n}")
+
+    if names is None:
+        nm = np.array([f"set {i}" for i in idx])
+    else:
+        nm = np.asarray(names, dtype=object)[ok]
+
+    y = np.log10(1.0 + h)
+    if np.std(s) == 0:
+        resid = y - y.mean()
+    else:
+        b = np.polyfit(s, y, 1)
+        resid = y - np.polyval(b, s)
+
+    # rank 1 = top. Original ranking is by raw hits, corrected by size-adjusted residual.
+    orig = (-h).argsort(kind="stable").argsort(kind="stable") + 1
+    corr = (-resid).argsort(kind="stable").argsort(kind="stable") + 1
+    move = orig - corr                       # negative = fell once size was removed
+
+    k = min(int(top), n)
+    was_top = orig <= k
+    still_top = corr <= k
+    survived = int((was_top & still_top).sum())
+    dropped = np.flatnonzero(was_top & ~still_top)
+    order = dropped[np.argsort(corr[dropped])] if dropped.size else dropped
+
+    rows = [{
+        "name": str(nm[i]),
+        "size": int(s[i]),
+        "hits": int(h[i]),
+        "rank_original": int(orig[i]),
+        "rank_size_aware": int(corr[i]),
+        "moved": int(move[i]),
+    } for i in order]
+
+    return {
+        "n_sets": n,
+        "top_n": k,
+        "survived_top_n": survived,
+        "left_top_n": int(k - survived),
+        "biggest_fall": int(max((-move[dropped]).max(), 0)) if dropped.size else 0,
+        "left_the_top": rows,
+        "correction": "log10(1+hits) regressed on set size; ranked by residual",
+        "reading": (
+            f"Of your top {k}, {survived} hold their place once set size is accounted "
+            f"for and {k - survived} do not. The ones that move are the entries your "
+            f"current ranking is least able to justify."),
+        "what_this_is_not": (
+            "Not a candidate list. This says which entries were carried by size, not "
+            "which to chase. Nothing here is a recommendation to validate anything."),
     }

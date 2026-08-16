@@ -25,6 +25,22 @@ It reads the table your tool already produced. No column renaming:
 
 Anything else: `denali audit FILE --set <col> --size <col> --hits <col>`.
 
+## The correction, applied
+
+Knowing a ranking is confounded is not the same as knowing what to do about it. This
+applies the size-aware correction and shows you what moves:
+
+```bash
+denali rerank my_results.csv --top 10
+```
+
+On the screen this project was built from — 50 MSigDB Hallmark pathways against 9,837
+CRISPRi knockdowns — three of the top ten hold their place and seven do not. The
+number-one ranked pathway, `HALLMARK_MYC_TARGETS_V1` at 194 genes, falls to 24th.
+
+It reports which entries the original ranking is **least able to justify**. That is the
+inverse of a candidate list, and it is the only direction this tool moves in.
+
 ## Two screens agreed?
 
 That's the strongest evidence most hit lists ever get. Both are confounded the same way,

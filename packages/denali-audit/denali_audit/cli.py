@@ -10,7 +10,7 @@ import pandas as pd
 
 from . import __version__
 from .adapters import SUPPORTED, describe_failure, detect
-from .core import audit, audit_replication
+from .core import audit, audit_replication, rerank
 
 
 def _read(path: str) -> pd.DataFrame:
@@ -49,6 +49,9 @@ def _emit(result, as_json: bool, header: str = "") -> None:
             print(f"  with inter-gene correlation (full VIF): R2 {result['r2_vif']}")
         if result.get("sets_with_zero_hits"):
             print(f"  {result['sets_with_zero_hits']} sets returned nothing")
+        if "corpus_percentile" in result:
+            print(f"\n  AGAINST THE FIELD\n  {result['corpus_reading']}")
+            print(f"  {result['corpus_caveat']}")
     else:
         print(f"\n  {result['reading']}\n")
         print(f"  agreement {result['agreement_raw']} -> "
@@ -80,6 +83,29 @@ def cmd_replication(a) -> int:
     res = audit_replication(m.size, m.hits, df[a.hits_b])
     res["input_format"] = m.fmt
     _emit(res, a.json, f"  read as {m.fmt}")
+    return 0
+
+
+def cmd_rerank(a) -> int:
+    df = _read(a.file)
+    m = _resolve(df, a)
+    names = df[m.set_col] if m.set_col in df.columns else None
+    res = rerank(m.size, m.hits, names, top=a.top)
+    if a.json:
+        print(json.dumps(res, indent=2))
+        return 0
+    print(f"  read as {m.fmt}\n")
+    print(f"  {res['reading']}\n")
+    if res["left_the_top"]:
+        print(f"  {'entry':44s} {'size':>5s} {'hits':>7s}   rank -> size-aware")
+        for r in res["left_the_top"]:
+            print(f"  {r['name'][:44]:44s} {r['size']:5d} {r['hits']:7d}   "
+                  f"{r['rank_original']:4d} -> {r['rank_size_aware']:<4d} ({r['moved']:+d})")
+        print(f"\n  biggest fall: {res['biggest_fall']} places")
+    else:
+        print("  Nothing left the top. This ranking survives its own size correction.")
+    print(f"\n  correction: {res['correction']}")
+    print(f"  {res['what_this_is_not']}")
     return 0
 
 
@@ -120,6 +146,13 @@ def main(argv=None) -> int:
     a2.add_argument("--hits-b", required=True, dest="hits_b",
                     help="column of hits from the SECOND, independent screen")
     a2.set_defaults(fn=cmd_replication)
+
+    a4 = sub.add_parser("rerank",
+                        help="apply the size correction and show what moves")
+    shared(a4)
+    a4.add_argument("--top", type=int, default=20,
+                    help="how many of your top entries to check (default 20)")
+    a4.set_defaults(fn=cmd_rerank)
 
     a3 = sub.add_parser("formats", help="which tool outputs are recognised")
     a3.set_defaults(fn=cmd_formats)

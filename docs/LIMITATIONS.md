@@ -205,6 +205,13 @@ we didn't.
   correction. Recorded because a wrong causal story about why a number changed
   is the same defect class as a wrong number, and this project has no standing
   to point that out in other people's work while leaving it in its own history.
+- **The MCP server only worked from one directory, and that is the directory we
+  always demonstrated it from.** `results/frozen/` was resolved against the
+  caller's working directory, so the server started fine from the repo root and
+  died with `FileNotFoundError` anywhere else — which is to say, in every real
+  MCP client, since a client launches a server from its own cwd. Nobody had
+  started it the way a stranger would. Both modules now anchor to their own file
+  location, and the README carries a tested, copy-pasteable client config.
 - **A red commit was pushed.** `776d687` went out with four failing count checks,
   because the `make test` that should have gated it was chained behind a `grep`
   that succeeded on the failure output. Green again one commit later at

@@ -18,7 +18,12 @@ from mcp.server.fastmcp import FastMCP
 from src.answers import HELDOUT_WARNING, SCOPE, refuse, unscored
 from src.next_experiment import propose
 
-FROZEN = Path("results/frozen")
+# Anchored to this file, NOT to the caller's cwd. An MCP client launches the
+# server from wherever it happens to be, so a relative path here meant a
+# stranger wiring this into their agent got FileNotFoundError on
+# results/frozen/heldout_evaluation.json. Found by starting the server from
+# /tmp the way a client actually would.
+FROZEN = Path(__file__).resolve().parents[1] / "results" / "frozen"
 mcp = FastMCP("denali")
 
 _S = pd.read_csv(FROZEN / "program_summary.csv")

@@ -3,7 +3,7 @@
 **A genome-scale CRISPRi screen, read back to ask what it can and cannot discover — and the answer is mostly an artifact of how the programs are defined, not their biology.**
 
 [![CI](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml/badge.svg)](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-370-brightgreen.svg)](tests/test_frozen_invariants.py)
+[![tests](https://img.shields.io/badge/tests-371-brightgreen.svg)](tests/test_frozen_invariants.py)
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](.python-version)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -254,6 +254,31 @@ The **measurability gate** requires ≥50% of members present, ≥25 present in 
 
 Reads `results/frozen/` only. Never recomputes, never scores.
 
+**Wiring it into a client.** An MCP client launches the server from its own
+working directory, not from this repository, so both paths below are absolute
+and `PYTHONPATH` is set explicitly. Replace `/abs/path/to/denali` with wherever
+you cloned it and nothing else needs changing:
+
+```json
+{
+  "mcpServers": {
+    "denali": {
+      "command": "/abs/path/to/denali/.venv/bin/python",
+      "args": ["-m", "src.mcp_server"],
+      "env": { "PYTHONPATH": "/abs/path/to/denali" }
+    }
+  }
+}
+```
+
+Tested by starting the server from `/tmp` the way a client actually does. Until
+2026-08-16 that failed: `results/frozen/` was resolved against the caller's
+working directory, so anyone wiring this into an agent got a `FileNotFoundError`
+rather than a server. Both modules now anchor to their own file location, and
+the failure is recorded in `docs/LIMITATIONS.md` §7 rather than quietly fixed —
+we had been demonstrating this server by running it from the repo root, which is
+the one directory where the bug is invisible.
+
 | Tool | Argument | Returns |
 |---|---|---|
 | `reversibility` | `program` (MSigDB name) | Measured result if the program is in the frozen 50 — rank, hits, tier, predicted vs. observed, residual — plus the generated next-experiment proposal. Held-out result if it was one of the ten. Otherwise an explicit `UNSCORED` response. |
@@ -335,7 +360,7 @@ Each was found only by running from a clean clone, and the third only after the 
 
 ## Tests
 
-`tests/test_frozen_invariants.py` — **370 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
+`tests/test_frozen_invariants.py` — **371 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
 
 Two guards exist because each caught a real defect. The **compile guard** parses every file under `src/` and `tests/` before anything else — added after a shipped module was found not to compile. The **scope guard** builds a gene-symbol universe from the Hallmark GMT and fails the build if any symbol appears within 260 characters of verdict language in the rendered page or the captions, with an allowance for "recovered known answer" and "positive control"; it enforces the −0.019 scope limit mechanically. A third set of checks asserts the page makes **no network calls** — no `fetch`, no `XMLHttpRequest`, no external script or stylesheet — so the interactive explorer cannot break unattended.
 
@@ -416,7 +441,7 @@ This is the part we care most about, so it is built into the code rather than pr
 - **We held ten pathways back** and only opened them after the model was frozen and hashed. The model **failed** on them — worse than a coin flip, zero true positives. We published that instead of quietly refitting.
 - **Seven of our eleven evaluations came back negative.** All eleven are reported, including the one that clears its bar by only 0.026.
 - **The one positive is a control, not a discovery.** Run unchanged on a pathway it was never tuned for, the ranking puts that pathway's known master switch at **rank 2 of 11,258**. So the machinery works — it just is not finding what people assume it is finding.
-- **370 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
+- **371 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
 
 ---
 

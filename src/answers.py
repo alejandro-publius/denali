@@ -15,7 +15,12 @@ from pathlib import Path
 
 import pandas as pd
 
-FROZEN = Path("results/frozen")
+# Anchored to this file, NOT to the caller's cwd. An MCP client launches the
+# server from wherever it happens to be, so a relative path here meant a
+# stranger wiring this into their agent got FileNotFoundError on
+# results/frozen/heldout_evaluation.json. Found by starting the server from
+# /tmp the way a client actually would.
+FROZEN = Path(__file__).resolve().parents[1] / "results" / "frozen"
 
 _EVAL = json.loads((FROZEN / "heldout_evaluation.json").read_text())
 _PROV = json.loads((FROZEN / "provenance.json").read_text())

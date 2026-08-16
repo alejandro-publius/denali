@@ -1065,6 +1065,71 @@ def main() -> int:
     check("the nomination refusal cites the predictor's own failure",
           str(held["axis2_balanced_accuracy"]) in _refuse("top hits")["reason"])
 
+    # ---------------- R2. the server serves the PRODUCT, not just the study ----
+    # `reversibility` and `provenance` are lookups into our frozen result: an
+    # agent could ask what WE found and could not run the check on anything of
+    # its own. `audit` and `rerank` are the packaged tool, so the server is now
+    # the instrument as well as the database. These assert that they are the
+    # PACKAGED functions -- a server-side reimplementation would be item 1's
+    # duplication all over again, one layer out.
+    import src.mcp_server as _srv                               # noqa: E402
+    check("the server exposes all four tools",
+          all(hasattr(_srv, t) for t in
+              ("reversibility", "provenance", "audit", "rerank")))
+    check("the server's audit IS the packaged audit",
+          _srv._audit is _pkg_core.audit)
+    check("the server's rerank IS the packaged rerank",
+          _srv._rerank is _pkg_core.rerank)
+
+    # The point of these two is that they answer about the CALLER's data. Run
+    # them on numbers that have nothing to do with this screen and check the
+    # answer is a property of those numbers.
+    _sz = [10, 20, 40, 80, 160, 320, 25, 55, 90, 200]
+    _ht = [1, 3, 6, 12, 25, 60, 4, 9, 15, 33]
+    _a = _srv.audit(sizes=_sz, hits=_ht)
+    check("server audits a caller's own ranking, no frozen data involved",
+          _a["verdict"] == "CONFOUNDED" and _a["n_sets"] == 10,
+          f"r2={_a['r2_size_alone']}")
+    _r = _srv.rerank(sizes=_sz, hits=_ht, top=5)
+    check("server reranks a caller's own ranking",
+          _r["top_n"] == 5 and 0 <= _r["survived_top_n"] <= 5)
+    # Constant size must not be reported as an all-clear through the server
+    # either -- that is the branch a MAGeCK/BAGEL/drugZ caller lands on.
+    check("server reports UNDETERMINED rather than clearing a constant-size input",
+          _srv.audit(sizes=[50] * 10,
+                     hits=[1, 4, 2, 9, 3, 7, 5, 6, 8, 2])["verdict"] == "UNDETERMINED")
+    # An MCP client renders a returned dict and buries a traceback, so bad input
+    # must come back as a value.
+    for _bad, _lbl in ((dict(sizes=[1, 2, 3], hits=[1, 2, 3]), "too few sets"),
+                       (dict(), "neither arrays nor a path"),
+                       (dict(table_path="/nonexistent/nope.csv"), "missing file")):
+        check(f"server returns an error value, not a traceback: {_lbl}",
+              _srv.audit(**_bad).get("status") == "ERROR")
+
+    # The path route is the one an agent actually uses: point at the file your
+    # enrichment tool already wrote. Through it, our own g:Profiler-shaped export
+    # must return the two numbers the page publishes.
+    _ex = ROOT / "examples" / "example_gprofiler.csv"
+    _pa = _srv.audit(table_path=str(_ex))
+    _pr = _srv.rerank(table_path=str(_ex), top=10)
+    check("server's audit on our own export reproduces the published R2",
+          near(_pa["r2_size_alone"], 0.4649, 5e-3), f"{_pa['r2_size_alone']}")
+    check("server's rerank on our own export reproduces the published 3 of 10",
+          _pr["survived_top_n"] == 3, f"{_pr['survived_top_n']}")
+    check("server names the format it read the caller's table as",
+          _pa.get("input_format") == "g:Profiler", _pa.get("input_format"))
+
+    # The asymmetry is the design and the README has to carry it, because a
+    # server that applies a correction while refusing to nominate is unusual
+    # enough that a reader will otherwise read it as an oversight.
+    _rdme = (ROOT / "README.md").read_text()
+    check("README states the four tools and the two halves",
+          "Four tools in two halves" in _rdme)
+    check("README states the apply-but-never-nominate asymmetry",
+          "deliberately asymmetric" in _rdme and "will not nominate" in _rdme)
+    check("the asymmetry is justified by the predictor's own failure",
+          str(held["axis2_balanced_accuracy"]) in _rdme)
+
     # ---------------- S. every branch says what would demote it ----------------
     # A proposal that cannot be wrong is not a proposal. The hit branch had no
     # falsification condition for hours, which is backwards -- that is the branch

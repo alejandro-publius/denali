@@ -50,12 +50,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-# The package is vendored in this repository, not installed. A clean clone can
-# run `python -m src.audit_screen` with no install step, which is the whole point
-# of `make judge-check` needing no network. Anchored to this file rather than the
-# caller's cwd for the same reason src/mcp_server.py anchors FROZEN.
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "packages" / "denali-audit"))
-
+# src/__init__.py puts the vendored packages/denali-audit on the path, so this
+# resolves to the in-repo copy with nothing installed.
 from denali_audit.core import audit                             # noqa: E402
 
 __all__ = ["audit", "audit_replication", "self_test", "main"]

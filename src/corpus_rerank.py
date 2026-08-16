@@ -57,8 +57,8 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "packages" / "denali-audit"))
 
+# src/__init__.py puts the vendored packages/denali-audit on the path.
 from denali_audit.adapters import detect            # noqa: E402
 from denali_audit.core import audit, rerank         # noqa: E402
 

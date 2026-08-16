@@ -1,9 +1,26 @@
-"""MCP server — one tool over the frozen reversal matrix.
+"""MCP server — the study's findings, and the tool that produced them.
 
-Given a program: measured reversibility if we scored it, predicted with
-uncertainty if we did not, plus the generated next-experiment proposal.
+Four tools, in two halves.
 
-Reads results/frozen/ only. Never recomputes, never scores.
+LOOKUPS INTO OUR RESULT. `reversibility` and `provenance` answer what WE found:
+measured reversibility for a program if we scored it, a prediction with
+uncertainty if we did not, plus the generated next-experiment proposal and the
+controls behind the whole thing. Read results/frozen/ only, never recompute.
+
+THE TOOL ITSELF, ON THE CALLER'S OWN DATA. `audit` and `rerank` are the packaged
+check from packages/denali-audit, exposed verbatim. An agent hands them its own
+gene-set table -- as arrays, or as a path to whatever its enrichment tool already
+wrote -- and gets back how much of its ranking is set size, and which of its top
+entries do not survive the correction. Nothing about denali is involved in the
+answer. Without these the server was a database of our findings; with them it is
+the instrument, reachable by any agent that speaks MCP.
+
+The two halves are deliberately asymmetric, and that asymmetry is the design.
+This server will APPLY a correction to your ranking and it will not NOMINATE
+anything from ours: ask it which program to chase and it refuses, citing the
+0.4375 balanced accuracy its own predictor scored on held-out data. A tool that
+told you what to chase on the strength of a predictor that failed would be
+committing the error this project exists to measure.
 
     .venv/bin/python -m src.mcp_server
 """
@@ -16,6 +33,13 @@ import pandas as pd
 
 from src.answers import HELDOUT_WARNING, SCOPE, refuse, unscored
 from src.next_experiment import propose
+
+# src/__init__.py puts the vendored packages/denali-audit on the path, so the
+# server serves the SAME function the study runs and the CLI ships -- not a
+# server-side reimplementation of it.
+from denali_audit.adapters import describe_failure, detect
+from denali_audit.core import audit as _audit
+from denali_audit.core import rerank as _rerank
 
 # Anchored to this file, NOT to the caller's cwd. An MCP client launches the
 # server from wherever it happens to be, so a relative path here meant a
@@ -107,6 +131,124 @@ def reversibility(program: str) -> dict:
 def provenance() -> dict:
     """Provenance, controls and the honest limits of this dataset."""
     return json.loads((FROZEN / "provenance.json").read_text())
+
+
+# --------------------------------------------------------------------------
+# The product, on the caller's own data. Neither tool below reads results/frozen/
+# or knows anything about denali's screen.
+
+def _load(table_path: str):
+    """Read the caller's table and work out which columns are which.
+
+    Returns (Mapping, error_dict). Errors come back as a value rather than an
+    exception because an MCP client renders a returned dict and swallows a
+    traceback into a wall of red -- and the most useful thing this can say to an
+    agent holding an unrecognised table is which columns it DID find.
+    """
+    p = Path(table_path).expanduser()
+    if not p.exists():
+        return None, {"status": "ERROR", "reason": f"no such file: {table_path}"}
+    sep = "\t" if p.suffix.lower() in (".tsv", ".tab", ".txt") else None
+    try:
+        df = pd.read_csv(p, sep=sep, engine="python")
+    except Exception as e:                                   # pragma: no cover
+        return None, {"status": "ERROR", "reason": f"could not read {p.name}: {e}"}
+    m = detect(df)
+    if m is None:
+        return None, {"status": "UNRECOGNISED_FORMAT",
+                      "reason": describe_failure(df),
+                      "columns_found": [str(c) for c in df.columns]}
+    return (df, m), None
+
+
+@mcp.tool()
+def audit(sizes: list[float] | None = None,
+          hits: list[float] | None = None,
+          corr: list[float] | None = None,
+          table_path: str | None = None) -> dict:
+    """How much of YOUR gene-set ranking is set size rather than biology?
+
+    This is the check itself, run on your data. It has nothing to do with
+    denali's screen: give it one row per gene set and it reports what share of
+    the variance in your hit counts is predicted by how big the sets are, with a
+    verdict of CONFOUNDED, PARTIALLY CONFOUNDED, NOT SIZE-DOMINATED, or
+    UNDETERMINED when every set is the same size and the question cannot be
+    asked. Where a reference distribution applies it also says where your screen
+    sits against 1,272 published ones.
+
+    It returns a property of your RANKING. It does not score, order or nominate
+    any set in it.
+
+    Args:
+        sizes: members measured per set, one number per set (min 8 sets)
+        hits: significant results per set, same order as sizes
+        corr: optional mean inter-gene correlation per set; upgrades the
+            estimate from size-only to the full variance-inflation factor
+        table_path: instead of arrays, a path to the table your enrichment tool
+            already wrote. g:Profiler, DAVID, clusterProfiler, Enrichr, fgsea,
+            GSEA desktop, MAGeCK, drugZ and BAGEL are recognised without flags.
+    """
+    if table_path:
+        loaded, err = _load(table_path)
+        if err:
+            return err
+        df, m = loaded
+        res = _audit(m.size, m.hits, m.corr)
+        res["input_format"] = m.fmt
+        if m.approximate:
+            res["input_warning"] = m.note
+        return res
+    if sizes is None or hits is None:
+        return {"status": "ERROR",
+                "reason": "give either sizes and hits, or table_path."}
+    try:
+        return _audit(sizes, hits, corr)
+    except ValueError as e:
+        return {"status": "ERROR", "reason": str(e)}
+
+
+@mcp.tool()
+def rerank(sizes: list[float] | None = None,
+           hits: list[float] | None = None,
+           names: list[str] | None = None,
+           top: int = 10,
+           table_path: str | None = None) -> dict:
+    """Apply the size correction to YOUR ranking and report what does not survive.
+
+    Regresses log10(1+hits) on set size and re-ranks by the residual, so a set is
+    scored on how far it beats what its size alone predicts. Returns which of
+    your top entries LEFT the top once that is done, and how far each fell.
+
+    This is the inverse of a candidate list and it is the only direction this
+    tool moves in: it names the entries your current ranking is least able to
+    justify, never the ones to chase. If every set is the same size it says so
+    and reports nothing, because a correction that cannot move anything is not a
+    test your ranking passed.
+
+    Args:
+        sizes: members measured per set, one number per set (min 8 sets)
+        hits: significant results per set, same order as sizes
+        names: optional labels for your sets, echoed back on the rows that moved
+        top: how many of your top entries to check (default 10)
+        table_path: instead of arrays, a path to the table your enrichment tool
+            already wrote; the same formats `audit` recognises.
+    """
+    if table_path:
+        loaded, err = _load(table_path)
+        if err:
+            return err
+        df, m = loaded
+        nm = df[m.set_col] if m.set_col in df.columns else None
+        res = _rerank(m.size, m.hits, nm, top=top)
+        res["input_format"] = m.fmt
+        return res
+    if sizes is None or hits is None:
+        return {"status": "ERROR",
+                "reason": "give either sizes and hits, or table_path."}
+    try:
+        return _rerank(sizes, hits, names, top=top)
+    except ValueError as e:
+        return {"status": "ERROR", "reason": str(e)}
 
 
 if __name__ == "__main__":

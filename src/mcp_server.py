@@ -31,7 +31,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.answers import HELDOUT_WARNING, SCOPE, refuse, unscored
+from src.answers import HELDOUT_WARNING, SCOPE, VALIDATION, refuse, unscored
 from src.next_experiment import propose
 
 # src/__init__.py puts the vendored packages/denali-audit on the path, so the
@@ -161,11 +161,42 @@ def _load(table_path: str):
     return (df, m), None
 
 
+def _rows(sets: list[dict]) -> tuple[tuple, None] | tuple[None, dict]:
+    """Row dicts -> (sizes, hits, names). An agent holds rows, not three
+    parallel arrays whose alignment nothing checks; over JSON-RPC a caller can
+    silently drop one element of one array and get a confidently wrong answer.
+    So rows are the primary shape and a row missing either field is refused
+    rather than guessed at."""
+    if not isinstance(sets, list) or not sets:
+        return None, {"status": "REFUSED", "reason": "sets must be a non-empty list "
+                                                     "of rows.", "scope_limit": SCOPE}
+    sizes, hits, names = [], [], []
+    for i, row in enumerate(sets):
+        if not isinstance(row, dict):
+            return None, {"status": "REFUSED",
+                          "reason": f"row {i} is not an object with size and hits.",
+                          "scope_limit": SCOPE}
+        size = row.get("size", row.get("n_present", row.get("term_size")))
+        hit = row.get("hits", row.get("n_hits", row.get("intersection_size")))
+        if size is None or hit is None:
+            return None, {
+                "status": "REFUSED",
+                "reason": f"row {i} is missing size or hits. Every row needs how "
+                          f"many members the set had and how many came back "
+                          f"significant; this tool will not infer either.",
+                "row": row, "scope_limit": SCOPE}
+        sizes.append(float(size))
+        hits.append(float(hit))
+        names.append(str(row.get("name", row.get("term_name", f"set_{i}"))))
+    return (sizes, hits, names), None
+
+
 @mcp.tool()
 def audit(sizes: list[float] | None = None,
           hits: list[float] | None = None,
           corr: list[float] | None = None,
-          table_path: str | None = None) -> dict:
+          table_path: str | None = None,
+          sets: list[dict] | None = None) -> dict:
     """How much of YOUR gene-set ranking is set size rather than biology?
 
     This is the check itself, run on your data. It has nothing to do with
@@ -187,7 +218,20 @@ def audit(sizes: list[float] | None = None,
         table_path: instead of arrays, a path to the table your enrichment tool
             already wrote. g:Profiler, DAVID, clusterProfiler, Enrichr, fgsea,
             GSEA desktop, MAGeCK, drugZ and BAGEL are recognised without flags.
+        sets: instead of arrays, one row per set: {"name", "size", "hits"}.
+            Preferred when you are holding the table in memory -- the row keeps
+            each set's size and hits together, so nothing depends on two lists
+            staying the same length and the same order.
     """
+    if sets is not None:
+        parsed, err = _rows(sets)
+        if err:
+            return err
+        s, h, _ = parsed
+        try:
+            return _audit(s, h, corr)
+        except ValueError as e:
+            return {"status": "REFUSED", "reason": str(e), "scope_limit": SCOPE}
     if table_path:
         loaded, err = _load(table_path)
         if err:
@@ -212,7 +256,8 @@ def rerank(sizes: list[float] | None = None,
            hits: list[float] | None = None,
            names: list[str] | None = None,
            top: int = 10,
-           table_path: str | None = None) -> dict:
+           table_path: str | None = None,
+           sets: list[dict] | None = None) -> dict:
     """Apply the size correction to YOUR ranking and report what does not survive.
 
     Regresses log10(1+hits) on set size and re-ranks by the residual, so a set is
@@ -232,7 +277,31 @@ def rerank(sizes: list[float] | None = None,
         top: how many of your top entries to check (default 10)
         table_path: instead of arrays, a path to the table your enrichment tool
             already wrote; the same formats `audit` recognises.
+        sets: instead of arrays, one row per set: {"name", "size", "hits"}.
+            Preferred when you are holding the table in memory.
     """
+    if sets is not None:
+        parsed, err = _rows(sets)
+        if err:
+            return err
+        s, h, nm = parsed
+        try:
+            res = _rerank(s, h, nm, top=top)
+        except ValueError as e:
+            return {"status": "REFUSED", "reason": str(e), "scope_limit": SCOPE}
+        # The correction is only meaningful next to the verdict on the same
+        # table: "three of your top ten left" reads very differently when the
+        # ranking was NOT SIZE-DOMINATED to begin with.
+        try:
+            a = _audit(s, h)
+            res["your_ranking"] = {"verdict": a.get("verdict"),
+                                   "r2_size_alone": a.get("r2_size_alone"),
+                                   "reading": a.get("reading")}
+        except ValueError:
+            pass
+        res["predictor_validation"] = VALIDATION
+        res["scope_limit"] = SCOPE
+        return res
     if table_path:
         loaded, err = _load(table_path)
         if err:

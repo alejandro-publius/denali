@@ -24,24 +24,35 @@ claim the data does not support.
 
 ## Colour
 
-Seven tokens. Nothing outside this list appears on the page.
+Eight tokens. Nothing outside this list appears on the page.
 
 | Token | Value | Job |
 |---|---|---|
-| `--ink` | `#1c1c1a` | Text. A warm near-black, not `#000` — pure black on white is harsh at body size and reads as default rather than chosen. |
-| `--soft` | `#8c8c89` | Secondary text, captions, labels. Same warmth as `--ink`. |
-| `--faint` | `#a3a39b` | Step numbers, the quietest tier. |
-| `--rule` | `rgba(0,0,0,.11)` | Every hairline. Alpha rather than a flat grey so it sits correctly on both `--paper` and `--fill`. |
-| `--fill` | `#f2f2f0` | Figure ground and the halted state. Warm, one step off paper. |
+| `--ink` | `#1a1a1a` | Body text. Near-black, not `#000` — pure black on white is harsh at body size and reads as default rather than chosen. |
+| `--soft` | `#6B7280` | Secondary text, captions, labels. |
+| `--rule` | `rgba(27,42,74,.14)` | Every hairline. Navy-tinted and alpha rather than a flat grey, so it sits correctly on `--paper`, `--fill` and `--tint` alike. |
+| `--fill` | `#f5f7f9` | Figure ground, code ground, and the halted state. One step off paper. |
+| `--navy` | `#1B2A4A` | Structure: headings, the masthead, the footer. Carries hierarchy so the accent does not have to. |
+| `--tint` | `#E6F7F2` | Card ground. The accent at low saturation, used as a surface rather than as a mark. |
 | `--paper` | `#fff` | Ground. |
-| `--accent` | `#4a6fa5` | A muted slate blue. **Spent exactly twice** on the original page: the pull-quote rule and the footer link. Interactive additions have extended it — checkbox accent, the proposal rail, the halt heading — and that is the budget's edge. Adding an eighth use means removing one. |
+| `--accent` | `#2EC4A0` | Teal. Links, the metric numerals, and small highlights — **sparingly**. It is the only saturated colour on the page and it marks things you can act on or read a number off. Structure is `--navy`'s job, not the accent's. |
 
 Semantic colour in figures (`#b2182b` red, `#2166ac` blue) comes from
 ColorBrewer's diverging scale and is **only** used inside matplotlib output, never
 in page chrome. It signals direction in data, not emphasis in text.
 
-**Radius is `0px`, globally.** Set once in `:root` and applied with `*`. Every
-corner on the page is square, and that is a decision, not an oversight.
+**Radius is `8px`.** Set once in `:root` as `--radius` and applied to the elements
+that read as surfaces — metric and card grids, figures, code blocks, tables. It is
+deliberately *not* applied with `*`, because a non-zero radius on the universal
+selector rounds every hairline and rule on the page as well.
+
+> **Changed 2026-08-15.** This section previously specified a warm-neutral palette
+> (`--ink:#1c1c1a`, `--accent:#4a6fa5`) and `0px` radius, argued as "paper, not
+> product — the restraint is the argument". That was a real position and it is
+> recorded here rather than overwritten silently. It was superseded by the denali
+> brand system. The restraint argument still governs everything below: no gradient,
+> no shadow, no dark hero, no chart junk, and failures set at the same size as
+> successes. What changed is the palette and the corner, not the posture.
 
 ## Type
 
@@ -49,21 +60,30 @@ Four sizes, and a fifth only for the hero. Anything else is drift.
 
 | Role | Size | Face |
 |---|---|---|
-| Hero | `clamp(2.5rem, 5.1vw, 4.25rem)` | serif, 600, `-.025em` |
-| Heading | `1.25rem` / 600 | serif |
+| Hero | `clamp(2.5rem, 5.1vw, 4.25rem)` | sans, 600, `-.025em`, navy |
+| Heading | `1.25rem` / 600 | sans, navy |
 | Claim | `1.1875rem` | serif, max 46em |
 | Body | `1rem` / 1.62 | serif |
 | Small | `.8125rem` | serif or mono depending on role |
 
 **Three families, each with one job:**
 
+- **Sans** — `"Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`
+  — the brand voice: masthead, hero, headings, metric numerals. Nothing else.
 - **Serif** — `"Source Serif 4", Georgia, "Times New Roman", serif` — all prose.
-  Chosen because the page is read, not scanned.
+  Kept because the page is read, not scanned, and the argument lives in the prose.
 - **Mono** — `"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace` —
   anything a machine produced or a person would type: evidence lines, the footer,
   hashes, commands, `tabular-nums` columns.
-- No third family. The distinction is prose versus machine output, and two faces
-  carry it.
+
+The split is headline versus prose versus machine output. Sans names the project,
+serif argues it, mono shows the receipts.
+
+All three are vendored as latin-subset `woff2` under `assets/fonts/` and inlined
+into the page as base64 `@font-face` sources. Not a CDN: the no-network invariant
+means the page has to render as designed on a machine with no wifi. Before this,
+the page *named* Source Serif 4 and JetBrains Mono but never actually loaded
+them, so it had been silently falling back to Georgia and Menlo.
 
 The mono/serif split does work here: when the agent prints `n=76 members · hits
 95 · R_p 1.982`, the monospace says *this came out of a file* without a label

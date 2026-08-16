@@ -1095,6 +1095,75 @@ def main() -> int:
               f"expected {tuple(expect)}, got {got}" if m
               else "phrase not found — prose was reworded without updating this check")
 
+    # ---------------- G. the corpus arm (evaluation 8, post-hoc) ----------------
+    # Every number quoted from the ORCS corpus recomputes from the committed
+    # per-screen table, the same discipline as results/frozen/. The raw
+    # substrate (752 MB) is gitignored; docs/CORPUS.md documents the download.
+    corp = json.loads((ROOT / "results" / "corpus" / "corpus_audit.json").read_text())
+    per = pd.read_csv(ROOT / "results" / "corpus" / "corpus_per_screen.csv")
+
+    check("corpus: audited count matches the per-screen table and the accounting closes",
+          corp["n_screens_audited"] == len(per)
+          and corp["n_screen_files"]
+              == corp["n_parse_failed"] + corp["n_excluded_by_rule"] + len(per),
+          f"{corp['n_screen_files']} files = {corp['n_parse_failed']} unparseable "
+          f"+ {corp['n_excluded_by_rule']} excluded + {len(per)} audited")
+    check("corpus: every audited screen satisfies the stated inclusion rule",
+          bool((per.n_hits >= 20).all() and (per.n_measured >= 10000).all()
+               and (per.n_sets_used >= 8).all()))
+
+    c_med = float(per.r2_size_alone.median())
+    check("corpus: the median recomputes from the per-screen table",
+          near(c_med, corp["quantiles"]["p50"]) and near(c_med, 0.2244),
+          f"recomputed {c_med:.4f}")
+    c_pct = 100 * float((per.r2_size_alone >= 0.465).mean())
+    check("corpus: the 9.6% figure recomputes from the per-screen table",
+          near(c_pct, corp["pct_at_or_above_denali_0465"], 0.05)
+          and near(c_pct, 9.6, 0.05), f"recomputed {c_pct:.1f}%")
+
+    c_bins = [(20, 100), (100, 500), (500, 2000), (2000, 10**9)]
+    c_meds = [float(per[(per.n_hits >= lo) & (per.n_hits < hi)].r2_size_alone.median())
+              for lo, hi in c_bins]
+    frozen_strat = [s["median_r2"] for s in corp["stratified_by_hitlist_size"]]
+    check("corpus: all four hit-list-size strata recompute",
+          len(frozen_strat) == 4
+          and all(near(a, b) for a, b in zip(c_meds, frozen_strat)),
+          f"recomputed {[round(m, 4) for m in c_meds]}")
+    check("corpus: the gradient across hit-list-size bins is monotonic",
+          all(a < b for a, b in zip(c_meds, c_meds[1:])),
+          " -> ".join(f"{m:.3f}" for m in c_meds))
+
+    corpus_md = (ROOT / "docs" / "CORPUS.md").read_text()
+    row8 = re.search(r"^\|\s*8\s*\|.*$", report_readme, re.M)
+    check("corpus: labelled post-hoc, not pre-registered, in the doc and the findings row",
+          "not pre-registered" in corpus_md.lower()
+          and row8 is not None and "post-hoc" in row8.group(0).lower())
+    check("corpus: the estimand warning survives in both surfaces",
+          "estimand" in corpus_md.lower()
+          and row8 is not None and "not the same estimand" in
+          report_readme[row8.start():row8.start() + 6000].lower())
+    check("corpus: README row 8 quotes the numbers the table recomputes",
+          row8 is not None and all(s in row8.group(0)
+                                   for s in ("0.224", "9.6%", "1,272")))
+
+    # Scope, the same pattern as the gene-symbol guard: the unit of inference
+    # is the distribution, so no screen and no publication may be named in the
+    # prose surfaces. Screen ids are small integers and would collide with
+    # innocent counts, so the guard covers the two forms a real citation would
+    # take: an explicit SCREEN_<id> token, or a PubMed id (source_id, >=5
+    # digits — small-integer counts like "418 publications" stay legal).
+    corpus_surfaces = {"docs/CORPUS.md": corpus_md,
+                       "README row 8": row8.group(0) if row8 else ""}
+    pmids = {s for s in per.source_id.dropna().astype(str) if len(s) >= 5}
+    for label, text in corpus_surfaces.items():
+        named = [p for p in pmids
+                 if re.search(rf"(?<![\d.]){re.escape(p)}(?![\d.])", text)]
+        screen_tok = re.findall(r"SCREEN[_ ]?\d+", text)
+        check(f"corpus scope: no screen or publication named in {label}",
+              not named and not screen_tok,
+              f"found {(named + screen_tok)[:5]}" if named or screen_tok else "")
+
+
     # These are hand-typed and therefore drift: the badge said 84, the Tests
     # section said 84, and the plain-language section said 86, while the suite
     # was at 99. A judge who finds a stale test count stops trusting every other

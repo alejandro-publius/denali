@@ -1,5 +1,11 @@
 # Deck and video — the shot list
 
+> ⚠ **THE EVENT WAS NOT ENTERED.** This file was written for a hackathon
+> submission that did not happen. It is kept unedited as a record of the work,
+> not as a live plan, and nothing downstream depends on it. The project is a
+> standalone piece of work; `README.md` and `REPORT.md` are the current
+> statements of what it is and what it found.
+
 **The talk is `docs/DEMO.md`.** This file is only *what is on screen while it is
 spoken*, and the order is locked to the beats there. If the two disagree,
 `DEMO.md` is the script and this is stale.

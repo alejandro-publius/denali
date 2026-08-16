@@ -45,10 +45,10 @@ came to check.
 | [`SREBF2_EVIDENCE.md`](SREBF2_EVIDENCE.md) | The positive control in full, including where it fails. **A control, not a discovery.** |
 | [`GATE_C1_PREREGISTRATION.md`](GATE_C1_PREREGISTRATION.md) · [`GATE_C1_RESULTS.md`](GATE_C1_RESULTS.md) | The measurability gate that selected the first program, pre-registered and then scored. |
 | [`HELDOUT_PROGRAM.md`](HELDOUT_PROGRAM.md) | The held-out program, named before the scoring code existed. |
-| [`DEMO.md`](DEMO.md) | The spoken demo, under three minutes. |
+| [`DEMO.md`](DEMO.md) | The spoken demo, under three minutes. **Written for an event that was not entered**, kept as a record. |
 | [`LITERATURE.md`](LITERATURE.md) · [`LITERATURE_PREREG.md`](LITERATURE_PREREG.md) | Evaluation 11 — of the 187 publications behind the corpus arm, how many mention set size at all. Pre-registration sealed before the run. |
-| [`DECK.md`](DECK.md) | What is on screen while `DEMO.md` is spoken — the shot list, the three title cards, and the video settings. The deck is the live page, not slides. |
-| [`SUBMISSION.md`](SUBMISSION.md) | Paste-ready submission copy, every figure carried from `results/`. |
+| [`DECK.md`](DECK.md) | What is on screen while `DEMO.md` is spoken. **Event not entered**, kept as a record — but the measured slow-3G and WebKit results in it are real and current. |
+| [`SUBMISSION.md`](SUBMISSION.md) | Submission copy, every figure carried from `results/`. **The submission did not happen**; kept because it is the most compact prose statement of the whole project. |
 | [`NUMBERING.md`](NUMBERING.md) | Why evaluation 8 is the off-target arm, and the disposition of all eleven branches. |
 
 ## Working documents, kept unedited on purpose

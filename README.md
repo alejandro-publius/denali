@@ -28,7 +28,7 @@ We scored all **50 MSigDB Hallmark gene programs** against **9,837 CRISPRi knock
 
 **New to CRISPR screens?** [Start with the plain-language section](#in-plain-language) — no jargon, and it explains why any of this matters before the method does.
 
-**Judging this?** The four criteria are answered with file paths at [**How this meets the judging criteria**](#how-this-meets-the-judging-criteria), at the bottom. If you have two minutes rather than ten: the [findings table](#findings) is eleven rows and seven of them say NEGATIVE; the [loop](docs/LOOP.md) is where the agent chooses and halts; and `grep -n 'HALLMARK_\|REACTOME_' src/next_experiment.py` returns nothing, which is our central claim stated as something you can falsify in one command rather than something you have to believe.
+**Evaluating this?** Four questions are answered with file paths at [**How to check this project**](#how-to-check-this-project), at the bottom. If you have two minutes rather than ten: the [findings table](#findings) is eleven rows and seven of them say NEGATIVE; the [loop](docs/LOOP.md) is where the agent chooses and halts; and `grep -n 'HALLMARK_\|REACTOME_' src/next_experiment.py` returns nothing, which is our central claim stated as something you can falsify in one command rather than something you have to believe.
 
 **Read it at [alejandro-publius.github.io/denali](https://alejandro-publius.github.io/denali/).** The hosted copy is byte-identical to `index.html` in this repository and, like it, makes **zero network calls** — GitHub Pages serves the file, nothing fetches anything. So if the venue wifi dies, clone the repo and double-click `index.html`: same page, no server, no network. Everything in it is injected from `results/frozen/` at build time. A Streamlit view of the same frozen data lives in `app.py` (`streamlit run app.py`); both read `results/frozen/` and neither recomputes.
 
@@ -485,7 +485,12 @@ This is the part we care most about, so it is built into the code rather than pr
 
 ---
 
-# How this meets the judging criteria
+# How to check this project
+
+Four questions worth asking of any computational result, each answered with the
+file that settles it. They began as a hackathon's judging criteria; the event
+was not entered, and they turned out to be the right structure for the writeup
+anyway, so they stayed.
 
 **1 · Closing the loop.** Ten pathways were named and committed as a held-out set before the code that scores them existed. The predictor was frozen and hashed first; the scorer verifies that hash on load and aborts if it changed. It failed on the held-out set — balanced accuracy **0.4375**, zero true positives — and we reported it. For the second half, hold a pathway fixed and change only its result: the proposed experiment flips from *"validate in a second cell type"* to *"raise power and re-run."* No branch in that code tests a pathway's name.
 

@@ -1,5 +1,11 @@
 # Demo — under 3 minutes spoken
 
+> ⚠ **THE EVENT WAS NOT ENTERED.** This file was written for a hackathon
+> submission that did not happen. It is kept unedited as a record of the work,
+> not as a live plan, and nothing downstream depends on it. The project is a
+> standalone piece of work; `README.md` and `REPORT.md` are the current
+> statements of what it is and what it found.
+
 **Read the bold. The rest is stage direction.** `[pause]` = stop, let the screen carry it.
 **The repeated number is SEVEN OF ELEVEN.** Say it in the first sentence and the last.
 

@@ -1112,6 +1112,32 @@ def main() -> int:
     check("the nomination refusal cites the predictor's own failure",
           str(held["axis2_balanced_accuracy"]) in _refuse("top hits")["reason"])
 
+    # ---------------- R1. no git-tracked symlinks into an absolute path -------
+    # A worktree linked data/raw at the primary tree to share the git-ignored
+    # substrate. `.gitignore` said `data/raw/` -- with a trailing slash, which
+    # ignores a DIRECTORY of that name and not a SYMLINK of that name -- so
+    # `git add -A` committed the link. Every checkout after that materialised
+    # data/raw as a symlink pointing at itself: not a broken share, a directory
+    # that hides the substrate and cannot be written into. A clean clone got it
+    # too. Cheap to assert, expensive to rediscover.
+    import subprocess as _sp
+    _tracked = _sp.run(["git", "ls-files", "-s"], cwd=ROOT, capture_output=True,
+                       text=True).stdout.splitlines()
+    _links = [ln.split("\t", 1)[1] for ln in _tracked if ln.startswith("120000")]
+    _abs_links = []
+    for _p in _links:
+        try:
+            _t = (ROOT / _p).readlink()
+        except OSError:                                       # pragma: no cover
+            continue
+        if _t.is_absolute():
+            _abs_links.append(f"{_p} -> {_t}")
+    check("no tracked symlink points at an absolute path",
+          not _abs_links, "; ".join(_abs_links))
+    check("data/raw is not tracked at all", "data/raw" not in _links)
+    check("data/raw is ignored as a name, not only as a directory",
+          "\ndata/raw\n" in (ROOT / ".gitignore").read_text())
+
     # ---------------- R2. the server serves the PRODUCT, not just the study ----
     # `reversibility` and `provenance` are lookups into our frozen result: an
     # agent could ask what WE found and could not run the check on anything of

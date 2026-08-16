@@ -23,6 +23,7 @@ from __future__ import annotations
 import json
 import re
 import sys
+import pathlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -197,6 +198,58 @@ def main() -> int:
               blank_in_table == 0 and para_in_table == 0,
               f"{blank_in_table} blank line(s) and {para_in_table} paragraph(s) "
               "inside a table -- those rows render as literal pipes")
+
+    # The rerank table in the README is the project's single strongest
+    # demonstration -- our own number one falling twenty-three places -- and it
+    # is 35 hand-typed cells. Re-derive it from the packaged tool rather than
+    # trusting that it was right the day it was pasted in.
+    readme_md = texts.get("README.md", "")
+    if "## What the tool does to our own result" in readme_md:
+        import subprocess, tempfile, csv as _csv
+        sec = readme_md.split("## What the tool does to our own result", 1)[1]
+        rows = re.findall(
+            r"^\| `(HALLMARK_\w+)` \| ([\d,]+) \| ([\d,]+) \| \*{0,2}(\d+) → (\d+)\*{0,2} \| −(\d+) \|",
+            sec, re.M)
+        import shutil
+        # PATH first so CI (system python) finds it, venv second for local use.
+        # NOT an optional skip: CI installs the package precisely so this runs,
+        # and a guard that quietly no-ops in the one environment that gates
+        # every push is the failure mode this repo keeps rediscovering.
+        venv = pathlib.Path(shutil.which("denali") or (ROOT / ".venv" / "bin" / "denali"))
+        summ = ROOT / "results" / "frozen" / "program_summary.csv"
+        if not rows:
+            check("cross-surface: the README rerank table is parseable", False,
+                  "no rows matched -- the table changed shape or vanished")
+        elif not venv.exists():
+            check("cross-surface: the README rerank table matches the tool", False,
+                  "denali is not installed, so this check cannot run. "
+                  "`pip install -e packages/denali-audit`. It fails rather than "
+                  "skipping on purpose.")
+        else:
+            with tempfile.NamedTemporaryFile("w", suffix=".csv", delete=False,
+                                             newline="") as fh:
+                w = _csv.writer(fh); w.writerow(["set", "size", "hits"])
+                with open(summ, newline="") as src:
+                    for r in _csv.DictReader(src):
+                        w.writerow([r["program"], r["n_present"], r["n_hits_q05"]])
+                tmp = fh.name
+            out = subprocess.run([str(venv), "rerank", tmp, "--top", "10"],
+                                 capture_output=True, text=True, timeout=120).stdout
+            live = {m.group(1): (int(m.group(2)), int(m.group(3)), int(m.group(4)),
+                                 int(m.group(5)), int(m.group(6)))
+                    for m in re.finditer(
+                        r"(HALLMARK_\w+)\s+(\d+)\s+(\d+)\s+(\d+) -> (\d+)\s+\((-\d+)\)", out)}
+            bad = []
+            for name, size, hits, r1, r2, d in rows:
+                want = (int(size.replace(",", "")), int(hits.replace(",", "")),
+                        int(r1), int(r2), -int(d))
+                if live.get(name) != want:
+                    bad.append(f"{name}: README {want} vs tool {live.get(name)}")
+            check("cross-surface: every cell of the README rerank table matches "
+                  "the packaged tool",
+                  not bad and len(rows) == len(live),
+                  "; ".join(bad[:3]) if bad
+                  else f"{len(rows)} rows x 5 cells re-derived from `denali rerank`")
 
     for p in passed:
         print(f"PASS  {p}")

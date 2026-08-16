@@ -21,9 +21,18 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          # The packaged tool, so the cross-surface guard that re-derives the
+          # README rerank table from `denali rerank` actually RUNS here rather
+          # than skipping. A guard that no-ops in the environment that gates
+          # every push is the failure mode this repository keeps finding.
+          pip install -e packages/denali-audit
+          pip install pytest
 
       # No substrate download here. The suite asserts against the committed
       # contents of results/frozen/, so it needs no raw data — that is the point
       # of freezing the interface.
       - name: Run invariants
         run: make test PY=python
+
+      - name: Run the packaged tool's own tests
+        run: python -m pytest packages/denali-audit/tests -q

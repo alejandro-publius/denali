@@ -559,6 +559,32 @@ def main() -> int:
         check("RPE1: results are outside results/frozen/",
               not (FROZEN / "rpe1_evaluation.json").exists())
 
+    # ---------------- P. cross-screen concordance ----------------
+    cc = ROOT / "results" / "concordance" / "cross_screen.json"
+    if cc.exists():
+        c = json.loads(cc.read_text())
+        raw = c["raw_agreement"]["spearman_rho"]
+        par = c["how_much_is_size"]["spearman_after_removing_size"]
+        check("concordance: removing size lowers agreement, never raises it",
+              par < raw, f"raw {raw} vs partial {par}")
+        check("concordance: the size-alone top-k beats chance",
+              c["how_much_is_size"]["top_k_overlap_using_SIZE_ALONE_to_predict_rpe1"]["top_10"]
+              > c["raw_agreement"]["top_k_overlap_expected_by_chance"]["top_10"])
+        check("concordance: labelled post-freeze",
+              "NOT PRE-REGISTERED" in c.get("status", ""))
+        check("concordance: states its own limits",
+              "not a general estimate" in c.get("limits", ""))
+        # the portable tool must reproduce the bespoke analysis
+        from src.audit_screen import audit_replication          # noqa: E402
+        pp = pd.read_csv(ROOT / "results" / "concordance" / "paired_programs.csv")
+        rep = audit_replication(pp.n_present_k562, pp.n_hits_q05_k562,
+                                pp.n_hits_q05_rpe1)
+        check("the portable replication auditor reproduces our own number",
+              near(rep["raw_agreement_spearman"], raw, 1e-3),
+              f"tool {rep['raw_agreement_spearman']} vs analysis {raw}")
+        check("replication auditor refuses too few paired sets",
+              _raises(audit_replication, [1, 2, 3], [1, 2, 3], [1, 2, 3]))
+
     # ---------------- F. the docs' own self-description ----------------
     report_readme = (ROOT / "README.md").read_text()
     # These are hand-typed and therefore drift: the badge said 84, the Tests

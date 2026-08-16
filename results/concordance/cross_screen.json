@@ -1,0 +1,39 @@
+{
+  "question": "If you ran the same 50-program analysis on two independently screened cell lines, how much of the ranking would agree -- and how much of that agreement is set size rather than biology?",
+  "n_programs": 50,
+  "screens": [
+    "K562 (9,837 targets)",
+    "RPE1 (2,386 targets)"
+  ],
+  "raw_agreement": {
+    "spearman_rho": 0.6633,
+    "p": 1.527e-07,
+    "top_k_overlap": {
+      "top_5": 0.8,
+      "top_10": 0.8,
+      "top_20": 0.6
+    },
+    "top_k_overlap_expected_by_chance": {
+      "top_5": 0.1,
+      "top_10": 0.2,
+      "top_20": 0.4
+    }
+  },
+  "how_much_is_size": {
+    "size_explains_in_k562_r2": 0.4649,
+    "size_explains_in_rpe1_r2": 0.214,
+    "spearman_after_removing_size": 0.4934,
+    "p_after_removing_size": 0.0002718,
+    "agreement_lost_to_size": 0.1699,
+    "top_k_overlap_using_SIZE_ALONE_to_predict_rpe1": {
+      "top_5": 0.6,
+      "top_10": 0.6,
+      "top_20": 0.55
+    }
+  },
+  "reading": "Raw rank agreement between two independent screens is rho +0.663. After removing set size from both, it falls to +0.493. So 26% of the apparent cross-screen reproducibility is explained by how the gene sets were built, not by the biology being reproducible.",
+  "why_it_matters": "'It replicated in a second cell line' is the strongest evidence most hit lists ever get. This measures how much of that evidence is carried by set size -- a property of the annotation, not the experiment. Both screens are confounded the same way, so agreeing for the same wrong reason looks exactly like agreeing for the right one.",
+  "limits": "50 programs, two cell lines, one lab, one assay. RPE1 covers 24.3% of K562's targets and that subset is disproportionately essential genes (rpe1_coverage_collision, FAIL). This is a measurement on our own two screens and not a general estimate of cross-screen reproducibility.",
+  "status": "POST-FREEZE, NOT PRE-REGISTERED",
+  "prompted_by": "our own landscape review finding the question unanswered"
+}

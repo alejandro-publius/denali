@@ -114,6 +114,76 @@ def audit(sizes, hits, corr=None) -> dict:
     return out
 
 
+def audit_replication(sizes, hits_a, hits_b) -> dict:
+    """Two screens of the same sets agreed. How much of that is set size?
+
+    "It replicated in a second system" is the strongest evidence most hit lists
+    ever get. But if both screens are confounded the same way, agreeing for the
+    same wrong reason looks exactly like agreeing for the right one. This
+    separates the two.
+
+    sizes : genes measured per set (shared)
+    hits_a, hits_b : significant results per set, from two independent screens
+    """
+    import statsmodels.api as sm
+    from scipy.stats import spearmanr
+
+    s = np.asarray(sizes, dtype=float)
+    a = np.log10(1.0 + np.asarray(hits_a, dtype=float))
+    b = np.log10(1.0 + np.asarray(hits_b, dtype=float))
+    ok = np.isfinite(s) & np.isfinite(a) & np.isfinite(b)
+    s, a, b = s[ok], a[ok], b[ok]
+    n = len(s)
+    if n < 8:
+        raise ValueError(f"need at least 8 paired sets; got {n}")
+
+    rho, p_raw = spearmanr(a, b)
+    X = sm.add_constant(s)
+    res_a = sm.OLS(a, X).fit().resid
+    res_b = sm.OLS(b, X).fit().resid
+    rho_p, p_par = spearmanr(res_a, res_b)
+
+    lost = float(rho - rho_p)
+    share = abs(lost / rho) if rho else float("nan")
+
+    k = min(10, max(3, n // 5))
+    top = lambda v: set(np.argsort(v)[-k:])
+    out = {
+        "n_paired_sets": int(n),
+        "raw_agreement_spearman": round(float(rho), 4),
+        "raw_p": float(f"{p_raw:.4g}"),
+        "agreement_after_removing_size": round(float(rho_p), 4),
+        "p_after_removing_size": float(f"{p_par:.4g}"),
+        "agreement_explained_by_size": round(lost, 4),
+        "share_of_agreement_that_is_size": round(float(share), 4),
+        f"top_{k}_overlap_observed": round(len(top(a) & top(b)) / k, 3),
+        f"top_{k}_overlap_from_SIZE_ALONE": round(len(top(s) & top(b)) / k, 3),
+        f"top_{k}_overlap_by_chance": round(k / n, 3),
+    }
+    out["reading"] = (
+        f"Raw agreement between the two screens is rho {rho:+.3f}. Removing set "
+        f"size from both drops it to {rho_p:+.3f}, so {share:.0%} of the apparent "
+        f"replication is carried by how the sets were built rather than by the "
+        f"biology replicating.")
+    if share >= 0.25:
+        out["verdict"] = "REPLICATION PARTLY ARTIFACTUAL"
+        out["what_to_do"] = (
+            "Do not treat agreement between these two screens as independent "
+            "confirmation. Both are confounded the same way, so a set can agree "
+            "for the same wrong reason in both. Re-rank each screen with a "
+            "size-aware statistic first, then ask whether the agreement survives.")
+    else:
+        out["verdict"] = "REPLICATION MOSTLY SURVIVES SIZE"
+        out["what_to_do"] = (
+            "Most of the agreement is not explained by set size. That is the good "
+            "case and it is worth stating explicitly, because most replication "
+            "claims are never checked this way.")
+    out["what_this_is_not"] = (
+        "Not a candidate list. This measures a property of the agreement between "
+        "two rankings, not of any set in them.")
+    return out
+
+
 def self_test() -> int:
     """Run the audit on denali's own frozen screen and check the known answer."""
     S = pd.read_csv("results/frozen/program_summary.csv")
@@ -134,6 +204,8 @@ def main() -> int:
     ap.add_argument("--size", default="size", help="column of genes measured per set")
     ap.add_argument("--hits", default="hits", help="column of significant results")
     ap.add_argument("--corr", default=None, help="optional: mean inter-gene correlation")
+    ap.add_argument("--hits-b", default=None,
+                    help="second screen's hit column, to audit a REPLICATION claim")
     ap.add_argument("--self-test", action="store_true",
                     help="run against denali's own frozen screen")
     a = ap.parse_args()
@@ -148,6 +220,17 @@ def main() -> int:
     if missing:
         print(f"missing column(s) {missing}. Found: {list(df.columns)}", file=sys.stderr)
         return 2
+
+    if a.hits_b:
+        if a.hits_b not in df.columns:
+            print(f"missing column {a.hits_b!r}. Found: {list(df.columns)}",
+                  file=sys.stderr)
+            return 2
+        rep = audit_replication(df[a.size], df[a.hits], df[a.hits_b])
+        rep["source"] = str(Path(a.csv).name)
+        print(json.dumps(rep, indent=2))
+        print(f"\n{rep['verdict']}: {rep['reading']}\n\n{rep['what_to_do']}")
+        return 0
 
     res = audit(df[a.size], df[a.hits], df[a.corr] if a.corr else None)
     res["source"] = str(Path(a.csv).name)

@@ -193,6 +193,22 @@ we didn't.
 - **A statistic bug in our own freeze code** reported 5 distinct evidence sources
   instead of 34 (`value_counts().nunique()` counts frequencies, not values).
   Caught before commit.
+- **A commit message gave the wrong cause for a number moving.** Commit
+  `9d0c2f4` explains the assertion count going 357 → 358 as the tool-status
+  guard "picking up benchflow being installed again". That is false. Checking
+  out both commits and diffing the check names shows exactly one assertion
+  appeared — `src/literature_audit.py parses` — because the suite runs a parse
+  check per module in `src/`, and that file landed in the same commit. The count
+  is **not** environment-dependent, and CI, which never installs benchflow,
+  reports the same total as this machine. The message is left as pushed rather
+  than rewritten, because teammates had already pulled it; this entry is the
+  correction. Recorded because a wrong causal story about why a number changed
+  is the same defect class as a wrong number, and this project has no standing
+  to point that out in other people's work while leaving it in its own history.
+- **A red commit was pushed.** `776d687` went out with four failing count checks,
+  because the `make test` that should have gated it was chained behind a `grep`
+  that succeeded on the failure output. Green again one commit later at
+  `9d0c2f4`. An exit code was read from the wrong end of a pipe.
 
 ## 8. Not attempted
 

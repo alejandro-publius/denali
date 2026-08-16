@@ -8,6 +8,13 @@ external loads**, so the no-network fallback still holds if the venue wifi dies 
 the page renders fully offline from one self-contained file.
 **Read order:** this file → `REPORT.md` → `docs/DEMO.md`. Nothing else needed.
 
+> ⚠ **Written mid-build, for a hackathon that was not entered.** The "venue
+> wifi" and demo framing below is a record of what we were preparing for, not a
+> live plan. Everything factual in this file — the results, the hashes, the
+> disclosures — is still accurate and still checked by the suite. If you are
+> arriving fresh, start at `README.md` instead; this file assumes you were
+> already here.
+
 **ANALYSIS IS CLOSED.** No new sweeps, no refits, no new features, no gene-level
 claims. Remaining work is communication and hardening only.
 

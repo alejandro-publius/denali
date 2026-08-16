@@ -1,0 +1,55 @@
+{
+  "domain": "protein sets",
+  "status": "Pre-registered in docs/DOMAINS_PREREG.md (6d40a079..., a2776f7).",
+  "substrate": "CPTAC COAD proteome (LinkedOmics) x Reactome human pathways",
+  "construction": {
+    "hit_rule": "Welch t tumour vs normal, BH q < 0.05",
+    "n_proteins_testable": 7672,
+    "n_proteins_hit": 5767,
+    "hit_fraction": 0.7517,
+    "usable_set_floor": 5,
+    "reactome_uniprot_to_symbol_join_rate": 0.9803
+  },
+  "primary": {
+    "n_sets": 1277,
+    "size_range": [
+      5,
+      399
+    ],
+    "median_set_size": 13,
+    "r2_size_alone_raw": 0.6969,
+    "r2_size_alone_log": 0.95,
+    "spearman_size_vs_hits": 0.9703,
+    "verdict": "CONFOUNDED",
+    "corpus_percentile_logsize": 99.8,
+    "rerank_top10_survived": 0,
+    "rerank_top10_left": 10,
+    "sets_with_zero_hits": 0
+  },
+  "hit_fraction_guard": {
+    "registered_range": [
+      0.01,
+      0.6
+    ],
+    "fired": true,
+    "note": "The guard was registered in advance precisely so a runaway hit rate could not be reported as a confound."
+  },
+  "registered_variant_top10pct_by_t": {
+    "n_sets": 1277,
+    "size_range": [
+      5,
+      399
+    ],
+    "median_set_size": 13,
+    "r2_size_alone_raw": 0.3706,
+    "r2_size_alone_log": 0.4305,
+    "spearman_size_vs_hits": 0.5982,
+    "verdict": "PARTIALLY CONFOUNDED",
+    "corpus_percentile_logsize": 89.2,
+    "rerank_top10_survived": 1,
+    "rerank_top10_left": 9,
+    "sets_with_zero_hits": 470,
+    "label": "Registered variant, fired by the pre-registered hit-fraction guard: top 10% by |t| (767 proteins)"
+  },
+  "scope": "No protein and no pathway is named as a finding."
+}

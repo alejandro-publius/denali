@@ -1,0 +1,96 @@
+{
+  "status": "Pre-registered in docs/BENCHMARKS_PREREG.md (9b825d87..., commit a2776f7).",
+  "pre_registered_expectation": "Normalisation defeats the mechanical confound: A2 fires, A1 is weak, A3 is robust. If so the finding is 'benchmarks got this right and set-level genomics did not.'",
+  "substrate": {
+    "panel": "HuggingFace Open LLM Leaderboard v1 archive, every model with a complete 57-subject MMLU vector",
+    "panel_size": 5452,
+    "models_in_artifact": 7103,
+    "subject_sizes": "cais/mmlu test split, 100-1534 items"
+  },
+  "gate": {
+    "n_models_used": 5452,
+    "max_relative_disagreement": 0.0,
+    "subjects_within_1pct": 57,
+    "passed": true,
+    "what_it_checks": "item counts recovered from each model's reported standard error, n = acc(1-acc)/se^2 + 1, against the dataset's own test-split sizes"
+  },
+  "A1_does_size_predict_the_rate": {
+    "unit": "subject (n=57); models share subject difficulty so the subject is the independent unit",
+    "spearman_size_vs_panel_mean_accuracy": 0.1203,
+    "r2_logsize_vs_panel_mean_accuracy": 0.0042,
+    "per_model_spearman_median": 0.1145,
+    "per_model_spearman_q10_q90": [
+      0.003,
+      0.1675
+    ],
+    "pct_models_negative_rho": 9.7,
+    "verdict": "RATE LAYER CLEAN \u2014 normalisation left no exploitable size signal"
+  },
+  "A2_count_layer": {
+    "what": "denali's packaged audit applied verbatim to (subject, n_items, n_correct), n_correct = round(accuracy x n_items)",
+    "median_r2_size_alone": 0.598,
+    "q10_q90": [
+      0.5728,
+      0.7218
+    ],
+    "pct_CONFOUNDED": 100.0,
+    "verdict": "ARITHMETIC CONFOUND PRESENT IN COUNT LAYER",
+    "reading": "This firing is expected and largely mechanical. It locates the mechanism: normalisation by item count is the whole of what stands between a leaderboard and the genomics failure mode, not anything about how benchmarks pick their items."
+  },
+  "A3_does_weighting_move_the_leaderboard": {
+    "what": "micro (item-weighted) vs macro (equal-subject) aggregation of the same per-subject accuracies. Nothing about any model changes.",
+    "panel_size": 5452,
+    "kendall_tau": 0.95529,
+    "pct_models_moving_3_or_more_ranks": 92.87,
+    "top5_membership_changed": 1,
+    "max_absolute_rank_move": 1093,
+    "median_absolute_rank_move": 39.0,
+    "pct_models_moving_10_or_more": 79.7,
+    "top10_membership_changed": 0,
+    "verdict": "CONSTRUCTION MOVES THE LEADERBOARD"
+  },
+  "A4_cross_benchmark_agreement": {
+    "benchmarks": "MMLU (57 subjects) vs BBH (24 subtasks)",
+    "n_models_common": 324,
+    "bbh_subtask_size_range": [
+      146,
+      250
+    ],
+    "mmlu_subject_size_range": [
+      100,
+      1534
+    ],
+    "agreement_micro": 0.8409,
+    "agreement_macro": 0.8334,
+    "share_of_agreement_from_weighting": 0.0089,
+    "verdict": "AGREEMENT IS CAPABILITY"
+  },
+  "post_hoc_how_A3_fired": {
+    "label": "POST-HOC, not pre-registered.",
+    "why": "A3's criterion fired. This characterises how it fired.",
+    "top5_boundary_gap_micro": 7.121e-05,
+    "top5_boundary_gap_in_items": 1.0,
+    "one_item_is_worth": 7.121e-05,
+    "reading_of_the_top5_change": "The single model that enters the top 5 under equal-subject weighting is separated from the one it displaces by one item out of 14,042. The criterion fired on a tie, not on a reordering.",
+    "median_rank_move_as_pct_of_panel": 0.715,
+    "rank_move_caveat": "The >=3-rank criterion was fixed before the panel size was known. With 5,452 densely packed models, 3 ranks is 0.06% of the panel and moves almost automatically.",
+    "score_shift_micro_minus_macro": {
+      "mean": -0.00799,
+      "sd": 0.00581,
+      "max_abs": 0.02794
+    },
+    "the_construction_difference_is_large": {
+      "largest_subject_share_of_items_pct": 10.9,
+      "top5_largest_subjects_share_of_items_pct": 31.1,
+      "micro_weight_ratio_largest_to_smallest": 15.3,
+      "total_variation_distance_between_weightings": 0.2764
+    },
+    "why_it_does_not_propagate": {
+      "mean_cross_subject_correlation_of_model_accuracy": 0.8685,
+      "median": 0.9171,
+      "pct_subject_pairs_above_0.8": 75.7,
+      "reading": "A model good at one subject is good at the others, so re-weighting the subjects cannot reorder the models much. This is a second protection, independent of normalisation, and set-level genomics has neither."
+    }
+  },
+  "scope": "No model, lab or leaderboard entry is named. The unit of inference is the distribution over the panel."
+}

@@ -1,0 +1,109 @@
+{
+  "domain": "yeast genetic interaction",
+  "status": "Pre-registered in docs/DOMAINS_PREREG.md (6d40a079..., a2776f7).",
+  "why_this_domain": "Best-annotated organism in biology. If the confound holds here it cannot be blamed on sloppy curation.",
+  "substrate": "Costanzo et al. 2016 Science 353:aaf1420 Data File S1 (SGA_NxN + SGA_ExN + SGA_ExE) x SGD GO Slim",
+  "construction": {
+    "gene_statistic": "count of significant negative genetic interactions",
+    "stringency": "p < 0.05 and eps < -0.08 (Costanzo intermediate)",
+    "hit_rule": "top 10% of measured genes by that count",
+    "measured_gene_rule": "ORF tested in >= 100 pairs",
+    "sets": "GO Slim biological process, >= 5 measured members"
+  },
+  "n_genes_measured": 5292,
+  "primary": {
+    "n_sets": 117,
+    "size_range": [
+      7,
+      1377
+    ],
+    "n_hit_genes": 530,
+    "r2_size_alone_raw": 0.3567,
+    "r2_size_alone_log": 0.6806,
+    "spearman_size_vs_hits": 0.8203,
+    "verdict": "PARTIALLY CONFOUNDED",
+    "rerank_top10_survived": 5,
+    "rerank_top10_left": 5
+  },
+  "corpus_percentile_logsize": 96.1,
+  "prereg_expectation": "log-size R^2 at or above the corpus 25th percentile (0.186); below the 10th (0.103) would mean annotation quality rescues set-level inference",
+  "variants": {
+    "primary_top10|primary_P": {
+      "n_sets": 117,
+      "size_range": [
+        7,
+        1377
+      ],
+      "n_hit_genes": 530,
+      "r2_size_alone_raw": 0.3567,
+      "r2_size_alone_log": 0.6806,
+      "spearman_size_vs_hits": 0.8203,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "rerank_top10_survived": 5,
+      "rerank_top10_left": 5
+    },
+    "primary_top10|sens_C": {
+      "n_sets": 211,
+      "size_range": [
+        5,
+        2932
+      ],
+      "n_hit_genes": 530,
+      "r2_size_alone_raw": 0.4358,
+      "r2_size_alone_log": 0.7207,
+      "spearman_size_vs_hits": 0.7488,
+      "verdict": "CONFOUNDED",
+      "rerank_top10_survived": 3,
+      "rerank_top10_left": 7
+    },
+    "primary_top10|sens_F": {
+      "n_sets": 42,
+      "size_range": [
+        17,
+        2014
+      ],
+      "n_hit_genes": 530,
+      "r2_size_alone_raw": 0.3785,
+      "r2_size_alone_log": 0.638,
+      "spearman_size_vs_hits": 0.7842,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "rerank_top10_survived": 9,
+      "rerank_top10_left": 1
+    },
+    "sens_top05|primary_P": {
+      "n_sets": 117,
+      "size_range": [
+        7,
+        1377
+      ],
+      "n_hit_genes": 265,
+      "r2_size_alone_raw": 0.2895,
+      "r2_size_alone_log": 0.5128,
+      "spearman_size_vs_hits": 0.7073,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "rerank_top10_survived": 5,
+      "rerank_top10_left": 5
+    },
+    "sens_top20|primary_P": {
+      "n_sets": 117,
+      "size_range": [
+        7,
+        1377
+      ],
+      "n_hit_genes": 1057,
+      "r2_size_alone_raw": 0.4262,
+      "r2_size_alone_log": 0.8007,
+      "spearman_size_vs_hits": 0.8847,
+      "verdict": "CONFOUNDED",
+      "rerank_top10_survived": 5,
+      "rerank_top10_left": 5
+    }
+  },
+  "post_hoc_rate_normalised": {
+    "note": "POST-HOC, not pre-registered. Hits = top 10% by negative interactions PER PAIR TESTED, removing the study's unequal query/array testing depth.",
+    "r2_size_alone_raw": 0.4216,
+    "r2_size_alone_log": 0.6997,
+    "verdict": "CONFOUNDED"
+  },
+  "scope": "No gene and no GO term is named as a finding. The unit of inference is the distribution over sets."
+}

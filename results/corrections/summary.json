@@ -1,0 +1,104 @@
+{
+  "status": "Pre-registered in docs/CORRECTIONS_PREREG.md (d58fa082..., commit a2776f7).",
+  "substrate": "BioGRID ORCS 2.0.18 (752,653,348 bytes verified) x Hallmark v2026.1.Hs; inclusion verbatim from src/corpus_audit.py",
+  "gate": {
+    "n_matching": 1272,
+    "pct_within_tol": 100.0,
+    "passed": true
+  },
+  "n_screens_audited": 1272,
+  "n_with_usable_scores": 1272,
+  "before_rho2_median": 0.1064,
+  "primary_metric": "squared Spearman correlation of ranked statistic vs set size",
+  "corrections": {
+    "C1_hypergeom": {
+      "n_screens": 1272,
+      "n_above_floor": 1150,
+      "median_relative_reduction": 0.5743,
+      "relative_reduction_q25_q75": [
+        0.2833,
+        0.8592
+      ],
+      "worse_share_pct": 0.71,
+      "median_after_rho2": 0.0422,
+      "median_top10_overlap": 9.0,
+      "publication_level_median_relative_reduction": 0.8969,
+      "verdict": "WORKS"
+    },
+    "C2_perm_z": {
+      "n_screens": 1272,
+      "n_above_floor": 1150,
+      "median_relative_reduction": 0.229,
+      "relative_reduction_q25_q75": [
+        -0.1,
+        0.7868
+      ],
+      "worse_share_pct": 13.36,
+      "median_after_rho2": 0.0876,
+      "median_top10_overlap": 9.0,
+      "publication_level_median_relative_reduction": 0.9254,
+      "verdict": "PARTIAL"
+    },
+    "C3_camera_rho0": {
+      "n_screens": 1272,
+      "n_above_floor": 1150,
+      "median_relative_reduction": 0.0276,
+      "relative_reduction_q25_q75": [
+        -0.4067,
+        0.7048
+      ],
+      "worse_share_pct": 18.24,
+      "median_after_rho2": 0.1021,
+      "median_top10_overlap": 9.0,
+      "publication_level_median_relative_reduction": 0.9068,
+      "verdict": "FAILS"
+    },
+    "C4_vif_rho01": {
+      "n_screens": 1272,
+      "n_above_floor": 1150,
+      "median_relative_reduction": 0.6163,
+      "relative_reduction_q25_q75": [
+        0.3332,
+        0.8963
+      ],
+      "worse_share_pct": 1.49,
+      "median_after_rho2": 0.0432,
+      "median_top10_overlap": 9.0,
+      "publication_level_median_relative_reduction": 0.9286,
+      "verdict": "WORKS"
+    },
+    "C4_vif_rho05": {
+      "n_screens": 1272,
+      "n_above_floor": 1150,
+      "median_relative_reduction": 0.8467,
+      "relative_reduction_q25_q75": [
+        0.7099,
+        0.9574
+      ],
+      "worse_share_pct": 1.81,
+      "median_after_rho2": 0.019,
+      "median_top10_overlap": 9.0,
+      "publication_level_median_relative_reduction": 0.9064,
+      "verdict": "WORKS"
+    },
+    "C5_residual": {
+      "n_screens": 1272,
+      "n_above_floor": 1150,
+      "median_relative_reduction": 0.8568,
+      "relative_reduction_q25_q75": [
+        0.789,
+        0.9326
+      ],
+      "worse_share_pct": 6.29,
+      "median_after_rho2": 0.0166,
+      "median_top10_overlap": 9.0,
+      "publication_level_median_relative_reduction": 0.9605,
+      "verdict": "WORKS ON MEDIAN, UNRELIABLE TAIL"
+    }
+  },
+  "caveat": "Driving the size correlation to zero proves size-decoupling, not correctness; a correction that deleted all biology would also score perfectly here. No ground truth exists in this corpus.",
+  "not_applicable": {
+    "GOseq": "corrects a per-gene covariate (transcript length), not set size",
+    "SetRank": "corrects inter-set overlap, not size; faithful implementation out of scope"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "domain": "metabolite sets",
+  "status": "Pre-registered in docs/DOMAINS_PREREG.md (6d40a079..., a2776f7).",
+  "why_this_domain": "The boundary condition. Sets here are 3-40 members, not hundreds. If the confound needs large sets it should weaken or vanish here.",
+  "substrate": "MetaboAnalyst human_cachexia.csv x SMPDB pathway sets",
+  "construction": {
+    "hit_rule": "Welch t on log concentrations, BH q < 0.05",
+    "n_samples": 77,
+    "n_metabolites_measured": 63,
+    "n_metabolites_hit": 54,
+    "usable_set_floor": 3
+  },
+  "n_sets": 91,
+  "size_range": [
+    3,
+    8
+  ],
+  "median_set_size": 3,
+  "r2_size_alone_raw": 0.9126,
+  "r2_size_alone_log": 0.9303,
+  "spearman_size_vs_hits": 0.9214,
+  "verdict": "CONFOUNDED",
+  "corpus_percentile_logsize": 99.8,
+  "rerank_top10_survived": 0,
+  "rerank_top10_left": 10,
+  "sets_with_zero_hits": 0,
+  "DEGENERACY_WARNING": {
+    "fired": true,
+    "hit_fraction": 0.857,
+    "why_the_primary_number_is_not_usable": "86% of measured metabolites are hits, so member hits = 0.86 x set size as an arithmetic identity. With sets of 3-8 members the R^2 of 0.9126 measures that tautology, not a confound. THE HEADLINE ENTRY FOR THIS DOMAIN IS THEREFORE THE POST-HOC STRICT-HIT VARIANT BELOW, LABELLED AS POST-HOC, AND THE PRIMARY IS REPORTED BESIDE IT, NEVER INSTEAD OF IT.",
+    "what_it_really_shows": "The boundary condition failed in the opposite direction from the one anticipated. The problem is not that sets are too small to show the confound; it is that a 63-compound assay cannot define a meaningful null against sets of 3-8 members."
+  },
+  "post_hoc_strict_hit_rule": {
+    "label": "POST-HOC, not pre-registered. Added because the registered hit rule returned an 86% hit rate, which makes the primary number arithmetically forced.",
+    "hit_rule": "top 10% of metabolites by |t| (6 of 63)",
+    "r2_size_alone_raw": 0.3305,
+    "r2_size_alone_log": 0.2991,
+    "verdict": "PARTIALLY CONFOUNDED",
+    "corpus_percentile_logsize": 81.8,
+    "rerank_top10_survived": 10,
+    "sets_with_zero_hits": 41
+  },
+  "scope": "No metabolite and no pathway is named as a finding."
+}

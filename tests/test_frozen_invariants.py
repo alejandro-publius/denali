@@ -1004,7 +1004,7 @@ def main() -> int:
         if break_after:
             break
     check("all three real branches were exercised",
-          {"HIT_ABOVE_THRESHOLD", "NULL_WITH_MECHANISM", "WEAK"} & seen_outcomes)
+          {"HIT_ABOVE_THRESHOLD", "NULL_WITH_MECHANISM", "WEAK"} <= seen_outcomes)
     check("the falsification panel reaches the page",
           '"change_my_mind"' in page and "What would change my mind" in page)
 

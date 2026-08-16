@@ -174,9 +174,9 @@ we didn't.
   original figure was not verifiable by anyone reading `git log`.
 - **The pre-registration has been appended to twice since it was hashed.** The
   file hashed `d3e24b77` is the version at commit `19684f2`, recoverable with
-  `git show 19684f2:docs/MATRIX_PREREG.md`. Two disclosed appends followed — a
+  `git show 19684f2:docs/MATRIX_PREREG.md`. Disclosed appends followed (5 commits touch the file) — a
   knockdown-count correction and a stale-count pointer — so the working copy now
-  hashes `826ed952`. **The original was never edited in place**; both additions sit
+  hashes `79269ce5`. **The original was never edited in place**; both additions sit
   below the original text, which remains visible and unchanged.
 
 - **Two crashes during the held-out run** (undefined coherence at <2 members;

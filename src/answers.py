@@ -109,7 +109,7 @@ def refuse(program: str) -> dict | None:
     if not q:
         return {"status": "REFUSED", "reason": "empty query", "scope_limit": SCOPE}
     # a bare gene symbol, rather than a program name
-    if _GENE_LIKE.match(q) and not q.startswith(("HALLMARK_", "REACTOME_", "GOBP_",
+    if _GENE_LIKE.match(q.upper()) and not q.upper().startswith(("HALLMARK_", "REACTOME_", "GOBP_",
                                                  "KEGG_", "WP_", "BIOCARTA_")):
         return {"status": "REFUSED", "query": q, "reason": REFUSAL,
                 "scope_limit": SCOPE}

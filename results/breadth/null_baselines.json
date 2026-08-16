@@ -1,0 +1,916 @@
+{
+  "status": "POST-HOC, exploratory. Not pre-registered.",
+  "what_this_measures": "The value audit()'s R2 would take with no biology at all, at the same set sizes and the same overall hit rate. An observed R2 is only interpretable against it.",
+  "why": "Where hits are drawn from the set's own members (classical overlap enrichment), regressing a count on the number of trials that produced it recovers the trial count. A large R2 is then arithmetic, not a confound.",
+  "arms": {
+    "denali_primary_published_0.4649": {
+      "n_sets": 50,
+      "observed_r2": 0.4649,
+      "null_kind": "permutation (hits not bounded by size)",
+      "has_counting_structure": false,
+      "frac_hits_le_size": 0.46,
+      "null_mean_r2": 0.0182,
+      "null_ci95": [
+        0.0,
+        0.0981
+      ],
+      "observed_minus_null": 0.4467,
+      "position": "ABOVE null"
+    },
+    "metabolites :: A1 SMPDB x MW-union(all human studies)": {
+      "n_sets": 98,
+      "observed_r2": 0.7935,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.8368,
+      "null_ci95": [
+        0.7932,
+        0.8716
+      ],
+      "observed_minus_null": -0.0433,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: A1 SMPDB x MW-union(all human studies) :: size_20to40": {
+      "n_sets": 43,
+      "observed_r2": 0.3837,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.6144,
+      "null_ci95": [
+        0.4432,
+        0.7542
+      ],
+      "observed_minus_null": -0.2307,
+      "position": "BELOW null"
+    },
+    "metabolites :: A1 SMPDB x MW-union(all human studies) :: size_gt40": {
+      "n_sets": 18,
+      "observed_r2": 0.6733,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.8172,
+      "null_ci95": [
+        0.6757,
+        0.9205
+      ],
+      "observed_minus_null": -0.1439,
+      "position": "BELOW null"
+    },
+    "metabolites :: A1 SMPDB x MW-union(all human studies) :: size_lt20": {
+      "n_sets": 37,
+      "observed_r2": 0.434,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.721,
+      "null_ci95": [
+        0.5751,
+        0.8331
+      ],
+      "observed_minus_null": -0.287,
+      "position": "BELOW null"
+    },
+    "metabolites :: A2 SMPDB x MW-single-broadest-study": {
+      "n_sets": 98,
+      "observed_r2": 0.5556,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.5322,
+      "null_ci95": [
+        0.4253,
+        0.633
+      ],
+      "observed_minus_null": 0.0234,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: A2 SMPDB x MW-single-broadest-study :: size_20to40": {
+      "n_sets": 43,
+      "observed_r2": 0.1192,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.1452,
+      "null_ci95": [
+        0.0104,
+        0.3363
+      ],
+      "observed_minus_null": -0.026,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: A2 SMPDB x MW-single-broadest-study :: size_gt40": {
+      "n_sets": 18,
+      "observed_r2": 0.5784,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.327,
+      "null_ci95": [
+        0.0203,
+        0.633
+      ],
+      "observed_minus_null": 0.2514,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: A2 SMPDB x MW-single-broadest-study :: size_lt20": {
+      "n_sets": 37,
+      "observed_r2": 0.024,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.1892,
+      "null_ci95": [
+        0.02,
+        0.4406
+      ],
+      "observed_minus_null": -0.1652,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: A3 SMPDB x MW-single-median-study": {
+      "n_sets": 98,
+      "observed_r2": 0.0753,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.0938,
+      "null_ci95": [
+        0.0104,
+        0.2438
+      ],
+      "observed_minus_null": -0.0185,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: A3 SMPDB x MW-single-median-study :: size_20to40": {
+      "n_sets": 43,
+      "observed_r2": 0.1771,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.0354,
+      "null_ci95": [
+        0.0002,
+        0.1402
+      ],
+      "observed_minus_null": 0.1417,
+      "position": "ABOVE null"
+    },
+    "metabolites :: A3 SMPDB x MW-single-median-study :: size_gt40": {
+      "n_sets": 18,
+      "observed_r2": 0.0029,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.0705,
+      "null_ci95": [
+        0.0001,
+        0.321
+      ],
+      "observed_minus_null": -0.0676,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: A3 SMPDB x MW-single-median-study :: size_lt20": {
+      "n_sets": 37,
+      "observed_r2": 0.0873,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.0388,
+      "null_ci95": [
+        0.0001,
+        0.1574
+      ],
+      "observed_minus_null": 0.0485,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: A4 SMPDB x detected-in->=10pct-of-studies": {
+      "n_sets": 98,
+      "observed_r2": 0.5114,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.7375,
+      "null_ci95": [
+        0.6636,
+        0.7942
+      ],
+      "observed_minus_null": -0.2261,
+      "position": "BELOW null"
+    },
+    "metabolites :: A4 SMPDB x detected-in->=10pct-of-studies :: size_20to40": {
+      "n_sets": 43,
+      "observed_r2": 0.1659,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.376,
+      "null_ci95": [
+        0.1862,
+        0.5653
+      ],
+      "observed_minus_null": -0.2101,
+      "position": "BELOW null"
+    },
+    "metabolites :: A4 SMPDB x detected-in->=10pct-of-studies :: size_gt40": {
+      "n_sets": 18,
+      "observed_r2": 0.0525,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.53,
+      "null_ci95": [
+        0.1955,
+        0.7676
+      ],
+      "observed_minus_null": -0.4775,
+      "position": "BELOW null"
+    },
+    "metabolites :: A4 SMPDB x detected-in->=10pct-of-studies :: size_lt20": {
+      "n_sets": 37,
+      "observed_r2": 0.1725,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.5263,
+      "null_ci95": [
+        0.3109,
+        0.712
+      ],
+      "observed_minus_null": -0.3538,
+      "position": "BELOW null"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=0% of studies": {
+      "n_sets": 98,
+      "observed_r2": 0.7935,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.8368,
+      "null_ci95": [
+        0.7932,
+        0.8716
+      ],
+      "observed_minus_null": -0.0433,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=0% of studies :: size_lt20": {
+      "n_sets": 37,
+      "observed_r2": 0.434,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.721,
+      "null_ci95": [
+        0.5751,
+        0.8331
+      ],
+      "observed_minus_null": -0.287,
+      "position": "BELOW null"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=1% of studies": {
+      "n_sets": 98,
+      "observed_r2": 0.7108,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.8122,
+      "null_ci95": [
+        0.7526,
+        0.8556
+      ],
+      "observed_minus_null": -0.1014,
+      "position": "BELOW null"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=1% of studies :: size_lt20": {
+      "n_sets": 37,
+      "observed_r2": 0.3357,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.679,
+      "null_ci95": [
+        0.5233,
+        0.8022
+      ],
+      "observed_minus_null": -0.3433,
+      "position": "BELOW null"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=10% of studies": {
+      "n_sets": 98,
+      "observed_r2": 0.4555,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.7224,
+      "null_ci95": [
+        0.6455,
+        0.7858
+      ],
+      "observed_minus_null": -0.2669,
+      "position": "BELOW null"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=10% of studies :: size_lt20": {
+      "n_sets": 37,
+      "observed_r2": 0.1258,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.5119,
+      "null_ci95": [
+        0.2992,
+        0.7089
+      ],
+      "observed_minus_null": -0.3861,
+      "position": "BELOW null"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=25% of studies": {
+      "n_sets": 98,
+      "observed_r2": 0.244,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.4426,
+      "null_ci95": [
+        0.3189,
+        0.5711
+      ],
+      "observed_minus_null": -0.1986,
+      "position": "BELOW null"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=25% of studies :: size_lt20": {
+      "n_sets": 37,
+      "observed_r2": 0.0004,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.1751,
+      "null_ci95": [
+        0.0092,
+        0.4335
+      ],
+      "observed_minus_null": -0.1747,
+      "position": "BELOW null"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=5% of studies": {
+      "n_sets": 98,
+      "observed_r2": 0.5662,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.7619,
+      "null_ci95": [
+        0.695,
+        0.8178
+      ],
+      "observed_minus_null": -0.1957,
+      "position": "BELOW null"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=5% of studies :: size_lt20": {
+      "n_sets": 37,
+      "observed_r2": 0.3324,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.5835,
+      "null_ci95": [
+        0.3824,
+        0.7495
+      ],
+      "observed_minus_null": -0.2511,
+      "position": "BELOW null"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=50% of studies": {
+      "n_sets": 98,
+      "observed_r2": 0.2504,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.141,
+      "null_ci95": [
+        0.0277,
+        0.3021
+      ],
+      "observed_minus_null": 0.1094,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=50% of studies :: size_lt20": {
+      "n_sets": 37,
+      "observed_r2": 0.0006,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.0441,
+      "null_ci95": [
+        0.0,
+        0.1664
+      ],
+      "observed_minus_null": -0.0435,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=75% of studies": {
+      "n_sets": 98,
+      "observed_r2": NaN,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": null,
+      "null_ci95": null,
+      "observed_minus_null": null,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=75% of studies :: size_lt20": {
+      "n_sets": 37,
+      "observed_r2": NaN,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": null,
+      "null_ci95": null,
+      "observed_minus_null": null,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=90% of studies": {
+      "n_sets": 98,
+      "observed_r2": NaN,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": null,
+      "null_ci95": null,
+      "observed_minus_null": null,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: A5 SMPDB sweep :: detected in >=90% of studies :: size_lt20": {
+      "n_sets": 37,
+      "observed_r2": NaN,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": null,
+      "null_ci95": null,
+      "observed_minus_null": null,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: B1 KEGG x MW-union (measured coverage)": {
+      "n_sets": 216,
+      "observed_r2": 0.3442,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.7417,
+      "null_ci95": [
+        0.7075,
+        0.7749
+      ],
+      "observed_minus_null": -0.3975,
+      "position": "BELOW null"
+    },
+    "metabolites :: B1 KEGG x MW-union (measured coverage) :: size_20to40": {
+      "n_sets": 51,
+      "observed_r2": 0.0061,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.4643,
+      "null_ci95": [
+        0.2792,
+        0.6062
+      ],
+      "observed_minus_null": -0.4582,
+      "position": "BELOW null"
+    },
+    "metabolites :: B1 KEGG x MW-union (measured coverage) :: size_gt40": {
+      "n_sets": 52,
+      "observed_r2": 0.0003,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.7096,
+      "null_ci95": [
+        0.6073,
+        0.794
+      ],
+      "observed_minus_null": -0.7093,
+      "position": "BELOW null"
+    },
+    "metabolites :: B1 KEGG x MW-union (measured coverage) :: size_lt20": {
+      "n_sets": 113,
+      "observed_r2": 0.3044,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.4869,
+      "null_ci95": [
+        0.3725,
+        0.5837
+      ],
+      "observed_minus_null": -0.1825,
+      "position": "BELOW null"
+    },
+    "metabolites :: B2 KEGG x SMPDB/HMDB annotation coverage": {
+      "n_sets": 216,
+      "observed_r2": 0.3304,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.7809,
+      "null_ci95": [
+        0.7541,
+        0.8077
+      ],
+      "observed_minus_null": -0.4505,
+      "position": "BELOW null"
+    },
+    "metabolites :: B2 KEGG x SMPDB/HMDB annotation coverage :: size_20to40": {
+      "n_sets": 51,
+      "observed_r2": 0.0102,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.6115,
+      "null_ci95": [
+        0.4548,
+        0.7434
+      ],
+      "observed_minus_null": -0.6013,
+      "position": "BELOW null"
+    },
+    "metabolites :: B2 KEGG x SMPDB/HMDB annotation coverage :: size_gt40": {
+      "n_sets": 52,
+      "observed_r2": 0.0018,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.7871,
+      "null_ci95": [
+        0.7041,
+        0.8608
+      ],
+      "observed_minus_null": -0.7853,
+      "position": "BELOW null"
+    },
+    "metabolites :: B2 KEGG x SMPDB/HMDB annotation coverage :: size_lt20": {
+      "n_sets": 113,
+      "observed_r2": 0.506,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.8173,
+      "null_ci95": [
+        0.7522,
+        0.8581
+      ],
+      "observed_minus_null": -0.3113,
+      "position": "BELOW null"
+    },
+    "metabolites :: B3 KEGG (incl. global maps) x annotation coverage": {
+      "n_sets": 305,
+      "observed_r2": 0.1319,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.1673,
+      "null_ci95": [
+        0.161,
+        0.1748
+      ],
+      "observed_minus_null": -0.0354,
+      "position": "BELOW null"
+    },
+    "metabolites :: B4 KEGG sweep :: detected in >=0% of studies": {
+      "n_sets": 216,
+      "observed_r2": 0.3442,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.7417,
+      "null_ci95": [
+        0.7075,
+        0.7749
+      ],
+      "observed_minus_null": -0.3975,
+      "position": "BELOW null"
+    },
+    "metabolites :: B4 KEGG sweep :: detected in >=0% of studies :: size_lt20": {
+      "n_sets": 113,
+      "observed_r2": 0.3044,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.4869,
+      "null_ci95": [
+        0.3725,
+        0.5837
+      ],
+      "observed_minus_null": -0.1825,
+      "position": "BELOW null"
+    },
+    "metabolites :: B4 KEGG sweep :: detected in >=10% of studies": {
+      "n_sets": 216,
+      "observed_r2": 0.1772,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.6698,
+      "null_ci95": [
+        0.6363,
+        0.7069
+      ],
+      "observed_minus_null": -0.4926,
+      "position": "BELOW null"
+    },
+    "metabolites :: B4 KEGG sweep :: detected in >=10% of studies :: size_lt20": {
+      "n_sets": 113,
+      "observed_r2": 0.1861,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.2886,
+      "null_ci95": [
+        0.1728,
+        0.4109
+      ],
+      "observed_minus_null": -0.1025,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: B4 KEGG sweep :: detected in >=25% of studies": {
+      "n_sets": 216,
+      "observed_r2": 0.1665,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.5843,
+      "null_ci95": [
+        0.5274,
+        0.6381
+      ],
+      "observed_minus_null": -0.4178,
+      "position": "BELOW null"
+    },
+    "metabolites :: B4 KEGG sweep :: detected in >=25% of studies :: size_lt20": {
+      "n_sets": 113,
+      "observed_r2": 0.1639,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.1361,
+      "null_ci95": [
+        0.0354,
+        0.2734
+      ],
+      "observed_minus_null": 0.0278,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: B4 KEGG sweep :: detected in >=5% of studies": {
+      "n_sets": 216,
+      "observed_r2": 0.2176,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.6961,
+      "null_ci95": [
+        0.6622,
+        0.7266
+      ],
+      "observed_minus_null": -0.4785,
+      "position": "BELOW null"
+    },
+    "metabolites :: B4 KEGG sweep :: detected in >=5% of studies :: size_lt20": {
+      "n_sets": 113,
+      "observed_r2": 0.2296,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.3465,
+      "null_ci95": [
+        0.2273,
+        0.4593
+      ],
+      "observed_minus_null": -0.1169,
+      "position": "INSIDE null band"
+    },
+    "metabolites :: B4 KEGG sweep :: detected in >=50% of studies": {
+      "n_sets": 216,
+      "observed_r2": 0.0485,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.3157,
+      "null_ci95": [
+        0.1908,
+        0.4456
+      ],
+      "observed_minus_null": -0.2672,
+      "position": "BELOW null"
+    },
+    "metabolites :: B4 KEGG sweep :: detected in >=50% of studies :: size_lt20": {
+      "n_sets": 113,
+      "observed_r2": 0.0106,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.0533,
+      "null_ci95": [
+        0.0006,
+        0.1495
+      ],
+      "observed_minus_null": -0.0427,
+      "position": "INSIDE null band"
+    },
+    "microbiome :: members-measured FDR10 :: FengQ_2015": {
+      "n_sets": 292,
+      "observed_r2": 0.8315,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.8038,
+      "null_ci95": [
+        0.782,
+        0.8233
+      ],
+      "observed_minus_null": 0.0277,
+      "position": "ABOVE null"
+    },
+    "microbiome :: members-measured FDR10 :: ThomasAM_2018a": {
+      "n_sets": 293,
+      "observed_r2": NaN,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": null,
+      "null_ci95": null,
+      "observed_minus_null": null,
+      "position": "INSIDE null band"
+    },
+    "microbiome :: members-measured FDR10 :: ThomasAM_2018b": {
+      "n_sets": 280,
+      "observed_r2": NaN,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": null,
+      "null_ci95": null,
+      "observed_minus_null": null,
+      "position": "INSIDE null band"
+    },
+    "microbiome :: members-measured FDR10 :: ThomasAM_2019_c": {
+      "n_sets": 291,
+      "observed_r2": NaN,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": null,
+      "null_ci95": null,
+      "observed_minus_null": null,
+      "position": "INSIDE null band"
+    },
+    "microbiome :: members-measured FDR10 :: VogtmannE_2016": {
+      "n_sets": 284,
+      "observed_r2": NaN,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": null,
+      "null_ci95": null,
+      "observed_minus_null": null,
+      "position": "INSIDE null band"
+    },
+    "microbiome :: members-measured FDR10 :: YuJ_2015": {
+      "n_sets": 317,
+      "observed_r2": 0.8231,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.7714,
+      "null_ci95": [
+        0.7497,
+        0.7917
+      ],
+      "observed_minus_null": 0.0517,
+      "position": "ABOVE null"
+    },
+    "microbiome :: members-measured FDR10 :: ZellerG_2014": {
+      "n_sets": 289,
+      "observed_r2": 0.7956,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.8054,
+      "null_ci95": [
+        0.7835,
+        0.8241
+      ],
+      "observed_minus_null": -0.0098,
+      "position": "INSIDE null band"
+    },
+    "microbiome :: detection :: FengQ_2015": {
+      "n_sets": 459,
+      "observed_r2": 0.0019,
+      "null_kind": "permutation (hits not bounded by size)",
+      "has_counting_structure": false,
+      "frac_hits_le_size": 0.146,
+      "null_mean_r2": 0.0023,
+      "null_ci95": [
+        0.0,
+        0.011
+      ],
+      "observed_minus_null": -0.0004,
+      "position": "INSIDE null band"
+    },
+    "microbiome :: detection :: ThomasAM_2018a": {
+      "n_sets": 413,
+      "observed_r2": 0.0034,
+      "null_kind": "permutation (hits not bounded by size)",
+      "has_counting_structure": false,
+      "frac_hits_le_size": 0.109,
+      "null_mean_r2": 0.0025,
+      "null_ci95": [
+        0.0,
+        0.0155
+      ],
+      "observed_minus_null": 0.0009,
+      "position": "INSIDE null band"
+    },
+    "microbiome :: detection :: ThomasAM_2018b": {
+      "n_sets": 409,
+      "observed_r2": 0.0037,
+      "null_kind": "permutation (hits not bounded by size)",
+      "has_counting_structure": false,
+      "frac_hits_le_size": 0.1296,
+      "null_mean_r2": 0.0027,
+      "null_ci95": [
+        0.0,
+        0.0133
+      ],
+      "observed_minus_null": 0.001,
+      "position": "INSIDE null band"
+    },
+    "microbiome :: detection :: ThomasAM_2019_c": {
+      "n_sets": 431,
+      "observed_r2": 0.0014,
+      "null_kind": "permutation (hits not bounded by size)",
+      "has_counting_structure": false,
+      "frac_hits_le_size": 0.1206,
+      "null_mean_r2": 0.0022,
+      "null_ci95": [
+        0.0,
+        0.0119
+      ],
+      "observed_minus_null": -0.0008,
+      "position": "INSIDE null band"
+    },
+    "microbiome :: detection :: VogtmannE_2016": {
+      "n_sets": 419,
+      "observed_r2": 0.0007,
+      "null_kind": "permutation (hits not bounded by size)",
+      "has_counting_structure": false,
+      "frac_hits_le_size": 0.1002,
+      "null_mean_r2": 0.0024,
+      "null_ci95": [
+        0.0,
+        0.013
+      ],
+      "observed_minus_null": -0.0017,
+      "position": "INSIDE null band"
+    },
+    "microbiome :: detection :: YuJ_2015": {
+      "n_sets": 471,
+      "observed_r2": 0.0012,
+      "null_kind": "permutation (hits not bounded by size)",
+      "has_counting_structure": false,
+      "frac_hits_le_size": 0.1529,
+      "null_mean_r2": 0.0018,
+      "null_ci95": [
+        0.0,
+        0.0082
+      ],
+      "observed_minus_null": -0.0006,
+      "position": "INSIDE null band"
+    },
+    "microbiome :: detection :: ZellerG_2014": {
+      "n_sets": 448,
+      "observed_r2": 0.0014,
+      "null_kind": "permutation (hits not bounded by size)",
+      "has_counting_structure": false,
+      "frac_hits_le_size": 0.1228,
+      "null_mean_r2": 0.0021,
+      "null_ci95": [
+        0.0,
+        0.0103
+      ],
+      "observed_minus_null": -0.0007,
+      "position": "INSIDE null band"
+    },
+    "regions :: paired real-query vs matched control": {
+      "n_jobs": 82,
+      "median_r2_real_query": 0.4035,
+      "median_r2_control_set": 0.5903,
+      "frac_jobs_control_ge_query": 0.8171,
+      "paired_median_difference": -0.1278,
+      "null_kind": "matched empirical control (the job's own control regions, randomised for most jobs)",
+      "position": "BELOW null"
+    }
+  }
+}

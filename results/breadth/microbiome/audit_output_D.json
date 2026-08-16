@@ -1,0 +1,798 @@
+{
+  "variants": [
+    {
+      "n_sets": 324,
+      "size_range": [
+        1,
+        932
+      ],
+      "r2_size_alone": 0.7844,
+      "spearman_size_vs_hits": 0.8857,
+      "sets_with_zero_hits": 172,
+      "share_explained_without_biology": 0.7844,
+      "reading": "78% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "CONFOUNDED",
+      "what_to_do": "Do not read the top of this ranking as biology. Before committing to any candidate, re-rank with a size-aware statistic -- a competitive test that accounts for inter-gene correlation (CAMERA and its relatives), or a permutation null that preserves set size -- and see which entries survive. The ones that move most are the ones your current ranking is least able to justify.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_pooled_membersMeasured_vs_FDR10",
+      "note": "size = number of species-stratified instances of the pathway TESTED (pooled over 7 cohorts); hits = number significant at BH-FDR<0.10. denali's exact estimand."
+    },
+    {
+      "n_sets": 324,
+      "size_range": [
+        1,
+        932
+      ],
+      "r2_size_alone": 0.7514,
+      "spearman_size_vs_hits": 0.9382,
+      "sets_with_zero_hits": 40,
+      "share_explained_without_biology": 0.7514,
+      "reading": "75% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "CONFOUNDED",
+      "what_to_do": "Do not read the top of this ranking as biology. Before committing to any candidate, re-rank with a size-aware statistic -- a competitive test that accounts for inter-gene correlation (CAMERA and its relatives), or a permutation null that preserves set size -- and see which entries survive. The ones that move most are the ones your current ranking is least able to justify.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_pooled_membersMeasured_vs_nominal05",
+      "note": "same size; hits = number significant at nominal p<0.05 (uncorrected). Nominal, not FDR."
+    },
+    {
+      "n_sets": 324,
+      "size_range": [
+        4,
+        205
+      ],
+      "r2_size_alone": 0.013,
+      "spearman_size_vs_hits": -0.2145,
+      "sets_with_zero_hits": 40,
+      "share_explained_without_biology": 0.013,
+      "reading": "1% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "NOT SIZE-DOMINATED",
+      "what_to_do": "Set size does not explain much of this ranking. That is the good case, and it is worth stating explicitly -- most published set-level rankings never check.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "E_pooled_reactions_vs_nominal05",
+      "note": "size = MetaCyc reaction count; hits = nominal p<0.05 count. Reaction-size definition for comparison."
+    },
+    {
+      "n_sets": 292,
+      "size_range": [
+        1,
+        126
+      ],
+      "r2_size_alone": 0.8315,
+      "spearman_size_vs_hits": 0.9032,
+      "sets_with_zero_hits": 164,
+      "share_explained_without_biology": 0.8315,
+      "reading": "83% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "CONFOUNDED",
+      "what_to_do": "Do not read the top of this ranking as biology. Before committing to any candidate, re-rank with a size-aware statistic -- a competitive test that accounts for inter-gene correlation (CAMERA and its relatives), or a permutation null that preserves set size -- and see which entries survive. The ones that move most are the ones your current ranking is least able to justify.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_FengQ_2015_FDR10",
+      "note": "per-cohort, size = members measured, hits = FDR<0.10"
+    },
+    {
+      "n_sets": 292,
+      "size_range": [
+        1,
+        126
+      ],
+      "r2_size_alone": 0.8053,
+      "spearman_size_vs_hits": 0.9089,
+      "sets_with_zero_hits": 131,
+      "share_explained_without_biology": 0.8053,
+      "reading": "81% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "CONFOUNDED",
+      "what_to_do": "Do not read the top of this ranking as biology. Before committing to any candidate, re-rank with a size-aware statistic -- a competitive test that accounts for inter-gene correlation (CAMERA and its relatives), or a permutation null that preserves set size -- and see which entries survive. The ones that move most are the ones your current ranking is least able to justify.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_FengQ_2015_nominal05",
+      "note": "per-cohort, size = members measured, hits = nominal p<0.05"
+    },
+    {
+      "n_sets": 293,
+      "size_range": [
+        1,
+        110
+      ],
+      "r2_size_alone": NaN,
+      "spearman_size_vs_hits": NaN,
+      "sets_with_zero_hits": 293,
+      "share_explained_without_biology": NaN,
+      "reading": "nan% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "DEGENERATE (no variance in hits) - no defensible number",
+      "what_to_do": "Set size does not explain much of this ranking. That is the good case, and it is worth stating explicitly -- most published set-level rankings never check.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_ThomasAM_2018a_FDR10",
+      "note": "per-cohort, size = members measured, hits = FDR<0.10"
+    },
+    {
+      "n_sets": 293,
+      "size_range": [
+        1,
+        110
+      ],
+      "r2_size_alone": 0.7056,
+      "spearman_size_vs_hits": 0.7562,
+      "sets_with_zero_hits": 51,
+      "share_explained_without_biology": 0.7056,
+      "reading": "71% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "CONFOUNDED",
+      "what_to_do": "Do not read the top of this ranking as biology. Before committing to any candidate, re-rank with a size-aware statistic -- a competitive test that accounts for inter-gene correlation (CAMERA and its relatives), or a permutation null that preserves set size -- and see which entries survive. The ones that move most are the ones your current ranking is least able to justify.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_ThomasAM_2018a_nominal05",
+      "note": "per-cohort, size = members measured, hits = nominal p<0.05"
+    },
+    {
+      "n_sets": 280,
+      "size_range": [
+        1,
+        135
+      ],
+      "r2_size_alone": NaN,
+      "spearman_size_vs_hits": NaN,
+      "sets_with_zero_hits": 280,
+      "share_explained_without_biology": NaN,
+      "reading": "nan% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "DEGENERATE (no variance in hits) - no defensible number",
+      "what_to_do": "Set size does not explain much of this ranking. That is the good case, and it is worth stating explicitly -- most published set-level rankings never check.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_ThomasAM_2018b_FDR10",
+      "note": "per-cohort, size = members measured, hits = FDR<0.10"
+    },
+    {
+      "n_sets": 280,
+      "size_range": [
+        1,
+        135
+      ],
+      "r2_size_alone": 0.742,
+      "spearman_size_vs_hits": 0.7454,
+      "sets_with_zero_hits": 189,
+      "share_explained_without_biology": 0.742,
+      "reading": "74% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "CONFOUNDED",
+      "what_to_do": "Do not read the top of this ranking as biology. Before committing to any candidate, re-rank with a size-aware statistic -- a competitive test that accounts for inter-gene correlation (CAMERA and its relatives), or a permutation null that preserves set size -- and see which entries survive. The ones that move most are the ones your current ranking is least able to justify.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_ThomasAM_2018b_nominal05",
+      "note": "per-cohort, size = members measured, hits = nominal p<0.05"
+    },
+    {
+      "n_sets": 291,
+      "size_range": [
+        1,
+        144
+      ],
+      "r2_size_alone": NaN,
+      "spearman_size_vs_hits": NaN,
+      "sets_with_zero_hits": 291,
+      "share_explained_without_biology": NaN,
+      "reading": "nan% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "DEGENERATE (no variance in hits) - no defensible number",
+      "what_to_do": "Set size does not explain much of this ranking. That is the good case, and it is worth stating explicitly -- most published set-level rankings never check.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_ThomasAM_2019_c_FDR10",
+      "note": "per-cohort, size = members measured, hits = FDR<0.10"
+    },
+    {
+      "n_sets": 291,
+      "size_range": [
+        1,
+        144
+      ],
+      "r2_size_alone": 0.8316,
+      "spearman_size_vs_hits": 0.7583,
+      "sets_with_zero_hits": 197,
+      "share_explained_without_biology": 0.8316,
+      "reading": "83% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "CONFOUNDED",
+      "what_to_do": "Do not read the top of this ranking as biology. Before committing to any candidate, re-rank with a size-aware statistic -- a competitive test that accounts for inter-gene correlation (CAMERA and its relatives), or a permutation null that preserves set size -- and see which entries survive. The ones that move most are the ones your current ranking is least able to justify.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_ThomasAM_2019_c_nominal05",
+      "note": "per-cohort, size = members measured, hits = nominal p<0.05"
+    },
+    {
+      "n_sets": 284,
+      "size_range": [
+        1,
+        141
+      ],
+      "r2_size_alone": NaN,
+      "spearman_size_vs_hits": NaN,
+      "sets_with_zero_hits": 284,
+      "share_explained_without_biology": NaN,
+      "reading": "nan% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "DEGENERATE (no variance in hits) - no defensible number",
+      "what_to_do": "Set size does not explain much of this ranking. That is the good case, and it is worth stating explicitly -- most published set-level rankings never check.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_VogtmannE_2016_FDR10",
+      "note": "per-cohort, size = members measured, hits = FDR<0.10"
+    },
+    {
+      "n_sets": 284,
+      "size_range": [
+        1,
+        141
+      ],
+      "r2_size_alone": 0.7945,
+      "spearman_size_vs_hits": 0.7554,
+      "sets_with_zero_hits": 31,
+      "share_explained_without_biology": 0.7945,
+      "reading": "79% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "CONFOUNDED",
+      "what_to_do": "Do not read the top of this ranking as biology. Before committing to any candidate, re-rank with a size-aware statistic -- a competitive test that accounts for inter-gene correlation (CAMERA and its relatives), or a permutation null that preserves set size -- and see which entries survive. The ones that move most are the ones your current ranking is least able to justify.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_VogtmannE_2016_nominal05",
+      "note": "per-cohort, size = members measured, hits = nominal p<0.05"
+    },
+    {
+      "n_sets": 317,
+      "size_range": [
+        1,
+        144
+      ],
+      "r2_size_alone": 0.8231,
+      "spearman_size_vs_hits": 0.8321,
+      "sets_with_zero_hits": 195,
+      "share_explained_without_biology": 0.8231,
+      "reading": "82% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "CONFOUNDED",
+      "what_to_do": "Do not read the top of this ranking as biology. Before committing to any candidate, re-rank with a size-aware statistic -- a competitive test that accounts for inter-gene correlation (CAMERA and its relatives), or a permutation null that preserves set size -- and see which entries survive. The ones that move most are the ones your current ranking is least able to justify.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_YuJ_2015_FDR10",
+      "note": "per-cohort, size = members measured, hits = FDR<0.10"
+    },
+    {
+      "n_sets": 317,
+      "size_range": [
+        1,
+        144
+      ],
+      "r2_size_alone": 0.803,
+      "spearman_size_vs_hits": 0.8575,
+      "sets_with_zero_hits": 179,
+      "share_explained_without_biology": 0.803,
+      "reading": "80% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "CONFOUNDED",
+      "what_to_do": "Do not read the top of this ranking as biology. Before committing to any candidate, re-rank with a size-aware statistic -- a competitive test that accounts for inter-gene correlation (CAMERA and its relatives), or a permutation null that preserves set size -- and see which entries survive. The ones that move most are the ones your current ranking is least able to justify.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_YuJ_2015_nominal05",
+      "note": "per-cohort, size = members measured, hits = nominal p<0.05"
+    },
+    {
+      "n_sets": 289,
+      "size_range": [
+        1,
+        132
+      ],
+      "r2_size_alone": 0.7956,
+      "spearman_size_vs_hits": 0.839,
+      "sets_with_zero_hits": 178,
+      "share_explained_without_biology": 0.7956,
+      "reading": "80% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "CONFOUNDED",
+      "what_to_do": "Do not read the top of this ranking as biology. Before committing to any candidate, re-rank with a size-aware statistic -- a competitive test that accounts for inter-gene correlation (CAMERA and its relatives), or a permutation null that preserves set size -- and see which entries survive. The ones that move most are the ones your current ranking is least able to justify.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_ZellerG_2014_FDR10",
+      "note": "per-cohort, size = members measured, hits = FDR<0.10"
+    },
+    {
+      "n_sets": 289,
+      "size_range": [
+        1,
+        132
+      ],
+      "r2_size_alone": 0.7962,
+      "spearman_size_vs_hits": 0.9138,
+      "sets_with_zero_hits": 152,
+      "share_explained_without_biology": 0.7962,
+      "reading": "80% of the variance in this ranking is predicted by how the sets were built, with no reference to what any gene does.",
+      "verdict": "CONFOUNDED",
+      "what_to_do": "Do not read the top of this ranking as biology. Before committing to any candidate, re-rank with a size-aware statistic -- a competitive test that accounts for inter-gene correlation (CAMERA and its relatives), or a permutation null that preserves set size -- and see which entries survive. The ones that move most are the ones your current ranking is least able to justify.",
+      "what_this_is_not": "Not a candidate list and not a recommendation. This measures a property of the ranking, not of any gene or pathway in it.",
+      "method": "VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461",
+      "label": "D_ZellerG_2014_nominal05",
+      "note": "per-cohort, size = members measured, hits = nominal p<0.05"
+    }
+  ],
+  "replication_pairs": [
+    {
+      "n_sets": 284,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "FengQ_2015",
+      "cohort_b": "ThomasAM_2018a"
+    },
+    {
+      "n_sets": 277,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "FengQ_2015",
+      "cohort_b": "ThomasAM_2018b"
+    },
+    {
+      "n_sets": 283,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "FengQ_2015",
+      "cohort_b": "ThomasAM_2019_c"
+    },
+    {
+      "n_sets": 278,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "FengQ_2015",
+      "cohort_b": "VogtmannE_2016"
+    },
+    {
+      "n_sets": 287,
+      "agreement_raw": 0.8733,
+      "agreement_after_removing_size": 0.5043,
+      "pct_of_agreement_that_is_size": 42.2,
+      "reading": "42% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "FengQ_2015",
+      "cohort_b": "YuJ_2015"
+    },
+    {
+      "n_sets": 284,
+      "agreement_raw": 0.8689,
+      "agreement_after_removing_size": 0.4611,
+      "pct_of_agreement_that_is_size": 46.9,
+      "reading": "47% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "FengQ_2015",
+      "cohort_b": "ZellerG_2014"
+    },
+    {
+      "n_sets": 273,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "ThomasAM_2018a",
+      "cohort_b": "ThomasAM_2018b"
+    },
+    {
+      "n_sets": 286,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "ThomasAM_2018a",
+      "cohort_b": "ThomasAM_2019_c"
+    },
+    {
+      "n_sets": 277,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "ThomasAM_2018a",
+      "cohort_b": "VogtmannE_2016"
+    },
+    {
+      "n_sets": 291,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "ThomasAM_2018a",
+      "cohort_b": "YuJ_2015"
+    },
+    {
+      "n_sets": 282,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "ThomasAM_2018a",
+      "cohort_b": "ZellerG_2014"
+    },
+    {
+      "n_sets": 276,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "ThomasAM_2018b",
+      "cohort_b": "ThomasAM_2019_c"
+    },
+    {
+      "n_sets": 276,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "ThomasAM_2018b",
+      "cohort_b": "VogtmannE_2016"
+    },
+    {
+      "n_sets": 277,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "ThomasAM_2018b",
+      "cohort_b": "YuJ_2015"
+    },
+    {
+      "n_sets": 280,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "ThomasAM_2018b",
+      "cohort_b": "ZellerG_2014"
+    },
+    {
+      "n_sets": 279,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "ThomasAM_2019_c",
+      "cohort_b": "VogtmannE_2016"
+    },
+    {
+      "n_sets": 288,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "ThomasAM_2019_c",
+      "cohort_b": "YuJ_2015"
+    },
+    {
+      "n_sets": 284,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "ThomasAM_2019_c",
+      "cohort_b": "ZellerG_2014"
+    },
+    {
+      "n_sets": 280,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "VogtmannE_2016",
+      "cohort_b": "YuJ_2015"
+    },
+    {
+      "n_sets": 282,
+      "agreement_raw": NaN,
+      "agreement_after_removing_size": NaN,
+      "pct_of_agreement_that_is_size": NaN,
+      "reading": "nan% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "VogtmannE_2016",
+      "cohort_b": "ZellerG_2014"
+    },
+    {
+      "n_sets": 286,
+      "agreement_raw": 0.8736,
+      "agreement_after_removing_size": 0.6626,
+      "pct_of_agreement_that_is_size": 24.2,
+      "reading": "24% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_FDR10",
+      "cohort_a": "YuJ_2015",
+      "cohort_b": "ZellerG_2014"
+    },
+    {
+      "n_sets": 284,
+      "agreement_raw": 0.7058,
+      "agreement_after_removing_size": 0.1511,
+      "pct_of_agreement_that_is_size": 78.6,
+      "reading": "79% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "FengQ_2015",
+      "cohort_b": "ThomasAM_2018a"
+    },
+    {
+      "n_sets": 277,
+      "agreement_raw": 0.7328,
+      "agreement_after_removing_size": 0.3879,
+      "pct_of_agreement_that_is_size": 47.1,
+      "reading": "47% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "FengQ_2015",
+      "cohort_b": "ThomasAM_2018b"
+    },
+    {
+      "n_sets": 283,
+      "agreement_raw": 0.7861,
+      "agreement_after_removing_size": 0.4646,
+      "pct_of_agreement_that_is_size": 40.9,
+      "reading": "41% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "FengQ_2015",
+      "cohort_b": "ThomasAM_2019_c"
+    },
+    {
+      "n_sets": 278,
+      "agreement_raw": 0.7775,
+      "agreement_after_removing_size": 0.4452,
+      "pct_of_agreement_that_is_size": 42.7,
+      "reading": "43% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "FengQ_2015",
+      "cohort_b": "VogtmannE_2016"
+    },
+    {
+      "n_sets": 287,
+      "agreement_raw": 0.8568,
+      "agreement_after_removing_size": 0.3127,
+      "pct_of_agreement_that_is_size": 63.5,
+      "reading": "64% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "FengQ_2015",
+      "cohort_b": "YuJ_2015"
+    },
+    {
+      "n_sets": 284,
+      "agreement_raw": 0.8936,
+      "agreement_after_removing_size": 0.3703,
+      "pct_of_agreement_that_is_size": 58.6,
+      "reading": "59% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "FengQ_2015",
+      "cohort_b": "ZellerG_2014"
+    },
+    {
+      "n_sets": 273,
+      "agreement_raw": 0.6701,
+      "agreement_after_removing_size": 0.271,
+      "pct_of_agreement_that_is_size": 59.6,
+      "reading": "60% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "ThomasAM_2018a",
+      "cohort_b": "ThomasAM_2018b"
+    },
+    {
+      "n_sets": 286,
+      "agreement_raw": 0.6746,
+      "agreement_after_removing_size": 0.3182,
+      "pct_of_agreement_that_is_size": 52.8,
+      "reading": "53% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "ThomasAM_2018a",
+      "cohort_b": "ThomasAM_2019_c"
+    },
+    {
+      "n_sets": 277,
+      "agreement_raw": 0.7904,
+      "agreement_after_removing_size": 0.5055,
+      "pct_of_agreement_that_is_size": 36.0,
+      "reading": "36% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "ThomasAM_2018a",
+      "cohort_b": "VogtmannE_2016"
+    },
+    {
+      "n_sets": 291,
+      "agreement_raw": 0.7029,
+      "agreement_after_removing_size": 0.1301,
+      "pct_of_agreement_that_is_size": 81.5,
+      "reading": "82% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "ThomasAM_2018a",
+      "cohort_b": "YuJ_2015"
+    },
+    {
+      "n_sets": 282,
+      "agreement_raw": 0.6905,
+      "agreement_after_removing_size": 0.1826,
+      "pct_of_agreement_that_is_size": 73.6,
+      "reading": "74% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "ThomasAM_2018a",
+      "cohort_b": "ZellerG_2014"
+    },
+    {
+      "n_sets": 276,
+      "agreement_raw": 0.7931,
+      "agreement_after_removing_size": 0.546,
+      "pct_of_agreement_that_is_size": 31.2,
+      "reading": "31% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "ThomasAM_2018b",
+      "cohort_b": "ThomasAM_2019_c"
+    },
+    {
+      "n_sets": 276,
+      "agreement_raw": 0.713,
+      "agreement_after_removing_size": 0.4289,
+      "pct_of_agreement_that_is_size": 39.8,
+      "reading": "40% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "ThomasAM_2018b",
+      "cohort_b": "VogtmannE_2016"
+    },
+    {
+      "n_sets": 277,
+      "agreement_raw": 0.745,
+      "agreement_after_removing_size": 0.2033,
+      "pct_of_agreement_that_is_size": 72.7,
+      "reading": "73% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "ThomasAM_2018b",
+      "cohort_b": "YuJ_2015"
+    },
+    {
+      "n_sets": 280,
+      "agreement_raw": 0.7399,
+      "agreement_after_removing_size": 0.1775,
+      "pct_of_agreement_that_is_size": 76.0,
+      "reading": "76% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "ThomasAM_2018b",
+      "cohort_b": "ZellerG_2014"
+    },
+    {
+      "n_sets": 279,
+      "agreement_raw": 0.7822,
+      "agreement_after_removing_size": 0.5274,
+      "pct_of_agreement_that_is_size": 32.6,
+      "reading": "33% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "ThomasAM_2019_c",
+      "cohort_b": "VogtmannE_2016"
+    },
+    {
+      "n_sets": 288,
+      "agreement_raw": 0.7475,
+      "agreement_after_removing_size": 0.3248,
+      "pct_of_agreement_that_is_size": 56.6,
+      "reading": "57% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "ThomasAM_2019_c",
+      "cohort_b": "YuJ_2015"
+    },
+    {
+      "n_sets": 284,
+      "agreement_raw": 0.793,
+      "agreement_after_removing_size": 0.3708,
+      "pct_of_agreement_that_is_size": 53.2,
+      "reading": "53% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "ThomasAM_2019_c",
+      "cohort_b": "ZellerG_2014"
+    },
+    {
+      "n_sets": 280,
+      "agreement_raw": 0.7698,
+      "agreement_after_removing_size": 0.2775,
+      "pct_of_agreement_that_is_size": 64.0,
+      "reading": "64% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "VogtmannE_2016",
+      "cohort_b": "YuJ_2015"
+    },
+    {
+      "n_sets": 282,
+      "agreement_raw": 0.7682,
+      "agreement_after_removing_size": 0.357,
+      "pct_of_agreement_that_is_size": 53.5,
+      "reading": "54% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "VogtmannE_2016",
+      "cohort_b": "ZellerG_2014"
+    },
+    {
+      "n_sets": 286,
+      "agreement_raw": 0.8919,
+      "agreement_after_removing_size": 0.5462,
+      "pct_of_agreement_that_is_size": 38.8,
+      "reading": "39% of the apparent agreement between these two screens is explained by set size. Both are confounded the same way, so agreeing for the same wrong reason is indistinguishable from agreeing for the right one.",
+      "what_this_is_not": "Not a claim about any individual set, and not a claim that either screen is wrong. It measures what the replication is worth as evidence.",
+      "mapping": "D_nominal05",
+      "cohort_a": "YuJ_2015",
+      "cohort_b": "ZellerG_2014"
+    }
+  ],
+  "replication_summary": {
+    "D_FDR10": {
+      "n_pairs": 21,
+      "n_pairs_finite": 3,
+      "median_raw_agreement": 0.8733,
+      "median_after_removing_size": 0.5043,
+      "median_pct_of_agreement_that_is_size": 42.2,
+      "IQR_pct_size": [
+        33.2,
+        44.5
+      ]
+    },
+    "D_nominal05": {
+      "n_pairs": 21,
+      "n_pairs_finite": 21,
+      "median_raw_agreement": 0.7682,
+      "median_after_removing_size": 0.357,
+      "median_pct_of_agreement_that_is_size": 53.5,
+      "IQR_pct_size": [
+        40.9,
+        64.0
+      ]
+    }
+  }
+}

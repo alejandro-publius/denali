@@ -1,0 +1,51 @@
+{
+  "FengQ_2015": {
+    "n_chunk": 154,
+    "n_cohort_meta": 154,
+    "n_matched": 154,
+    "n_unique": 154,
+    "n_shared_cols": 504
+  },
+  "ThomasAM_2018a": {
+    "n_chunk": 80,
+    "n_cohort_meta": 80,
+    "n_matched": 80,
+    "n_unique": 80,
+    "n_shared_cols": 457
+  },
+  "ThomasAM_2018b": {
+    "n_chunk": 60,
+    "n_cohort_meta": 60,
+    "n_matched": 60,
+    "n_unique": 60,
+    "n_shared_cols": 453
+  },
+  "ThomasAM_2019_c": {
+    "n_chunk": 80,
+    "n_cohort_meta": 80,
+    "n_matched": 80,
+    "n_unique": 80,
+    "n_shared_cols": 476
+  },
+  "VogtmannE_2016": {
+    "n_chunk": 104,
+    "n_cohort_meta": 104,
+    "n_matched": 104,
+    "n_unique": 104,
+    "n_shared_cols": 462
+  },
+  "YuJ_2015": {
+    "n_chunk": 128,
+    "n_cohort_meta": 128,
+    "n_matched": 128,
+    "n_unique": 128,
+    "n_shared_cols": 517
+  },
+  "ZellerG_2014": {
+    "n_chunk": 156,
+    "n_cohort_meta": 156,
+    "n_matched": 156,
+    "n_unique": 156,
+    "n_shared_cols": 495
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "POST_HOC": "Post-hoc and exploratory. Nothing pre-registered.",
+  "n_jobs_with_defined_r2": 82,
+  "n_jobs_degenerate_all_zero_hits_r2_undefined": 5,
+  "n_jobs_empty_result_file_on_server": 7,
+  "n_bed_query_jobs_found": 94,
+  "total_set_level_rows": 1226499,
+  "n_sets_per_job": {
+    "count": 82.0,
+    "mean": 14819.19512195122,
+    "std": 12584.277120789078,
+    "min": 15.0,
+    "25%": 2178.5,
+    "50%": 9013.0,
+    "75%": 26592.75,
+    "max": 35223.0
+  },
+  "size_min_overall": 1,
+  "size_max_overall": 807639,
+  "M1_query_overlap": {
+    "r2_median": 0.40349999999999997,
+    "r2_p10": 0.14400999999999997,
+    "r2_p25": 0.28232500000000005,
+    "r2_p75": 0.49917500000000004,
+    "r2_p90": 0.6124600000000001,
+    "r2_min": 0.0001,
+    "r2_max": 0.7785,
+    "verdicts": {
+      "CONFOUNDED": 41,
+      "PARTIALLY CONFOUNDED": 25,
+      "NOT SIZE-DOMINATED": 16
+    },
+    "spearman_median": 0.8230500000000001,
+    "frac_jobs_above_crispr_corpus_median_0.2244": 0.793,
+    "frac_jobs_above_crispr_corpus_p90_0.4548": 0.427,
+    "frac_jobs_at_or_above_denali_headline_0.465": 0.39,
+    "approx_corpus_percentile_of_median": 86
+  },
+  "M2_control_overlap": {
+    "n": 86,
+    "r2_median": 0.5844499999999999,
+    "r2_p25": 0.407475,
+    "r2_p75": 0.647575,
+    "verdicts": {
+      "CONFOUNDED": 65,
+      "PARTIALLY CONFOUNDED": 14,
+      "NOT SIZE-DOMINATED": 7
+    },
+    "n_jobs_with_randomised_control_typeB_rnd": 68,
+    "r2_median_randomised_control_only": 0.591
+  },
+  "M3_descriptive_not_audit": {
+    "what": "Spearman of peak count against the two statistics a ChIP-Atlas user actually ranks on. NOT audit() output -- audit() takes a hit count, and these are not counts. Reported because the ranking, not the raw overlap, is what gets read.",
+    "rho_size_vs_logQ_median": -0.6057,
+    "rho_size_vs_logQ_iqr": [
+      -0.7568,
+      -0.3992
+    ],
+    "rho_size_vs_fold_median": 0.31484999999999996,
+    "rho_size_vs_fold_iqr": [
+      0.0317,
+      0.4596
+    ],
+    "note": "log Q is negative-is-more-significant, so rho ~ -0.61 means experiments with more peaks get more significant Fisher p-values. Fold enrichment, the effect-size column, is far less size-tracking (rho ~ +0.31)."
+  },
+  "degenerate_jobs": {
+    "n": 5,
+    "why": "every set scored zero hits, so the hit vector is constant and R2 is undefined; audit() returns nan and its verdict field falls through to NOT SIZE-DOMINATED, which would be a false clean bill of health. Excluded from all M1 statistics."
+  },
+  "replication_pairs": {
+    "n_pairs": 496,
+    "note": "pct_of_agreement_that_is_size is unstable when the raw agreement is near zero (the ratio blows up and can go negative); the _stable subset restricts to pairs with |raw Spearman| >= 0.20.",
+    "n_pairs_stable": 368,
+    "pct_of_agreement_that_is_size_median_stable": 63.5,
+    "pct_of_agreement_that_is_size_p25_stable": 39.025,
+    "pct_of_agreement_that_is_size_p75_stable": 80.825,
+    "n_paired_sets_median": 5460.0,
+    "agreement_raw_median": 0.60005,
+    "agreement_after_removing_size_median": 0.10994999999999999,
+    "pct_of_agreement_that_is_size_median": 51.35,
+    "pct_of_agreement_that_is_size_p25": 12.375,
+    "pct_of_agreement_that_is_size_p75": 77.125
+  },
+  "corpus_yardstick": {
+    "denali_crispr_corpus": {
+      "p10": 0.1026,
+      "p25": 0.1862,
+      "median": 0.2244,
+      "p75": 0.2689,
+      "p90": 0.4548
+    }
+  }
+}

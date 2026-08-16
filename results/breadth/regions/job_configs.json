@@ -1,0 +1,3762 @@
+[
+ {
+  "wabiID": "0c49a659-ca54-4366-adfa-0e7583fb52d5",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0c49a659-ca54-4366-adfa-0e7583fb52d5.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0c49a659-ca54-4366-adfa-0e7583fb52d5.bed"
+  },
+  "permTime": 10,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0f28edcf-c865-4bbb-8aed-f1f834959b69",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0f28edcf-c865-4bbb-8aed-f1f834959b69.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0f28edcf-c865-4bbb-8aed-f1f834959b69.bed"
+  },
+  "permTime": 1,
+  "title": "TKO_ACs",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0140ccf0-ab50-4d40-ad11-6f81ddbda64b",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Pluripotent stem cell",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0140ccf0-ab50-4d40-ad11-6f81ddbda64b.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0140ccf0-ab50-4d40-ad11-6f81ddbda64b.bed"
+  },
+  "permTime": 1,
+  "title": "tf2",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0a65edf9-08aa-4de3-bc12-8da3de4e37f1",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0a65edf9-08aa-4de3-bc12-8da3de4e37f1.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0a65edf9-08aa-4de3-bc12-8da3de4e37f1.bed"
+  },
+  "permTime": 1,
+  "title": "softstiff_human",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0c7ca86a-94a4-43c3-9c59-20754d160b28",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0c7ca86a-94a4-43c3-9c59-20754d160b28.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0c7ca86a-94a4-43c3-9c59-20754d160b28.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "10da8843-7a37-4f12-aab8-c86d7c8d8aac",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Epidermis",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_10da8843-7a37-4f12-aab8-c86d7c8d8aac.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_10da8843-7a37-4f12-aab8-c86d7c8d8aac.bed"
+  },
+  "permTime": 1,
+  "title": "upX 0.8 vs aut",
+  "distanceUp": 3000
+ },
+ {
+  "wabiID": "0dbf3429-1835-4e20-a2ec-3197d7076354",
+  "genome": "mm9",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0dbf3429-1835-4e20-a2ec-3197d7076354.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0dbf3429-1835-4e20-a2ec-3197d7076354.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "023ebfc0-5812-4e82-aa7d-405e727bf241",
+  "genome": "rn6",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_023ebfc0-5812-4e82-aa7d-405e727bf241.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_023ebfc0-5812-4e82-aa7d-405e727bf241.bed"
+  },
+  "permTime": 1,
+  "title": "HFD_down_rn6_all_expgene",
+  "distanceUp": 1500
+ },
+ {
+  "wabiID": "0671b984-2255-4df3-ae67-de30a7a31a9e",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0671b984-2255-4df3-ae67-de30a7a31a9e.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0671b984-2255-4df3-ae67-de30a7a31a9e.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0028b307-87bb-4550-ae27-17c7f9e47115",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 500,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0028b307-87bb-4550-ae27-17c7f9e47115.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0028b307-87bb-4550-ae27-17c7f9e47115.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "086b26ce-cd64-42b2-9026-116ac593dd81",
+  "genome": "hg19",
+  "antigenClass": "ATAC-Seq",
+  "cellClass": "Cardiovascular",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_086b26ce-cd64-42b2-9026-116ac593dd81.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_086b26ce-cd64-42b2-9026-116ac593dd81.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0f8f8b92-1db0-4906-9767-4c54accad1d9",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0f8f8b92-1db0-4906-9767-4c54accad1d9.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0f8f8b92-1db0-4906-9767-4c54accad1d9.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0497f69f-86ce-4caa-aa37-4bd93b4bf9ee",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0497f69f-86ce-4caa-aa37-4bd93b4bf9ee.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0497f69f-86ce-4caa-aa37-4bd93b4bf9ee.bed"
+  },
+  "permTime": 1,
+  "title": "D1_OX40ag_UP",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0bcc4a48-0f11-4bac-97c4-29157b5410ce",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0bcc4a48-0f11-4bac-97c4-29157b5410ce.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0bcc4a48-0f11-4bac-97c4-29157b5410ce.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0d2b627d-a103-4900-966f-c0a1acd0d72b",
+  "genome": "mm10",
+  "antigenClass": "Bisulfite-Seq",
+  "cellClass": "Blood",
+  "threshold": 999,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0d2b627d-a103-4900-966f-c0a1acd0d72b.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0d2b627d-a103-4900-966f-c0a1acd0d72b.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "08879eb2-627c-40d8-9c84-8f0bc0f50f0b",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_08879eb2-627c-40d8-9c84-8f0bc0f50f0b.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_08879eb2-627c-40d8-9c84-8f0bc0f50f0b.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0ac439e9-b9d9-4f48-9ddb-6220fbc1a8e4",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0ac439e9-b9d9-4f48-9ddb-6220fbc1a8e4.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0ac439e9-b9d9-4f48-9ddb-6220fbc1a8e4.bed"
+  },
+  "permTime": 1,
+  "title": "pttern2-copy_3_12-1.5_3-12_0.5-3",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "04f0b05f-b994-42fa-845e-27632c0dbe41",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Digestive tract",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_04f0b05f-b994-42fa-845e-27632c0dbe41.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_04f0b05f-b994-42fa-845e-27632c0dbe41.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "01a8a99d-d1bd-4809-a940-938bd0ddb4d0",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 500,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_01a8a99d-d1bd-4809-a940-938bd0ddb4d0.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_01a8a99d-d1bd-4809-a940-938bd0ddb4d0.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0106de81-5f96-403d-aeaa-7a316c62bfc2",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0106de81-5f96-403d-aeaa-7a316c62bfc2.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0106de81-5f96-403d-aeaa-7a316c62bfc2.bed"
+  },
+  "permTime": 1,
+  "title": "TF enrichment on X genes 2kb",
+  "distanceUp": 2000
+ },
+ {
+  "wabiID": "035dc401-e6fc-4dc9-b83a-1ac0e8483f3d",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_035dc401-e6fc-4dc9-b83a-1ac0e8483f3d.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_035dc401-e6fc-4dc9-b83a-1ac0e8483f3d.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "1119dc51-410e-45e0-93da-656edc7e4c86",
+  "genome": "mm10",
+  "antigenClass": "ATAC-Seq",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_1119dc51-410e-45e0-93da-656edc7e4c86.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_1119dc51-410e-45e0-93da-656edc7e4c86.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0715aef1-3cfd-4831-8099-ec8fe2623299",
+  "genome": "mm9",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0715aef1-3cfd-4831-8099-ec8fe2623299.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0715aef1-3cfd-4831-8099-ec8fe2623299.bed"
+  },
+  "permTime": 1,
+  "title": "ES specific",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0473ddd9-afa9-4010-bfa3-1deb973ff52b",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0473ddd9-afa9-4010-bfa3-1deb973ff52b.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0473ddd9-afa9-4010-bfa3-1deb973ff52b.bed"
+  },
+  "permTime": 1,
+  "title": "4MD_UP_p0.01_fc1",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "049af925-2d7c-455d-a596-6136ed210ed8",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_049af925-2d7c-455d-a596-6136ed210ed8.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_049af925-2d7c-455d-a596-6136ed210ed8.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0837720f-244a-4952-962f-841ec92ce5ba",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0837720f-244a-4952-962f-841ec92ce5ba.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0837720f-244a-4952-962f-841ec92ce5ba.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "036389c4-a058-47b4-b2e0-26eee26c06bb",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 500,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_036389c4-a058-47b4-b2e0-26eee26c06bb.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_036389c4-a058-47b4-b2e0-26eee26c06bb.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "094045e3-93a5-41d3-9ba5-90a9034f9238",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_094045e3-93a5-41d3-9ba5-90a9034f9238.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_094045e3-93a5-41d3-9ba5-90a9034f9238.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "055ffcfe-0155-4fd1-bc9c-0a7fc836b533",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 500,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_055ffcfe-0155-4fd1-bc9c-0a7fc836b533.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_055ffcfe-0155-4fd1-bc9c-0a7fc836b533.bed"
+  },
+  "permTime": 100,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "01a8b254-b874-4aa3-9b21-c7cf78dbd5e3",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_01a8b254-b874-4aa3-9b21-c7cf78dbd5e3.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_01a8b254-b874-4aa3-9b21-c7cf78dbd5e3.bed"
+  },
+  "permTime": 1,
+  "title": "TAMs_TFs",
+  "distanceUp": 1000
+ },
+ {
+  "wabiID": "0f7c1f03-2500-438f-97ff-ab827a54261d",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0f7c1f03-2500-438f-97ff-ab827a54261d.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0f7c1f03-2500-438f-97ff-ab827a54261d.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "007e723c-7b1b-4771-8494-c30bc9581433",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_007e723c-7b1b-4771-8494-c30bc9581433.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_007e723c-7b1b-4771-8494-c30bc9581433.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "01d3e8e4-1fd1-4231-b6db-87f54b45d626",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Epidermis",
+  "threshold": 500,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_01d3e8e4-1fd1-4231-b6db-87f54b45d626.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_01d3e8e4-1fd1-4231-b6db-87f54b45d626.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "11629ff8-f68a-4e9f-97d4-dd338e6f12e8",
+  "genome": "hg19",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_11629ff8-f68a-4e9f-97d4-dd338e6f12e8.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_11629ff8-f68a-4e9f-97d4-dd338e6f12e8.bed"
+  },
+  "permTime": 10,
+  "title": "Test",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0e49e446-b68f-4d66-b943-5be9022e7feb",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0e49e446-b68f-4d66-b943-5be9022e7feb.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0e49e446-b68f-4d66-b943-5be9022e7feb.bed"
+  },
+  "permTime": 10,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "007ba088-5945-42f9-9c13-4378e3d3123a",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Liver",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_007ba088-5945-42f9-9c13-4378e3d3123a.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_007ba088-5945-42f9-9c13-4378e3d3123a.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0132844c-a4c0-4ce6-b015-e47b33a99d25",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0132844c-a4c0-4ce6-b015-e47b33a99d25.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0132844c-a4c0-4ce6-b015-e47b33a99d25.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "01b74f95-1fbf-4296-bda8-881867eacdfa",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Prostate",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_01b74f95-1fbf-4296-bda8-881867eacdfa.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_01b74f95-1fbf-4296-bda8-881867eacdfa.bed"
+  },
+  "permTime": 1,
+  "title": "TF for prostate CTAs",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "08763b6a-f882-4f06-9830-db3a7a4f196a",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_08763b6a-f882-4f06-9830-db3a7a4f196a.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_08763b6a-f882-4f06-9830-db3a7a4f196a.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0f8ac3c9-73f3-4516-bb4d-46ef8e947ba7",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0f8ac3c9-73f3-4516-bb4d-46ef8e947ba7.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0f8ac3c9-73f3-4516-bb4d-46ef8e947ba7.bed"
+  },
+  "permTime": 1,
+  "title": "Histone-All-Thres500_aging_soma-not-Sertoli_distal-upDAR",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0dd35778-9e50-49c9-8d73-679937efdeb6",
+  "genome": "mm9",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0dd35778-9e50-49c9-8d73-679937efdeb6.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0dd35778-9e50-49c9-8d73-679937efdeb6.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "037c2905-4c69-49ad-893b-9eae8cb7f103",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_037c2905-4c69-49ad-893b-9eae8cb7f103.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_037c2905-4c69-49ad-893b-9eae8cb7f103.bed"
+  },
+  "permTime": 1,
+  "title": "siSNRPC",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0da269f7-5aa3-419c-901a-69610416d981",
+  "genome": "mm9",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0da269f7-5aa3-419c-901a-69610416d981.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0da269f7-5aa3-419c-901a-69610416d981.bed"
+  },
+  "permTime": 100,
+  "title": "Th17_Ahr_TF_mm9",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "114aeed8-76e1-4708-8413-efdd903255d7",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_114aeed8-76e1-4708-8413-efdd903255d7.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_114aeed8-76e1-4708-8413-efdd903255d7.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "04ca8d39-d1c0-4ba1-99f8-9ec0c047b5a5",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Breast",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_04ca8d39-d1c0-4ba1-99f8-9ec0c047b5a5.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_04ca8d39-d1c0-4ba1-99f8-9ec0c047b5a5.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0c01606c-be17-4298-a45d-c085923e61e3",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0c01606c-be17-4298-a45d-c085923e61e3.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0c01606c-be17-4298-a45d-c085923e61e3.bed"
+  },
+  "permTime": 10,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0531d493-83e0-406b-b763-2a4e95682c37",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Epidermis",
+  "threshold": 500,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0531d493-83e0-406b-b763-2a4e95682c37.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0531d493-83e0-406b-b763-2a4e95682c37.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "057a9b98-292e-4041-a70b-b97aa1a96fc3",
+  "genome": "dm6",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_057a9b98-292e-4041-a70b-b97aa1a96fc3.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_057a9b98-292e-4041-a70b-b97aa1a96fc3.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0183d9f0-f016-44a9-90e9-6ac07867f0cc",
+  "genome": "mm10",
+  "antigenClass": "Histone",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0183d9f0-f016-44a9-90e9-6ac07867f0cc.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0183d9f0-f016-44a9-90e9-6ac07867f0cc.bed"
+  },
+  "permTime": 1,
+  "title": "appeared_old_WT_1_3",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "1080e19e-b3ef-4ae1-8ce5-7d280d136d42",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_1080e19e-b3ef-4ae1-8ce5-7d280d136d42.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_1080e19e-b3ef-4ae1-8ce5-7d280d136d42.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0fb02455-b7e3-4f04-acef-f5df7094377f",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0fb02455-b7e3-4f04-acef-f5df7094377f.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0fb02455-b7e3-4f04-acef-f5df7094377f.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0adebc66-be53-47fa-9301-554075be57ac",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0adebc66-be53-47fa-9301-554075be57ac.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0adebc66-be53-47fa-9301-554075be57ac.bed"
+  },
+  "permTime": 10,
+  "title": "T30TE4",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "085ffd8e-c18c-489e-a693-92b53698ef48",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_085ffd8e-c18c-489e-a693-92b53698ef48.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_085ffd8e-c18c-489e-a693-92b53698ef48.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "049e4551-c54b-4451-85a9-2b8c23fc6792",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_049e4551-c54b-4451-85a9-2b8c23fc6792.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_049e4551-c54b-4451-85a9-2b8c23fc6792.bed"
+  },
+  "permTime": 1,
+  "title": "Refed_vs_Fast",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "03ee07d0-d22c-4d5f-8e45-0ea0ea7a24f7",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Pluripotent stem cell",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_03ee07d0-d22c-4d5f-8e45-0ea0ea7a24f7.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_03ee07d0-d22c-4d5f-8e45-0ea0ea7a24f7.bed"
+  },
+  "permTime": 100,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0f770914-0815-4911-854f-7efdbd07c553",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Kidney",
+  "threshold": 100,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0f770914-0815-4911-854f-7efdbd07c553.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0f770914-0815-4911-854f-7efdbd07c553.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0ffa4b56-7b24-4487-b4ae-b900c95359ed",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0ffa4b56-7b24-4487-b4ae-b900c95359ed.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0ffa4b56-7b24-4487-b4ae-b900c95359ed.bed"
+  },
+  "permTime": 1,
+  "title": "Up1 vs aut",
+  "distanceUp": 1000
+ },
+ {
+  "wabiID": "0407fa7e-898f-4a89-b4f4-68ffdedd528b",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Pluripotent stem cell",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0407fa7e-898f-4a89-b4f4-68ffdedd528b.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0407fa7e-898f-4a89-b4f4-68ffdedd528b.bed"
+  },
+  "permTime": 10,
+  "title": "TF-Remained",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0d410930-65cb-4788-a889-6b71f32e07e5",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Bone",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0d410930-65cb-4788-a889-6b71f32e07e5.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0d410930-65cb-4788-a889-6b71f32e07e5.bed"
+  },
+  "permTime": 100,
+  "title": "bone",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0d88349e-f568-4384-910b-4f4a13b072cd",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0d88349e-f568-4384-910b-4f4a13b072cd.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0d88349e-f568-4384-910b-4f4a13b072cd.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0b38ae05-a8b3-4d02-b053-72a8947e07be",
+  "genome": "mm9",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0b38ae05-a8b3-4d02-b053-72a8947e07be.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0b38ae05-a8b3-4d02-b053-72a8947e07be.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0cab47f7-ab5a-4c5a-8651-8627f46ac084",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0cab47f7-ab5a-4c5a-8651-8627f46ac084.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0cab47f7-ab5a-4c5a-8651-8627f46ac084.bed"
+  },
+  "permTime": 1,
+  "title": "TKI.HDvTKI.PD_UP",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "04854f29-5460-46f3-b0d7-8ae51b6da1b3",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_04854f29-5460-46f3-b0d7-8ae51b6da1b3.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_04854f29-5460-46f3-b0d7-8ae51b6da1b3.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0e1aa619-62d0-4bbc-9ab0-95950a5cbf81",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0e1aa619-62d0-4bbc-9ab0-95950a5cbf81.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0e1aa619-62d0-4bbc-9ab0-95950a5cbf81.bed"
+  },
+  "permTime": 1,
+  "title": "Up",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0e209c65-495d-4d17-bd27-6770871a321d",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Kidney",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0e209c65-495d-4d17-bd27-6770871a321d.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0e209c65-495d-4d17-bd27-6770871a321d.bed"
+  },
+  "permTime": 1,
+  "title": "up",
+  "distanceUp": 1000
+ },
+ {
+  "wabiID": "0d77fa69-4fc0-4e42-86e7-5f7919084138",
+  "genome": "mm9",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0d77fa69-4fc0-4e42-86e7-5f7919084138.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0d77fa69-4fc0-4e42-86e7-5f7919084138.bed"
+  },
+  "permTime": 1,
+  "title": "DEG 5kb mus",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "053a2ae2-77a3-4281-90e1-ab3889353c1c",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_053a2ae2-77a3-4281-90e1-ab3889353c1c.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_053a2ae2-77a3-4281-90e1-ab3889353c1c.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0c17c307-b474-420e-b958-6a230117e7d8",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Gonad",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0c17c307-b474-420e-b958-6a230117e7d8.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0c17c307-b474-420e-b958-6a230117e7d8.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0a1600c0-7d07-4002-91ee-1eed08fa5230",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0a1600c0-7d07-4002-91ee-1eed08fa5230.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0a1600c0-7d07-4002-91ee-1eed08fa5230.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "037a16d9-2f84-4e8e-989e-93fffa6e25be",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_037a16d9-2f84-4e8e-989e-93fffa6e25be.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_037a16d9-2f84-4e8e-989e-93fffa6e25be.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "062aef2f-acb0-4a46-9407-78ee8170ebdf",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_062aef2f-acb0-4a46-9407-78ee8170ebdf.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_062aef2f-acb0-4a46-9407-78ee8170ebdf.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "10793916-cc97-43fe-8b13-d9f5be30e17f",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_10793916-cc97-43fe-8b13-d9f5be30e17f.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_10793916-cc97-43fe-8b13-d9f5be30e17f.bed"
+  },
+  "permTime": 10,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "034b3aec-f2f4-4ef1-8070-c5b4c5dcf427",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_034b3aec-f2f4-4ef1-8070-c5b4c5dcf427.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_034b3aec-f2f4-4ef1-8070-c5b4c5dcf427.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 1000
+ },
+ {
+  "wabiID": "08332177-f146-4879-ab5d-7d065b0be9d6",
+  "genome": "hg19",
+  "antigenClass": "ATAC-Seq",
+  "cellClass": "Blood",
+  "threshold": 100,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_08332177-f146-4879-ab5d-7d065b0be9d6.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_08332177-f146-4879-ab5d-7d065b0be9d6.bed"
+  },
+  "permTime": 10,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "024833b9-8811-460a-86f4-67ec569c8e10",
+  "genome": "mm10",
+  "antigenClass": "Bisulfite-Seq",
+  "cellClass": "Gonad",
+  "threshold": 999,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_024833b9-8811-460a-86f4-67ec569c8e10.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_024833b9-8811-460a-86f4-67ec569c8e10.bed"
+  },
+  "permTime": 1,
+  "title": "sexual-maturation_SPG-DAR",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "068d84e4-ec3f-4735-a748-c0ae32309b8a",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_068d84e4-ec3f-4735-a748-c0ae32309b8a.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_068d84e4-ec3f-4735-a748-c0ae32309b8a.bed"
+  },
+  "permTime": 10,
+  "title": "SSc EWAS variants",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "03ce5de5-27cf-40a2-b392-365841d20d46",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Gonad",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_03ce5de5-27cf-40a2-b392-365841d20d46.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_03ce5de5-27cf-40a2-b392-365841d20d46.bed"
+  },
+  "permTime": 1,
+  "title": "tight_Histone_sexual-maturation_SPG-SPT-prox-upDAR_inversion",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0a67f2e9-9847-4f1b-9020-21d26e66787e",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0a67f2e9-9847-4f1b-9020-21d26e66787e.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0a67f2e9-9847-4f1b-9020-21d26e66787e.bed"
+  },
+  "permTime": 1,
+  "title": "Hip_overlap",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0e76b3dd-23b3-4aee-b196-bec7fe5021a4",
+  "genome": "mm9",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0e76b3dd-23b3-4aee-b196-bec7fe5021a4.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0e76b3dd-23b3-4aee-b196-bec7fe5021a4.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "04819184-fa92-47ed-a3a9-cc39ed930e05",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_04819184-fa92-47ed-a3a9-cc39ed930e05.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_04819184-fa92-47ed-a3a9-cc39ed930e05.bed"
+  },
+  "permTime": 10,
+  "title": "GluN_NIID_peak_2",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "08acf2f3-095a-4c97-8b20-20530996f6f2",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_08acf2f3-095a-4c97-8b20-20530996f6f2.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_08acf2f3-095a-4c97-8b20-20530996f6f2.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "04deb9c3-38d8-4c53-b4c0-2d77142baba5",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Bone",
+  "threshold": 100,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_04deb9c3-38d8-4c53-b4c0-2d77142baba5.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_04deb9c3-38d8-4c53-b4c0-2d77142baba5.bed"
+  },
+  "permTime": 100,
+  "title": "HT1080_500",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "049789b4-3d61-4df2-b931-e2ffefe67c0c",
+  "genome": "hg38",
+  "antigenClass": "Bisulfite-Seq",
+  "cellClass": "Blood",
+  "threshold": 999,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_049789b4-3d61-4df2-b931-e2ffefe67c0c.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_049789b4-3d61-4df2-b931-e2ffefe67c0c.bed"
+  },
+  "permTime": 100,
+  "title": "WGBS",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0ce504dd-62ca-43d4-af99-eee3343cd161",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0ce504dd-62ca-43d4-af99-eee3343cd161.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0ce504dd-62ca-43d4-af99-eee3343cd161.bed"
+  },
+  "permTime": 1,
+  "title": "My project6-22PCG",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "101d35c7-7208-43bf-9a8d-4ac9e0907873",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Pluripotent stem cell",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_101d35c7-7208-43bf-9a8d-4ac9e0907873.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_101d35c7-7208-43bf-9a8d-4ac9e0907873.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "10c2f9ea-9a3e-43bb-9957-3b855958beb8",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Bone",
+  "threshold": 100,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_10c2f9ea-9a3e-43bb-9957-3b855958beb8.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_10c2f9ea-9a3e-43bb-9957-3b855958beb8.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "01c01ae4-1c1b-4ecb-8f1e-7fd61970c172",
+  "genome": "hg19",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_01c01ae4-1c1b-4ecb-8f1e-7fd61970c172.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_01c01ae4-1c1b-4ecb-8f1e-7fd61970c172.bed"
+  },
+  "permTime": 1,
+  "title": "VAJ",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0156633f-068b-461d-a111-342cb243c01e",
+  "genome": "mm9",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0156633f-068b-461d-a111-342cb243c01e.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0156633f-068b-461d-a111-342cb243c01e.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "02cfcf63-0137-497b-85cb-6e82d6139439",
+  "genome": "hg19",
+  "antigenClass": "ATAC-Seq",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_02cfcf63-0137-497b-85cb-6e82d6139439.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_02cfcf63-0137-497b-85cb-6e82d6139439.bed"
+  },
+  "permTime": 1,
+  "title": "ATACN5000",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0629a3d5-70ab-4a6e-9b1a-a1cf4aa39c3a",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0629a3d5-70ab-4a6e-9b1a-a1cf4aa39c3a.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0629a3d5-70ab-4a6e-9b1a-a1cf4aa39c3a.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 10000
+ },
+ {
+  "wabiID": "0aefb2c3-35aa-4709-87e7-e3eeed0df1f7",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0aefb2c3-35aa-4709-87e7-e3eeed0df1f7.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0aefb2c3-35aa-4709-87e7-e3eeed0df1f7.bed"
+  },
+  "permTime": 1,
+  "title": "RNA-Seq-Dioxygenase",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "06f09815-c083-42bb-8c6f-c1ac62cb2e29",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 100,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_06f09815-c083-42bb-8c6f-c1ac62cb2e29.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_06f09815-c083-42bb-8c6f-c1ac62cb2e29.bed"
+  },
+  "permTime": 1,
+  "title": "Treg",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "03190117-c14b-4e47-95f4-94aa3b980317",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_03190117-c14b-4e47-95f4-94aa3b980317.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_03190117-c14b-4e47-95f4-94aa3b980317.bed"
+  },
+  "permTime": 10,
+  "title": "SLE",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "045bb394-ffb3-4cea-9a65-c8208580cbcd",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Liver",
+  "threshold": 100,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_045bb394-ffb3-4cea-9a65-c8208580cbcd.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_045bb394-ffb3-4cea-9a65-c8208580cbcd.bed"
+  },
+  "permTime": 1,
+  "title": "TF Enrich",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0bbb6898-db25-4f70-a378-8c710e694d31",
+  "genome": "mm10",
+  "antigenClass": "Histone",
+  "cellClass": "Uterus",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0bbb6898-db25-4f70-a378-8c710e694d31.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0bbb6898-db25-4f70-a378-8c710e694d31.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0c523d26-55de-4e31-b286-adccf448ec17",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Lung",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0c523d26-55de-4e31-b286-adccf448ec17.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0c523d26-55de-4e31-b286-adccf448ec17.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "03c660b5-9d6a-4d60-9fdd-78ecf2c02962",
+  "genome": "hg38",
+  "antigenClass": "DNase-seq",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_03c660b5-9d6a-4d60-9fdd-78ecf2c02962.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_03c660b5-9d6a-4d60-9fdd-78ecf2c02962.bed"
+  },
+  "permTime": 10,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0aa5b1c0-6244-42dc-8139-caeb710ecb0c",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0aa5b1c0-6244-42dc-8139-caeb710ecb0c.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0aa5b1c0-6244-42dc-8139-caeb710ecb0c.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "04d612ec-03b5-4501-8be4-ff47222006e7",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_04d612ec-03b5-4501-8be4-ff47222006e7.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_04d612ec-03b5-4501-8be4-ff47222006e7.bed"
+  },
+  "permTime": 1,
+  "title": "PDAC",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0f43db18-7420-44a8-8967-7d0a8fcb7e91",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Digestive tract",
+  "threshold": 100,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0f43db18-7420-44a8-8967-7d0a8fcb7e91.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0f43db18-7420-44a8-8967-7d0a8fcb7e91.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "02ba6c13-f6a7-477a-ade0-37fda399819b",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "Liver",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_02ba6c13-f6a7-477a-ade0-37fda399819b.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_02ba6c13-f6a7-477a-ade0-37fda399819b.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "09b667d2-283d-4470-a8d4-8f84e4a930c6",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_09b667d2-283d-4470-a8d4-8f84e4a930c6.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_09b667d2-283d-4470-a8d4-8f84e4a930c6.bed"
+  },
+  "permTime": 1,
+  "title": "Hip_down_neuron_10kb",
+  "distanceUp": 10000
+ },
+ {
+  "wabiID": "02c2e082-ba90-4b7b-9ab1-fe5bbdb217a5",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_02c2e082-ba90-4b7b-9ab1-fe5bbdb217a5.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_02c2e082-ba90-4b7b-9ab1-fe5bbdb217a5.bed"
+  },
+  "permTime": 1,
+  "title": "GAG Genes and PGs",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0f8351eb-25c5-42bf-a00e-f41cacbcf2b2",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 200,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0f8351eb-25c5-42bf-a00e-f41cacbcf2b2.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0f8351eb-25c5-42bf-a00e-f41cacbcf2b2.bed"
+  },
+  "permTime": 1,
+  "title": "AC-AD_q-0.05_gene_ID",
+  "distanceUp": 1000
+ },
+ {
+  "wabiID": "02910c63-0472-4c1a-9a9f-fe33d3b080fd",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Adipocyte",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_02910c63-0472-4c1a-9a9f-fe33d3b080fd.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_02910c63-0472-4c1a-9a9f-fe33d3b080fd.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0ddd98f3-a1c8-457d-b95d-6f976ee50bab",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 500,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0ddd98f3-a1c8-457d-b95d-6f976ee50bab.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0ddd98f3-a1c8-457d-b95d-6f976ee50bab.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "04595276-efda-4a5b-8a95-7b7825078423",
+  "genome": "mm10",
+  "antigenClass": "Histone",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_04595276-efda-4a5b-8a95-7b7825078423.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_04595276-efda-4a5b-8a95-7b7825078423.bed"
+  },
+  "permTime": 1,
+  "title": "GEP8_histone",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "02eb55b8-66cf-4ee5-8a57-36763e75b710",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_02eb55b8-66cf-4ee5-8a57-36763e75b710.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_02eb55b8-66cf-4ee5-8a57-36763e75b710.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0940017d-bc1d-4caf-bfce-d2955660c2be",
+  "genome": "mm10",
+  "antigenClass": "Histone",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0940017d-bc1d-4caf-bfce-d2955660c2be.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0940017d-bc1d-4caf-bfce-d2955660c2be.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "08472f8b-8547-4782-87d6-82a2a88757e7",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_08472f8b-8547-4782-87d6-82a2a88757e7.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_08472f8b-8547-4782-87d6-82a2a88757e7.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0f43dcd2-292c-4691-b050-097348d4eb23",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Epidermis",
+  "threshold": 500,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0f43dcd2-292c-4691-b050-097348d4eb23.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0f43dcd2-292c-4691-b050-097348d4eb23.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "034f3d41-0065-460f-b4ad-5bbf5ed11b84",
+  "genome": "mm9",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_034f3d41-0065-460f-b4ad-5bbf5ed11b84.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_034f3d41-0065-460f-b4ad-5bbf5ed11b84.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0186e43c-0a6e-4f88-b51a-61ee808be276",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0186e43c-0a6e-4f88-b51a-61ee808be276.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0186e43c-0a6e-4f88-b51a-61ee808be276.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0296abfa-c66c-48b7-8984-3a489fadd64e",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Liver",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0296abfa-c66c-48b7-8984-3a489fadd64e.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0296abfa-c66c-48b7-8984-3a489fadd64e.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "04418d9b-5dcb-4593-ac79-d2f65b8b81e7",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_04418d9b-5dcb-4593-ac79-d2f65b8b81e7.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_04418d9b-5dcb-4593-ac79-d2f65b8b81e7.bed"
+  },
+  "permTime": 10,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "01102ad0-6ce0-45d3-99ee-2a9d632b38d4",
+  "genome": "mm9",
+  "antigenClass": "TFs and others",
+  "cellClass": "Digestive tract",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_01102ad0-6ce0-45d3-99ee-2a9d632b38d4.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_01102ad0-6ce0-45d3-99ee-2a9d632b38d4.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "071aea92-5550-4017-abfa-6e3b14770e8f",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_071aea92-5550-4017-abfa-6e3b14770e8f.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_071aea92-5550-4017-abfa-6e3b14770e8f.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "083f4603-7c3e-4fa7-baec-d9130703aecb",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Bone",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_083f4603-7c3e-4fa7-baec-d9130703aecb.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_083f4603-7c3e-4fa7-baec-d9130703aecb.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0ef3cfb7-9b8f-499e-99a9-0fa3e2ec63e4",
+  "genome": "hg38",
+  "antigenClass": "RNA polymerase",
+  "cellClass": "Pancreas",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0ef3cfb7-9b8f-499e-99a9-0fa3e2ec63e4.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0ef3cfb7-9b8f-499e-99a9-0fa3e2ec63e4.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "03373104-b3b8-40b3-a41b-08510936e603",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Liver",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_03373104-b3b8-40b3-a41b-08510936e603.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_03373104-b3b8-40b3-a41b-08510936e603.bed"
+  },
+  "permTime": 1,
+  "title": "upX0.8 vs aut 3k",
+  "distanceUp": 3000
+ },
+ {
+  "wabiID": "00480f72-c37c-47f4-be0a-5bc50ceaa194",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_00480f72-c37c-47f4-be0a-5bc50ceaa194.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_00480f72-c37c-47f4-be0a-5bc50ceaa194.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0015b573-c11f-4860-a675-e2c29384b718",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 500,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0015b573-c11f-4860-a675-e2c29384b718.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0015b573-c11f-4860-a675-e2c29384b718.bed"
+  },
+  "permTime": 1,
+  "title": "ESRRBct_GAINED",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0fc628ad-507e-4a48-aeb7-c2eaeb4e342e",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Liver",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0fc628ad-507e-4a48-aeb7-c2eaeb4e342e.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0fc628ad-507e-4a48-aeb7-c2eaeb4e342e.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0bffae67-2a21-4ab2-afb8-48dfc64e3489",
+  "genome": "dm6",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0bffae67-2a21-4ab2-afb8-48dfc64e3489.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0bffae67-2a21-4ab2-afb8-48dfc64e3489.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "05b7a4e7-9342-4825-9d13-daf18088afbc",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_05b7a4e7-9342-4825-9d13-daf18088afbc.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_05b7a4e7-9342-4825-9d13-daf18088afbc.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "01957b37-94fa-4879-9066-2acd799d1c8a",
+  "genome": "mm10",
+  "antigenClass": "Histone",
+  "cellClass": "Gonad",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_01957b37-94fa-4879-9066-2acd799d1c8a.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_01957b37-94fa-4879-9066-2acd799d1c8a.bed"
+  },
+  "permTime": 1,
+  "title": "Histone-Gonad-Thres50_aging_soma-not-Sertoli_distal-upDAR",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0108b9cb-1fa9-468a-9360-a7ed27f65263",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0108b9cb-1fa9-468a-9360-a7ed27f65263.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0108b9cb-1fa9-468a-9360-a7ed27f65263.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "054bcf50-3431-483a-8be1-2e45cecd022a",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_054bcf50-3431-483a-8be1-2e45cecd022a.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_054bcf50-3431-483a-8be1-2e45cecd022a.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 2000
+ },
+ {
+  "wabiID": "08899390-597f-4b26-9054-3c47ba25a790",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_08899390-597f-4b26-9054-3c47ba25a790.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_08899390-597f-4b26-9054-3c47ba25a790.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0f91476e-62eb-4bf7-aea9-1ffa3839471f",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0f91476e-62eb-4bf7-aea9-1ffa3839471f.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0f91476e-62eb-4bf7-aea9-1ffa3839471f.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0f881760-68ac-44cc-8bdd-183c8feb2f7f",
+  "genome": "mm9",
+  "antigenClass": "TFs and others",
+  "cellClass": "Digestive tract",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0f881760-68ac-44cc-8bdd-183c8feb2f7f.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0f881760-68ac-44cc-8bdd-183c8feb2f7f.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "085d186b-b9fa-409a-94df-50902f4f1083",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_085d186b-b9fa-409a-94df-50902f4f1083.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_085d186b-b9fa-409a-94df-50902f4f1083.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "110312eb-36d9-49db-996f-45733613bb8d",
+  "genome": "hg19",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_110312eb-36d9-49db-996f-45733613bb8d.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_110312eb-36d9-49db-996f-45733613bb8d.bed"
+  },
+  "permTime": 10,
+  "title": "Test",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "046e6f19-b238-453d-b2fb-758c50197788",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_046e6f19-b238-453d-b2fb-758c50197788.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_046e6f19-b238-453d-b2fb-758c50197788.bed"
+  },
+  "permTime": 100,
+  "title": "conservedG4",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0fcff1b3-20e1-4372-991e-e3cb336c3d56",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 500,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0fcff1b3-20e1-4372-991e-e3cb336c3d56.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0fcff1b3-20e1-4372-991e-e3cb336c3d56.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0307d790-7ca2-4f65-b4f7-8ea06e7dfedd",
+  "genome": "hg38",
+  "antigenClass": "Bisulfite-Seq",
+  "cellClass": "Pancreas",
+  "threshold": 999,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0307d790-7ca2-4f65-b4f7-8ea06e7dfedd.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0307d790-7ca2-4f65-b4f7-8ea06e7dfedd.bed"
+  },
+  "permTime": 1,
+  "title": "Bisulfite",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0c3369cf-a970-4cd7-969d-880f09d0e825",
+  "genome": "hg38",
+  "antigenClass": "RNA polymerase",
+  "cellClass": "Liver",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0c3369cf-a970-4cd7-969d-880f09d0e825.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0c3369cf-a970-4cd7-969d-880f09d0e825.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0c0caf32-8446-4017-931f-f94c26039ada",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0c0caf32-8446-4017-931f-f94c26039ada.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0c0caf32-8446-4017-931f-f94c26039ada.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0063edfa-602b-4711-9b0d-680005ea859f",
+  "genome": "rn6",
+  "antigenClass": "ATAC-Seq",
+  "cellClass": "Muscle",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0063edfa-602b-4711-9b0d-680005ea859f.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0063edfa-602b-4711-9b0d-680005ea859f.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0ffb0639-7a57-4b3c-a43c-b44590b54282",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "Blood",
+  "threshold": 100,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0ffb0639-7a57-4b3c-a43c-b44590b54282.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0ffb0639-7a57-4b3c-a43c-b44590b54282.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0583d301-e593-4cbe-8e62-3f5358da29c1",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Pluripotent stem cell",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0583d301-e593-4cbe-8e62-3f5358da29c1.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0583d301-e593-4cbe-8e62-3f5358da29c1.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "00520983-cdf6-4499-83d3-2bdeb167b01b",
+  "genome": "hg38",
+  "antigenClass": "RNA polymerase",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_00520983-cdf6-4499-83d3-2bdeb167b01b.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_00520983-cdf6-4499-83d3-2bdeb167b01b.bed"
+  },
+  "permTime": 100,
+  "title": "K562",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "03bb638b-33ce-460f-81bc-d8ee07295e06",
+  "genome": "hg19",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_03bb638b-33ce-460f-81bc-d8ee07295e06.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_03bb638b-33ce-460f-81bc-d8ee07295e06.bed"
+  },
+  "permTime": 1,
+  "title": "top_pos_1000",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0fbe9496-fe07-4f44-8374-a22aecf815b7",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0fbe9496-fe07-4f44-8374-a22aecf815b7.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0fbe9496-fe07-4f44-8374-a22aecf815b7.bed"
+  },
+  "permTime": 10,
+  "title": "T30_AR_DHT_MCF7_rep1",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "064cb768-2503-4a3c-bbb6-54b9f677dc49",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 200,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_064cb768-2503-4a3c-bbb6-54b9f677dc49.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_064cb768-2503-4a3c-bbb6-54b9f677dc49.bed"
+  },
+  "permTime": 100,
+  "title": "AC-AD ",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0be920ad-f450-44dd-a926-734ed29b0efd",
+  "genome": "hg38",
+  "antigenClass": "ATAC-Seq",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0be920ad-f450-44dd-a926-734ed29b0efd.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0be920ad-f450-44dd-a926-734ed29b0efd.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "056f38a1-1182-4602-bc25-b22d04572376",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_056f38a1-1182-4602-bc25-b22d04572376.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_056f38a1-1182-4602-bc25-b22d04572376.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "095977b3-408e-426a-b860-36cff1f361dc",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_095977b3-408e-426a-b860-36cff1f361dc.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_095977b3-408e-426a-b860-36cff1f361dc.bed"
+  },
+  "permTime": 1,
+  "title": "Reg HAM ChipHistone",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "08225edd-0fc4-4926-85a7-99dc3a93f8a4",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Prostate",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_08225edd-0fc4-4926-85a7-99dc3a93f8a4.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_08225edd-0fc4-4926-85a7-99dc3a93f8a4.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0478b1c7-da66-41ef-83aa-2e43659772b2",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0478b1c7-da66-41ef-83aa-2e43659772b2.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0478b1c7-da66-41ef-83aa-2e43659772b2.bed"
+  },
+  "permTime": 1,
+  "title": "4MD_UP_p0.05",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0ca756e9-d67b-4c34-95cf-b5dd0d7e689b",
+  "genome": "hg38",
+  "antigenClass": "ATAC-Seq",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0ca756e9-d67b-4c34-95cf-b5dd0d7e689b.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0ca756e9-d67b-4c34-95cf-b5dd0d7e689b.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "01e4db43-edf1-4232-98c0-f9631cce2787",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_01e4db43-edf1-4232-98c0-f9631cce2787.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_01e4db43-edf1-4232-98c0-f9631cce2787.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0645995b-e8c4-4c6a-8a00-d1f4d8f3df2c",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0645995b-e8c4-4c6a-8a00-d1f4d8f3df2c.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0645995b-e8c4-4c6a-8a00-d1f4d8f3df2c.bed"
+  },
+  "permTime": 1,
+  "title": "non_4MD_UP_p0.05_top200",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0ee86a64-160c-4043-9d94-194ec7ad6a61",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0ee86a64-160c-4043-9d94-194ec7ad6a61.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0ee86a64-160c-4043-9d94-194ec7ad6a61.bed"
+  },
+  "permTime": 10,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0a6203e7-0fb7-4010-8eff-48176d22f4c6",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0a6203e7-0fb7-4010-8eff-48176d22f4c6.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0a6203e7-0fb7-4010-8eff-48176d22f4c6.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "05e9aecd-b2bd-4560-900a-66690f9275cb",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_05e9aecd-b2bd-4560-900a-66690f9275cb.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_05e9aecd-b2bd-4560-900a-66690f9275cb.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "09242c99-092e-4869-abaa-9184179d77ee",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Epidermis",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_09242c99-092e-4869-abaa-9184179d77ee.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_09242c99-092e-4869-abaa-9184179d77ee.bed"
+  },
+  "permTime": 1,
+  "title": "upX0.8 vs aut",
+  "distanceUp": 1000
+ },
+ {
+  "wabiID": "0620640c-a39e-42bd-8637-c4a00687692f",
+  "genome": "hg19",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0620640c-a39e-42bd-8637-c4a00687692f.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0620640c-a39e-42bd-8637-c4a00687692f.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0fbfe4f9-d918-401d-a420-b533ce29801e",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0fbfe4f9-d918-401d-a420-b533ce29801e.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0fbfe4f9-d918-401d-a420-b533ce29801e.bed"
+  },
+  "permTime": 10,
+  "title": "SSc finemapping variants",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0fc3bd30-f847-480b-b360-0990b6b5d76c",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Pluripotent stem cell",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0fc3bd30-f847-480b-b360-0990b6b5d76c.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0fc3bd30-f847-480b-b360-0990b6b5d76c.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "09723ac9-24a1-46ce-a08b-f58ba9d7e366",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "Pancreas",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_09723ac9-24a1-46ce-a08b-f58ba9d7e366.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_09723ac9-24a1-46ce-a08b-f58ba9d7e366.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0a7ea9c2-d32d-4dab-bc44-76c088bfaefd",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 100,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0a7ea9c2-d32d-4dab-bc44-76c088bfaefd.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0a7ea9c2-d32d-4dab-bc44-76c088bfaefd.bed"
+  },
+  "permTime": 10,
+  "title": "GABA_NIID_peak",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "079f026b-5817-4f95-874d-146a34ce0eb3",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Epidermis",
+  "threshold": 500,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_079f026b-5817-4f95-874d-146a34ce0eb3.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_079f026b-5817-4f95-874d-146a34ce0eb3.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "011b03c8-d133-417a-bd48-875a1126f7c6",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_011b03c8-d133-417a-bd48-875a1126f7c6.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_011b03c8-d133-417a-bd48-875a1126f7c6.bed"
+  },
+  "permTime": 100,
+  "title": "20250701 common",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0c03c281-e2dc-4f3b-a52f-c28535cd5b61",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0c03c281-e2dc-4f3b-a52f-c28535cd5b61.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0c03c281-e2dc-4f3b-a52f-c28535cd5b61.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "03d8513f-168b-4902-a506-9486e2f709ed",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_03d8513f-168b-4902-a506-9486e2f709ed.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_03d8513f-168b-4902-a506-9486e2f709ed.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0fe65c2a-a6a8-4b86-bd2d-553a2243af48",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Epidermis",
+  "threshold": 500,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0fe65c2a-a6a8-4b86-bd2d-553a2243af48.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0fe65c2a-a6a8-4b86-bd2d-553a2243af48.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "00401d19-f0e9-4c58-b5d0-993d21971ea2",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Gonad",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_00401d19-f0e9-4c58-b5d0-993d21971ea2.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_00401d19-f0e9-4c58-b5d0-993d21971ea2.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0e2fe2b8-7ace-4eef-b25a-58bb5a7471c8",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0e2fe2b8-7ace-4eef-b25a-58bb5a7471c8.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0e2fe2b8-7ace-4eef-b25a-58bb5a7471c8.bed"
+  },
+  "permTime": 1,
+  "title": "tf_near enhancer",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "08f7e786-537f-499d-b59e-19e1219df4ef",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Bone",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_08f7e786-537f-499d-b59e-19e1219df4ef.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_08f7e786-537f-499d-b59e-19e1219df4ef.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "08b2dabb-c378-4b06-b447-edb6f06fde84",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_08b2dabb-c378-4b06-b447-edb6f06fde84.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_08b2dabb-c378-4b06-b447-edb6f06fde84.bed"
+  },
+  "permTime": 10,
+  "title": "T0TE4D",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0faef052-adea-455b-95c5-a75c06808cac",
+  "genome": "hg19",
+  "antigenClass": "ATAC-Seq",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0faef052-adea-455b-95c5-a75c06808cac.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0faef052-adea-455b-95c5-a75c06808cac.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "059219ef-c7a3-4fa2-8814-888f723f326a",
+  "genome": "mm9",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_059219ef-c7a3-4fa2-8814-888f723f326a.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_059219ef-c7a3-4fa2-8814-888f723f326a.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0464a749-c460-4ed7-b74a-30adb82d3379",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "Epidermis",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0464a749-c460-4ed7-b74a-30adb82d3379.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0464a749-c460-4ed7-b74a-30adb82d3379.bed"
+  },
+  "permTime": 1,
+  "title": "upX 3 vs aut",
+  "distanceUp": 3000
+ },
+ {
+  "wabiID": "0d4aa0f3-3efb-4103-b892-4ab54037a7e7",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0d4aa0f3-3efb-4103-b892-4ab54037a7e7.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0d4aa0f3-3efb-4103-b892-4ab54037a7e7.bed"
+  },
+  "permTime": 100,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "09278ad6-bf8a-440c-b727-037c4d77e1f1",
+  "genome": "hg19",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_09278ad6-bf8a-440c-b727-037c4d77e1f1.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_09278ad6-bf8a-440c-b727-037c4d77e1f1.bed"
+  },
+  "permTime": 10,
+  "title": "Test",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0efb0a2c-7564-4f4d-8b5c-67e3f1ae2bfa",
+  "genome": "hg19",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0efb0a2c-7564-4f4d-8b5c-67e3f1ae2bfa.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0efb0a2c-7564-4f4d-8b5c-67e3f1ae2bfa.bed"
+  },
+  "permTime": 1,
+  "title": "S2-Promoter-Down-Bed",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0fc74243-dcb0-46e4-be3d-a8c282aa47d0",
+  "genome": "hg19",
+  "antigenClass": "Histone",
+  "cellClass": "Epidermis",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0fc74243-dcb0-46e4-be3d-a8c282aa47d0.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0fc74243-dcb0-46e4-be3d-a8c282aa47d0.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0bdace30-0950-4916-9394-d8f9369a9804",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0bdace30-0950-4916-9394-d8f9369a9804.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0bdace30-0950-4916-9394-d8f9369a9804.bed"
+  },
+  "permTime": 1,
+  "title": "non_4MD_UP_p0.05_top100",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "03840b67-4f67-479b-8e3d-ecc91c92d8ad",
+  "genome": "hg38",
+  "antigenClass": "Bisulfite-Seq",
+  "cellClass": "Blood",
+  "threshold": 999,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_03840b67-4f67-479b-8e3d-ecc91c92d8ad.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_03840b67-4f67-479b-8e3d-ecc91c92d8ad.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "039dd7f4-2a24-4add-942e-19adbc080b11",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "Blood",
+  "threshold": 100,
+  "typeA": "bed",
+  "typeB": "bed",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_039dd7f4-2a24-4add-942e-19adbc080b11.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_039dd7f4-2a24-4add-942e-19adbc080b11.bed"
+  },
+  "permTime": 1,
+  "title": "6kb_boundary_vs_interior_Histone",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "000b5579-acc7-4baf-9c77-6d4ab0b438dc",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_000b5579-acc7-4baf-9c77-6d4ab0b438dc.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_000b5579-acc7-4baf-9c77-6d4ab0b438dc.bed"
+  },
+  "permTime": 1,
+  "title": "TJE9_UP",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "06d44fa5-9ad6-44dc-8a3f-74dbc51f0bd0",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Neural",
+  "threshold": 100,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_06d44fa5-9ad6-44dc-8a3f-74dbc51f0bd0.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_06d44fa5-9ad6-44dc-8a3f-74dbc51f0bd0.bed"
+  },
+  "permTime": 10,
+  "title": "GluN_NIID_peak4",
+  "distanceUp": 0
+ },
+ {
+  "wabiID": "0383702a-7c3f-4f99-b3c0-a1e16baddcae",
+  "genome": "mm10",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 100,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0383702a-7c3f-4f99-b3c0-a1e16baddcae.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0383702a-7c3f-4f99-b3c0-a1e16baddcae.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "07f24c76-7e99-452e-a806-14146d83786b",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_07f24c76-7e99-452e-a806-14146d83786b.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_07f24c76-7e99-452e-a806-14146d83786b.bed"
+  },
+  "permTime": 1,
+  "title": "My project",
+  "distanceUp": 2000
+ },
+ {
+  "wabiID": "03a4aba7-818b-4530-87f2-aba403d5ee2e",
+  "genome": "hg38",
+  "antigenClass": "Histone",
+  "cellClass": "Liver",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "refseq",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_03a4aba7-818b-4530-87f2-aba403d5ee2e.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_03a4aba7-818b-4530-87f2-aba403d5ee2e.bed"
+  },
+  "permTime": 1,
+  "title": "Group8 liver",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "07616718-cfec-4aef-aceb-656b0512d200",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "Blood",
+  "threshold": 50,
+  "typeA": "gene",
+  "typeB": "userlist",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_07616718-cfec-4aef-aceb-656b0512d200.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_07616718-cfec-4aef-aceb-656b0512d200.bed"
+  },
+  "permTime": 1,
+  "title": "ACTL6A",
+  "distanceUp": 5000
+ },
+ {
+  "wabiID": "0aeaff29-d399-4b99-a217-80ea19b65264",
+  "genome": "hg38",
+  "antigenClass": "TFs and others",
+  "cellClass": "All cell types",
+  "threshold": 50,
+  "typeA": "bed",
+  "typeB": "rnd",
+  "bedAFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedAFile_0aeaff29-d399-4b99-a217-80ea19b65264.bed"
+  },
+  "bedBFile": {
+   "class": "File",
+   "location": "/home/ubuntu/chip-atlas/script/sapporo-enrichment-analysis/../enrichment-analysis/bedBFile_0aeaff29-d399-4b99-a217-80ea19b65264.bed"
+  },
+  "permTime": 10,
+  "title": "AD EWAS variants",
+  "distanceUp": 0
+ }
+]

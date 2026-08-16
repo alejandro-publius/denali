@@ -1,0 +1,1117 @@
+{
+  "domain": "metabolite sets (metabolomics pathway membership vs measured coverage)",
+  "label": "POST-HOC / EXPLORATORY -- not pre-registered",
+  "unit_of_inference": "the distribution of sets. No individual pathway, compound or metabolite is named, ranked or flagged anywhere in this output.",
+  "corpus_yardstick": {
+    "p10": 0.1026,
+    "p25": 0.1862,
+    "median": 0.2244,
+    "p75": 0.2689,
+    "p90": 0.4548
+  },
+  "n_mw_studies_fetched": 383,
+  "n_mw_studies_resolved": 358,
+  "n_measured_inchikey_blocks_union": 6443,
+  "mappings": {
+    "A1 SMPDB x MW-union(all human studies)": {
+      "label": "A1 SMPDB x MW-union(all human studies)",
+      "note": "hits = pathway members detected in >=1 of the sampled human MW studies",
+      "n_sets": 98,
+      "size_range": [
+        4,
+        73
+      ],
+      "r2_size_alone": 0.7935,
+      "spearman_size_vs_hits": 0.9184,
+      "sets_with_zero_hits": 0,
+      "verdict": "CONFOUNDED",
+      "fold_size_range": 18.25,
+      "median_size": 24.0,
+      "median_hit_rate": 0.6901,
+      "error": null,
+      "corpus_percentile": ">=p90"
+    },
+    "A1 SMPDB x MW-union(all human studies) :: size_lt20": {
+      "label": "A1 SMPDB x MW-union(all human studies) :: size_lt20",
+      "note": "hits = pathway members detected in >=1 of the sampled human MW studies | stratum size_lt20",
+      "n_sets": 37,
+      "size_range": [
+        4,
+        19
+      ],
+      "r2_size_alone": 0.434,
+      "spearman_size_vs_hits": 0.7024,
+      "sets_with_zero_hits": 0,
+      "verdict": "CONFOUNDED",
+      "fold_size_range": 4.75,
+      "median_size": 13.0,
+      "median_hit_rate": 0.6667,
+      "error": null,
+      "corpus_percentile": "~p75-p90"
+    },
+    "A1 SMPDB x MW-union(all human studies) :: size_20to40": {
+      "label": "A1 SMPDB x MW-union(all human studies) :: size_20to40",
+      "note": "hits = pathway members detected in >=1 of the sampled human MW studies | stratum size_20to40",
+      "n_sets": 43,
+      "size_range": [
+        20,
+        40
+      ],
+      "r2_size_alone": 0.3837,
+      "spearman_size_vs_hits": 0.634,
+      "sets_with_zero_hits": 0,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "fold_size_range": 2.0,
+      "median_size": 27.0,
+      "median_hit_rate": 0.6897,
+      "error": null,
+      "corpus_percentile": "~p75-p90"
+    },
+    "A1 SMPDB x MW-union(all human studies) :: size_gt40": {
+      "label": "A1 SMPDB x MW-union(all human studies) :: size_gt40",
+      "note": "hits = pathway members detected in >=1 of the sampled human MW studies | stratum size_gt40",
+      "n_sets": 18,
+      "size_range": [
+        41,
+        73
+      ],
+      "r2_size_alone": 0.6733,
+      "spearman_size_vs_hits": 0.8862,
+      "sets_with_zero_hits": 0,
+      "verdict": "CONFOUNDED",
+      "fold_size_range": 1.78,
+      "median_size": 53.0,
+      "median_hit_rate": 0.7295,
+      "error": null,
+      "corpus_percentile": ">=p90"
+    },
+    "A2 SMPDB x MW-single-broadest-study": {
+      "label": "A2 SMPDB x MW-single-broadest-study",
+      "note": "hits = members detected in one single human study (1417 resolved compounds); single-platform coverage",
+      "n_sets": 98,
+      "size_range": [
+        4,
+        73
+      ],
+      "r2_size_alone": 0.5556,
+      "spearman_size_vs_hits": 0.7196,
+      "sets_with_zero_hits": 9,
+      "verdict": "CONFOUNDED",
+      "fold_size_range": 18.25,
+      "median_size": 24.0,
+      "median_hit_rate": 0.1429,
+      "error": null,
+      "corpus_percentile": ">=p90"
+    },
+    "A2 SMPDB x MW-single-broadest-study :: size_lt20": {
+      "label": "A2 SMPDB x MW-single-broadest-study :: size_lt20",
+      "note": "hits = members detected in one single human study (1417 resolved compounds); single-platform coverage | stratum size_lt20",
+      "n_sets": 37,
+      "size_range": [
+        4,
+        19
+      ],
+      "r2_size_alone": 0.024,
+      "spearman_size_vs_hits": 0.1211,
+      "sets_with_zero_hits": 9,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 4.75,
+      "median_size": 13.0,
+      "median_hit_rate": 0.1176,
+      "error": null,
+      "corpus_percentile": "<p10"
+    },
+    "A2 SMPDB x MW-single-broadest-study :: size_20to40": {
+      "label": "A2 SMPDB x MW-single-broadest-study :: size_20to40",
+      "note": "hits = members detected in one single human study (1417 resolved compounds); single-platform coverage | stratum size_20to40",
+      "n_sets": 43,
+      "size_range": [
+        20,
+        40
+      ],
+      "r2_size_alone": 0.1192,
+      "spearman_size_vs_hits": 0.4166,
+      "sets_with_zero_hits": 0,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 2.0,
+      "median_size": 27.0,
+      "median_hit_rate": 0.1429,
+      "error": null,
+      "corpus_percentile": "~p10-p25"
+    },
+    "A2 SMPDB x MW-single-broadest-study :: size_gt40": {
+      "label": "A2 SMPDB x MW-single-broadest-study :: size_gt40",
+      "note": "hits = members detected in one single human study (1417 resolved compounds); single-platform coverage | stratum size_gt40",
+      "n_sets": 18,
+      "size_range": [
+        41,
+        73
+      ],
+      "r2_size_alone": 0.5784,
+      "spearman_size_vs_hits": 0.7949,
+      "sets_with_zero_hits": 0,
+      "verdict": "CONFOUNDED",
+      "fold_size_range": 1.78,
+      "median_size": 53.0,
+      "median_hit_rate": 0.1861,
+      "error": null,
+      "corpus_percentile": ">=p90"
+    },
+    "A3 SMPDB x MW-single-median-study": {
+      "label": "A3 SMPDB x MW-single-median-study",
+      "note": "hits = members detected in one median-coverage human study (56 resolved compounds)",
+      "n_sets": 98,
+      "size_range": [
+        4,
+        73
+      ],
+      "r2_size_alone": 0.0753,
+      "spearman_size_vs_hits": 0.2988,
+      "sets_with_zero_hits": 83,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 18.25,
+      "median_size": 24.0,
+      "median_hit_rate": 0.0,
+      "error": null,
+      "corpus_percentile": "<p10"
+    },
+    "A3 SMPDB x MW-single-median-study :: size_lt20": {
+      "label": "A3 SMPDB x MW-single-median-study :: size_lt20",
+      "note": "hits = members detected in one median-coverage human study (56 resolved compounds) | stratum size_lt20",
+      "n_sets": 37,
+      "size_range": [
+        4,
+        19
+      ],
+      "r2_size_alone": 0.0873,
+      "spearman_size_vs_hits": 0.3202,
+      "sets_with_zero_hits": 34,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 4.75,
+      "median_size": 13.0,
+      "median_hit_rate": 0.0,
+      "error": null,
+      "corpus_percentile": "<p10"
+    },
+    "A3 SMPDB x MW-single-median-study :: size_20to40": {
+      "label": "A3 SMPDB x MW-single-median-study :: size_20to40",
+      "note": "hits = members detected in one median-coverage human study (56 resolved compounds) | stratum size_20to40",
+      "n_sets": 43,
+      "size_range": [
+        20,
+        40
+      ],
+      "r2_size_alone": 0.1771,
+      "spearman_size_vs_hits": 0.3218,
+      "sets_with_zero_hits": 37,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 2.0,
+      "median_size": 27.0,
+      "median_hit_rate": 0.0,
+      "error": null,
+      "corpus_percentile": "~p10-p25"
+    },
+    "A3 SMPDB x MW-single-median-study :: size_gt40": {
+      "label": "A3 SMPDB x MW-single-median-study :: size_gt40",
+      "note": "hits = members detected in one median-coverage human study (56 resolved compounds) | stratum size_gt40",
+      "n_sets": 18,
+      "size_range": [
+        41,
+        73
+      ],
+      "r2_size_alone": 0.0029,
+      "spearman_size_vs_hits": 0.0322,
+      "sets_with_zero_hits": 12,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 1.78,
+      "median_size": 53.0,
+      "median_hit_rate": 0.0,
+      "error": null,
+      "corpus_percentile": "<p10"
+    },
+    "A4 SMPDB x detected-in->=10pct-of-studies": {
+      "label": "A4 SMPDB x detected-in->=10pct-of-studies",
+      "note": "hits = members detected in >=35 of 358 studies (reproducibly measurable subset, 303 compounds)",
+      "n_sets": 98,
+      "size_range": [
+        4,
+        73
+      ],
+      "r2_size_alone": 0.5114,
+      "spearman_size_vs_hits": 0.741,
+      "sets_with_zero_hits": 0,
+      "verdict": "CONFOUNDED",
+      "fold_size_range": 18.25,
+      "median_size": 24.0,
+      "median_hit_rate": 0.41,
+      "error": null,
+      "corpus_percentile": ">=p90"
+    },
+    "A4 SMPDB x detected-in->=10pct-of-studies :: size_lt20": {
+      "label": "A4 SMPDB x detected-in->=10pct-of-studies :: size_lt20",
+      "note": "hits = members detected in >=35 of 358 studies (reproducibly measurable subset, 303 compounds) | stratum size_lt20",
+      "n_sets": 37,
+      "size_range": [
+        4,
+        19
+      ],
+      "r2_size_alone": 0.1725,
+      "spearman_size_vs_hits": 0.4095,
+      "sets_with_zero_hits": 0,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 4.75,
+      "median_size": 13.0,
+      "median_hit_rate": 0.4615,
+      "error": null,
+      "corpus_percentile": "~p10-p25"
+    },
+    "A4 SMPDB x detected-in->=10pct-of-studies :: size_20to40": {
+      "label": "A4 SMPDB x detected-in->=10pct-of-studies :: size_20to40",
+      "note": "hits = members detected in >=35 of 358 studies (reproducibly measurable subset, 303 compounds) | stratum size_20to40",
+      "n_sets": 43,
+      "size_range": [
+        20,
+        40
+      ],
+      "r2_size_alone": 0.1659,
+      "spearman_size_vs_hits": 0.4599,
+      "sets_with_zero_hits": 0,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 2.0,
+      "median_size": 27.0,
+      "median_hit_rate": 0.3793,
+      "error": null,
+      "corpus_percentile": "~p10-p25"
+    },
+    "A4 SMPDB x detected-in->=10pct-of-studies :: size_gt40": {
+      "label": "A4 SMPDB x detected-in->=10pct-of-studies :: size_gt40",
+      "note": "hits = members detected in >=35 of 358 studies (reproducibly measurable subset, 303 compounds) | stratum size_gt40",
+      "n_sets": 18,
+      "size_range": [
+        41,
+        73
+      ],
+      "r2_size_alone": 0.0525,
+      "spearman_size_vs_hits": 0.2622,
+      "sets_with_zero_hits": 0,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 1.78,
+      "median_size": 53.0,
+      "median_hit_rate": 0.3931,
+      "error": null,
+      "corpus_percentile": "<p10"
+    },
+    "A5 SMPDB sweep :: detected in >=0% of studies": {
+      "label": "A5 SMPDB sweep :: detected in >=0% of studies",
+      "note": "threshold 1/358 studies; 6443 compounds qualify",
+      "n_sets": 98,
+      "size_range": [
+        4,
+        73
+      ],
+      "r2_size_alone": 0.7935,
+      "spearman_size_vs_hits": 0.9184,
+      "sets_with_zero_hits": 0,
+      "verdict": "CONFOUNDED",
+      "fold_size_range": 18.25,
+      "median_size": 24.0,
+      "median_hit_rate": 0.6901,
+      "error": null,
+      "corpus_percentile": ">=p90"
+    },
+    "A5 SMPDB sweep :: detected in >=0% of studies :: size_lt20": {
+      "label": "A5 SMPDB sweep :: detected in >=0% of studies :: size_lt20",
+      "note": "small-set stratum of the same sweep row",
+      "n_sets": 37,
+      "size_range": [
+        4,
+        19
+      ],
+      "r2_size_alone": 0.434,
+      "spearman_size_vs_hits": 0.7024,
+      "sets_with_zero_hits": 0,
+      "verdict": "CONFOUNDED",
+      "fold_size_range": 4.75,
+      "median_size": 13.0,
+      "median_hit_rate": 0.6667,
+      "error": null,
+      "corpus_percentile": "~p75-p90"
+    },
+    "A5 SMPDB sweep :: detected in >=1% of studies": {
+      "label": "A5 SMPDB sweep :: detected in >=1% of studies",
+      "note": "threshold 4/358 studies; 1966 compounds qualify",
+      "n_sets": 98,
+      "size_range": [
+        4,
+        73
+      ],
+      "r2_size_alone": 0.7108,
+      "spearman_size_vs_hits": 0.8799,
+      "sets_with_zero_hits": 0,
+      "verdict": "CONFOUNDED",
+      "fold_size_range": 18.25,
+      "median_size": 24.0,
+      "median_hit_rate": 0.633,
+      "error": null,
+      "corpus_percentile": ">=p90"
+    },
+    "A5 SMPDB sweep :: detected in >=1% of studies :: size_lt20": {
+      "label": "A5 SMPDB sweep :: detected in >=1% of studies :: size_lt20",
+      "note": "small-set stratum of the same sweep row",
+      "n_sets": 37,
+      "size_range": [
+        4,
+        19
+      ],
+      "r2_size_alone": 0.3357,
+      "spearman_size_vs_hits": 0.5909,
+      "sets_with_zero_hits": 0,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "fold_size_range": 4.75,
+      "median_size": 13.0,
+      "median_hit_rate": 0.6667,
+      "error": null,
+      "corpus_percentile": "~p75-p90"
+    },
+    "A5 SMPDB sweep :: detected in >=5% of studies": {
+      "label": "A5 SMPDB sweep :: detected in >=5% of studies",
+      "note": "threshold 18/358 studies; 558 compounds qualify",
+      "n_sets": 98,
+      "size_range": [
+        4,
+        73
+      ],
+      "r2_size_alone": 0.5662,
+      "spearman_size_vs_hits": 0.7629,
+      "sets_with_zero_hits": 0,
+      "verdict": "CONFOUNDED",
+      "fold_size_range": 18.25,
+      "median_size": 24.0,
+      "median_hit_rate": 0.4603,
+      "error": null,
+      "corpus_percentile": ">=p90"
+    },
+    "A5 SMPDB sweep :: detected in >=5% of studies :: size_lt20": {
+      "label": "A5 SMPDB sweep :: detected in >=5% of studies :: size_lt20",
+      "note": "small-set stratum of the same sweep row",
+      "n_sets": 37,
+      "size_range": [
+        4,
+        19
+      ],
+      "r2_size_alone": 0.3324,
+      "spearman_size_vs_hits": 0.5795,
+      "sets_with_zero_hits": 0,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "fold_size_range": 4.75,
+      "median_size": 13.0,
+      "median_hit_rate": 0.5,
+      "error": null,
+      "corpus_percentile": "~p75-p90"
+    },
+    "A5 SMPDB sweep :: detected in >=10% of studies": {
+      "label": "A5 SMPDB sweep :: detected in >=10% of studies",
+      "note": "threshold 36/358 studies; 290 compounds qualify",
+      "n_sets": 98,
+      "size_range": [
+        4,
+        73
+      ],
+      "r2_size_alone": 0.4555,
+      "spearman_size_vs_hits": 0.6867,
+      "sets_with_zero_hits": 0,
+      "verdict": "CONFOUNDED",
+      "fold_size_range": 18.25,
+      "median_size": 24.0,
+      "median_hit_rate": 0.3841,
+      "error": null,
+      "corpus_percentile": ">=p90"
+    },
+    "A5 SMPDB sweep :: detected in >=10% of studies :: size_lt20": {
+      "label": "A5 SMPDB sweep :: detected in >=10% of studies :: size_lt20",
+      "note": "small-set stratum of the same sweep row",
+      "n_sets": 37,
+      "size_range": [
+        4,
+        19
+      ],
+      "r2_size_alone": 0.1258,
+      "spearman_size_vs_hits": 0.3335,
+      "sets_with_zero_hits": 0,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 4.75,
+      "median_size": 13.0,
+      "median_hit_rate": 0.4444,
+      "error": null,
+      "corpus_percentile": "~p10-p25"
+    },
+    "A5 SMPDB sweep :: detected in >=25% of studies": {
+      "label": "A5 SMPDB sweep :: detected in >=25% of studies",
+      "note": "threshold 90/358 studies; 63 compounds qualify",
+      "n_sets": 98,
+      "size_range": [
+        4,
+        73
+      ],
+      "r2_size_alone": 0.244,
+      "spearman_size_vs_hits": 0.4855,
+      "sets_with_zero_hits": 13,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "fold_size_range": 18.25,
+      "median_size": 24.0,
+      "median_hit_rate": 0.0992,
+      "error": null,
+      "corpus_percentile": "~p50-p75"
+    },
+    "A5 SMPDB sweep :: detected in >=25% of studies :: size_lt20": {
+      "label": "A5 SMPDB sweep :: detected in >=25% of studies :: size_lt20",
+      "note": "small-set stratum of the same sweep row",
+      "n_sets": 37,
+      "size_range": [
+        4,
+        19
+      ],
+      "r2_size_alone": 0.0004,
+      "spearman_size_vs_hits": -0.0302,
+      "sets_with_zero_hits": 4,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 4.75,
+      "median_size": 13.0,
+      "median_hit_rate": 0.1111,
+      "error": null,
+      "corpus_percentile": "<p10"
+    },
+    "A5 SMPDB sweep :: detected in >=50% of studies": {
+      "label": "A5 SMPDB sweep :: detected in >=50% of studies",
+      "note": "threshold 179/358 studies; 8 compounds qualify",
+      "n_sets": 98,
+      "size_range": [
+        4,
+        73
+      ],
+      "r2_size_alone": 0.2504,
+      "spearman_size_vs_hits": 0.4228,
+      "sets_with_zero_hits": 66,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "fold_size_range": 18.25,
+      "median_size": 24.0,
+      "median_hit_rate": 0.0,
+      "error": null,
+      "corpus_percentile": "~p50-p75"
+    },
+    "A5 SMPDB sweep :: detected in >=50% of studies :: size_lt20": {
+      "label": "A5 SMPDB sweep :: detected in >=50% of studies :: size_lt20",
+      "note": "small-set stratum of the same sweep row",
+      "n_sets": 37,
+      "size_range": [
+        4,
+        19
+      ],
+      "r2_size_alone": 0.0006,
+      "spearman_size_vs_hits": -0.0033,
+      "sets_with_zero_hits": 30,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 4.75,
+      "median_size": 13.0,
+      "median_hit_rate": 0.0,
+      "error": null,
+      "corpus_percentile": "<p10"
+    },
+    "A5 SMPDB sweep :: detected in >=75% of studies": {
+      "label": "A5 SMPDB sweep :: detected in >=75% of studies",
+      "note": "threshold 268/358 studies; 0 compounds qualify",
+      "n_sets": 98,
+      "size_range": [
+        4,
+        73
+      ],
+      "r2_size_alone": null,
+      "spearman_size_vs_hits": null,
+      "sets_with_zero_hits": 98,
+      "verdict": "DEGENERATE -- no variance in hits, R2 undefined",
+      "fold_size_range": 18.25,
+      "median_size": 24.0,
+      "median_hit_rate": 0.0,
+      "error": null,
+      "degenerate": true,
+      "corpus_percentile": null
+    },
+    "A5 SMPDB sweep :: detected in >=75% of studies :: size_lt20": {
+      "label": "A5 SMPDB sweep :: detected in >=75% of studies :: size_lt20",
+      "note": "small-set stratum of the same sweep row",
+      "n_sets": 37,
+      "size_range": [
+        4,
+        19
+      ],
+      "r2_size_alone": null,
+      "spearman_size_vs_hits": null,
+      "sets_with_zero_hits": 37,
+      "verdict": "DEGENERATE -- no variance in hits, R2 undefined",
+      "fold_size_range": 4.75,
+      "median_size": 13.0,
+      "median_hit_rate": 0.0,
+      "error": null,
+      "degenerate": true,
+      "corpus_percentile": null
+    },
+    "A5 SMPDB sweep :: detected in >=90% of studies": {
+      "label": "A5 SMPDB sweep :: detected in >=90% of studies",
+      "note": "threshold 322/358 studies; 0 compounds qualify",
+      "n_sets": 98,
+      "size_range": [
+        4,
+        73
+      ],
+      "r2_size_alone": null,
+      "spearman_size_vs_hits": null,
+      "sets_with_zero_hits": 98,
+      "verdict": "DEGENERATE -- no variance in hits, R2 undefined",
+      "fold_size_range": 18.25,
+      "median_size": 24.0,
+      "median_hit_rate": 0.0,
+      "error": null,
+      "degenerate": true,
+      "corpus_percentile": null
+    },
+    "A5 SMPDB sweep :: detected in >=90% of studies :: size_lt20": {
+      "label": "A5 SMPDB sweep :: detected in >=90% of studies :: size_lt20",
+      "note": "small-set stratum of the same sweep row",
+      "n_sets": 37,
+      "size_range": [
+        4,
+        19
+      ],
+      "r2_size_alone": null,
+      "spearman_size_vs_hits": null,
+      "sets_with_zero_hits": 37,
+      "verdict": "DEGENERATE -- no variance in hits, R2 undefined",
+      "fold_size_range": 4.75,
+      "median_size": 13.0,
+      "median_hit_rate": 0.0,
+      "error": null,
+      "degenerate": true,
+      "corpus_percentile": null
+    },
+    "B1 KEGG x MW-union (measured coverage)": {
+      "label": "B1 KEGG x MW-union (measured coverage)",
+      "note": "hits = KEGG compounds resolvable via the SMPDB KEGG->InChIKey crosswalk AND detected in >=1 sampled human MW study. Compounds with no crosswalk entry can never be hits -- this is a floor, not an unbiased estimate.",
+      "n_sets": 216,
+      "size_range": [
+        5,
+        148
+      ],
+      "r2_size_alone": 0.3442,
+      "spearman_size_vs_hits": 0.76,
+      "sets_with_zero_hits": 6,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "fold_size_range": 29.6,
+      "median_size": 17.0,
+      "median_hit_rate": 0.4211,
+      "error": null,
+      "corpus_percentile": "~p75-p90"
+    },
+    "B1 KEGG x MW-union (measured coverage) :: size_lt20": {
+      "label": "B1 KEGG x MW-union (measured coverage) :: size_lt20",
+      "note": "hits = KEGG compounds resolvable via the SMPDB KEGG->InChIKey crosswalk AND detected in >=1 sampled human MW study. Compounds with no crosswalk entry can never be hits -- this is a floor, not an unbiased estimate. | stratum size_lt20",
+      "n_sets": 113,
+      "size_range": [
+        5,
+        19
+      ],
+      "r2_size_alone": 0.3044,
+      "spearman_size_vs_hits": 0.6148,
+      "sets_with_zero_hits": 4,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "fold_size_range": 3.8,
+      "median_size": 9.0,
+      "median_hit_rate": 0.4444,
+      "error": null,
+      "corpus_percentile": "~p75-p90"
+    },
+    "B1 KEGG x MW-union (measured coverage) :: size_20to40": {
+      "label": "B1 KEGG x MW-union (measured coverage) :: size_20to40",
+      "note": "hits = KEGG compounds resolvable via the SMPDB KEGG->InChIKey crosswalk AND detected in >=1 sampled human MW study. Compounds with no crosswalk entry can never be hits -- this is a floor, not an unbiased estimate. | stratum size_20to40",
+      "n_sets": 51,
+      "size_range": [
+        20,
+        40
+      ],
+      "r2_size_alone": 0.0061,
+      "spearman_size_vs_hits": 0.1002,
+      "sets_with_zero_hits": 1,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 2.0,
+      "median_size": 29.0,
+      "median_hit_rate": 0.4474,
+      "error": null,
+      "corpus_percentile": "<p10"
+    },
+    "B1 KEGG x MW-union (measured coverage) :: size_gt40": {
+      "label": "B1 KEGG x MW-union (measured coverage) :: size_gt40",
+      "note": "hits = KEGG compounds resolvable via the SMPDB KEGG->InChIKey crosswalk AND detected in >=1 sampled human MW study. Compounds with no crosswalk entry can never be hits -- this is a floor, not an unbiased estimate. | stratum size_gt40",
+      "n_sets": 52,
+      "size_range": [
+        42,
+        148
+      ],
+      "r2_size_alone": 0.0003,
+      "spearman_size_vs_hits": 0.1019,
+      "sets_with_zero_hits": 1,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 3.52,
+      "median_size": 57.0,
+      "median_hit_rate": 0.334,
+      "error": null,
+      "corpus_percentile": "<p10"
+    },
+    "B2 KEGG x SMPDB/HMDB annotation coverage": {
+      "label": "B2 KEGG x SMPDB/HMDB annotation coverage",
+      "note": "hits = KEGG compounds that carry a human-metabolome (SMPDB/HMDB) record. Pure ANNOTATION coverage; no measurement involved.",
+      "n_sets": 216,
+      "size_range": [
+        5,
+        148
+      ],
+      "r2_size_alone": 0.3304,
+      "spearman_size_vs_hits": 0.756,
+      "sets_with_zero_hits": 1,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "fold_size_range": 29.6,
+      "median_size": 17.0,
+      "median_hit_rate": 0.7042,
+      "error": null,
+      "corpus_percentile": "~p75-p90"
+    },
+    "B2 KEGG x SMPDB/HMDB annotation coverage :: size_lt20": {
+      "label": "B2 KEGG x SMPDB/HMDB annotation coverage :: size_lt20",
+      "note": "hits = KEGG compounds that carry a human-metabolome (SMPDB/HMDB) record. Pure ANNOTATION coverage; no measurement involved. | stratum size_lt20",
+      "n_sets": 113,
+      "size_range": [
+        5,
+        19
+      ],
+      "r2_size_alone": 0.506,
+      "spearman_size_vs_hits": 0.792,
+      "sets_with_zero_hits": 0,
+      "verdict": "CONFOUNDED",
+      "fold_size_range": 3.8,
+      "median_size": 9.0,
+      "median_hit_rate": 0.9091,
+      "error": null,
+      "corpus_percentile": ">=p90"
+    },
+    "B2 KEGG x SMPDB/HMDB annotation coverage :: size_20to40": {
+      "label": "B2 KEGG x SMPDB/HMDB annotation coverage :: size_20to40",
+      "note": "hits = KEGG compounds that carry a human-metabolome (SMPDB/HMDB) record. Pure ANNOTATION coverage; no measurement involved. | stratum size_20to40",
+      "n_sets": 51,
+      "size_range": [
+        20,
+        40
+      ],
+      "r2_size_alone": 0.0102,
+      "spearman_size_vs_hits": 0.2065,
+      "sets_with_zero_hits": 1,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 2.0,
+      "median_size": 29.0,
+      "median_hit_rate": 0.6667,
+      "error": null,
+      "corpus_percentile": "<p10"
+    },
+    "B2 KEGG x SMPDB/HMDB annotation coverage :: size_gt40": {
+      "label": "B2 KEGG x SMPDB/HMDB annotation coverage :: size_gt40",
+      "note": "hits = KEGG compounds that carry a human-metabolome (SMPDB/HMDB) record. Pure ANNOTATION coverage; no measurement involved. | stratum size_gt40",
+      "n_sets": 52,
+      "size_range": [
+        42,
+        148
+      ],
+      "r2_size_alone": 0.0018,
+      "spearman_size_vs_hits": 0.1337,
+      "sets_with_zero_hits": 0,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 3.52,
+      "median_size": 57.0,
+      "median_hit_rate": 0.4254,
+      "error": null,
+      "corpus_percentile": "<p10"
+    },
+    "B3 KEGG (incl. global maps) x annotation coverage": {
+      "label": "B3 KEGG (incl. global maps) x annotation coverage",
+      "note": "same as B2 but global/superpathway maps and 1-4 compound pathways retained",
+      "n_sets": 305,
+      "size_range": [
+        1,
+        3253
+      ],
+      "r2_size_alone": 0.1319,
+      "spearman_size_vs_hits": 0.8815,
+      "sets_with_zero_hits": 11,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 3253.0,
+      "median_size": 11.0,
+      "median_hit_rate": 0.75,
+      "error": null,
+      "corpus_percentile": "~p10-p25"
+    },
+    "B4 KEGG sweep :: detected in >=0% of studies": {
+      "label": "B4 KEGG sweep :: detected in >=0% of studies",
+      "note": "threshold 1/358 studies",
+      "n_sets": 216,
+      "size_range": [
+        5,
+        148
+      ],
+      "r2_size_alone": 0.3442,
+      "spearman_size_vs_hits": 0.76,
+      "sets_with_zero_hits": 6,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "fold_size_range": 29.6,
+      "median_size": 17.0,
+      "median_hit_rate": 0.4211,
+      "error": null,
+      "corpus_percentile": "~p75-p90"
+    },
+    "B4 KEGG sweep :: detected in >=0% of studies :: size_lt20": {
+      "label": "B4 KEGG sweep :: detected in >=0% of studies :: size_lt20",
+      "note": "small-set stratum of the same sweep row",
+      "n_sets": 113,
+      "size_range": [
+        5,
+        19
+      ],
+      "r2_size_alone": 0.3044,
+      "spearman_size_vs_hits": 0.6148,
+      "sets_with_zero_hits": 4,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "fold_size_range": 3.8,
+      "median_size": 9.0,
+      "median_hit_rate": 0.4444,
+      "error": null,
+      "corpus_percentile": "~p75-p90"
+    },
+    "B4 KEGG sweep :: detected in >=5% of studies": {
+      "label": "B4 KEGG sweep :: detected in >=5% of studies",
+      "note": "threshold 18/358 studies",
+      "n_sets": 216,
+      "size_range": [
+        5,
+        148
+      ],
+      "r2_size_alone": 0.2176,
+      "spearman_size_vs_hits": 0.6383,
+      "sets_with_zero_hits": 19,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "fold_size_range": 29.6,
+      "median_size": 17.0,
+      "median_hit_rate": 0.25,
+      "error": null,
+      "corpus_percentile": "~p25-p50"
+    },
+    "B4 KEGG sweep :: detected in >=5% of studies :: size_lt20": {
+      "label": "B4 KEGG sweep :: detected in >=5% of studies :: size_lt20",
+      "note": "small-set stratum of the same sweep row",
+      "n_sets": 113,
+      "size_range": [
+        5,
+        19
+      ],
+      "r2_size_alone": 0.2296,
+      "spearman_size_vs_hits": 0.5412,
+      "sets_with_zero_hits": 15,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "fold_size_range": 3.8,
+      "median_size": 9.0,
+      "median_hit_rate": 0.2727,
+      "error": null,
+      "corpus_percentile": "~p50-p75"
+    },
+    "B4 KEGG sweep :: detected in >=10% of studies": {
+      "label": "B4 KEGG sweep :: detected in >=10% of studies",
+      "note": "threshold 36/358 studies",
+      "n_sets": 216,
+      "size_range": [
+        5,
+        148
+      ],
+      "r2_size_alone": 0.1772,
+      "spearman_size_vs_hits": 0.5727,
+      "sets_with_zero_hits": 26,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 29.6,
+      "median_size": 17.0,
+      "median_hit_rate": 0.195,
+      "error": null,
+      "corpus_percentile": "~p10-p25"
+    },
+    "B4 KEGG sweep :: detected in >=10% of studies :: size_lt20": {
+      "label": "B4 KEGG sweep :: detected in >=10% of studies :: size_lt20",
+      "note": "small-set stratum of the same sweep row",
+      "n_sets": 113,
+      "size_range": [
+        5,
+        19
+      ],
+      "r2_size_alone": 0.1861,
+      "spearman_size_vs_hits": 0.4785,
+      "sets_with_zero_hits": 20,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 3.8,
+      "median_size": 9.0,
+      "median_hit_rate": 0.2,
+      "error": null,
+      "corpus_percentile": "~p10-p25"
+    },
+    "B4 KEGG sweep :: detected in >=25% of studies": {
+      "label": "B4 KEGG sweep :: detected in >=25% of studies",
+      "note": "threshold 90/358 studies",
+      "n_sets": 216,
+      "size_range": [
+        5,
+        148
+      ],
+      "r2_size_alone": 0.1665,
+      "spearman_size_vs_hits": 0.5325,
+      "sets_with_zero_hits": 70,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 29.6,
+      "median_size": 17.0,
+      "median_hit_rate": 0.0683,
+      "error": null,
+      "corpus_percentile": "~p10-p25"
+    },
+    "B4 KEGG sweep :: detected in >=25% of studies :: size_lt20": {
+      "label": "B4 KEGG sweep :: detected in >=25% of studies :: size_lt20",
+      "note": "small-set stratum of the same sweep row",
+      "n_sets": 113,
+      "size_range": [
+        5,
+        19
+      ],
+      "r2_size_alone": 0.1639,
+      "spearman_size_vs_hits": 0.4206,
+      "sets_with_zero_hits": 55,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 3.8,
+      "median_size": 9.0,
+      "median_hit_rate": 0.0667,
+      "error": null,
+      "corpus_percentile": "~p10-p25"
+    },
+    "B4 KEGG sweep :: detected in >=50% of studies": {
+      "label": "B4 KEGG sweep :: detected in >=50% of studies",
+      "note": "threshold 179/358 studies",
+      "n_sets": 216,
+      "size_range": [
+        5,
+        148
+      ],
+      "r2_size_alone": 0.0485,
+      "spearman_size_vs_hits": 0.2171,
+      "sets_with_zero_hits": 147,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 29.6,
+      "median_size": 17.0,
+      "median_hit_rate": 0.0,
+      "error": null,
+      "corpus_percentile": "<p10"
+    },
+    "B4 KEGG sweep :: detected in >=50% of studies :: size_lt20": {
+      "label": "B4 KEGG sweep :: detected in >=50% of studies :: size_lt20",
+      "note": "small-set stratum of the same sweep row",
+      "n_sets": 113,
+      "size_range": [
+        5,
+        19
+      ],
+      "r2_size_alone": 0.0106,
+      "spearman_size_vs_hits": 0.1225,
+      "sets_with_zero_hits": 87,
+      "verdict": "NOT SIZE-DOMINATED",
+      "fold_size_range": 3.8,
+      "median_size": 9.0,
+      "median_hit_rate": 0.0,
+      "error": null,
+      "corpus_percentile": "<p10"
+    }
+  },
+  "detection_threshold_sweep_smpdb": [
+    {
+      "threshold_frac": 0.0,
+      "n_compounds": 6443,
+      "median_hit_rate_all": 0.6901,
+      "r2_all": 0.7935,
+      "verdict_all": "CONFOUNDED",
+      "median_hit_rate_small": 0.6667,
+      "r2_small": 0.434,
+      "verdict_small": "CONFOUNDED",
+      "n_small": 37,
+      "zero_hit_sets_all": 0
+    },
+    {
+      "threshold_frac": 0.01,
+      "n_compounds": 1966,
+      "median_hit_rate_all": 0.633,
+      "r2_all": 0.7108,
+      "verdict_all": "CONFOUNDED",
+      "median_hit_rate_small": 0.6667,
+      "r2_small": 0.3357,
+      "verdict_small": "PARTIALLY CONFOUNDED",
+      "n_small": 37,
+      "zero_hit_sets_all": 0
+    },
+    {
+      "threshold_frac": 0.05,
+      "n_compounds": 558,
+      "median_hit_rate_all": 0.4603,
+      "r2_all": 0.5662,
+      "verdict_all": "CONFOUNDED",
+      "median_hit_rate_small": 0.5,
+      "r2_small": 0.3324,
+      "verdict_small": "PARTIALLY CONFOUNDED",
+      "n_small": 37,
+      "zero_hit_sets_all": 0
+    },
+    {
+      "threshold_frac": 0.1,
+      "n_compounds": 290,
+      "median_hit_rate_all": 0.3841,
+      "r2_all": 0.4555,
+      "verdict_all": "CONFOUNDED",
+      "median_hit_rate_small": 0.4444,
+      "r2_small": 0.1258,
+      "verdict_small": "NOT SIZE-DOMINATED",
+      "n_small": 37,
+      "zero_hit_sets_all": 0
+    },
+    {
+      "threshold_frac": 0.25,
+      "n_compounds": 63,
+      "median_hit_rate_all": 0.0992,
+      "r2_all": 0.244,
+      "verdict_all": "PARTIALLY CONFOUNDED",
+      "median_hit_rate_small": 0.1111,
+      "r2_small": 0.0004,
+      "verdict_small": "NOT SIZE-DOMINATED",
+      "n_small": 37,
+      "zero_hit_sets_all": 13
+    },
+    {
+      "threshold_frac": 0.5,
+      "n_compounds": 8,
+      "median_hit_rate_all": 0.0,
+      "r2_all": 0.2504,
+      "verdict_all": "PARTIALLY CONFOUNDED",
+      "median_hit_rate_small": 0.0,
+      "r2_small": 0.0006,
+      "verdict_small": "NOT SIZE-DOMINATED",
+      "n_small": 37,
+      "zero_hit_sets_all": 66
+    },
+    {
+      "threshold_frac": 0.75,
+      "n_compounds": 0,
+      "median_hit_rate_all": 0.0,
+      "r2_all": null,
+      "verdict_all": "DEGENERATE -- no variance in hits, R2 undefined",
+      "median_hit_rate_small": 0.0,
+      "r2_small": null,
+      "verdict_small": "DEGENERATE -- no variance in hits, R2 undefined",
+      "n_small": 37,
+      "zero_hit_sets_all": 98
+    },
+    {
+      "threshold_frac": 0.9,
+      "n_compounds": 0,
+      "median_hit_rate_all": 0.0,
+      "r2_all": null,
+      "verdict_all": "DEGENERATE -- no variance in hits, R2 undefined",
+      "median_hit_rate_small": 0.0,
+      "r2_small": null,
+      "verdict_small": "DEGENERATE -- no variance in hits, R2 undefined",
+      "n_small": 37,
+      "zero_hit_sets_all": 98
+    }
+  ],
+  "detection_threshold_sweep_kegg": [
+    {
+      "threshold_frac": 0.0,
+      "n_compounds": 6443,
+      "median_hit_rate_all": 0.4211,
+      "r2_all": 0.3442,
+      "verdict_all": "PARTIALLY CONFOUNDED",
+      "median_hit_rate_small": 0.4444,
+      "r2_small": 0.3044,
+      "verdict_small": "PARTIALLY CONFOUNDED",
+      "n_small": 113
+    },
+    {
+      "threshold_frac": 0.05,
+      "n_compounds": 558,
+      "median_hit_rate_all": 0.25,
+      "r2_all": 0.2176,
+      "verdict_all": "PARTIALLY CONFOUNDED",
+      "median_hit_rate_small": 0.2727,
+      "r2_small": 0.2296,
+      "verdict_small": "PARTIALLY CONFOUNDED",
+      "n_small": 113
+    },
+    {
+      "threshold_frac": 0.1,
+      "n_compounds": 290,
+      "median_hit_rate_all": 0.195,
+      "r2_all": 0.1772,
+      "verdict_all": "NOT SIZE-DOMINATED",
+      "median_hit_rate_small": 0.2,
+      "r2_small": 0.1861,
+      "verdict_small": "NOT SIZE-DOMINATED",
+      "n_small": 113
+    },
+    {
+      "threshold_frac": 0.25,
+      "n_compounds": 63,
+      "median_hit_rate_all": 0.0683,
+      "r2_all": 0.1665,
+      "verdict_all": "NOT SIZE-DOMINATED",
+      "median_hit_rate_small": 0.0667,
+      "r2_small": 0.1639,
+      "verdict_small": "NOT SIZE-DOMINATED",
+      "n_small": 113
+    },
+    {
+      "threshold_frac": 0.5,
+      "n_compounds": 8,
+      "median_hit_rate_all": 0.0,
+      "r2_all": 0.0485,
+      "verdict_all": "NOT SIZE-DOMINATED",
+      "median_hit_rate_small": 0.0,
+      "r2_small": 0.0106,
+      "verdict_small": "NOT SIZE-DOMINATED",
+      "n_small": 113
+    }
+  ],
+  "saturation_diagnostic": {
+    "what": "R2 across every variant plotted against that variant's median hit rate. When the hit rate saturates near 1 the relation hits ~= size is arithmetic, not evidence of a biological confound; when it collapses to 0 the response is degenerate and R2 is noise.",
+    "spearman_r2_vs_absdist_from_half": -0.2736,
+    "spearman_r2_vs_median_hit_rate": 0.5227,
+    "caveat": "Descriptive only. No threshold was pre-set for either statistic and none is applied. Both extremes are pathological for different reasons, so a single monotone summary understates the effect; the sweep tables are the evidence, not these two numbers.",
+    "n_variants": 47
+  },
+  "replication_arm_split_halves": {
+    "computed": true,
+    "n_paired_sets": 98,
+    "raw_agreement": 0.9903,
+    "after_removing_size": 0.9503,
+    "pct_that_is_size": 4.0,
+    "note": "Two disjoint random halves of the 358 resolved human MW studies (179 vs 179) treated as two independent 'screens'. Coverage, not differential abundance."
+  },
+  "replication_arm_two_studies": {
+    "computed": true,
+    "n_paired_sets": 98,
+    "raw_agreement": 0.7929,
+    "after_removing_size": 0.7079,
+    "pct_that_is_size": 10.7,
+    "note": "Two single broadest-coverage human studies as independent arms."
+  }
+}

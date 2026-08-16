@@ -13,6 +13,13 @@ dist/
 # --- large public raw data: re-downloadable, see docs/DATASETS.md ---
 data/raw/
 data/validation_raw/
+
+# --- breadth-probe substrate: 107 MB of public ChIP-Atlas job results and the
+#     1.2M-row set-level table derived from them. Handled exactly like data/raw/ --
+#     re-fetchable, so results/breadth/regions/README.md carries the URLs and the
+#     derived per-job table is committed instead. See results/breadth/README.md.
+results/breadth/regions/raw/
+results/breadth/regions/set_size_hits.csv.gz
 # published supplementary workbooks for evaluation 8; URLs in docs/OFFTARGET.md
 data/offtarget/
 

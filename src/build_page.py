@@ -591,6 +591,14 @@ p.cite{margin-top:26px;font-size:.8125rem;line-height:1.65;color:var(--soft);
    Gate and Call columns permanently unreachable, which is worse than the bug.
    Each table scrolls inside its own box instead, so every column stays
    reachable and the page itself stops moving. */
+/* A visible focus ring. There was none: keyboard users could reach nothing in
+   the explorer, and once they could, they would not have been able to see where
+   they were. :focus-visible so a mouse click does not leave a ring behind.
+   Uses the accent token, which now clears AA on all three grounds. */
+table.ex tr:focus-visible,table.ex th:focus-visible,a:focus-visible,
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);
+  outline-offset:2px}
+table.ex tr{cursor:pointer}
 @media(max-width:700px){
   table.ex,table.tools{display:block;overflow-x:auto}
   table.ex th{white-space:normal}
@@ -859,14 +867,21 @@ function rows(){{let r=DATA.slice();
     return (x<y?-1:x>y?1:0)*(sortAsc?1:-1);}});}}
 function draw(){{const r=rows();
   $("cnt").textContent=r.length+" of "+DATA.length+" programs";
-  $("tb").innerHTML=r.map(d=>'<tr data-i="'+DATA.indexOf(d)+'"><td>'+d.short+
+  $("tb").innerHTML=r.map(d=>'<tr tabindex="0" role="button" aria-label="Open details for '+d.short+'" data-i="'+DATA.indexOf(d)+'"><td>'+d.short+
     (d.is_held_out_program?' <span class="tag held">held out</span>':'')+
     '</td><td class="num">'+num(d.n_hits_q05)+'</td><td class="num">'+num(d.R_p)+
     '</td><td class="num">'+num(d.R_p_predicted_from_measurability)+
     '</td><td class="num">'+num(d.R_p_residual_after_measurability)+
     '</td><td><span class="tag">'+(d.passes_measurability_gate?'passes':'fails')+
     '</span></td><td>'+d.reversibility_call+'</td></tr>').join("");
-  [...$("tb").rows].forEach(tr=>tr.onclick=()=>detail(+tr.dataset.i,tr));}}
+  // Keyboard parity with the mouse. The explorer is the interactive centre of
+  // this page and until 2026-08-16 all 50 rows were unreachable without a
+  // pointer: tabindex -1, no role, click-only. Enter and Space both open a row,
+  // matching what role="button" promises a screen-reader user.
+  [...$("tb").rows].forEach(tr=>{{
+    tr.onclick=()=>detail(+tr.dataset.i,tr);
+    tr.onkeydown=e=>{{if(e.key==="Enter"||e.key===" "){{e.preventDefault();
+      detail(+tr.dataset.i,tr);}}}};}});}}
 function detail(i,tr){{const d=DATA[i],pr=d.proposal||{{}};
   [...$("tb").rows].forEach(x=>x.classList.remove("sel")); if(tr)tr.classList.add("sel");
   const bits=[["Measured members",num(d.n_present)],
@@ -886,8 +901,12 @@ function detail(i,tr){{const d=DATA[i],pr=d.proposal||{{}};
     d.call_plain+'</p><dl>'+bits+'</dl><div class="prop"><b>Generated next experiment &middot; '+
     (pr.outcome||'')+'</b><p>'+(pr.next_experiment||'')+'</p>'+extra+'</div>'+cmm;
   $("det").classList.add("on");}}
-document.querySelectorAll("table.ex th").forEach(th=>th.onclick=()=>{{
-  const k=th.dataset.k; sortAsc=(k===sortK)?!sortAsc:(k==="short"); sortK=k; draw();}});
+document.querySelectorAll("table.ex th").forEach(th=>{{
+  const go=()=>{{const k=th.dataset.k; sortAsc=(k===sortK)?!sortAsc:(k==="short");
+    sortK=k; draw();}};
+  th.tabIndex=0; th.setAttribute("role","button");
+  th.onclick=go;
+  th.onkeydown=e=>{{if(e.key==="Enter"||e.key===" "){{e.preventDefault();go();}}}};}});
 $("fGate").onchange=$("fHeld").onchange=draw;
 draw();
 

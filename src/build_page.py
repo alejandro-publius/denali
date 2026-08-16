@@ -8,7 +8,10 @@ Design contract, enforced below:
     traced does not appear on the page.
   * caption text is read verbatim from results/figures/CAPTIONS.md.
   * figures are inlined as base64 so index.html is genuinely standalone.
-  * white ground, ONE accent used twice, FOUR type sizes, no gradients, no dark
+  * fonts are inlined as base64 too, for the same reason: the page must render
+    as designed on an expo machine with no wifi, so no CDN is used.
+  * white ground, navy structure, teal rationed to links, the four metric
+    numerals and three hairline rules. FOUR type sizes, no gradients, no dark
     hero, no dashboard chrome. The explorer is the only interactive element and
     it makes no network call — everything it needs is embedded.
 """
@@ -26,6 +29,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FROZEN = ROOT / "results" / "frozen"
 FIGS = ROOT / "results" / "figures"
 SENS = ROOT / "results" / "sensitivity"
+ASSETS = ROOT / "assets"
 OUT = ROOT / "index.html"
 
 PROV = json.loads((FROZEN / "provenance.json").read_text())
@@ -238,6 +242,32 @@ def captions() -> dict[str, dict[str, str]]:
 CAP = captions()
 
 
+# ---------------------------------------------------------------- fonts
+# Inlined rather than pulled from Google Fonts. The test suite asserts the page
+# makes no network call, and that guard is load-bearing: the page has to render
+# as designed on an expo machine with no wifi. Latin subsets, vendored under the
+# OFL — see assets/fonts/LICENSE.md. These are presentation assets and no number
+# depends on them.
+_FACES = [("Poppins", 400, "poppins-400.woff2"),
+          ("Poppins", 500, "poppins-500.woff2"),
+          ("Poppins", 600, "poppins-600.woff2"),
+          ("JetBrains Mono", 400, "jetbrainsmono-400.woff2")]
+
+
+def font_faces() -> str:
+    out = []
+    for family, weight, fn in _FACES:
+        b64 = base64.b64encode((ASSETS / "fonts" / fn).read_bytes()).decode()
+        out.append(
+            f"@font-face{{font-family:'{family}';font-style:normal;"
+            f"font-weight:{weight};font-display:swap;"
+            f"src:url(data:font/woff2;base64,{b64}) format('woff2')}}")
+    return "\n".join(out)
+
+
+FONTS = font_faces()
+
+
 def figure(name: str) -> str:
     c = CAP[name]
     b64 = base64.b64encode((FIGS / name).read_bytes()).decode()
@@ -249,157 +279,177 @@ def figure(name: str) -> str:
 
 # ---------------------------------------------------------------- page
 CSS = """
-/* Design language adapted from Rachel's Figma Make study
+/* denali brand restyle. Palette, Poppins headings and the 8px grid are from
+   Rachel's Figma design; the hairline-ruled column, the four-size type scale
+   and the figure treatment carry over from her earlier Figma Make study
    (Scientific-Results-Page-Design, IfX8SSpdJtmfx1a5ud9PtJ).
-   Typography, palette, hairline rules and the two-touch accent are hers.
-   Every number, figure and sentence is ours, from results/frozen/. */
+   Every number, figure and sentence is ours, from results/frozen/.
+
+   On the accent: teal is rationed to links, the four metric numerals, and
+   three 2px rules (pull quote, proposal block, explorer checkbox). The outcome
+   badges stay achromatic on purpose — a badge that colours its own verdict is
+   editorialising a result, and three of our four are negative. */
 :root{
-  --ink:#1c1c1a;          /* warm near-black */
-  --soft:#8c8c89;         /* warm muted */
-  --rule:rgba(0,0,0,.11); /* hairline */
-  --fill:#f2f2f0;         /* figure ground */
-  --accent:#4a6fa5;       /* used TWICE: pull-quote rule, footer link */
+  --navy:#1B2A4A;           /* headers, headings, footer */
+  --teal:#2EC4A0;           /* links, metric numerals, hairline rules — sparingly */
+  --tint:#E6F7F2;           /* card ground */
+  --ink:#1a1a1a;            /* body */
+  --soft:#6B7280;           /* secondary */
+  --rule:rgba(27,42,74,.14);/* hairline, navy-tinted */
+  --fill:#f5f7f9;           /* figure and code ground */
   --paper:#fff;
-  --radius:0px;
+  --radius:8px;             /* the one radius */
+  --sans:"Poppins",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
 }
-*{box-sizing:border-box;margin:0;padding:0;border-radius:var(--radius)}
+*{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%;font-size:16px}
 body{background:var(--paper);color:var(--ink);
   font:400 16px/1.62 "Source Serif 4",Georgia,"Times New Roman",serif;
   padding:0 40px;-webkit-font-smoothing:antialiased}
-main{max-width:1100px;margin:0 auto;padding:44px 0 96px}
+main{max-width:1100px;margin:0 auto;padding:48px 0 96px}
 
-/* four sizes: hero / heading / body / small */
-.hero{font-size:clamp(2.5rem,5.1vw,4.25rem);line-height:1.05;
-  letter-spacing:-.025em;font-weight:600}
-h2{font-size:1.25rem;line-height:1.4;font-weight:600;margin:0 0 26px}
-.claim{font-size:1.1875rem;line-height:1.5;max-width:46em;margin:22px 0 0}
+/* four sizes: hero / heading / body / small. headings in Poppins, navy */
+.hero{font-family:var(--sans);font-size:clamp(2.5rem,5.1vw,4.25rem);
+  line-height:1.05;letter-spacing:-.025em;font-weight:600;color:var(--navy)}
+h2{font-family:var(--sans);font-size:1.25rem;line-height:1.4;font-weight:600;
+  margin:0 0 24px;color:var(--navy)}
+.claim{font-size:1.1875rem;line-height:1.5;max-width:70ch;margin:24px 0 0}
 .circ{font-style:italic;font-size:.8125rem;color:var(--soft);
-  max-width:60em;margin:13px 0 0;line-height:1.55}
-.mech{font-size:1rem;margin:11px 0 0;max-width:60em}
+  max-width:70ch;margin:16px 0 0;line-height:1.55}
+.mech{font-size:1rem;margin:8px 0 0;max-width:70ch}
+code{font:400 .875em/1.5 var(--mono);color:var(--navy)}
 
-/* hairline-ruled column, not whitespace-separated blocks */
+/* hairline-ruled column, not whitespace-separated blocks. 8px grid throughout */
 section{padding:40px 0;border-bottom:1px solid var(--rule)}
-section.hero-sec{padding:0 0 34px;border-bottom:1px solid var(--rule)}
-figure{padding:44px 0;border-bottom:1px solid var(--rule);margin:0}
+section.hero-sec{padding:0 0 32px;border-bottom:1px solid var(--rule)}
+figure{padding:40px 0;border-bottom:1px solid var(--rule);margin:0}
 
 /* shared-rule grids: cells divided by hairlines, no floating boxes */
 .metrics{display:grid;grid-template-columns:repeat(4,1fr);
-  border:1px solid var(--rule);background:var(--rule);gap:1px}
-.metric{background:var(--paper);padding:22px 24px}
-.metric .n{font-size:1.25rem;font-weight:600;line-height:1;margin-bottom:9px;
-  font-variant-numeric:tabular-nums}
+  border:1px solid var(--rule);background:var(--rule);gap:1px;
+  border-radius:var(--radius);overflow:hidden}
+.metric{background:var(--paper);padding:24px}
+/* the accent, use 1 of 5: the four headline numerals */
+.metric .n{font-family:var(--sans);font-size:1.5rem;font-weight:600;line-height:1;
+  margin-bottom:8px;color:var(--teal);font-variant-numeric:tabular-nums}
 .metric .l{font-size:.8125rem;line-height:1.4;color:var(--soft)}
 
 .cards{display:grid;grid-template-columns:repeat(3,1fr);
-  border:1px solid var(--rule);background:var(--rule);gap:1px}
-.card{background:var(--paper);padding:24px 26px}
-.card h3{font-size:.8125rem;font-weight:600;text-transform:uppercase;
-  letter-spacing:.1em;color:var(--soft);margin:0 0 14px}
+  border:1px solid var(--rule);background:var(--rule);gap:1px;
+  border-radius:var(--radius);overflow:hidden}
+.card{background:var(--tint);padding:24px}
+.card h3{font-family:var(--sans);font-size:.8125rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--navy);margin:0 0 16px}
 .card p{font-size:1rem;line-height:1.62}
 
 figure img{width:100%;height:auto;display:block;background:var(--fill);
-  border:1px solid var(--rule)}
-figcaption{margin-top:14px;font-size:.8125rem;line-height:1.65;color:var(--soft);
-  max-width:62em}
-figcaption b{color:var(--ink);font-weight:600}
+  border:1px solid var(--rule);border-radius:var(--radius)}
+figcaption{margin-top:16px;font-size:.8125rem;line-height:1.65;color:var(--soft);
+  max-width:70ch}
+figcaption b{color:var(--navy);font-weight:600}
 
-/* the accent, first of two uses */
-blockquote{margin-left:32px;padding-left:20px;border-left:2px solid var(--accent);
-  max-width:46em}
+/* the accent, use 2 of 5 */
+blockquote{margin-left:32px;padding-left:16px;border-left:2px solid var(--teal);
+  max-width:70ch}
 blockquote p{font-size:1.25rem;font-style:italic;line-height:1.55}
 
-.label{font-size:.8125rem;font-weight:600;text-transform:uppercase;
-  letter-spacing:.1em;color:var(--soft);margin:0 0 14px}
-.control{max-width:48em}
+.label{font-family:var(--sans);font-size:.8125rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--soft);margin:0 0 16px}
+.control{max-width:70ch}
 .control p{font-size:1rem;line-height:1.62}
-.control .note{margin-top:14px;font-size:.8125rem;font-style:italic;
+.control .note{margin-top:16px;font-size:.8125rem;font-style:italic;
   color:var(--soft)}
 
 ol.limits{list-style:none;counter-reset:l;display:grid;
-  grid-template-columns:1fr 1fr;gap:22px 48px}
-ol.limits li{counter-increment:l;display:flex;gap:18px;font-size:1rem;
+  grid-template-columns:1fr 1fr;gap:24px 48px}
+ol.limits li{counter-increment:l;display:flex;gap:16px;font-size:1rem;
   line-height:1.62}
 ol.limits li::before{content:counter(l) ".";color:var(--soft);flex:none;
-  font:400 .8125rem/1.9 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  font-variant-numeric:tabular-nums}
+  font:400 .8125rem/1.9 var(--mono);font-variant-numeric:tabular-nums}
 
-footer{padding:26px 0 0;
-  font:400 .8125rem/1.95 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  color:var(--soft)}
-footer b{color:var(--ink);font-weight:600}
-/* the accent, second and last use */
-footer a{color:var(--accent);text-decoration:none}
+footer{padding:24px 0 0;font:400 .8125rem/1.95 var(--mono);color:var(--navy)}
+footer b{color:var(--navy);font-weight:600}
+/* the accent, use 3 of 5: the one link */
+footer a{color:var(--teal);text-decoration:none}
 footer a:hover{text-decoration:underline;text-underline-offset:2px}
 
 /* explorer — same palette, same four sizes */
-.ctl{display:flex;gap:22px;align-items:center;margin:0 0 18px;flex-wrap:wrap}
+.ctl{display:flex;gap:24px;align-items:center;margin:0 0 16px;flex-wrap:wrap}
 .ctl label{font-size:.8125rem;color:var(--soft);display:flex;gap:8px;
   align-items:center;cursor:pointer;user-select:none}
-.ctl input{accent-color:var(--accent);cursor:pointer}
-.ctl .count{font-size:.8125rem;color:var(--soft);
-  font-family:"JetBrains Mono",ui-monospace,monospace}
-table.ex{width:100%;border-collapse:collapse;font-size:.9375rem}
-table.ex th{text-align:left;font-size:.75rem;text-transform:uppercase;
-  letter-spacing:.08em;color:var(--soft);font-weight:600;padding:0 12px 9px 0;
-  border-bottom:1px solid var(--rule);cursor:pointer;white-space:nowrap}
-table.ex th:hover{color:var(--ink)}
+/* the accent, use 4 of 5 */
+.ctl input{accent-color:var(--teal);cursor:pointer}
+.ctl .count{font-size:.8125rem;color:var(--soft);font-family:var(--mono)}
+table.ex{width:100%;border-collapse:collapse;font-size:.9375rem;
+  font-variant-numeric:tabular-nums}
+table.ex th{font-family:var(--sans);text-align:left;font-size:.75rem;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--soft);font-weight:600;
+  padding:0 16px 8px 0;border-bottom:1px solid var(--rule);cursor:pointer;
+  white-space:nowrap}
+table.ex th:hover{color:var(--navy)}
 table.ex th.num,table.ex td.num{text-align:right;font-variant-numeric:tabular-nums}
-table.ex td{padding:9px 12px 9px 0;border-bottom:1px solid var(--rule);
+table.ex td{padding:8px 16px 8px 0;border-bottom:1px solid var(--rule);
   vertical-align:top}
 table.ex tbody tr{cursor:pointer}
-table.ex tbody tr:hover{background:var(--fill)}
-table.ex tbody tr.sel{background:var(--fill)}
-.tag{font-size:.6875rem;text-transform:uppercase;letter-spacing:.07em;
-  padding:2px 6px;border:1px solid var(--rule);color:var(--soft);white-space:nowrap}
-.tag.held{border-color:var(--accent);color:var(--accent)}
-.detail{margin-top:22px;padding:20px 24px;border:1px solid var(--rule);
-  background:var(--fill);display:none}
+table.ex tbody tr:hover{background:var(--tint)}
+table.ex tbody tr.sel{background:var(--tint)}
+/* outcome badges: mono, plain-bordered, no colour — see the note at the top.
+   held-out rows are marked by weight and a darker rule, not by hue. */
+.tag{font-family:var(--mono);font-size:.6875rem;text-transform:uppercase;
+  letter-spacing:.07em;padding:2px 8px;border:1px solid var(--rule);
+  border-radius:var(--radius);color:var(--soft);white-space:nowrap}
+.tag.held{border-color:var(--ink);color:var(--ink);font-weight:600}
+.detail{margin-top:24px;padding:24px;border:1px solid var(--rule);
+  background:var(--tint);border-radius:var(--radius);display:none}
 .detail.on{display:block}
-.detail h3{font-size:1rem;font-weight:600;margin:0 0 12px}
-.detail dl{display:grid;grid-template-columns:auto 1fr;gap:5px 20px;
+.detail h3{font-family:var(--sans);font-size:1rem;font-weight:600;margin:0 0 8px;
+  color:var(--navy)}
+.detail dl{display:grid;grid-template-columns:auto 1fr;gap:8px 24px;
   font-size:.875rem;margin:0 0 16px}
 .detail dt{color:var(--soft)}
 .detail dd{margin:0;font-variant-numeric:tabular-nums}
-.detail .prop{border-left:2px solid var(--accent);padding-left:16px;
+/* the accent, use 5 of 5 */
+.detail .prop{border-left:2px solid var(--teal);padding-left:16px;
   font-size:.9375rem;line-height:1.6}
-.detail .prop b{display:block;font-size:.75rem;text-transform:uppercase;
-  letter-spacing:.08em;color:var(--soft);margin-bottom:6px}
-.detail .prop p{margin:0 0 10px}
+.detail .prop b{font-family:var(--sans);display:block;font-size:.75rem;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--soft);
+  margin-bottom:8px}
+.detail .prop p{margin:0 0 8px}
 /* tool chain — the same hairline table, one extra column that carries the point */
-table.tools{width:100%;border-collapse:collapse;font-size:.9375rem;
-  margin:0 0 6px}
-table.tools th{text-align:left;font-size:.75rem;text-transform:uppercase;
-  letter-spacing:.08em;color:var(--soft);font-weight:600;
-  padding:0 16px 9px 0;border-bottom:1px solid var(--rule);vertical-align:bottom}
-table.tools td{padding:13px 16px 13px 0;border-bottom:1px solid var(--rule);
+table.tools{width:100%;border-collapse:collapse;font-size:.9375rem;margin:0 0 8px;
+  font-variant-numeric:tabular-nums}
+table.tools th{font-family:var(--sans);text-align:left;font-size:.75rem;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--soft);font-weight:600;
+  padding:0 16px 8px 0;border-bottom:1px solid var(--rule);vertical-align:bottom}
+table.tools td{padding:16px 16px 16px 0;border-bottom:1px solid var(--rule);
   vertical-align:top}
 table.tools td:last-child,table.tools th:last-child{padding-right:0}
-table.tools .tool{font-weight:600;white-space:nowrap}
+table.tools .tool{font-family:var(--sans);font-weight:600;white-space:nowrap;
+  color:var(--navy)}
 table.tools .ver{display:block;font-weight:400;color:var(--soft);
-  font:400 .75rem/1.5 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+  font:400 .75rem/1.5 var(--mono)}
 table.tools .stat{font-size:.875rem;color:var(--soft);max-width:20em}
 table.tools .what{font-size:.875rem;line-height:1.6;color:var(--ink)}
 table.tools tr.untouched .tool,table.tools tr.untouched .what{color:var(--soft)}
-.touch{font:400 .75rem/1.6 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  white-space:nowrap}
+.touch{font:400 .75rem/1.6 var(--mono);white-space:nowrap}
 .touch.no{color:var(--soft)}
-.touch.yes{color:var(--ink);font-weight:600}
-.callable{margin-top:38px;border-top:1px solid var(--rule);padding-top:30px}
-.callable h3{font-size:.8125rem;font-weight:600;text-transform:uppercase;
-  letter-spacing:.1em;color:var(--soft);margin:0 0 14px}
-.callable p{font-size:1rem;line-height:1.62;max-width:52em}
-pre.wire{margin:18px 0 0;padding:20px 24px;background:var(--fill);
-  border:1px solid var(--rule);overflow-x:auto;
-  font:400 .8125rem/1.75 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+.touch.yes{color:var(--navy);font-weight:600}
+.callable{margin-top:40px;border-top:1px solid var(--rule);padding-top:32px}
+.callable h3{font-family:var(--sans);font-size:.8125rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--soft);margin:0 0 16px}
+.callable p{font-size:1rem;line-height:1.62;max-width:70ch}
+pre.wire{margin:16px 0 0;padding:24px;background:var(--fill);
+  border:1px solid var(--rule);border-radius:var(--radius);overflow-x:auto;
+  font:400 .8125rem/1.75 var(--mono);
   color:var(--ink);white-space:pre-wrap;word-break:break-word;max-width:100%}
 pre.wire .k{color:var(--soft)}
-p.cite{margin-top:26px;font-size:.8125rem;line-height:1.65;color:var(--soft);
-  max-width:60em}
+p.cite{margin-top:24px;font-size:.8125rem;line-height:1.65;color:var(--soft);
+  max-width:70ch}
 @media(max-width:1000px){
   .metrics,.cards,ol.limits{grid-template-columns:1fr}
   table.tools .stat,table.tools thead th:nth-child(2){display:none}
-  body{padding:0 22px}main{padding:40px 0 64px}}
+  body{padding:0 24px}main{padding:32px 0 64px}}
 """
 
 EXPLORER_JSON = json.dumps(EXPLORER, separators=(",", ":"), default=str)
@@ -434,8 +484,9 @@ V(PRED["residual_sd"], "predictor.residual_sd -> MCP wire example")
 HTML = f"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>denali — what a genome-scale screen can and cannot discover</title>
-<style>{CSS}</style>
+<title>denali</title>
+<style>{FONTS}
+{CSS}</style>
 <main>
 
 <!-- 1. hero -->

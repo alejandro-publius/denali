@@ -462,25 +462,36 @@ def main() -> int:
                if not REFUSAL.search(blob[max(0, m.start() - 200):m.end() + 200])]
         check("offtarget: no guide is named safe or unsafe", not bad, str(bad[:3]))
 
-        # --- recompute from the source sheets when they are present ---
-        sheets = ROOT / "data" / "offtarget" / "crisprme.xlsx"
-        if sheets.exists():
-            xl = pd.ExcelFile(sheets)
-            tot = alt_n = abs_n = 0
-            for s in xl.sheet_names:
-                d = pd.read_excel(xl, sheet_name=s)
-                tot += len(d)
-                alt_n += int((d["REF/ALT_origin_(highest_CFD)"]
-                              .astype(str).str.strip().str.lower() == "alt").sum())
-                abs_n += int((d["Not_found_in_REF"]
-                              .astype(str).str.strip().str.lower() == "y").sum())
-            check("offtarget: the alt-allele fraction recomputes from the sheets",
-                  alt_n == alt["n"] and near(alt_n / tot, alt["fraction"], 5e-4),
-                  f"recomputed {alt_n}/{tot}={alt_n / tot:.4f} vs "
-                  f"{alt['n']}/{a2['sites_ranked_total']}={alt['fraction']}")
-            check("offtarget: the absent-from-reference fraction recomputes",
-                  abs_n == absent["n"] and near(abs_n / tot, absent["fraction"], 5e-4),
-                  f"recomputed {abs_n}/{tot}={abs_n / tot:.4f} vs {absent['fraction']}")
+        # --- recompute the fractions ---
+        # These recompute from the COMMITTED per-guide table, not from the source
+        # workbooks, and that is deliberate. The workbooks are git-ignored, so a
+        # check gated on their presence runs here and not in CI -- which makes the
+        # suite's own count depend on whether optional data happens to be on disk,
+        # and a self-counting badge cannot have an environment-dependent count.
+        # The first version of these checks did exactly that: 307 locally, 305 on
+        # a clone. Every check below runs everywhere.
+        pg = pd.read_csv(ROOT / "results" / "offtarget" / "crisprme_per_guide.csv")
+        tot = int(pg.n_sites_ranked.sum())
+        alt_n = int(pg.alt_allele_best_alignment.sum())
+        abs_n = int(pg.absent_from_reference.sum())
+        check("offtarget: the alt-allele fraction recomputes per guide",
+              alt_n == alt["n"] and near(alt_n / tot, alt["fraction"], 5e-4),
+              f"recomputed {alt_n}/{tot}={alt_n / tot:.4f} vs "
+              f"{alt['n']}/{a2['sites_ranked_total']}={alt['fraction']}")
+        check("offtarget: the absent-from-reference fraction recomputes per guide",
+              abs_n == absent["n"] and near(abs_n / tot, absent["fraction"], 5e-4),
+              f"recomputed {abs_n}/{tot}={abs_n / tot:.4f} vs {absent['fraction']}")
+        check("offtarget: the per-guide table covers every guide in the JSON",
+              len(pg) == a2["guides"] and tot == a2["sites_ranked_total"],
+              f"csv {len(pg)} guides / {tot} sites vs json {a2['guides']} / "
+              f"{a2['sites_ranked_total']}")
+
+        # The source workbooks are git-ignored, so pin them by hash instead: a
+        # silently re-versioned supplement would otherwise be undetectable.
+        offdoc = (ROOT / "docs" / "OFFTARGET.md").read_text()
+        check("offtarget: both source workbooks are pinned by sha256",
+              len(re.findall(r"\b[0-9a-f]{64}\b", offdoc)) >= 2,
+              f"found {len(re.findall(r'[0-9a-f]{64}', offdoc))} hashes in docs/OFFTARGET.md")
     check("audit refuses to rank or recommend",
           "not a candidate list" in conf["what_this_is_not"].lower()
           and not any("rank_" in k or k == "top" for k in conf))

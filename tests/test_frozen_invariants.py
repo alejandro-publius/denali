@@ -1347,6 +1347,39 @@ def main() -> int:
         n_a = lit["tier_a_explicit_size"]["n"]
         pct_a = lit["tier_a_explicit_size"]["of_resolved"]
 
+        # The search terms are part of what was sealed, so the code must
+        # implement exactly the set the pre-registration fixed -- no more, no
+        # fewer. The first run shipped 7 of the 8 Tier A terms because one was
+        # dropped in transcription, and nothing here noticed. Parse the terms
+        # out of the fenced block in the pre-reg and compare to the module.
+        prereg = ROOT / "docs" / "LITERATURE_PREREG.md"
+        if prereg.exists():
+            import importlib
+            _lit = importlib.import_module("src.literature_audit")
+            pre_txt = prereg.read_text()
+
+            def _terms(header: str) -> set:
+                seg = pre_txt.split(header, 1)[1].split("```")[1]
+                # A newline separates terms exactly as "|" does -- the sealed
+                # block wraps mid-list. Treating it as whitespace glued
+                # "size[- ]dependent" to "larger gene sets" and made this
+                # guard fail against correct code.
+                return {t.strip() for t in seg.replace("\n", "|").split("|")
+                        if t.strip()}
+
+            for header, coded, label in (
+                    ("**Tier A", set(_lit.TIER_A), "Tier A"),
+                    ("**Tier B", set(_lit.TIER_B), "Tier B")):
+                sealed = _terms(header)
+                check(f"literature: {label} implements exactly the sealed terms",
+                      sealed == coded,
+                      f"sealed-only {sorted(sealed - coded)} · "
+                      f"code-only {sorted(coded - sealed)}"
+                      if sealed != coded else f"{len(sealed)} terms")
+            check("literature: the pre-registration still hashes to the cited sha256",
+                  hashlib.sha256(pre_txt.encode()).hexdigest().startswith("165d91a2"),
+                  hashlib.sha256(pre_txt.encode()).hexdigest()[:16])
+
         check("literature: the query set is the corpus arm's publications",
               n_q == int(per.source_id.nunique()),
               f"arm says {n_q}, corpus_per_screen.csv has {per.source_id.nunique()}")

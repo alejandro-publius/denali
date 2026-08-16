@@ -41,6 +41,15 @@ TIER_A = [
     r"size[- ]dependent",
     r"larger gene sets",
     r"number of genes in the (gene )?set",
+    # Restored 2026-08-15 after review. The sealed pre-registration lists EIGHT
+    # Tier A terms and the first run implemented seven -- this one was dropped
+    # in transcription. Re-running it alone over the 111 resolved publications
+    # matched 3, all of which were already Tier A on another term, so the
+    # corrected count is unchanged at 4 of 111 = 3.6%. The deviation cost
+    # nothing, and it is disclosed in docs/LITERATURE.md rather than quietly
+    # closed, because "we deviated and it happened not to matter" and "we did
+    # what we said" are different claims.
+    r"set[- ]size",
 ]
 TIER_B = [
     r"CAMERA",

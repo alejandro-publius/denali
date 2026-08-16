@@ -35,7 +35,7 @@ Eight tokens. Nothing outside this list appears on the page.
 | `--navy` | `#1B2A4A` | Structure: headings, the masthead, the footer. Carries hierarchy so the accent does not have to. |
 | `--tint` | `#E6F7F2` | Card ground. The accent at low saturation, used as a surface rather than as a mark. |
 | `--paper` | `#fff` | Ground. |
-| `--accent` | `#2EC4A0` | Teal. Links, the metric numerals, and small highlights — **sparingly**. It is the only saturated colour on the page and it marks things you can act on or read a number off. Structure is `--navy`'s job, not the accent's. |
+| `--accent` | `#1D7C65` | Teal. Links, the metric numerals, and small highlights — **sparingly**. It is the only saturated colour on the page and it marks things you can act on or read a number off. Structure is `--navy`'s job, not the accent's. Darkened from `#2EC4A0` for contrast — see below. |
 
 Semantic colour in figures (`#b2182b` red, `#2166ac` blue) comes from
 ColorBrewer's diverging scale and is **only** used inside matplotlib output on
@@ -62,27 +62,70 @@ selector rounds every hairline and rule on the page as well.
 > no shadow, no dark hero, no chart junk, and failures set at the same size as
 > successes. What changed is the palette and the corner, not the posture.
 
-## Contrast — a deliberate accept
+## Contrast — measured, not asserted
 
-Checked 2026-08-15, WCAG 2.1, each token on `--paper` (`#fff`):
+**Re-measured 2026-08-16 against the rendered page, not the token table.** The
+previous version of this section scored the *warm* palette — `#1c1c1a`,
+`#8c8c89`, `#a3a39b` — which `index.html` stopped using at the brand pass. It
+was describing a page that no longer existed, and it took an automated sweep
+over computed styles to notice. That is the same class of error this project
+keeps finding elsewhere, and it is recorded rather than quietly overwritten.
 
-| Token | Ratio | AA body (4.5) | AA large / UI (3.0) |
-|---|---:|:--:|:--:|
-| ink `#1c1c1a` | 17.1 : 1 | pass | pass |
-| soft `#8c8c89` | 3.4 : 1 | fail | pass |
-| faint `#a3a39b` | 2.5 : 1 | fail | fail |
+Method: walk every element with a text node on the built page, take the computed
+colour and the nearest opaque background, and apply the WCAG 2.1 threshold for
+that element's actual rendered size and weight. Not the token table — the pixels.
 
-**Accepted, with the constraint that makes it safe.** `--ink` carries every line a
-reader must read. `--soft` renders only secondary text — captions, labels,
-provenance — never body copy, and it clears AA for large text and UI components.
-`--faint` is used only for non-text (hairline borders on `app.py`) and large
-decorative numerals (step numbers on `index.html`), never a string parsed at body
-size. **No token below 4.5 : 1 is applied to body text on either surface** — that
-is the invariant; if `--soft` or `--faint` ever lands on running text, that is the
-bug to catch. Print: both surfaces are dark text on `--paper` white with no
-full-bleed dark block, so a browser print/PDF stays legible and spends no ink on
-backgrounds; the one accepted risk is a wide table clipping at page width, which
-`overflow-x:auto` handles on screen but a printer cannot scroll.
+### `index.html`, current palette
+
+| Token | on `--paper` | on `--fill` | on `--tint` | verdict |
+|---|---:|---:|---:|---|
+| ink `#1a1a1a` | 17.40 | 16.21 | 15.71 | passes everywhere |
+| navy `#1B2A4A` | 14.22 | 13.24 | 12.83 | passes everywhere |
+| soft `#6B7280` | 4.83 | 4.50 | 4.36 | passes AA body on paper and fill |
+| accent `#1D7C65` | 5.09 | 4.74 | 4.60 | passes AA body everywhere |
+
+**Two failures were found and both were fixed rather than accepted.**
+
+- **`--accent` was `#2EC4A0`, which scored 2.21 on white** and failed AA at every
+  size — including the footer link carrying the repository URL, which is the one
+  string on the page a reader is most likely to copy or read off a screen.
+  Darkened to `#1D7C65`: **identical hue (165.6°) and saturation (0.62)**, only
+  lightness moved (0.475 → 0.300). It is the same teal, and it now clears 4.5 on
+  all three grounds the page uses.
+- **`--soft` on `--tint` measured 4.36 against a 4.5 requirement** — the card
+  headings, the only place those two met. Changed to `--navy` (12.83 there). A
+  card heading reading stronger than its own body was the better call anyway.
+
+**`--soft` on `--tint` remains the one pair to watch.** It is 4.36, and it is
+fine only because nothing renders text in that combination any more. If a future
+card puts secondary text on the tint ground, that is the bug this table exists
+to catch.
+
+The sweep is reproducible and finds zero failures on the current page:
+
+```bash
+node /tmp/contrast.mjs   # walks computed styles, prints every pair below threshold
+```
+
+### `app.py` — known drift, still the warm palette
+
+`app.py` was not converged at the brand pass and still carries `#1c1c1a`,
+`#8c8c89`, `#a3a39b`, `#f2f2f0`. Those four are grandfathered **by name** in the
+invariant suite, so the exception is enumerated rather than waved through and
+dies the moment the Streamlit view is converged. Their measured ratios on white:
+ink 17.1, soft 3.4, faint 2.5.
+
+The constraint that makes that safe is unchanged and is the real invariant:
+`--soft` renders only secondary text — captions, labels, provenance — never body
+copy; `--faint` is used only for non-text hairlines and large decorative
+numerals. **No token below 4.5 : 1 is applied to body text on either surface.**
+
+### Print
+
+Both surfaces are dark text on white with no full-bleed dark block, so a
+browser print or PDF stays legible and spends no ink on backgrounds. The one
+accepted risk is a wide table clipping at page width: `overflow-x:auto` handles
+it on screen and a printer cannot scroll.
 
 ## Type
 

@@ -351,7 +351,15 @@ CSS = """
   --soft:#6B7280;         /* secondary */
   --rule:rgba(27,42,74,.14); /* hairline, navy-tinted */
   --fill:#f5f7f9;         /* figure and code ground */
-  --accent:#2EC4A0;       /* teal: links, metric numerals, small highlights */
+  /* Darkened 2026-08-16 for WCAG AA -- identical hue (165.6) and saturation
+     (0.62), only lightness moved, 0.475 -> 0.300, so the brand is the same
+     teal. The previous value scored 2.21 on white and failed AA at every
+     size, including the footer link carrying the repository URL. Now 5.09 on
+     paper, 4.60 on tint, 4.74 on fill. The retired hex is deliberately not
+     written here: the palette guard scans this stylesheet for literals and
+     cannot tell a comment from a declaration, which is the correct bias.
+     docs/DESIGN.md carries the before/after. */
+  --accent:#1D7C65;       /* teal: links, metric numerals, small highlights */
   --navy:#1B2A4A;         /* headers, headings, footer */
   --tint:#E6F7F2;         /* card ground */
   --paper:#fff;
@@ -407,8 +415,12 @@ figure{padding:44px 0;border-bottom:1px solid var(--rule);margin:0}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);
   border:1px solid var(--rule);background:var(--rule);gap:1px}
 .card{background:var(--tint);padding:24px 26px}
+/* Navy rather than soft-grey here. This heading sits on the tint ground,
+   where the soft token measured 4.36
+   against a 4.5 requirement. Navy is 12.83 there, and a card heading reading
+   stronger than its body was the right call independently. */
 .card h3{font-size:.8125rem;font-weight:600;text-transform:uppercase;
-  letter-spacing:.1em;color:var(--soft);margin:0 0 14px}
+  letter-spacing:.1em;color:var(--navy);margin:0 0 14px}
 .card p{font-size:1rem;line-height:1.62}
 
 figure img{width:100%;height:auto;display:block;background:var(--fill);
@@ -572,6 +584,19 @@ p.cite{margin-top:26px;font-size:.8125rem;line-height:1.65;color:var(--soft);
   .metrics,.metrics.tally,.cards,ol.limits{grid-template-columns:1fr}
   table.tools .stat,table.tools thead th:nth-child(2){display:none}
   body{padding:0 22px}main{padding:40px 0 64px}}
+/* Phones. Until this existed the document was 680px wide inside a 390px
+   viewport on first paint -- the whole page dragged sideways before anyone
+   touched it. Four separate causes, one per line below.
+   NOT body{overflow-x:hidden}: that hides the drag and leaves the explorer's
+   Gate and Call columns permanently unreachable, which is worse than the bug.
+   Each table scrolls inside its own box instead, so every column stays
+   reachable and the page itself stops moving. */
+@media(max-width:700px){
+  table.ex,table.tools{display:block;overflow-x:auto}
+  table.ex th{white-space:normal}
+  table.tools .tool,.touch{white-space:normal}
+  blockquote p,.detail h3,pre.wire,table.ex td:first-child{overflow-wrap:anywhere}
+  .agwrap,.detail dl{grid-template-columns:1fr}}
 """
 
 EXPLORER_JSON = json.dumps(EXPLORER, separators=(",", ":"), default=str)
@@ -616,7 +641,13 @@ HTML = f"""<!doctype html>
 
 <!-- 1. hero -->
 <section class="hero-sec">
-<p class="hero">Bigger gene sets win,<br>and it has nothing<br>to do with biology.</p>
+<!-- The page had no h1 at all: every outline tool and screen reader saw a
+     document starting at h2, with the real title existing only as a styled
+     paragraph. This is a markup change, not a design change -- the global
+     star-selector margin reset and .hero's explicit font-size mean p and h1
+     render identically here, verified by measuring the box before and after
+     and getting the same top, left, width, height, and computed type. -->
+<h1 class="hero">Bigger gene sets win,<br>and it has nothing<br>to do with biology.</h1>
 <p class="claim">A 200-gene program returns more hits than a 30-gene one regardless of
 what either does &mdash; the way a raw crime count always ranks big cities as the most
 dangerous. Across all {N_PROGRAMS} Hallmark programs scored against {N_KD:,} CRISPRi

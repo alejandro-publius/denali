@@ -446,6 +446,35 @@ def main() -> int:
         check("selection: states what was NOT attempted",
               "did not attempt" in sel.lower())
 
+    # ---------------- L. docs/LOOP.md describes the real code ----------------
+    # LOOP.md documents criterion 1 and hands a reviewer a grep to falsify it. If
+    # the doc and the code drift apart, the grep becomes the reviewer's find
+    # rather than ours, so tie every claim it makes to its source.
+    loop_p = ROOT / "docs" / "LOOP.md"
+    if loop_p.exists():
+        loop = loop_p.read_text()
+        ne = (ROOT / "src" / "next_experiment.py").read_text()
+        # the falsification test the doc publishes, actually run
+        named = re.search(r"^\s*(?:if|elif).*(HALLMARK_|REACTOME_)", ne, re.M)
+        check("LOOP.md's own falsification grep still returns nothing",
+              named is None, named.group(0).strip() if named else "")
+        sweep = (ROOT / "src" / "sweep.py").read_text()
+        mf = re.search(r"MIN_FRAC,\s*MIN_N,\s*ALPHA\s*=\s*([\d.]+),\s*(\d+)", sweep)
+        check("LOOP.md gate thresholds match src/sweep.py",
+              mf is not None and f"\u2265{mf.group(1)} fraction" in loop
+              and f"\u2265{mf.group(2)} present" in loop,
+              f"code says {mf.groups() if mf else '?'}")
+        hm = re.search(r"HIT_MIN_HITS\s*=\s*(\d+)", ne)
+        check("LOOP.md hit threshold matches next_experiment.py",
+              hm is not None and f"hit threshold of {hm.group(1)}" in loop,
+              f"code says {hm.group(1) if hm else '?'}")
+        for n, label in [(gap["gate_fail_but_has_hits"], "gate-fail-with-hits"),
+                         (gap["gate_pass_but_zero_hits"], "gate-pass-zero-hits")]:
+            check(f"LOOP.md states {label} as {n}", f"{n}" in loop)
+        check("LOOP.md discloses that the predictor failed its own evaluation",
+              f"{held['axis2_balanced_accuracy']}" in loop
+              and "not refit" in loop.lower())
+
     # ---------------- F. the docs' own self-description ----------------
     report_readme = (ROOT / "README.md").read_text()
     # These are hand-typed and therefore drift: the badge said 84, the Tests

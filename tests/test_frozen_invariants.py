@@ -1284,6 +1284,17 @@ def main() -> int:
     check("corpus: README row 8 quotes the numbers the table recomputes",
           row8 is not None and all(s in row8.group(0)
                                    for s in ("0.224", "9.6%", "1,272")))
+    # The unreconciled independent run is the other load-bearing caveat in this
+    # arm and it was guarded by nothing: another execution of the same idea got
+    # a median near 0.10 over ~1,673 screens and the two could not be made to
+    # agree. Without it the doc reads as though 0.224 were settled. It sat in
+    # prose only, which is how the demo's "three of four" survived three arms.
+    _dis_doc = all(s in corpus_md for s in ("0.10", "1,673")) and \
+        "reconcil" in corpus_md.lower()
+    _row_txt = report_readme[row8.start():row8.start() + 6000] if row8 else ""
+    _dis_row = "0.10" in _row_txt and "reconcil" in _row_txt.lower()
+    check("corpus: the unreconciled independent run (~0.10) is disclosed in both surfaces",
+          _dis_doc and _dis_row, f"doc={_dis_doc} readme={_dis_row}")
 
     # Scope, the same pattern as the gene-symbol guard: the unit of inference
     # is the distribution, so no screen and no publication may be named in the

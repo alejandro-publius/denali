@@ -206,34 +206,63 @@ def main() -> int:
         check(f"scope rule: no gene named as a finding in {label}", not hits,
               hits[0] if hits else "")
 
-    # page text = the literal strings app.py renders
-    page_text = re.sub(r"<[^>]+>", " ", re.sub(r"<style.*?</style>|<img[^>]*>", " ", page, flags=re.S))
-    scan("the page (index.html)", page_text)
-    scan("results/figures/CAPTIONS.md", caps)
-
-    # app.py is the OTHER surface an audience sees, and until now no scope guard
-    # read it: the scan above covers index.html and the captions only. A gene
-    # named as a finding in the Streamlit page would have passed every check.
-    # Scan what the audience READS, not the Python. Two things are stripped
-    # first, because neither reaches the screen: f-string expressions, since
-    # {seal['commit']} renders a commit hash; and dict-subscript keys, since
-    # prov["seal"] is a lookup into a frozen file whose key we do not rename.
+    # ---- the registry of RENDERED SURFACES ----
+    # Every surface an audience reads is registered here once, and both guards
+    # below iterate the registry. app.py was scanned by neither for most of this
+    # project's life: the guards named index.html and CAPTIONS.md literally, so
+    # the Streamlit page kept saying a program was "sealed in git before the
+    # scoring code existed" long after that framing was stripped everywhere a
+    # guard could see. The registry exists so a surface is covered by every
+    # guard or by none, never by some.
+    #
+    # app.py is scanned for what the audience READS, not for its Python. Two
+    # things are stripped first because neither reaches the screen: f-string
+    # expressions, since {prereg['commit']} renders a commit hash; and
+    # dict-subscript keys, since prov["seal"] is a lookup into a frozen file
+    # whose key we do not rename.
     app_src = (ROOT / "app.py").read_text()
     app_text = re.sub(r"<[^>]+>", " ",
                       re.sub(r"\[\s*['\"][^'\"]*['\"]\s*\]", " ",
                              re.sub(r"\{[^{}]*\}", " ",
                                     re.sub(r"<style.*?</style>", " ",
                                            app_src, flags=re.S))))
-    scan("the expo app (app.py)", app_text)
+    page_text = re.sub(r"<[^>]+>", " ", re.sub(r"<style.*?</style>|<img[^>]*>", " ", page, flags=re.S))
+
+    SURFACES = {
+        "index.html": page_text,
+        "app.py": app_text,
+        "results/figures/CAPTIONS.md": caps,
+        "REPORT.md": report,
+    }
+
+    for label, txt in SURFACES.items():
+        scan(label, txt)
 
     # framing rule: the project does not lead with commit ordering
     SEAL = re.compile(r"\bseal(ed|ing)?\b|before the scoring code existed|"
                       r"\d+ minutes? before", re.I)
-    for label, txt in [("index.html", page), ("CAPTIONS.md", caps),
-                       ("REPORT.md", report), ("app.py", app_text)]:
+    for label, txt in SURFACES.items():
         hit = SEAL.search(txt)
         check(f"no seal framing in {label}", hit is None,
               txt[max(0, hit.start()-60):hit.end()+60].replace("\n", " ") if hit else "")
+
+    # A NEW surface must be registered above, or this fails. Without this, the
+    # next page someone adds repeats app.py's history exactly: rendered to an
+    # audience, read by no guard, and green the whole time.
+    rendered = set()
+    for h in ROOT.glob("*.html"):
+        rendered.add(h.name)
+    for py in ROOT.glob("*.py"):
+        if re.search(r"^import streamlit|^\s*import streamlit", py.read_text(), re.M):
+            rendered.add(py.name)
+    for py in sorted((ROOT / "src").glob("*.py")):
+        for out in re.findall(r"['\"]([\w./-]+\.html)['\"]", py.read_text()):
+            rendered.add(Path(out).name)
+    unregistered = sorted(rendered - set(SURFACES))
+    check("every rendered surface is registered with the scope guards",
+          not unregistered,
+          f"unguarded: {unregistered} -- add to SURFACES in this file so the "
+          f"gene-naming and framing guards read it too")
 
     # The seal guard above scans rendered TEXT. Two figures had "SEALED program"
     # drawn into the PNG, where no text scan can reach it -- the guard passed for
@@ -424,6 +453,45 @@ def main() -> int:
         check("proposals: no nomination language",
               not any(w in blob for w in ("we recommend", "top candidate",
                                           "most promising", "best target")))
+
+        # THE ONE THAT WAS MISSING. proposals.json went stale at 24cf2ba and stayed
+        # stale for hours: what_would_change_my_mind landed in next_experiment.py at
+        # 0dfb5d2 and the freeze step was never re-run. Nothing noticed, because
+        # every check above interrogates the file's CONTENT and none of them asked
+        # whether the file still matches the generator that owns it. So `make all`
+        # on a clean clone rewrote it and left the tree dirty, which made README's
+        # byte-identical reproduction claim false while the whole suite stayed green.
+        #
+        # A frozen artifact that its own generator would rewrite is not frozen. This
+        # regenerates in memory -- writing nothing -- and demands byte equality.
+        # The generator is pointed at a temp directory holding copies of its two
+        # inputs, so this check never writes a byte into results/frozen/ -- a test
+        # that had to mutate the frozen interface to verify it would be its own
+        # counterexample.
+        import contextlib
+        import io
+        import shutil
+        import tempfile
+
+        from src import freeze_proposals as _fp
+
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            for f in ("program_summary.csv", "heldout.csv"):
+                shutil.copy2(FROZEN / f, tmp / f)
+            real_frozen = _fp.FROZEN
+            try:
+                _fp.FROZEN = tmp
+                with contextlib.redirect_stdout(io.StringIO()):
+                    _fp.main()
+                regenerated = (tmp / "proposals.json").read_bytes()
+            finally:
+                _fp.FROZEN = real_frozen
+        check("proposals: the frozen file matches what its generator produces",
+              prop_p.read_bytes() == regenerated,
+              "results/frozen/proposals.json is STALE -- run "
+              "`python -m src.freeze_proposals`. A clean clone would rewrite it, "
+              "so the byte-identical reproduction claim is false until you do.")
 
     # ---------------- J. program A is described correctly ----------------
     # REPORT.md claimed inducing ER stress would move program A "from 0 hits to

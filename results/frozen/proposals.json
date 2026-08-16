@@ -15,6 +15,7 @@
     "mechanism": "members are expressed and variable (expr_ratio=1.16, sd_ratio=1.03) yet nothing reaches significance; this is a POWER limit, not a biology limit",
     "next_experiment": "Change the condition: increase cells per perturbation, or aggregate related perturbations to raise effective n. Then re-run the identical sweep.",
     "falsifies_the_mechanism": "If doubling depth yields no hits, the null is biological rather than statistical and the mechanism is refuted.",
+    "what_would_change_my_mind": "If doubling depth yields no hits, the null is biological rather than statistical and the mechanism is refuted.",
     "cost": "one re-profile; scoring is ~11 s on the existing pipeline."
   },
   "hit": {
@@ -29,6 +30,7 @@
     },
     "next_experiment": "Validate at PATHWAY level: test whether the ranked knockdowns recover this program's canonical regulators at both tails, in a second independently screened cell type, using set-level enrichment \u2014 not individual gene lookups.",
     "why_not_gene_level": "Guide-pair concordance is -0.019. Two independent guides against the same gene give uncorrelated scores, so any single-gene call here is not reproducible. Set-level statistics aggregate over thousands of perturbations and survive that noise; individual ranks do not.",
+    "what_would_change_my_mind": "This program is called reversible because 5,707 knockdowns moved it. Two things would demote that, and both are measurable before anyone commits: (1) if a size-aware re-ranking (CAMERA-style, or a permutation null preserving set size) drops its residual below 0, the 5,707 hits were set size and not biology \u2014 its residual is currently -0.408; (2) if the canonical regulators of this program do NOT land at both tails in a second independently screened cell type at set level, the ranking is not recovering known biology and nothing here should be carried forward.",
     "caveat": "Observed R_p is 0.41 below what measurability alone predicts. The measurability model explains most of the variance across programs, so the residual is the only part that can be biology.",
     "cost": "existing RPE1 matrix; no new data."
   },

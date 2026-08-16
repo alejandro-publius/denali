@@ -51,6 +51,28 @@ the design invariants permit on that surface.
 **Radius is `0px`, globally.** Set once in `:root` and applied with `*`. Every
 corner on the page is square, and that is a decision, not an oversight.
 
+## Contrast — a deliberate accept
+
+Checked 2026-08-15, WCAG 2.1, each token on `--paper` (`#fff`):
+
+| Token | Ratio | AA body (4.5) | AA large / UI (3.0) |
+|---|---:|:--:|:--:|
+| ink `#1c1c1a` | 17.1 : 1 | pass | pass |
+| soft `#8c8c89` | 3.4 : 1 | fail | pass |
+| faint `#a3a39b` | 2.5 : 1 | fail | fail |
+
+**Accepted, with the constraint that makes it safe.** `--ink` carries every line a
+reader must read. `--soft` renders only secondary text — captions, labels,
+provenance — never body copy, and it clears AA for large text and UI components.
+`--faint` is used only for non-text (hairline borders on `app.py`) and large
+decorative numerals (step numbers on `index.html`), never a string parsed at body
+size. **No token below 4.5 : 1 is applied to body text on either surface** — that
+is the invariant; if `--soft` or `--faint` ever lands on running text, that is the
+bug to catch. Print: both surfaces are dark text on `--paper` white with no
+full-bleed dark block, so a browser print/PDF stays legible and spends no ink on
+backgrounds; the one accepted risk is a wide table clipping at page width, which
+`overflow-x:auto` handles on screen but a printer cannot scroll.
+
 ## Type
 
 Four sizes, and a fifth only for the hero. Anything else is drift.

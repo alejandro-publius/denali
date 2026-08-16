@@ -74,9 +74,18 @@ replication of the map.
 
 ### Still in force
 
-- **No agents or subagents without explicit authorisation**, and any authorised
-  agent must be told not to spawn children.
-- **No broad prior-art or novelty sweeps** beyond the targeted checks already done.
+> **This file is stale as of 2026-08-15. `docs/MORNING_HANDOFF.md` is the current
+> handoff — read it, not this, to orient.** The rules below are annotated where
+> they no longer hold; history is kept, not deleted.
+
+- ~~**No agents or subagents without explicit authorisation**, and any authorised
+  agent must be told not to spawn children.~~ **SUPERSEDED 2026-08-15:** agents
+  were authorised and ran (research fan-outs and verification workflows); the
+  blanket prohibition and the no-children rule no longer hold. See
+  `docs/MORNING_HANDOFF.md`.
+- ~~**No broad prior-art or novelty sweeps** beyond the targeted checks already
+  done.~~ **SUPERSEDED 2026-08-15:** the prior-art sweep ran; Fulcher is now cited
+  six times in `docs/LANDSCAPE.md`.
 - **Do not resurrect** FigContract, RETRIAL, RescueMap/ENOUGH, or the ILD
   gradient project.
 - Do not redefine a kill criterion after seeing data.

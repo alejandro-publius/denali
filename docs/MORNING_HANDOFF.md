@@ -1,6 +1,11 @@
 # Handoff — resume with zero explanation
 
-**Repo:** https://github.com/alejandro-publius/denali (private)
+**Repo:** https://github.com/alejandro-publius/denali (public, MIT)
+**Site:** https://alejandro-publius.github.io/denali/ — **LIVE**. Two consequences
+to hold in mind: it **redeploys automatically on every push to main**, so a bad
+push is immediately public; and it is **byte-identical to `index.html` with zero
+external loads**, so the no-network fallback still holds if the venue wifi dies —
+the page renders fully offline from one self-contained file.
 **Read order:** this file → `REPORT.md` → `docs/DEMO.md`. Nothing else needed.
 
 **ANALYSIS IS CLOSED.** No new sweeps, no refits, no new features, no gene-level

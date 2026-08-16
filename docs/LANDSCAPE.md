@@ -5,6 +5,54 @@ I could not verify something I say so instead of filling the gap.
 
 ---
 
+## 0. The field just named our problem as *the* bottleneck
+
+This is the most important thing in this document and it was published a month
+before the event.
+
+Google DeepMind, *Conjecture Machines: AI agents and the new validation
+bottleneck in science*, July 2026:
+
+> **"The bottleneck for AI for Science is no longer hypothesis generation, it is
+> verification.** Karl Popper said science advances through conjectures and
+> refutations. Agentic AI is changing the economics of that pairing. AI agents
+> are conjecture machines, making ideas and candidate solutions abundant and
+> relatively cheap. Refutations remain physical and institutional — and so,
+> costly and slow."
+
+And the failure mode they name:
+
+> "An agent can propose a novel genetic lead to reverse cellular ageing, but
+> cannot say definitively whether it actually works."
+
+They list **calibrating confidence about what the agent does not know** — the
+"epistemic humility" problem — as an open weakness of current systems.
+
+**Read the field against that.** Lila Sciences runs autonomous science factories
+that hypothesise and iterate without human guidance. FutureHouse's Kosmos and
+Robin generate thousands of candidate hypotheses in a single run. Google's own
+Co-Scientist proposes testable experiments *"at a rate no laboratory can fully
+evaluate."* Every one of them is a conjecture machine, and they are collectively
+making the bottleneck worse.
+
+**denali is a refutation machine.** It does not propose candidates — it refuses
+to, on the record, and the pre-registration is what forbids it. What it does is
+take a ranked list somebody already believes and measure how much of it is
+artifact. On its own held-out test it reported its own predictor failing at
+balanced accuracy 0.4375 with zero true positives, unasked. That is the epistemic
+humility DeepMind names as missing, implemented rather than aspired to.
+
+This is not a smaller version of an AI scientist. **It is the other half**, and
+the half the field's leading policy voice says is now the constraint.
+
+Corroborating that this is a live front, not one company's opinion:
+NeurIPS 2026 has a workshop titled *Verification in the Age of AI Scientists*,
+and Philosophical Transactions of the Royal Society A published *The need for
+verification in artificial intelligence-driven scientific discovery*. DeepMind
+has gone as far as building a wet lab inside the Francis Crick Institute
+specifically to validate agent hypotheses — which is what it costs to refute
+things physically, and why doing it computationally first has value.
+
 ## 1. The problem has a price tag, and it is published
 
 | Finding | Source |
@@ -84,6 +132,26 @@ Nothing about the result. It changes the framing:
   than in a footnote.
 
 ---
+
+## 6. Time-sensitive: Virtual Cell Challenge 2026 opens 20 August
+
+Arc Institute — a co-host of this event — opens round two of the Virtual Cell
+Challenge on **Thursday 20 August 2026**, four days after this hackathon ends.
+Announced scope: *"a new problem to solve and a wider scope"*; the 2025 wrap-up
+signals expansion toward **combinatorial perturbations and cross-cell-type
+generalization**. Round one drew 5,000+ registrants across 114 countries and 300+
+final submissions.
+
+Two things from their own 2025 post-mortem are worth reading as an invitation:
+
+> *"purely AI-based approaches did not consistently outperform statistical
+> baselines"*
+
+> *"no single metric captures model quality"*
+
+Both are this project's argument, in their words. The cross-cell-type direction is
+also exactly what our RPE1 arm just tested. **This is the obvious next venue**, and
+unlike a hackathon it rewards a method that holds up rather than a demo.
 
 **Method note.** Compiled 2026-08-15 from direct literature search. Four
 automated research passes on the commercial landscape failed partway through for

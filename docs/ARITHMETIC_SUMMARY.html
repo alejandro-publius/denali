@@ -1,0 +1,556 @@
+<title>Arithmetic, Not Biology</title>
+<style>
+  :root{
+    --ground:#FAFAFB; --surface:#F0F2F5; --surface-2:#E6E9EE;
+    --ink:#0F1720; --ink-2:#3A4653; --muted:#69737F;
+    --rule:#D6DBE2; --rule-strong:#B7BFC9;
+    --accent:#1F6A7C;        /* construction / arithmetic */
+    --accent-soft:#CFE3E8;
+    --warn:#A64B18;          /* degenerate, unusable */
+    --warn-soft:#F2DFD3;
+    --ok:#3F6B45;            /* clean, protected */
+    --shadow:0 1px 2px rgba(15,23,32,.06),0 8px 24px rgba(15,23,32,.05);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#0E1317; --surface:#161D23; --surface-2:#1E272E;
+      --ink:#E7ECF0; --ink-2:#B4BEC8; --muted:#85929E;
+      --rule:#26313A; --rule-strong:#36444F;
+      --accent:#6FB9CB; --accent-soft:#1B3A44;
+      --warn:#E08B57; --warn-soft:#3A2418;
+      --ok:#8FBF97;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0E1317; --surface:#161D23; --surface-2:#1E272E;
+    --ink:#E7ECF0; --ink-2:#B4BEC8; --muted:#85929E;
+    --rule:#26313A; --rule-strong:#36444F;
+    --accent:#6FB9CB; --accent-soft:#1B3A44;
+    --warn:#E08B57; --warn-soft:#3A2418;
+    --ok:#8FBF97;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:Charter,"Bitstream Charter","Iowan Old Style",Georgia,serif;
+    font-size:17px; line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px}
+  .col{max-width:64ch}
+
+  h1,h2,h3,.mono,.eyebrow,th,.num{
+    font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  }
+  .mono,.num,code,.hash{
+    font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    font-variant-numeric:tabular-nums;
+  }
+  h1{font-size:clamp(2.1rem,5.4vw,3.4rem);line-height:1.04;letter-spacing:-.028em;
+     font-weight:760;margin:0;text-wrap:balance}
+  h2{font-size:clamp(1.35rem,2.6vw,1.75rem);line-height:1.16;letter-spacing:-.018em;
+     font-weight:700;margin:0;text-wrap:balance}
+  h3{font-size:1.02rem;line-height:1.3;letter-spacing:-.008em;font-weight:680;margin:0}
+  p{margin:0}
+  a{color:var(--accent)}
+  strong{font-weight:700}
+
+  .eyebrow{
+    font-size:.685rem;font-weight:640;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  /* ---------- masthead ---------- */
+  header{
+    border-bottom:1px solid var(--rule);
+    background:
+      linear-gradient(to bottom, var(--surface), var(--ground));
+  }
+  .head-inner{display:flex;flex-direction:column;gap:26px;padding:60px 0 44px}
+  .claim{font-size:1.16rem;line-height:1.55;color:var(--ink-2);max-width:60ch}
+  .claim b{color:var(--ink)}
+
+  /* the rail: a percentile scale, because percentile placement IS the method */
+  .rail{position:relative;height:8px;border-radius:99px;background:var(--surface-2);
+        overflow:hidden}
+  .rail i{position:absolute;inset:0 auto 0 0;background:var(--accent);opacity:.30}
+  .rail b{position:absolute;top:-3px;width:3px;height:14px;border-radius:2px;
+          background:var(--accent);transform:translateX(-1.5px)}
+  .rail.ref i{background:var(--muted);opacity:.22}
+  .rail.ref b{background:var(--muted)}
+
+  /* ---------- track cards ---------- */
+  .tracks{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+          padding:34px 0}
+  .card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;
+        padding:20px;display:flex;flex-direction:column;gap:11px;box-shadow:var(--shadow)}
+  .card .q{font-size:.95rem;color:var(--ink-2);line-height:1.45}
+  .verdict{font-size:.72rem;font-weight:680;letter-spacing:.06em;text-transform:uppercase;
+           display:inline-flex;align-items:center;gap:7px}
+  .verdict::before{content:"";width:8px;height:8px;border-radius:2px;background:currentColor}
+  .v-ok{color:var(--ok)} .v-acc{color:var(--accent)} .v-warn{color:var(--warn)}
+  .big{font-size:2.05rem;font-weight:720;letter-spacing:-.03em;line-height:1}
+  .big small{font-size:.8rem;font-weight:600;color:var(--muted);letter-spacing:0}
+
+  section{padding:52px 0;border-top:1px solid var(--rule)}
+  .sec-head{display:flex;flex-direction:column;gap:9px;margin-bottom:26px}
+  .body-stack{display:flex;flex-direction:column;gap:18px}
+
+  /* ---------- tables ---------- */
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:6px 0}
+  table{border-collapse:collapse;width:100%;font-size:.86rem;min-width:560px}
+  th{font-size:.68rem;font-weight:640;letter-spacing:.08em;text-transform:uppercase;
+     color:var(--muted);text-align:left;padding:0 14px 8px 0;
+     border-bottom:1px solid var(--rule-strong);white-space:nowrap}
+  td{padding:11px 14px 11px 0;border-bottom:1px solid var(--rule);vertical-align:baseline}
+  td.num,th.num{text-align:right;padding-right:18px}
+  .num{font-size:.88rem;font-weight:600}
+  tr.hi td{background:var(--accent-soft)}
+  .dom{font-weight:600;font-size:.9rem}
+  .tag{font-size:.66rem;font-weight:660;letter-spacing:.05em;text-transform:uppercase;
+       padding:2px 7px;border-radius:4px;white-space:nowrap;display:inline-block}
+  .t-conf{background:var(--accent-soft);color:var(--accent)}
+  .t-part{background:var(--surface-2);color:var(--ink-2)}
+  .t-warn{background:var(--warn-soft);color:var(--warn)}
+
+  /* ---------- callouts ---------- */
+  .note{background:var(--surface);border-left:3px solid var(--rule-strong);
+        padding:16px 18px;border-radius:0 8px 8px 0;font-size:.95rem;line-height:1.55;
+        display:flex;flex-direction:column;gap:8px}
+  .note.warn{border-left-color:var(--warn)}
+  .note.acc{border-left-color:var(--accent)}
+  .note .eyebrow{color:var(--muted)}
+
+  /* two-column compare for count vs rate */
+  .compare{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+  .cmp{border:1px solid var(--rule);border-radius:9px;padding:17px;background:var(--surface);
+       display:flex;flex-direction:column;gap:7px}
+  .cmp .bar{height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+  .cmp .bar i{display:block;height:100%;background:var(--accent)}
+  .cmp.clean .bar i{background:var(--ok)}
+
+  .rails{display:flex;flex-direction:column;gap:15px}
+  .rrow{display:grid;grid-template-columns:1fr;gap:6px}
+  .rlab{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+        font-size:.83rem}
+  .rlab span:first-child{font-weight:600}
+  .rlab span:last-child{color:var(--muted)}
+
+  ul{margin:0;padding-left:1.15em;display:flex;flex-direction:column;gap:9px}
+  li{padding-left:.15em}
+  code{font-size:.85em;background:var(--surface-2);padding:1px 5px;border-radius:4px}
+  pre{background:var(--surface);border:1px solid var(--rule);border-radius:9px;
+      padding:15px 17px;overflow-x:auto;font-size:.8rem;line-height:1.6;margin:0}
+  pre code{background:none;padding:0}
+  .hash{font-size:.74rem;color:var(--muted);word-break:break-all}
+  footer{border-top:1px solid var(--rule);padding:34px 0 60px;color:var(--muted);
+         font-size:.84rem;display:flex;flex-direction:column;gap:10px}
+  @media (prefers-reduced-motion:no-preference){
+    .card,.cmp{transition:border-color .18s ease}
+  }
+</style>
+
+<header>
+  <div class="wrap head-inner">
+    <div class="eyebrow">denali · post-deadline extension · three pre-registered arms</div>
+    <h1>Arithmetic, not biology</h1>
+    <p class="claim">
+      denali showed that set-level rankings are dominated by how the sets were
+      <b>built</b> — chiefly their size — rather than by what they mean. If that is
+      arithmetic, it must appear wherever a score is aggregated over sets of varying
+      size. <b>It does: in six fields that share no biology, including the
+      best-annotated organism in the world.</b> And it is absent from AI benchmarks
+      for one identifiable reason, which tells you exactly what genomics is missing.
+    </p>
+    <div class="hash">
+      Thresholds fixed and hashed before any data was downloaded ·
+      commit <code>a2776f7</code> · benchmarks <code>9b825d87…</code> ·
+      corrections <code>d58fa082…</code> · domains <code>6d40a079…</code>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="tracks">
+    <div class="card">
+      <div class="eyebrow">Track A · AI benchmarks</div>
+      <div class="q">Is a model's leaderboard position predicted by subset size?</div>
+      <div class="big">No<small> — 5,452 models</small></div>
+      <div class="verdict v-ok">Benchmarks got this right</div>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Track B · the published fixes</div>
+      <div class="q">Do fifteen years of proposed corrections work at scale?</div>
+      <div class="big">85%<small> removed, CAMERA-VIF</small></div>
+      <div class="verdict v-warn">Ours is not the one to use</div>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Track C · six domains</div>
+      <div class="q">Does the confound appear outside gene sets?</div>
+      <div class="big">6 / 6<small> defensible rows</small></div>
+      <div class="verdict v-acc">It is arithmetic</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<section>
+  <div class="col sec-head">
+    <div class="eyebrow">The negative first</div>
+    <h2>AI benchmarks are not confounded, and that is the finding</h2>
+  </div>
+  <div class="col body-stack">
+    <p>
+      Every LLM benchmark is a set of items of wildly varying size — MMLU's 57
+      subjects run from 100 to 1,534 items. So the question is whether leaderboard
+      position is partly an artifact of benchmark construction. We pre-registered
+      the expectation that it would <em>not</em> be, and why.
+    </p>
+
+    <div class="compare">
+      <div class="cmp">
+        <div class="eyebrow">Count layer · items correct</div>
+        <div class="num" style="font-size:1.5rem;font-weight:700">R² 0.598</div>
+        <div class="bar"><i style="width:59.8%"></i></div>
+        <div style="font-size:.85rem;color:var(--ink-2);line-height:1.45">
+          Confounded for <strong>100%</strong> of the panel — harder than denali's
+          own headline of 0.465.
+        </div>
+      </div>
+      <div class="cmp clean">
+        <div class="eyebrow">Rate layer · accuracy</div>
+        <div class="num" style="font-size:1.5rem;font-weight:700">ρ 0.12</div>
+        <div class="bar"><i style="width:12%"></i></div>
+        <div style="font-size:.85rem;color:var(--ink-2);line-height:1.45">
+          Clean. Item difficulty does not meaningfully track how many items a
+          subject has.
+        </div>
+      </div>
+    </div>
+
+    <p>
+      The whole difference is one division. Accuracy is a <em>rate</em>; a gene-set
+      hit count is a <em>count</em>. Normalising by item count is the entire
+      protection.
+    </p>
+
+    <div class="note acc">
+      <div class="eyebrow">We measured the floor rather than asserting it</div>
+      <p>
+        Replace each model with a hypothetical one scoring its own mean accuracy on
+        every subject — no capability variation at all, so any size dependence left
+        is arithmetic and nothing else. That null scores <strong>0.807</strong>.
+        Real models score 0.598 — <strong>below</strong> the arithmetic floor, for
+        99.9% of the panel. So the count-layer number says nothing bad about any
+        benchmark; it measures how strong the arithmetic is with nothing
+        normalising it.
+      </p>
+    </div>
+
+    <p>
+      A second protection stacks on the first. Item-weighted averaging gives the
+      largest subject <strong>15.3×</strong> the weight of the smallest, and the
+      five biggest subjects carry 31% of all items — the construction imbalance is
+      real and large. It does not propagate, because model ability is correlated
+      across subjects at <strong>r = 0.87</strong>. A model good at one subject is
+      good at the others, so re-weighting cannot reorder much. Set-level genomics
+      has <em>neither</em> protection.
+    </p>
+
+    <div class="note warn">
+      <div class="eyebrow">Our own criterion fired, and we are reporting how</div>
+      <p>
+        The registered rule for "construction moves the leaderboard" tripped: top-5
+        membership changed, and 93% of models moved ≥ 3 ranks. <strong>The verdict
+        stands as registered — a criterion is never revised after seeing data.</strong>
+        But the top-5 swap is separated by <strong>0.000071 — exactly one item out
+        of 14,042</strong>, and 3 ranks is 0.06% of a 5,452-model panel. Kendall τ is
+        0.955 and the top ten does not change at all. The criterion fired on two
+        artifacts of scale.
+      </p>
+    </div>
+
+    <p>
+      When two benchmarks agree on a ranking, <strong>0.9%</strong> of the agreement
+      is shared weighting structure. In denali's own CRISPR work, <strong>26%</strong>
+      of the apparent replication between two screens was set size.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="col sec-head">
+    <div class="eyebrow">Track B · 1,272 published screens × 6 corrections</div>
+    <h2>Which correction to use — and it is not ours</h2>
+  </div>
+  <div class="col body-stack">
+    <p>
+      The literature has proposed fixes for this confound since 2012. Nobody had
+      measured how much of the size dependence each actually removes on real data at
+      scale, or how often one makes things worse. The pipeline first had to reproduce
+      the published corpus numbers, and does, on <strong>1,272 of 1,272 screens</strong>.
+    </p>
+  </div>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Correction</th>
+          <th class="num">Size dependence removed</th>
+          <th class="num">Screens made worse</th>
+          <th>Verdict</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="hi">
+          <td class="dom">CAMERA, variance-inflated (ρ̄ = 0.05)</td>
+          <td class="num">85%</td><td class="num">1.8%</td>
+          <td><span class="tag t-conf">Use this one</span></td>
+        </tr>
+        <tr>
+          <td class="dom">denali's own residualisation</td>
+          <td class="num">86%</td><td class="num">6.3%</td>
+          <td><span class="tag t-warn">Unreliable tail</span></td>
+        </tr>
+        <tr>
+          <td class="dom">CAMERA, variance-inflated (ρ̄ = 0.01)</td>
+          <td class="num">62%</td><td class="num">1.5%</td>
+          <td><span class="tag t-part">Works</span></td>
+        </tr>
+        <tr>
+          <td class="dom">ORA hypergeometric — the field's default</td>
+          <td class="num">57%</td><td class="num">0.7%</td>
+          <td><span class="tag t-part">Works</span></td>
+        </tr>
+        <tr>
+          <td class="dom">Size-preserving permutation null</td>
+          <td class="num">23%</td><td class="num">13.4%</td>
+          <td><span class="tag t-part">Partial</span></td>
+        </tr>
+        <tr>
+          <td class="dom">Competitive score test, no inflation (ρ̄ = 0)</td>
+          <td class="num">3%</td><td class="num">18.2%</td>
+          <td><span class="tag t-warn">Fails</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col body-stack" style="margin-top:20px">
+    <div class="note warn">
+      <div class="eyebrow">The result we pre-committed to reporting</div>
+      <p>
+        denali's own correction has the <em>best</em> median — and breaks
+        <strong>6.3%</strong> of screens against CAMERA-VIF's 1.8%, nearly four times
+        the failure rate for one percentage point of gain. <strong>So the tool should
+        recommend CAMERA's method, not its own.</strong> An invariant now fails the
+        build if that sentence disappears.
+      </p>
+    </div>
+    <p>
+      The last two rows are the same test with and without the variance-inflation
+      term. Adding it turns the worst method in the table into the best-behaved one.
+      That is Wu &amp; Smyth's entire 2012 argument, reproduced across a thousand
+      screens run without reference to it: <strong>the inflation term is the
+      correction; the competitive framing alone is not.</strong>
+    </p>
+    <div class="note">
+      <div class="eyebrow">And the caveat that bounds all of it</div>
+      <p>
+        Driving a size correlation to zero proves size-decoupling, not correctness. A
+        correction that deleted all biology would score perfectly on every metric
+        here. There is no ground truth in this corpus.
+      </p>
+    </div>
+    <p>
+      One practical finding for anyone holding a hit list: a correction changes the
+      size dependence far more than it changes <em>who is at the top</em> — except in
+      the most confounded fifth of screens, where applying CAMERA-VIF replaces
+      <strong>seven of your top ten</strong>.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="col sec-head">
+    <div class="eyebrow">Track C · one recipe, six domains</div>
+    <h2>Where each field falls against the CRISPR corpus</h2>
+  </div>
+  <div class="col body-stack" style="margin-bottom:26px">
+    <p>
+      Percentile of each domain's size-alone R² against the distribution of 1,272
+      published CRISPR screens — same transform on both sides. The gene-set row
+      <em>is</em> that distribution, so it sits at 50 by construction.
+    </p>
+  </div>
+
+  <div class="rails">
+    <div class="rrow">
+      <div class="rlab"><span>Region sets — ChIP peaks × GWAS hits</span>
+        <span class="num">99.6 · R² 0.648</span></div>
+      <div class="rail"><i style="width:99.6%"></i><b style="left:99.6%"></b></div>
+    </div>
+    <div class="rrow">
+      <div class="rlab"><span>Yeast genetic interaction — Costanzo × GO Slim</span>
+        <span class="num">96.1 · R² 0.357</span></div>
+      <div class="rail"><i style="width:96.1%"></i><b style="left:96.1%"></b></div>
+    </div>
+    <div class="rrow">
+      <div class="rlab"><span>Microbiome functions — 5 of 11 CRC cohorts</span>
+        <span class="num">89.7 · R² 0.633</span></div>
+      <div class="rail"><i style="width:89.7%"></i><b style="left:89.7%"></b></div>
+    </div>
+    <div class="rrow">
+      <div class="rlab"><span>Protein sets — CPTAC × Reactome</span>
+        <span class="num">89.2 · R² 0.371</span></div>
+      <div class="rail"><i style="width:89.2%"></i><b style="left:89.2%"></b></div>
+    </div>
+    <div class="rrow">
+      <div class="rlab"><span>Metabolite sets — 3–8 members, the boundary</span>
+        <span class="num">81.8 · R² 0.331</span></div>
+      <div class="rail"><i style="width:81.8%"></i><b style="left:81.8%"></b></div>
+    </div>
+    <div class="rrow">
+      <div class="rlab"><span>Gene sets — 1,272 CRISPR screens <em>(reference)</em></span>
+        <span class="num">50.0 · R² 0.192</span></div>
+      <div class="rail ref"><i style="width:50%"></i><b style="left:50%"></b></div>
+    </div>
+  </div>
+
+  <div class="col body-stack" style="margin-top:34px">
+    <h3>The row that kills the strongest objection</h3>
+    <p>
+      The standing argument against this work has always been that the confound is an
+      artifact of sloppy curation. <em>Saccharomyces cerevisiae</em> is the
+      best-annotated organism in biology. Across <strong>15.8 million measured gene
+      pairs</strong> scored against SGD's curated GO Slim, it lands at the
+      <strong>96th percentile</strong> of the published CRISPR corpus — against a
+      pre-registered expectation of merely "at or above the 25th". Five of the top ten
+      terms leave the top ten once size is removed. All four registered sensitivities
+      agree, and normalising for how many pairs each gene was actually tested in makes
+      the effect <em>stronger</em>, not weaker.
+    </p>
+
+    <h3>The cleanest demonstration</h3>
+    <p>
+      Region sets share nothing with gene-set machinery — no gene symbols, no
+      annotation, no curation. A set is a pile of genomic intervals a ChIP experiment
+      called; its size is antibody, sequencing depth and peak caller. Across 300
+      experiments spanning a <strong>5,639-fold</strong> size range, size alone explains
+      <strong>89%</strong> of the ranking and <strong>none</strong> of the top ten
+      survives re-ranking. An experiment that calls more peaks covers more genome and
+      overlaps more query SNPs. That is area, not biology.
+    </p>
+
+    <div class="note warn">
+      <div class="eyebrow">Three negatives inside Track C, reported not buried</div>
+      <ul>
+        <li>
+          Two registered hit rules were <strong>degenerate</strong> — 75% of proteins
+          and 86% of metabolites called hits, which makes hits ≈ rate × size by
+          arithmetic identity. Both flattering numbers (R² 0.70 and 0.91) are printed
+          beside the usable variants and used for nothing. The protein guard was
+          pre-registered and fired on its own.
+        </li>
+        <li>
+          <strong>Six of eleven microbiome cohorts</strong> return no significant
+          result at all, so their R² does not exist. They are counted as unscoreable,
+          never scored — calling them "not size-dominated" would be exactly the error
+          this project exists to catch.
+        </li>
+        <li>
+          The metabolite boundary failed in the <em>opposite</em> direction from the one
+          anticipated. Small sets are not immune (R² 0.331); a 63-compound assay simply
+          cannot define a meaningful null against sets of 3–8 members.
+        </li>
+      </ul>
+    </div>
+
+    <p>
+      Because the microbiome domain spans cohorts, it answers denali's replication
+      question directly: across all ten cohort pairs, <strong>28%</strong> of
+      cross-cohort agreement is set size — against the <strong>26%</strong> measured
+      between two CRISPR cell lines, in a field sharing no organism, assay or
+      annotation with it.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="col sec-head">
+    <div class="eyebrow">Limits</div>
+    <h2>What this does not say</h2>
+  </div>
+  <div class="col">
+    <ul>
+      <li>
+        <strong>No individual set, model, screen, cohort or publication is named as a
+        finding.</strong> The unit of inference is the distribution, throughout.
+      </li>
+      <li>
+        A high R² does not mean any particular set is wrong, and driving one to zero
+        would not make a ranking right.
+      </li>
+      <li>
+        These are six constructions, not six fields. Another defensible construction in
+        the same domain could land elsewhere; the claim is that the effect appears at
+        all outside gene sets.
+      </li>
+      <li>
+        The AI-benchmark result covers one archived leaderboard's models on one
+        benchmark family, scored by one harness. The count-layer figure must never be
+        quoted as "benchmarks are 60% confounded" — nobody ranks on counts.
+      </li>
+      <li>
+        One domain deviates from its registration: the MetaCyc class hierarchy is not
+        publicly obtainable, so the substitute construction was fixed and committed
+        <em>before</em> any value in that domain existed, and is labelled wherever
+        reported.
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="col sec-head">
+    <div class="eyebrow">Reproduce</div>
+    <h2>Every substrate is a public download</h2>
+  </div>
+  <div class="col body-stack">
+    <pre><code>git clone https://github.com/alejandro-publius/denali
+git checkout big-swing &amp;&amp; make setup
+
+.venv/bin/python -m src.benchmarks_audit    # Track A
+.venv/bin/python -m src.corrections_audit   # Track B
+.venv/bin/python -m src.domains_table       # Track C, assembles six rows
+
+make test                                   # 393 + 23 + 50 checks</code></pre>
+    <p>
+      Each arm carries a gate that must pass before any result is read: Track A
+      recovers item counts from each model's own reported standard error and matches
+      the dataset on 57 of 57 subjects; Track B reproduces the published corpus median
+      on every one of 1,272 screens. Fifty invariants pin the pre-registrations by
+      hash and refuse to let a degenerate hit rule become a headline.
+    </p>
+  </div>
+</section>
+
+<footer class="wrap">
+  <div>
+    Post-deadline extension work on branch <code>big-swing</code>. The eleven closed
+    evaluations are unrevised and <code>results/frozen/</code> is untouched.
+  </div>
+  <div class="hash">
+    Sources: BioGRID ORCS 2.0.18 · MSigDB Hallmark v2026.1.Hs · HuggingFace Open LLM
+    Leaderboard (v1 and v2 archives) · cais/mmlu · Costanzo et al. 2016 <em>Science</em>
+    353:aaf1420 · SGD GO Slim · ChIP-Atlas · NHGRI-EBI GWAS Catalog · MetaboAnalyst ·
+    SMPDB · CPTAC via LinkedOmics · Reactome · UniProt · curatedMetagenomicData 3.20.0.
+    Method reference: Wu &amp; Smyth 2012, <em>Nucleic Acids Research</em> 40(17):e133.
+  </div>
+</footer>
+</div>

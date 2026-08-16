@@ -93,6 +93,44 @@ agreement is set size. Access order fixed: local R with
 curatedMetagenomicData if present, else any public flat-file mirror, else
 "no defensible number here."
 
+---
+
+## CORRECTION 1 — domain 5 set definition. Appended 2026-08-16, before any
+## domain-5 value was computed. The original above is not edited.
+
+The registered domain-5 construction groups MetaCyc pathways into
+"superpathway/ontology-class" sets. **That grouping is not obtainable from a
+public source.** What is public is HUMAnN's
+`metacyc_pathways_structured_filtered_v24_subreactions` (987 pathways), which
+expands every superpathway into *reactions* and therefore cannot recover
+pathway-to-pathway class membership; MetaCyc's own class hierarchy is
+license-gated. The cohorts themselves are fully accessible
+(curatedMetagenomicData 3.20.0 is installed locally and yields 11 CRC/control
+stool cohorts at n >= 20 per group), so the failure is in the set definition,
+not in access.
+
+Two options were available: report "no defensible number here" for domain 5,
+or substitute a set definition that the registered substrate does support.
+The substitute is registered here, before any value is computed:
+
+> **Sets = MetaCyc pathways. Members = the microbial species that carry that
+> pathway,** read from the stratified HUMAnN pathway-abundance table that
+> curatedMetagenomicData already ships (`PWY|g__Genus.s__Species` rows).
+> Size = species strata measured for that pathway in that cohort. Hits =
+> species strata significantly different between CRC and control, Welch t on
+> log-transformed relative abundance, BH q < 0.05 within cohort. Usable set:
+> >= 5 measured member strata.
+
+This keeps the registered substrate, the registered hit rule and the
+registered multi-cohort concordance arm, and changes only what a "set" is.
+It is a **deviation and is labelled as one everywhere it is reported.** The
+size range it produces is reported as a property of the construction, and the
+domain-5 row in the six-row table carries the deviation marker.
+
+Everything else in this pre-registration stands unchanged.
+
+---
+
 ## The deciding claim, fixed now
 
 **Primary claim (a) — "it is arithmetic":** at least 4 of the 6 rows yield a

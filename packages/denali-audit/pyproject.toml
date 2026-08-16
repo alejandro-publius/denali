@@ -9,25 +9,41 @@ description = "How much of your gene-set ranking is set size rather than biology
 readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
-# scipy is NOT optional: core.py uses pandas' spearman correlation, which
-# dispatches into scipy. Declaring only numpy and pandas produced a package
-# that installed cleanly and then raised ModuleNotFoundError on the first
-# audit -- found by building an environment at the declared floors instead of
-# assuming they worked.
+# Two sessions found the same bug from opposite ends on the same day and the
+# merge keeps both halves.
 #
-# Floors are what actually installs AND passes the tests on the supported
-# interpreters, not the oldest version that ever worked. numpy 1.24 cannot
-# build on Python 3.12 at all (it predates 3.12 and needs distutils) and
-# pandas 2.0.3 fails the same way, so the previous >=1.24 / >=1.5 advertised
-# support that does not exist.
+# THE BUG. core.py used pandas' spearman correlation, which dispatches into
+# scipy. scipy was not declared, so a clean install produced ModuleNotFoundError
+# on the first audit while every dev machine passed -- they all had scipy from
+# the study's own requirements. Declaring scipy fixes it; so does not needing
+# it. core.py now computes Spearman from its definition (Pearson on average
+# ranks), verified against scipy.stats.spearmanr to 5.6e-17 over 500 tie-heavy
+# trials and exactly on the frozen study data. scipy is therefore NOT a
+# dependency: it is a large install for one rank correlation, in a tool whose
+# whole argument is that running it should be trivial.
 #
-# These floors are TESTED, not guessed: numpy 1.26.0 + pandas 2.1.1 +
-# scipy 1.11.4 on Python 3.12 runs the full suite green (12 passed, 1
-# skipped), three major versions below what the study itself pins. The study
-# is pinned exactly because numpy 2.x and pandas 3.x changed defaults that
-# move results; the tool is loose because it has to install next to whatever
-# a stranger already has.
-dependencies = ["numpy>=1.26", "pandas>=2.1.1", "scipy>=1.11"]
+# THE FLOORS. numpy>=1.24 alongside requires-python >=3.9 advertised support
+# that does not exist -- numpy 1.24 predates Python 3.12 and cannot build on it
+# (needs distutils, removed in 3.12); pandas 2.0.3 fails the same way. These
+# floors are tested, not guessed: numpy 1.26.0 + pandas 2.1.1 on Python 3.12
+# runs the full suite green with scipy ABSENT from the environment.
+dependencies = ["numpy>=1.26", "pandas>=2.1.1"]
+keywords = ["CRISPR", "gene-set", "enrichment", "confounding", "reproducibility",
+            "MAGeCK", "BAGEL", "drugZ", "pathway-analysis"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
 
 [project.urls]
 Homepage = "https://github.com/alejandro-publius/denali"

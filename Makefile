@@ -20,7 +20,7 @@
 PY ?= .venv/bin/python
 RAW := data/raw
 
-.PHONY: all setup data check test judge-check retrieval page clean
+.PHONY: all setup data check test judge-check package retrieval page clean
 
 setup:
 	uv venv --python 3.12 .venv
@@ -122,6 +122,30 @@ page:
 	$(PY) -m src.build_page
 	@echo "open index.html"
 
+# Build the distributable and prove it installs somewhere that is NOT this repo.
+# The clean-venv step is the point: it is what caught the package shipping a
+# hidden scipy dependency that every dev machine happened to satisfy. Uploading
+# needs credentials and is deliberately not automated -- see docs/RELEASE.md.
+package:
+	rm -rf packages/denali-audit/dist packages/denali-audit/build
+	uv build --out-dir packages/denali-audit/dist packages/denali-audit
+	uv tool run twine check packages/denali-audit/dist/*
+	@echo ""
+	@echo "clean venv, wheel only, tests run from OUTSIDE the repo:"
+	@rm -rf /tmp/denali-pkgcheck && mkdir -p /tmp/denali-pkgcheck/tests
+	@uv venv --python 3.12 /tmp/denali-pkgcheck/venv -q
+	@uv pip install --python /tmp/denali-pkgcheck/venv/bin/python -q \
+		packages/denali-audit/dist/*.whl pytest
+	@cp -r packages/denali-audit/tests/* /tmp/denali-pkgcheck/tests/
+	@rm -f /tmp/denali-pkgcheck/tests/conftest.py
+	@rm -rf /tmp/denali-pkgcheck/tests/__pycache__
+	@cd /tmp/denali-pkgcheck/tests && \
+		DENALI_RESEARCH_REPO=$(CURDIR) /tmp/denali-pkgcheck/venv/bin/python -m pytest . -q | tail -2
+	@/tmp/denali-pkgcheck/venv/bin/denali audit examples/example_gprofiler.csv | head -3
+	@echo ""
+	@echo "built and verified. to publish: docs/RELEASE.md"
+
 clean:
 	rm -rf results/frozen results/figures/*.png results/sensitivity/*.json index.html
+	rm -rf packages/denali-audit/dist packages/denali-audit/build
 	@echo "removed generated outputs. data/raw kept."

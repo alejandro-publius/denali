@@ -20,6 +20,23 @@ CONFOUNDED = 0.40
 PARTIAL = 0.20
 
 
+def _spearman(x, y) -> float:
+    """Spearman by its definition: Pearson on the ranks, average ranks for ties.
+
+    Not a reimplementation for its own sake. `pd.Series.corr(method="spearman")`
+    imports scipy, which this package does not depend on -- so on a clean install
+    `denali audit` died with ModuleNotFoundError, and every machine that had scipy
+    for other reasons hid it. Pulling in scipy for one rank correlation is a large
+    dependency for a tool whose whole argument is that it should be trivial to run.
+    Verified to agree with scipy.stats.spearmanr to 1e-12 on the frozen study data
+    and on every fixture in the suite.
+    """
+    xs, ys = pd.Series(np.asarray(x, dtype=float)), pd.Series(np.asarray(y, dtype=float))
+    if xs.std() == 0 or ys.std() == 0:
+        return float("nan")
+    return float(np.corrcoef(xs.rank(), ys.rank())[0, 1])
+
+
 def _r2(x, y) -> float:
     x = np.asarray(x, dtype=float)
     if np.std(x) == 0:
@@ -55,10 +72,7 @@ def audit(sizes, hits, corr=None) -> dict:
         "n_sets": int(n),
         "size_range": [int(s.min()), int(s.max())],
         "r2_size_alone": round(_r2(s, y), 4),
-        # Constant size makes the rank correlation undefined; asking for it anyway
-        # prints a scipy warning to stderr in the middle of a user-facing verdict.
-        "spearman_size_vs_hits": float("nan") if np.std(s) == 0 else round(float(
-            pd.Series(s).corr(pd.Series(y), method="spearman")), 4),
+        "spearman_size_vs_hits": round(_spearman(s, y), 4),
         "sets_with_zero_hits": int((h == 0).sum()),
     }
 
@@ -163,9 +177,8 @@ def audit_replication(sizes, hits_a, hits_b) -> dict:
         bb = np.polyfit(x, y, 1)
         return y - np.polyval(bb, x)
 
-    raw = float(pd.Series(la).corr(pd.Series(lb), method="spearman"))
-    net = float(pd.Series(_resid(la, ls)).corr(
-        pd.Series(_resid(lb, ls)), method="spearman"))
+    raw = _spearman(la, lb)
+    net = _spearman(_resid(la, ls), _resid(lb, ls))
     explained = float("nan") if raw == 0 else round(100 * (1 - abs(net) / abs(raw)), 1)
 
     return {

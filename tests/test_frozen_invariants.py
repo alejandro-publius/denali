@@ -633,6 +633,29 @@ def main() -> int:
     check("the nomination refusal cites the predictor's own failure",
           str(held["axis2_balanced_accuracy"]) in _refuse("top hits")["reason"])
 
+    # ---------------- S. every branch says what would demote it ----------------
+    # A proposal that cannot be wrong is not a proposal. The hit branch had no
+    # falsification condition for hours, which is backwards -- that is the branch
+    # where someone commits a year.
+    from src.next_experiment import propose as _prop            # noqa: E402
+    seen_outcomes = set()
+    for prog in summary.program:
+        pr = _prop(prog, summary)
+        seen_outcomes.add(pr["outcome"])
+        cmm = pr.get("what_would_change_my_mind", "")
+        check(f"{pr['outcome']}: states what would change its mind",
+              bool(cmm) and len(cmm) > 40, f"{prog}: {cmm[:40]!r}")
+        if pr["outcome"] == "HIT_ABOVE_THRESHOLD":
+            check(f"hit branch names a numeric threshold that would demote it",
+                  "residual" in cmm and any(ch.isdigit() for ch in cmm))
+        break_after = len(seen_outcomes) >= 3
+        if break_after:
+            break
+    check("all three real branches were exercised",
+          {"HIT_ABOVE_THRESHOLD", "NULL_WITH_MECHANISM", "WEAK"} & seen_outcomes)
+    check("the falsification panel reaches the page",
+          '"change_my_mind"' in page and "What would change my mind" in page)
+
     # ---------------- F. the docs' own self-description ----------------
     report_readme = (ROOT / "README.md").read_text()
     # These are hand-typed and therefore drift: the badge said 84, the Tests

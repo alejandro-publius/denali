@@ -113,6 +113,7 @@ def propose(program: str, S: pd.DataFrame, feat: dict | None = None) -> dict:
             "mechanism": mech,
             "next_experiment": f"Change the condition: {fix}. Then re-run the identical sweep.",
             "falsifies_the_mechanism": falsify,
+            "what_would_change_my_mind": falsify,
             "cost": "one re-profile; scoring is ~11 s on the existing pipeline.",
         }
 
@@ -137,6 +138,20 @@ def propose(program: str, S: pd.DataFrame, feat: dict | None = None) -> dict:
                 f"call here is not reproducible. Set-level statistics aggregate over "
                 f"thousands of perturbations and survive that noise; individual "
                 f"ranks do not."),
+            "what_would_change_my_mind": (
+                f"This program is called reversible because {hits:,} knockdowns "
+                f"moved it. Two things would demote that, and both are measurable "
+                f"before anyone commits: (1) if a size-aware re-ranking "
+                f"(CAMERA-style, or a permutation null preserving set size) drops "
+                f"its residual below 0, the {hits:,} hits were set size and not "
+                f"biology \u2014 its residual is currently {resid:+.3f}; (2) if the "
+                f"canonical regulators of this program do NOT land at both tails "
+                f"in a second independently screened cell type at set level, the "
+                f"ranking is not recovering known biology and nothing here should "
+                f"be carried forward."
+                + ("" if gate else
+                   f" It also already FAILS the measurability gate, which is a "
+                   f"third strike we are counting against it rather than around.")),
             "caveat": (
                 f"Observed R_p is {abs(resid):.2f} {excess} what measurability alone "
                 f"predicts. The measurability model explains most of the variance "
@@ -151,6 +166,11 @@ def propose(program: str, S: pd.DataFrame, feat: dict | None = None) -> dict:
     return {
         "program": program, "outcome": "WEAK",
         "evidence": {"n_hits_q05": hits, "R_p": float(r.R_p)},
+        "what_would_change_my_mind": (
+            f"Called weak on {hits} hits, below the {HIT_MIN_HITS}-hit threshold "
+            f"fixed before any program was scored. If raising depth pushes it "
+            f"above {HIT_MIN_HITS} the call becomes a hit; if it stays below with "
+            f"twice the reads, the ceiling is the program and not the experiment."),
         "next_experiment": (
             f"Underpowered at {hits} hits. Either raise depth or merge with a "
             f"related program to increase measured member count "

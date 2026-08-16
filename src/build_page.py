@@ -142,6 +142,7 @@ def _explorer_rows():
                              "next_experiment": pr.get("next_experiment", ""),
                              "mechanism": pr.get("mechanism", ""),
                              "falsifies": pr.get("falsifies_the_mechanism", ""),
+                             "change_my_mind": pr.get("what_would_change_my_mind", ""),
                              "why_not_gene_level": pr.get("why_not_gene_level", ""),
                              "caveat": pr.get("caveat", "")}
         except Exception as e:
@@ -400,6 +401,13 @@ table.ex tbody tr.sel{background:var(--fill)}
 .detail .prop b{display:block;font-size:.75rem;text-transform:uppercase;
   letter-spacing:.08em;color:var(--soft);margin-bottom:6px}
 .detail .prop p{margin:0 0 10px}
+/* what would change my mind — the falsification panel */
+.cmm{margin-top:18px;border:1px solid var(--rule);border-left:2px solid var(--ink);
+  padding:16px 20px;background:var(--paper)}
+.cmm b{display:block;font:600 .6875rem/1.5 "JetBrains Mono",ui-monospace,monospace;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--ink);margin-bottom:9px}
+.cmm p{font-size:.9375rem;line-height:1.62;margin:0;color:var(--ink)}
+
 /* use-it — terminal-ish, but the same paper, no chrome */
 .use{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--rule);
   background:var(--rule);gap:1px;margin-top:24px}
@@ -756,11 +764,14 @@ function detail(i,tr){{const d=DATA[i],pr=d.proposal||{{}};
     ["Residual, the part that could be biology",num(d.R_p_residual_after_measurability)],
     ["Measurability gate",d.passes_measurability_gate?"passes":"fails"]]
     .map(kv=>'<dt>'+kv[0]+'</dt><dd>'+kv[1]+'</dd>').join("");
-  const extra=["mechanism","falsifies","why_not_gene_level","caveat"]
+  const extra=["mechanism","why_not_gene_level","caveat"]
     .filter(k=>pr[k]).map(k=>'<p>'+pr[k]+'</p>').join("");
+  const cmm=pr.change_my_mind
+    ? '<div class="cmm"><b>What would change my mind</b><p>'+pr.change_my_mind+'</p></div>'
+    : "";
   $("det").innerHTML='<h3>'+d.program+'</h3><p style="font-size:.9375rem;color:var(--soft);margin:-6px 0 14px">'+
     d.call_plain+'</p><dl>'+bits+'</dl><div class="prop"><b>Generated next experiment &middot; '+
-    (pr.outcome||'')+'</b><p>'+(pr.next_experiment||'')+'</p>'+extra+'</div>';
+    (pr.outcome||'')+'</b><p>'+(pr.next_experiment||'')+'</p>'+extra+'</div>'+cmm;
   $("det").classList.add("on");}}
 document.querySelectorAll("table.ex th").forEach(th=>th.onclick=()=>{{
   const k=th.dataset.k; sortAsc=(k===sortK)?!sortAsc:(k==="short"); sortK=k; draw();}});

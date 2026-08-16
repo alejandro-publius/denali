@@ -1,0 +1,63 @@
+{
+  "preregistration": {
+    "file": "docs/ANNOTATION_PREREG.md",
+    "sha256": "ec5edb900ce8fe6ae7615464b8f7f290d8f4c8569ba340533028c546c6ee41e0",
+    "committed": "10a82a7",
+    "committed_before_this_ran": true
+  },
+  "scorer_sha256": "2abfdc6f730d786180e37f73e2951c303c5a7b42caa27dc3394c74c323d7bbfa",
+  "scorer_unmodified": true,
+  "seed": 20260815,
+  "sets_scored": 110,
+  "hallmark_bar": 0.4649,
+  "per_collection": {
+    "hallmark": {
+      "n_sampled": 50,
+      "n_scoreable": 49,
+      "size_range": [
+        32,
+        200
+      ],
+      "size_alone_r2": 0.4464,
+      "slope": 0.016252,
+      "p": 1.562e-07,
+      "exceeds_hallmark_bar": false
+    },
+    "wikipathways": {
+      "n_sampled": 20,
+      "n_scoreable": 10,
+      "size_range": [
+        8,
+        121
+      ],
+      "verdict": "UNDERPOWERED"
+    },
+    "reactome": {
+      "n_sampled": 20,
+      "n_scoreable": 11,
+      "size_range": [
+        5,
+        217
+      ],
+      "verdict": "UNDERPOWERED"
+    },
+    "go_bp": {
+      "n_sampled": 20,
+      "n_scoreable": 9,
+      "size_range": [
+        5,
+        412
+      ],
+      "verdict": "UNDERPOWERED"
+    }
+  },
+  "verdict": "DOES NOT SCALE WITH ANNOTATION LOOSENESS",
+  "claim_supported": "neither",
+  "secondary_descriptive": {
+    "spearman_size_range_vs_r2": null,
+    "p": null,
+    "note": "Descriptive. No threshold was set for this and none is applied."
+  },
+  "scope": "Collection-level statistics only. No set is named as a finding. Nested parent/child overlap in Reactome and GO is part of what is being measured, disclosed rather than adjusted away.",
+  "does_not_revise": "the pre-registered K562 primary in results/frozen/"
+}

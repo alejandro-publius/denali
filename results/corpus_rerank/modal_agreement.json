@@ -1,0 +1,40 @@
+{
+  "status": "POST-HOC, exploratory. Not pre-registered.",
+  "what_this_is": "The corpus rerank run as distributed compute: the same src.corpus_rerank.screen_row, imported verbatim, fanned across Modal containers. Not a second implementation and not an independent check of the maths -- it establishes that the arm runs without the 752 MB local archive, and that fanning it out does not change the answer.",
+  "names_nothing": "No screen, publication or gene set is named. The unit of inference is the distribution.",
+  "source": "BioGRID ORCS 2.0.18 (pinned release URL), human, MIT licence.",
+  "containers": 32,
+  "wall_clock_s": 62.0,
+  "n_screen_files": 1952,
+  "n_parse_failed": 0,
+  "n_excluded_by_rule": 680,
+  "n_screens_audited": 1272,
+  "gates": {
+    "join_vs_evaluation_10": {
+      "screens_matched_row_for_row": 1272,
+      "max_abs_r2_delta_vs_committed": 0.0,
+      "passed": true
+    },
+    "own_screen": {
+      "r2_size_alone": 0.4649,
+      "corpus_p90": 0.4548,
+      "above_p90": true,
+      "survivors_top10": 3,
+      "matches_published_3_of_10": true,
+      "passed": true
+    },
+    "agreement_with_local_run": {
+      "compared": true,
+      "n_screens_differing": 0,
+      "passed": true
+    }
+  },
+  "quantiles": {
+    "p10": 6.0,
+    "p25": 8.0,
+    "p50": 9.0,
+    "p75": 9.0,
+    "p90": 9.0
+  },
+  "mean": 8.08
+}

@@ -76,6 +76,52 @@ def quantiles(s: pd.Series) -> dict:
     return {f"p{int(k * 100)}": round(float(v), 2) for k, v in q.items()}
 
 
+def screen_row(path: str, sets: dict) -> tuple[str, dict | None]:
+    """One ORCS screen file -> ("ok", row) | ("parse_failed", None) | ("excluded", None).
+
+    Factored out of main() so `src/modal_corpus_rerank.py` can fan the SAME
+    function across containers instead of carrying a second copy of the inclusion
+    rule. A distributed run that reimplemented this would be measuring a different
+    quantity while claiming to reproduce one, which is the failure mode this
+    project exists to name. Parsing and inclusion are corpus_audit's, verbatim:
+    same columns, same thresholds, same accounting, and a screen lands in exactly
+    one bucket.
+    """
+    try:
+        d = pd.read_csv(path, sep="\t", usecols=["#SCREEN_ID", "OFFICIAL_SYMBOL", "HIT"],
+                        low_memory=False)
+    except Exception:
+        return "parse_failed", None
+    sid = str(d["#SCREEN_ID"].iloc[0]) if len(d) else None
+    if sid is None:
+        return "parse_failed", None
+    hits = set(d.loc[d.HIT.astype(str).str.upper() == "YES", "OFFICIAL_SYMBOL"].dropna())
+    measured = set(d.OFFICIAL_SYMBOL.dropna())
+    if len(hits) < 20 or len(measured) < 10000:
+        return "excluded", None
+    size, nhit = [], []
+    for g in sets.values():
+        m = g & measured
+        if len(m) < 5:
+            continue
+        size.append(len(m))
+        nhit.append(len(g & hits))
+    if len(size) < 8:
+        return "excluded", None
+    v = r2(np.log10(np.array(size)), np.log10(1 + np.array(nhit)))
+    if not np.isfinite(v):
+        return "excluded", None
+
+    rr = rerank(size, nhit, names=None, top=TOP)
+    h_desc = sorted(nhit, reverse=True)
+    return "ok", {
+        "screen_id": sid,
+        "survivors_top10": rr["survived_top_n"],
+        "top10_boundary_tied": bool(len(h_desc) > TOP and h_desc[TOP - 1] == h_desc[TOP]),
+        "r2_size_alone": round(v, 4),
+    }
+
+
 def main() -> int:
     sets = load_gmt(ROOT / GMT)
     print(f"{len(sets)} Hallmark sets loaded")
@@ -88,46 +134,13 @@ def main() -> int:
     for i, f in enumerate(files):
         if i % 400 == 0:
             print(f"  {i}/{len(files)}")
-        # Parsing and inclusion are corpus_audit's, verbatim: same columns, same
-        # thresholds, same accounting. A screen lands in exactly one bucket.
-        try:
-            d = pd.read_csv(f, sep="\t", usecols=["#SCREEN_ID", "OFFICIAL_SYMBOL", "HIT"],
-                            low_memory=False)
-        except Exception:
+        status, row = screen_row(f, sets)
+        if status == "parse_failed":
             n_parse_failed += 1
-            continue
-        sid = str(d["#SCREEN_ID"].iloc[0]) if len(d) else None
-        if sid is None:
-            n_parse_failed += 1
-            continue
-        hits = set(d.loc[d.HIT.astype(str).str.upper() == "YES", "OFFICIAL_SYMBOL"].dropna())
-        measured = set(d.OFFICIAL_SYMBOL.dropna())
-        if len(hits) < 20 or len(measured) < 10000:
+        elif status == "excluded":
             n_excluded += 1
-            continue
-        size, nhit = [], []
-        for g in sets.values():
-            m = g & measured
-            if len(m) < 5:
-                continue
-            size.append(len(m))
-            nhit.append(len(g & hits))
-        if len(size) < 8:
-            n_excluded += 1
-            continue
-        v = r2(np.log10(np.array(size)), np.log10(1 + np.array(nhit)))
-        if not np.isfinite(v):
-            n_excluded += 1
-            continue
-
-        rr = rerank(size, nhit, names=None, top=TOP)
-        h_desc = sorted(nhit, reverse=True)
-        rows.append({
-            "screen_id": sid,
-            "survivors_top10": rr["survived_top_n"],
-            "top10_boundary_tied": bool(len(h_desc) > TOP and h_desc[TOP - 1] == h_desc[TOP]),
-            "r2_size_alone": round(v, 4),
-        })
+        else:
+            rows.append(row)
 
     R = pd.DataFrame(rows)
     print(f"\nfiles: {len(files)}  parse-failed: {n_parse_failed}  "

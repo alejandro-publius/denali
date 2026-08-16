@@ -12,6 +12,7 @@ Three classes of check:
 """
 from __future__ import annotations
 
+import ast
 import json
 import re
 import sys
@@ -355,6 +356,38 @@ def main() -> int:
           f"found {sorted(pipeline_mods)}")
     check("modal_sweep is NOT a make-all step (it verifies, it does not produce)",
           "modal_sweep" not in pipeline_mods)
+    # The second Modal entry point runs a post-hoc arm over the published corpus.
+    # It is held to the same rule for the same reason: cloud compute is allowed to
+    # reproduce or extend, never to produce a committed result on a path a clean
+    # clone cannot re-run without an account.
+    check("modal_corpus_rerank is NOT a make-all step either",
+          "modal_corpus_rerank" not in pipeline_mods)
+    _mcr = ROOT / "src" / "modal_corpus_rerank.py"
+    if _mcr.exists():
+        _src = _mcr.read_text()
+        check("the Modal corpus arm imports the local arm rather than reimplementing it",
+              "from src.corpus_rerank import screen_row" in _src)
+        # Prose is allowed to SAY "results/frozen/ is untouched"; code is not
+        # allowed to name it. Strip the docstrings and comments and look at what
+        # actually executes -- the first version of this check failed on its own
+        # module's disclaimer, which is a guard measuring the wrong thing.
+        # `ast` is rebound later inside this function, so it is local here --
+        # alias the module rather than reorder someone else's imports.
+        import ast as _ast
+        _tree = _ast.parse(_src)
+        for _n in _ast.walk(_tree):                  # drop every docstring
+            _b = getattr(_n, "body", None)
+            if isinstance(_n, (_ast.Module, _ast.FunctionDef, _ast.AsyncFunctionDef,
+                               _ast.ClassDef)) and _b and isinstance(
+                                   _b[0], _ast.Expr) and isinstance(
+                                   _b[0].value, _ast.Constant) and isinstance(
+                                   _b[0].value.value, str):
+                _n.body = _b[1:] or [_ast.Pass()]
+        _code = _ast.unparse(_tree)
+        check("the Modal corpus arm never writes results/frozen/",
+              "frozen" not in _code, "code path mentions the frozen interface")
+        check("the Modal corpus arm writes its own file, not the local arm's",
+              "modal_agreement.json" in _src and 'out / "corpus_rerank.json"' not in _src)
     # concordance READS results/rpe1/. For hours make all ran concordance without
     # regenerating its input, so a clean clone silently consumed a committed file
     # instead of reproducing it. Order matters, so assert the order.

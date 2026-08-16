@@ -143,6 +143,47 @@ recomputes the median, the zero/all-ten counts, all four strata and the
 publication-level median from the per-screen table on every build.
 `results/frozen/` is untouched by this arm.
 
+## The same arm, run as distributed compute
+
+`src/modal_corpus_rerank.py` fans this arm across Modal containers. Every screen
+is independent of every other, so this is the one embarrassingly-parallel
+workload in the project — and it is genuinely the same arm, not a cloud
+reimplementation: the per-screen function `src.corpus_rerank.screen_row` is
+imported verbatim and calls the packaged `denali_audit.core.rerank`.
+
+```bash
+modal run src/modal_corpus_rerank.py            # 1,952 files, 32 containers
+```
+
+| | |
+|---|---|
+| Containers | **32** |
+| Wall clock | **62 s** for all 1,952 files (1,272 audited, 680 excluded, 0 unparseable) |
+| Join gate, against evaluation 10 | 1,272 screens row-for-row, max \|ΔR²\| = **0.0** |
+| Own-screen gate | R² **0.4649** vs corpus p90 **0.4548**, survivors **3 of 10** |
+| Agreement gate, against the local run | **1,272 of 1,272 screens identical** |
+| Median survivors | **9**, mean **8.08** — the same distribution |
+
+The third gate is the one worth having. A distributed run that quietly disagreed
+with the single-process run would be the most dangerous output this repository
+could produce, so the per-screen survivor counts are compared row-for-row and a
+single disagreement is a non-zero exit. It writes `modal_agreement.json` and
+`modal_per_screen.csv` and never touches `corpus_rerank.json`: the local arm owns
+that file, this one reproduces it and reports whether it agreed. Like
+`src/modal_sweep.py`, it is deliberately **not** a `make all` step, and the
+invariant suite asserts that for both.
+
+**Two things this run found that a laptop would not have.** The substrate is
+**uploaded** to a Modal Volume rather than downloaded in the container, because
+BioGRID truncated the in-container fetch at `IncompleteRead(1036550 bytes read)`
+and ignores `Range` headers, so a resumable download is not available — the same
+family of truncation `docs/CORPUS.md` records for curl over HTTP/2. And the first
+run left that truncated archive cached in the Volume, where a status check that
+only asked *does the archive exist* would have skipped the upload forever. The
+archive's sha256 is now verified in the container on every run and a wrong hash
+drops the cache and re-uploads, because a cache that can be poisoned by a failed
+write has to be able to notice.
+
 **Source.** BioGRID ORCS 2.0.18, human, MIT licence. Oughtred R et al., *Protein
 Science* 2021;30(1):187–200, doi:10.1002/pro.3978. Gene sets: MSigDB Hallmark
 v2026.1.Hs, 50 sets.

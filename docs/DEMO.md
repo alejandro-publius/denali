@@ -1,122 +1,106 @@
-# Demo — under 3 minutes spoken
+# Demo — under 3 minutes spoken, and the tool runs live
 
-> ⚠ **THE EVENT WAS NOT ENTERED.** This file was written for a hackathon
-> submission that did not happen. It is kept unedited as a record of the work,
-> not as a live plan, and nothing downstream depends on it. The project is a
-> standalone piece of work; `README.md` and `REPORT.md` are the current
-> statements of what it is and what it found.
+> ⚠ **THE EVENT WAS NOT ENTERED.** This script was written for a hackathon
+> submission that did not happen. It is kept because it is the shortest honest
+> account of what the tool does, and it has since been rewritten around running
+> the tool rather than narrating the study. `README.md` and `REPORT.md` remain
+> the current statements of what this is and what it found.
 
 **Read the bold. The rest is stage direction.** `[pause]` = stop, let the screen carry it.
-**The repeated number is SEVEN OF ELEVEN.** Say it in the first sentence and the last.
+**The repeated number is SEVEN OF ELEVEN.** It lands in the close.
+**Two beats are LIVE.** They are real commands against a real table, not a recording,
+and both are in `make judge-check` so they run with no network and no key.
+
+**Rehearse this once.** Run `make judge-check` before you speak: it executes both
+live beats end to end and prints exactly what the audience will see.
 
 ---
 
-## OPEN
+## OPEN — the problem, one breath
 
-> ### **"We ran eleven evaluations on this project. Seven of them came back negative. We're reporting all eleven, and the seven negatives are the reason the positive control is worth anything."**
+> ### **"A genetic screen hands you a ranked list of thousands of hits. Chasing one costs a year and six figures, and more than half of preclinical research does not reproduce. This is the check you run before you pick which one."**
 
 `[pause — 2 beats]`
 
 ---
 
-## 1 · What it is — one sentence
+## 1 · The finding — and why it is arithmetic
 
-> **"It takes a biological program — a named list of genes that do one job — and asks which of nine thousand eight hundred genetic knockouts pushes that whole program the other way. We ran all fifty programs in a standard public collection, so we couldn't cherry-pick."**
-
-*Screen: **FIG 1**, the matrix.*
-
----
-
-## 2 · THE LOOP — it chooses, it proposes, and twice it stopped itself
-
-**Moved to the front deliberately.** The track is "build an AI scientist," and a
-judge scoring criterion 1 should not have to wait two minutes to see the agent.
-This beat also sets up the three negatives: two of them are the loop halting.
-
-*Screen: **the agent panel**, mid-run — picking its next program, halting on its own.*
-
-> **"Here it is running. It picks which program to read next by a stated policy, updates a running estimate, and stops when the estimate stops moving. When it halts it tells you that stopping early overstated its own answer by nought-point-oh-eight-one."**
-
-*Screen: the three proposals, side by side. Point at it; don't read it aloud.*
-
-| Result | Proposal it generates | Read from |
-|---|---|---|
-| **Null**, 0 hits | *"Members expressed and variable, nothing significant → power limit, not biology. Raise depth."* **Falsified if** doubling depth still yields nothing. | `expr_ratio`, `sd_ratio` |
-| **Hit**, 5,707 | *"Validate pathway-level, both tails, second cell type."* **Not gene-level, because concordance is −0.019.** | hits, residual |
-| **Unscored** | *"Predicted R_p 3.48, SD 0.58. The informative part is the residual."* | 6 features, no scoring |
-
-> **"Same code, three results, three different proposals. No branch in it tests a program name — grep the file for a pathway name and it returns nothing."**
+> **"We measured how much of that ranking is explained by how the gene sets were built rather than by any biology. On a published genome-scale screen, set size alone explains forty-six and a half percent of it."**
 >
-> **"That loop ran eight laps. Three of them stopped on a rule we wrote before the run: two halted outright, and one refused to ask its question until it had proved the program was switched on. Two of those halts are the next two minutes of this talk."**
+> **"It is the crime-count problem. A pathway with two hundred genes returns more hits than one with thirty regardless of what either does — the same way a raw crime count always ranks the biggest cities as the most dangerous. Nobody divides through by size."**
 
+*Screen: **FIG 3**. The size-alone figure on it is **46.5%**.*
 `[pause]`
 
 ---
 
-## 3 · NEGATIVE ONE — most of what looks like biology isn't biology
+## 2 · LIVE — install it, and audit a real table
 
-> **"Between fifty-six and seventy-five percent of the variance in which programs look reversible is explained by how the programs were defined — chiefly their size — not biology."**
->
-> **"The range is wide because one of our own features is partly circular — computed from the same matrix as the outcome. Fifty-six is the number that survives that objection. We report both ends."**
->
-> **"The mechanism is size. Bigger programs with more co-moving members return more hits regardless of what they do. Program size alone explains forty-six and a half percent."**
->
-> **"We pre-registered this. Before the sweep we wrote down that if measurability cleared sixty percent, that becomes the finding, not the failure. It cleared."**
+*Type both lines. They take about four seconds.*
 
-*Screen: **FIG 3**.*
+```bash
+pip install -e packages/denali-audit
+denali audit examples/example_gprofiler.csv
+```
+
+> **"That is the tool, not a figure. One line to install, and it reads the table your analysis already produced — no renaming a column, because a check that asks you to reshape your data first never gets run."**
+
+*Screen: the verdict block. Let it sit before reading the second half.*
+
+> **"Verdict: confounded. Forty-six percent of this ranking is predicted by how the sets were built, with no reference to what any gene does."**
+>
+> **"Then the part I care about. An R-squared is not a judgement until you know what normal looks like, so it puts you against one thousand two hundred and seventy-two published screens. This one is worse than nine in ten of them."**
+>
+> **"That table is our own screen. The tool says it about us."**
+
+*The percentile line reads: 90% of 1272 published screens are less explained by set size than yours. The field median is 0.224 against this screen's 0.465.*
 `[pause]`
 
 ---
 
-## 4 · NEGATIVE TWO — the filter anyone would build is wrong
+## 3 · LIVE — apply the correction, and watch our own headline fall
 
-> **"We built the obvious quality filter: enough members measured, expressed above background, variable above background. Across fifty programs it's wrong twenty times. Twenty fail the filter and produce hits anyway."**
->
-> **"And the one we held out fails our own filter. Expression ratio zero-point-nine-two, just under the line. It ranks eleventh of fifty with seven hundred and seventy-three hits."**
->
-> **"We built a filter that would have thrown away our best result. We only found that out because we checked it against every program instead of the ones it passed."**
+```bash
+denali rerank examples/example_gprofiler.csv --top 10
+```
 
-*Screen: **FIG 2**.*
-`[pause]`
+> **"Now it applies the correction it just named, and shows what moves. Of our own top ten, three hold their place once set size is accounted for and seven do not. Our number one — the largest set in the collection — falls to twenty-fourth."**
 
----
+*Screen: the seven rows that leave the top ten. Point at the first one:*
+`HALLMARK_MYC_TARGETS_V1`, 194 members, 5,707 hits, **rank 1 → 24**.
 
-## 5 · NEGATIVE THREE — the held-out test failed
-
-> **"Ten programs from a different collection, chosen by a public rule, not scored until the model was finished and frozen."**
->
-> **"One of the ten was even measurable. By our own pre-registered rule — written before any number was visible — that makes the whole evaluation underpowered and inconclusive. Binary accuracy came back below chance. Zero true positives."**
->
-> **"And the clearest illustration is a single row. Scavenging of heme from plasma drew the highest prediction of all ten. It has one measured gene. It returned zero hits."**
->
-> **"That's the measurability finding reappearing in held-out data we hadn't touched. The failure and the finding are the same fact."**
+> **"Note what it refuses to do. It does not tell you the three survivors are real, and it does not hand you a shorter list to chase. Its own output says so. It tells you which entries your ranking cannot justify — a tool for deciding what not to chase, and that is where the money goes."**
 
 `[pause — strongest beat in the talk]`
 
 ---
 
-## 6 · THE POSITIVE CONTROL — a control, not a headline
+## CLOSE
 
-> **"Two of the ten came back positive. This one is a control, not a discovery."**
->
-> **"We took a program we had not scored and asked the pipeline to rank all nine thousand eight hundred knockouts against it. Its master regulator comes back second. That is the textbook answer — we are not claiming we found it."**
->
-> **"What a lucky hit does not produce is the shape. Seventeen canonical members of that pathway were in the screen. Eleven land in the extreme ten percent — expected by chance, one point seven. p equals seven times ten to the minus eight. And the signs are right at both ends: knock out the activators and the program goes down, knock out the brake and it goes up."**
->
-> **"That tells you the ranking works. It does not tell you the ranking discovered anything, and we do not say that it did."**
-
-*Screen: the 17-gene rank distribution, both tails highlighted.*
-`[pause]`
+> **"We ran eleven evaluations on this project. Seven of them came back negative. All eleven are reported, and the ones that were not pre-registered say so. Scope is pathway-level only, because guide-pair concordance is −0.019, so we name no novel gene anywhere. And a test requires the installed package to reproduce the published figure exactly, so the tool and the paper cannot drift apart. Take it apart."**
 
 ---
 
-## CLOSE
+# RUNNING THE LIVE BEATS
 
-> **"Seven of eleven evaluations negative. Every one reported, and the ones that were not pre-registered say so. Scope is pathway-level only — concordance is minus nought-one-nine, so we name no novel gene anywhere in this project. Everything is frozen with a data dictionary, and the failures are in the repo next to the results. Take it apart."**
+Both commands are step 3 and step 4 of `make judge-check`, so the safe rehearsal
+is to run that target and read its output. It needs no download, no API key and
+no network.
+
+| If | Do this |
+|---|---|
+| `pip install` is slow or the venue has no network | Skip it and prefix instead: `PYTHONPATH=packages/denali-audit python -m denali_audit.cli audit …`. Same code, no install step. |
+| Someone asks for their own file | `denali formats` lists what is read without any flags. Anything else: `denali audit FILE --set <col> --size <col> --hits <col>`. |
+| The whole live section has to go | `make judge-check` prints both beats in one command; run it and narrate the output. |
 
 ---
 
 # PREPARED RESPONSES
+
+## ⚠ "You showed me your own screen. Isn't that the one you tuned it on?"
+
+> **"It is our own screen, and that is the point — the tool demotes its author's top hit by twenty-three places. We also ran the identical command on seven other groups' published supplementary tables, where thirty-six to eighty-eight percent of each ranking is explained by set construction alone. One of those comes back only partially confounded, and one table was refused outright for having no true hit count, so it discriminates rather than flagging everything."**
 
 ## ⚠ Partial visibility of the held-out set — lead with point 1
 
@@ -149,7 +133,7 @@ alternative is being walked into it.
 
 *Lead with 1. It is the strongest and it needs no timestamp.*
 
-> **1. "We ran a held-out evaluation and it failed. Ten programs we had never scored — underpowered, inconclusive, balanced accuracy zero-point-four-four, worse than chance, zero true positives. We report it. A system that only ever reports its successes has no external standard by definition."**
+> **1. "We ran a held-out evaluation and it failed. Ten programs we had never scored — underpowered, inconclusive, balanced accuracy 0.4375, worse than chance, zero true positives. We report it. A system that only ever reports its successes has no external standard by definition."**
 >
 > **2. "Seven controls, four of them failing, all reported. Random genes return nothing. Canonical regulators land where they should on one program and nowhere near it on another — that second one is our null."**
 >
@@ -157,21 +141,29 @@ alternative is being walked into it.
 >
 > **4. "Thresholds were written down before the numbers existed — including the rule that declared the held-out inconclusive. That rule fired against us."**
 >
-> **5. "And we audited our own documents adversarially. Found four numeric inconsistencies and one scope violation. Fixed them, and wrote down that we found them."**
+> **5. "And the shipped package is held to the paper by a test: it runs the same maths on the frozen research data and has to return 0.4649. If the tool and the paper ever disagree, CI fails instead of the two quietly diverging."**
 
-## ⚠ "Seven negatives — you only showed me three." The other arms.
+## ⚠ "Seven negatives — you only showed me the headline." The other arms.
 
-*If asked what the other negatives are, or whether the finding generalises:*
+*If asked what the negatives are, or whether the finding generalises:*
 
-> **"The first three negatives are on our own screen. Four more take it off our screen. Cross-screen agreement — a quarter of what looks like replication, twenty-six percent, is set size, not biology. Clinical off-target nomination — a methods audit of published nominations, no dosing and no recommendation — where a median of thirty-one percent of the biochemical-versus-cellular agreement is search yield, not the guide. Adamson, where the program is actively engaged rather than dormant: the confound persists, and that arm is pre-registered. And 1,272 published screens: the field's median size-confound is 0.224, ours is 0.465 — above the ninetieth percentile."**
+> **"Three are on our own screen: most of what looks like biology is set construction; the obvious quality filter is wrong twenty times in fifty; and the held-out test failed. Four take it off our screen. Cross-screen agreement — a quarter of what looks like replication, twenty-six percent, is set size, not biology. Clinical off-target nomination — a methods audit of published nominations, no dosing and no recommendation — where a median of thirty-one percent of the biochemical-versus-cellular agreement is search yield, not the guide. Adamson, where the program is actively engaged rather than dormant: the confound persists, and that arm is pre-registered. And 1,272 published screens: the field's median size-confound is 0.224, ours is 0.465 — above the ninetieth percentile."**
 >
-> **"And the eleventh asks whether the field says so. Of the hundred and eighty-seven publications behind those screens, a hundred and eleven are open access, and four of them — three and a half percent — mention gene-set size anywhere in the paper. That one is pre-registered, and it measures whether they mention it, not whether they understood it."**
+> **"And the eleventh asks whether the field says so. Of the hundred and eighty-seven publications behind those screens, 111 are open access, and four of them — 3.6% — mention gene-set size anywhere in the paper. That one is pre-registered, and it measures whether they mention it, not whether they understood it."**
 >
 > **"That last one is the honest core. Our headline number is atypical in magnitude, and we published that fact rather than bury it. The mechanism is universal; our screen just shows it more clearly."**
 
+*The loop, if asked whether anything chooses for itself:*
+
+> **"It picks which program to read next by a stated policy, updates a running estimate, and stops when the estimate stops moving. It ran eight laps and three stopped on a rule written before the run — two halting outright, one refusing to ask its question until it had proved the program was switched on. When it halts it reports that stopping early overstated its own answer by nought-point-oh-eight-one. No branch in it tests a program name; grep the file for a pathway name and it returns nothing."**
+
+*The positive control, if asked what works:*
+
+> **"We took a program we had not scored and ranked all nine thousand eight hundred knockouts against it. Its master regulator comes back second — that is the textbook answer and we call it a recovered known answer, not a discovery. What a lucky hit does not produce is the shape: seventeen canonical members in the screen, eleven in the extreme ten percent, p equals seven times ten to the minus eight, correct sign at both tails."**
+
 *The second positive, if asked:*
 
-> **"Besides the control, the size effect reproduces in an independent second cell line, RPE1 — pre-registered at zero-point-two-five, and it clears by zero-point-zero-two-six. A positive that makes the negative stronger, not weaker: the confound is real and it replicates."**
+> **"The size effect also reproduces in an independent second cell line, RPE1 — pre-registered at zero-point-two-five, and it clears by zero-point-zero-two-six. A positive that makes the negative stronger, not weaker: the confound is real and it replicates."**
 
 *"So seventy-four percent of the replication is biology?"*
 
@@ -181,15 +173,15 @@ alternative is being walked into it.
 
 | # | Question | Verdict and answer |
 |---|---|---|
-| **1** | **"The held-out failed. Why should I believe the predictor?"** | **Fatal to the predictor, survivable for the work.** *"Don't believe it. It failed, we report it as failure, we didn't refit. What survives is descriptive: across the fifty we did score, measurability explains most of the variance. The predictor was the test of whether that generalises, and at n=10 it didn't."* |
+| **1** | **"The held-out failed. Why should I believe the predictor?"** | **Fatal to the predictor, survivable for the work.** *"Don't believe it. It failed, we report it as failure, we didn't refit. What survives is descriptive: across the fifty we did score, set construction explains most of the variance. The predictor was the test of whether that generalises, and at n=10 it didn't."* |
 | **2** | **"You saw part of the held-out set before patching."** | **Survivable — pre-empt it.** See above; lead with "the result was a failure." |
 | **3** | **"Is 0.751 inflated by circular features?"** | **Already answered.** *"Yes, partly, and it's in our first sentence. That's why it's a range. 0.561 excludes the circular feature. We never quote the top alone."* |
 | **4** | **"−0.019 — doesn't that kill the pathway claims too?"** | **Survivable.** *"Ranking noise moves individual positions; it doesn't move seventeen genes to both tails at p = 7e-8. Gene-level is dead, pathway-level survives, and that's exactly where we drew the line."* |
-| **5** | **"SREBF2 at rank 2 is just the obvious answer."** | **Already answered.** *"Completely — and it is labelled a recovered known answer everywhere. What a guess does not produce is the shape: eleven of seventeen canonical pathway members landing in the extreme ten percent with the correct sign at both ends. That is a pathway-level pattern, and it is the only part we claim."* |
+| **5** | **"Your rerank is just residuals. That's not CAMERA."** | **True, and stated in the output.** *"The correction is log10(1+hits) regressed on set size, ranked by residual — the tool prints that line so you can disagree with it. It is the cheapest correction that works on a table you already have, which is the only kind anyone runs."* |
 | **6** | **"One review covers 50.4% — is the evidence layer real?"** | **Fatal to calling it an evidence chain; we don't.** *"It's a pointer layer and we labelled it one. Our top source for ATF3 was a paper on integrating single-cell data across species. Nineteen of twenty probe genes returned the same zebrafish methods paper."* Screen: **FIG 4**. |
 
-> ### Pre-empt **#1** in the opening.
-> "Seven of eleven came back negative" defuses it before it is asked. If a judge raises the held-out failure first, everything after reads as damage control.
+> ### Pre-empt **#1** in the close.
+> **Seven of eleven evaluations negative.** Saying "Seven of eleven came back negative" defuses it before it is asked. If a judge raises the held-out failure first, everything after it reads as damage control.
 
 ## Cut — answer live if asked, do not narrate
 
@@ -197,45 +189,39 @@ RPE1 24.2% coverage collision · tier detail · Sanger KY and scbench (not done,
 
 ## Timing — MEASURED, not estimated
 
-**704 spoken words. At 150 wpm that is 4:41, not the 3:05 this table used to
-claim.** The old numbers were written by eye and never counted. Counted:
+**409 spoken words. At 150 wpm that is 2:43**, which leaves only about fifteen
+seconds for the two commands to run and the pauses to land. It fits under three
+minutes and it does not fit comfortably, so rehearse it with the commands
+actually running rather than by reading the words — and if you are a slow
+speaker, take cut 1 below before you start rather than mid-talk.
 
 | Beat | Words | At 150 wpm |
 |---|---:|---:|
-| Open | 30 | 0:12 |
-| 1 What it is | 47 | 0:19 |
-| 2 The loop | 116 | 0:46 |
-| 3 Negative one | 113 | 0:45 |
-| 4 Negative two | 88 | 0:35 |
-| 5 Negative three | 106 | 0:42 |
-| 6 The positive | 147 | 0:59 |
-| Close | 57 | 0:23 |
-| **Total** | **704** | **4:41** |
+| Open, the problem | 41 | 0:16 |
+| 1 The finding | 82 | 0:32 |
+| 2 LIVE audit | 116 | 0:46 |
+| 3 LIVE rerank | 102 | 0:40 |
+| Close | 68 | 0:27 |
+| **Spoken total** | **409** | **2:43** |
+| Commands running + pauses | — | ~0:15 |
 
 Recount after any edit:
 
 ```bash
-.venv/bin/python -c "import re,pathlib;t=pathlib.Path('docs/DEMO.md').read_text().split('# PREPARED RESPONSES')[0];print(sum(len(re.findall(r'\\S+',q)) for q in re.findall(r'\\*\\*\"(.+?)\"\\*\\*',t,re.S)),'words')"
+.venv/bin/python -c "import re,pathlib;t=pathlib.Path('docs/DEMO.md').read_text().split('# RUNNING THE LIVE BEATS')[0];print(sum(len(re.findall(r'\\S+',q)) for q in re.findall(r'\\*\\*\"(.+?)\"\\*\\*',t,re.S)),'words')"
 ```
 
-## If you have three minutes, cut IN THIS ORDER
+## If you are over time, cut IN THIS ORDER
 
-**Decided now so nobody has to decide it at 10am.** A 3:00 ceiling is 450 words,
-so you need to lose about 254. Delete from the top of this list until it fits;
-each line says what it costs.
+**Decided now so nobody has to decide it live.** Each line says what it costs.
 
 | # | Cut | Saves | What you lose |
 |---:|---|---:|---|
-| 1 | **Beat 6, the 17-gene shape sentence** — "What a lucky hit does not produce is the shape…" through "…the brake and it goes up." | ~95w · 38s | The strongest *evidence* that the control is real. Keep it if a judge looks skeptical; it is the best answer to "SREBF2 is just the obvious answer." |
-| 2 | **Beat 1 entirely** | 47w · 19s | The one-sentence "what it is". The hero on screen says it. Your own note already said cut beat 1 first. |
-| 3 | **Beat 3, the circular-features caveat** — "The range is wide because…" through "…We report both ends." | ~38w · 15s | Nothing, *if* you say "fifty-six to seventy-five" and never quote 0.751 alone. It is prepared response #3 verbatim, so you still have it if asked. |
-| 4 | **Beat 2, the three-proposal table narration** | ~30w · 12s | Point at the table instead of describing it. **Never cut the halts sentence** — it is the most on-track line in the talk. |
+| 1 | **The install line** — prefix with `PYTHONPATH=` instead | ~0w · 10s | Nothing spoken. Buys back the slowest part of the demo and costs the audience nothing. Take this one first. |
+| 2 | **Beat 1's second paragraph** — the crime-count analogy | 45w · 18s | The one line that makes a statistician's point land for a biologist. Cut it only for an audience that already knows what a competitive test is. |
+| 3 | **Beat 2's percentile half** — "Then the part I care about…" | 41w · 16s | The reference distribution, which is the answer to "is 46% a lot?". Keep it if there is any chance of that question being asked. |
+| 4 | **Beat 3's refusal paragraph** | 56w · 22s | The reason this is not a candidate-list generator. **Never cut this and the close both** — one of them has to carry the scope limit. |
 
-Cutting 1 and 2 lands at **3:44**. Cutting 1, 2 and 3 lands at **3:29**. All four
-lands at **3:17**. To reach a hard 3:00 you must also drop beat 4 (35s), and at
-that point you are showing three negatives instead of four — which is still the
-claim, because the findings table on screen carries all eleven.
-
-**Never cut:** the open, beat 5 (the held-out failure — the strongest beat), the
-halts sentence in beat 2, or the close. The open and close both carry "seven of
-eleven", which is the number the talk exists to repeat.
+**Never cut:** the open, either live command, or the close. The close carries
+"seven of eleven", the −0.019 scope limit, and the anti-drift test, and those are
+the three things the talk exists to leave behind.

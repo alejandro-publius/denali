@@ -308,6 +308,30 @@ Set up is not the same as used. What actually touched the result:
 
 Arc Institute co-hosts this event. Their [Virtual Cell Challenge wrap-up](https://arcinstitute.org/news/virtual-cell-challenge-2025-wrap-up) (6 December 2025, 300+ final submissions) reported that perturbation-prediction models are *"not yet consistently outperforming naive baselines across all metrics"*, with almost all models below baseline on MAE specifically. That is a larger and different task than ours — predicting expression responses, not program-level movement — so it is not a defence of our held-out failure. It is why we treated that failure as the outcome to design for rather than one to bury, and why we report several statistics instead of optimising one.
 
+## Running things in `src/`
+
+**These are pipeline steps, not command-line tools.** With one exception they do
+not parse arguments at all: `python -m src.<anything> --help` **ignores the flag
+and runs the step**, which for `src.sweep` means fifteen minutes and for the
+`freeze_*` modules means rewriting files in `results/frozen/`. Nothing is
+damaged if you do this — every step is deterministic, which is the whole point,
+and the outputs land byte-identical — but it is not what you asked for.
+
+| You want | Run |
+|---|---|
+| the whole pipeline | `make all` |
+| the tests | `make test` |
+| the page | `make page` |
+| **to audit your own screen** | `python -m src.audit_screen --help` — the one real CLI |
+| a next-experiment proposal | `python -m src.next_experiment --demo` |
+| the MCP server | `python -m src.mcp_server` |
+
+The reason they are not CLIs is the byte-frozen scorer: `src/score_k562.py` is
+pinned at sha256 `2abfdc6f…` and verified on load, so adding argument parsing to
+it would invalidate every number in this repository. Rather than make one module
+an exception to a rule the rest follow, they all stayed plain. That is a real
+cost and it is stated here rather than discovered.
+
 ## Reproduce it
 
 Python 3.12.0. Every number in `results/frozen/` and every figure is reproducible — seeds are fixed and inputs are checksummed.

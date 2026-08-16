@@ -212,6 +212,16 @@ we didn't.
   MCP client, since a client launches a server from its own cwd. Nobody had
   started it the way a stranger would. Both modules now anchor to their own file
   location, and the README carries a tested, copy-pasteable client config.
+- **`--help` runs the pipeline.** With one exception the modules in `src/` do
+  not parse arguments, so `python -m src.sweep --help` ignores the flag and
+  spends fifteen minutes doing the sweep, and the `freeze_*` modules rewrite
+  their outputs. Found by trying it. Nothing is damaged — every step is
+  deterministic and the files land byte-identical, which is the reproducibility
+  property doing its job — but a stranger asking for help should not trigger a
+  write. Not fixed, and the reason is a real trade: `src/score_k562.py` is
+  byte-frozen at sha256 `2abfdc6f…` and verified on load, so adding argument
+  parsing to it would invalidate every number here. Documented in the README
+  instead, under "Running things in `src/`".
 - **A red commit was pushed.** `776d687` went out with four failing count checks,
   because the `make test` that should have gated it was chained behind a `grep`
   that succeeded on the failure output. Green again one commit later at

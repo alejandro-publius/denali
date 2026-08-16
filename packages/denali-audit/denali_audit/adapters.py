@@ -107,6 +107,64 @@ def _fgsea(df):
     return None
 
 
+def _mageck(df):
+    """MAGeCK `mageck test` gene_summary.txt — the file a screener is actually
+    holding when the screen finishes, before any enrichment step has run.
+
+    Each GENE is treated as a set of its sgRNAs: `num` is guides per gene (size)
+    and `neg|goodsgrna` is MAGeCK's own count of guides passing its cutoff (hits).
+    Both are exact counts, so this mapping is not approximate. The question the
+    audit answers becomes: how much of this gene ranking is explained by how many
+    guides each gene had?
+    """
+    if not _has(df, "id", "num", "neg|goodsgrna"):
+        return None
+    note = ("each gene is read as a set of its sgRNAs: 'num' is guides per gene, "
+            "'neg|goodsgrna' the count passing MAGeCK's cutoff. This audits the "
+            "depletion (neg) direction; for enrichment rerun with "
+            "--set id --size num --hits 'pos|goodsgrna'")
+    size = pd.to_numeric(df[_col(df, "num")], errors="coerce")
+    if size.nunique(dropna=True) == 1:
+        note += (". Guides-per-gene is constant in this library, so guide count "
+                 "cannot explain this ranking — the audit will say so")
+    return Mapping("MAGeCK (gene_summary)", _col(df, "id"),
+                   size, pd.to_numeric(df[_col(df, "neg|goodsgrna")], errors="coerce"),
+                   note=note)
+
+
+def _drugz(df):
+    if not _has(df, "gene", "numobs", "normz", "fdr_synth"):
+        return None
+    size = pd.to_numeric(df[_col(df, "numobs")], errors="coerce")
+    q = pd.to_numeric(df[_col(df, "fdr_synth")], errors="coerce")
+    return Mapping("drugZ", _col(df, "gene"), size, (q < 0.05).astype(int) * size,
+                   approximate=True,
+                   note="each gene is read as a set of its guide observations; numObs "
+                        "counts guide x replicate observations, not distinct guides. "
+                        "drugZ reports no per-gene count of significant guides, so "
+                        "genes below fdr_synth 0.05 are credited their full numObs — "
+                        "the same coarse stand-in as GSEA desktop. This audits the "
+                        "synthetic-lethal (synth) direction only; the suppressor "
+                        "(supp) columns are present in your file but not audited.")
+
+
+def _bagel(df):
+    if not _has(df, "gene", "bf", "numobs") or _has(df, "rna"):
+        return None
+    size = pd.to_numeric(df[_col(df, "numobs")], errors="coerce")
+    bf = pd.to_numeric(df[_col(df, "bf")], errors="coerce")
+    return Mapping("BAGEL2", _col(df, "gene"), size, (bf > 0).astype(int) * size,
+                   approximate=True,
+                   note="each gene is read as a set of its guide observations; NumObs "
+                        "counts guide x replicate observations, not distinct guides. "
+                        "BAGEL reports no per-gene count of significant guides and no "
+                        "FDR at this step, so genes with BF > 0 (evidence favours the "
+                        "essential model) are credited their full NumObs — a coarse "
+                        "stand-in. For a calibrated cutoff, take an FDR threshold from "
+                        "`BAGEL.py pr`, join it to this file, and name the columns "
+                        "yourself.")
+
+
 def _gsea_desktop(df):
     if not _has(df, "name", "size"):
         return None
@@ -122,10 +180,33 @@ def _gsea_desktop(df):
     return None
 
 
-ADAPTERS = (_denali, _gprofiler, _david, _clusterprofiler, _enrichr, _fgsea, _gsea_desktop)
+ADAPTERS = (_denali, _gprofiler, _david, _clusterprofiler, _enrichr, _mageck,
+            _fgsea, _gsea_desktop, _drugz, _bagel)
 
 SUPPORTED = ("denali", "g:Profiler", "DAVID", "clusterProfiler",
-             "Enrichr / GSEApy", "fgsea", "GSEA desktop")
+             "Enrichr / GSEApy", "MAGeCK (gene_summary)", "fgsea", "GSEA desktop",
+             "drugZ (approximate — flagged)", "BAGEL2 bf with NumObs (approximate — flagged)")
+
+
+def _near_miss(df: pd.DataFrame) -> str | None:
+    """Files we recognise but honestly cannot audit. Naming what is missing beats
+    a generic failure, and beats inventing the missing column by a wide margin."""
+    if _has(df, "sgrna", "gene") and not _has(df, "num"):
+        return ("This looks like MAGeCK's per-guide file (sgrna_summary.txt). The "
+                "audit reads the per-gene file: point it at gene_summary.txt from "
+                "the same `mageck test` run.")
+    if _has(df, "gene", "bf") and not _has(df, "numobs"):
+        return ("This looks like BAGEL output, but without a NumObs column there is "
+                "no set size to audit. `BAGEL.py bf` with the default bootstrap "
+                "training writes GENE, BF, STD, NumObs — use that file. (The `pr` "
+                "output reports FDR but no size, so it cannot be audited either.) "
+                "Alternatively, join guides-per-gene from your library file and name "
+                "the columns yourself.")
+    if _has(df, "rna", "gene", "bf"):
+        return ("This looks like BAGEL's per-guide (RNA-level) output. The audit "
+                "reads the per-gene file: rerun `BAGEL.py bf` without the RNA-level "
+                "flag.")
+    return None
 
 
 def detect(df: pd.DataFrame) -> Mapping | None:
@@ -138,6 +219,9 @@ def detect(df: pd.DataFrame) -> Mapping | None:
 
 
 def describe_failure(df: pd.DataFrame) -> str:
+    miss = _near_miss(df)
+    if miss:
+        return miss
     return (
         "Could not recognise this table.\n\n"
         f"  columns found: {list(df.columns)}\n\n"

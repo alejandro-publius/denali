@@ -55,7 +55,9 @@ def audit(sizes, hits, corr=None) -> dict:
         "n_sets": int(n),
         "size_range": [int(s.min()), int(s.max())],
         "r2_size_alone": round(_r2(s, y), 4),
-        "spearman_size_vs_hits": round(float(
+        # Constant size makes the rank correlation undefined; asking for it anyway
+        # prints a scipy warning to stderr in the middle of a user-facing verdict.
+        "spearman_size_vs_hits": float("nan") if np.std(s) == 0 else round(float(
             pd.Series(s).corr(pd.Series(y), method="spearman")), 4),
         "sets_with_zero_hits": int((h == 0).sum()),
     }
@@ -69,6 +71,33 @@ def audit(sizes, hits, corr=None) -> dict:
 
     share = out.get("r2_vif", out["r2_size_alone"])
     out["share_explained_without_biology"] = share
+
+    # A non-finite share means the question could not be ASKED -- every set is the
+    # same size, so size has no variance to explain anything with. Falling through
+    # to the final branch would report that as "not size-dominated, the good case",
+    # which is a reassurance the data does not support. This branch is the one
+    # place this file departs from src/audit_screen.py, and it changes no number:
+    # it only stops a NaN from being read as an all-clear. Screen-level inputs
+    # (MAGeCK, BAGEL, drugZ) hit it routinely, because most libraries build every
+    # gene with the same number of guides.
+    if not np.isfinite(share):
+        out["verdict"] = "UNDETERMINED"
+        out["reading"] = (
+            "This ranking cannot be audited for size: every set is the same size, "
+            "so set size has no variation with which to explain anything.")
+        out["what_to_do"] = (
+            "This is not an all-clear. Size is ruled out here by construction, but "
+            "the other ways a ranking can be carried by how it was measured -- "
+            "read depth, guide efficacy, replicate count -- are untested and this "
+            "tool does not test them. If your sets do vary in size, check you "
+            "passed the right column.")
+        out["what_this_is_not"] = (
+            "Not a candidate list and not a recommendation. This measures a property "
+            "of the ranking, not of any gene or pathway in it.")
+        out["method"] = ("VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, "
+                         "Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461")
+        return out
+
     out["reading"] = (
         f"{share:.0%} of the variance in this ranking is predicted by how the "
         f"sets were built, with no reference to what any gene does."
@@ -186,7 +215,11 @@ def rerank(sizes, hits, names=None, top=20) -> dict:
         nm = np.asarray(names, dtype=object)[ok]
 
     y = np.log10(1.0 + h)
-    if np.std(s) == 0:
+    constant_size = bool(np.std(s) == 0)
+    if constant_size:
+        # Nothing can move: the correction subtracts the same number from every
+        # entry, so the corrected order is the original order. Reporting that as
+        # "your ranking survived the correction" would be a pass it never sat.
         resid = y - y.mean()
     else:
         b = np.polyfit(s, y, 1)
@@ -213,18 +246,27 @@ def rerank(sizes, hits, names=None, top=20) -> dict:
         "moved": int(move[i]),
     } for i in order]
 
+    reading = (
+        f"Of your top {k}, {survived} hold their place once set size is accounted "
+        f"for and {k - survived} do not. The ones that move are the entries your "
+        f"current ranking is least able to justify.")
+    if constant_size:
+        reading = (
+            "Every set here is the same size, so the size correction cannot move "
+            "anything and nothing below is evidence either way. This is not a "
+            "ranking that survived the correction; it is one the correction could "
+            "not be applied to.")
+
     return {
         "n_sets": n,
         "top_n": k,
         "survived_top_n": survived,
         "left_top_n": int(k - survived),
+        "size_is_constant": constant_size,
         "biggest_fall": int(max((-move[dropped]).max(), 0)) if dropped.size else 0,
         "left_the_top": rows,
         "correction": "log10(1+hits) regressed on set size; ranked by residual",
-        "reading": (
-            f"Of your top {k}, {survived} hold their place once set size is accounted "
-            f"for and {k - survived} do not. The ones that move are the entries your "
-            f"current ranking is least able to justify."),
+        "reading": reading,
         "what_this_is_not": (
             "Not a candidate list. This says which entries were carried by size, not "
             "which to chase. Nothing here is a recommendation to validate anything."),

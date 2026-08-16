@@ -25,6 +25,35 @@ It reads the table your tool already produced. No column renaming:
 
 Anything else: `denali audit FILE --set <col> --size <col> --hits <col>`.
 
+## You haven't run enrichment yet
+
+Enrichment is a later step, and plenty of screens never reach it. The decision — which
+three hits to chase — gets made the week the screen finishes, when what you are holding
+is the output of the caller itself. Those are read too:
+
+| tool | recognised from | what a "set" becomes |
+|---|---|---|
+| MAGeCK | `num`, `neg\|goodsgrna` | a gene, and its sgRNAs |
+| BAGEL2 | `BF`, `NumObs` (approximate — flagged) | a gene, and its guide observations |
+| drugZ | `numObs`, `fdr_synth` (approximate — flagged) | a gene, and its guide observations |
+
+The question shifts with the input. On enrichment output it asks how much of your pathway
+ranking is set size; on caller output it asks how much of your gene ranking is **how many
+guides survived for each gene** — the same confound one level down.
+
+Two honest limits, both stated in the output rather than left to be discovered:
+
+- **Neither BAGEL nor drugZ reports a count of significant guides per gene.** Genes past
+  the cutoff are credited their full observation count, which is coarse. Both mappings
+  are marked approximate and the CLI prints the warning above the verdict.
+- **Most libraries build every gene with the same number of guides.** Size then has no
+  variance, the R² is undefined, and the verdict is `UNDETERMINED` — explicitly *not* an
+  all-clear. It means the question could not be asked, not that the answer was good.
+
+MAGeCK is the exception: `num` and `neg|goodsgrna` are both exact counts, so that mapping
+is not approximate. It reads the depletion direction; for enrichment, name the `pos`
+columns yourself.
+
 ## Where does your ranking sit?
 
 An R² is not a judgement until you know what normal looks like. Every audit reports a

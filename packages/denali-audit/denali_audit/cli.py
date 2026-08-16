@@ -96,6 +96,10 @@ def cmd_rerank(a) -> int:
         return 0
     print(f"  read as {m.fmt}\n")
     print(f"  {res['reading']}\n")
+    if res.get("size_is_constant"):
+        print(f"  correction: {res['correction']}")
+        print(f"  {res['what_this_is_not']}")
+        return 0
     if res["left_the_top"]:
         print(f"  {'entry':44s} {'size':>5s} {'hits':>7s}   rank -> size-aware")
         for r in res["left_the_top"]:

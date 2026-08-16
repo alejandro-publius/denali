@@ -17,7 +17,7 @@ We scored all **50 MSigDB Hallmark gene programs** against **9,837 CRISPRi knock
 
 **New to CRISPR screens?** [Start with the plain-language section](#in-plain-language) — no jargon, and it explains why any of this matters before the method does.
 
-There is no hosted instance. `index.html` is a single self-contained file — open it by double-clicking, no server, no network. Everything in it is injected from `results/frozen/` at build time. A Streamlit view of the same frozen data lives in `app.py` (`streamlit run app.py`); both read `results/frozen/` and neither recomputes.
+**Read it at [alejandro-publius.github.io/denali](https://alejandro-publius.github.io/denali/).** The hosted copy is byte-identical to `index.html` in this repository and, like it, makes **zero network calls** — GitHub Pages serves the file, nothing fetches anything. So if the venue wifi dies, clone the repo and double-click `index.html`: same page, no server, no network. Everything in it is injected from `results/frozen/` at build time. A Streamlit view of the same frozen data lives in `app.py` (`streamlit run app.py`); both read `results/frozen/` and neither recomputes.
 
 ![Running the audit on your own screen, and re-auditing after the fix](docs/img/use-it.png)
 

@@ -7,24 +7,40 @@
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](.python-version)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A genetic screen hands a lab a ranked list of thousands of hits, and validating the top of it costs a year and six figures. **denali is the check you run before that decision.** It reads a finished screen back and estimates how much of the ranking is explained by how the gene sets were built rather than by any biology — so you can tell which parts of your list are worth chasing.
+A genetic screen hands a lab a ranked list of thousands of hits, and validating the top of it costs a year and six figures. **denali is the check you run before that decision.** It takes the table your gene-set analysis already produced and tells you how much of your ranking is explained by *how the sets were built* rather than by any biology.
 
-It ships as a tool, not only as a result. `src/audit_screen.py` takes the table any gene-set analysis already produces — set, size, hits — and reports the same estimate for **your** screen. What follows is that check applied once, to ours.
+```bash
+pip install -e packages/denali-audit
+denali audit my_results.csv
+```
 
-**And to seven other people's.** We ran the identical command on the published
-supplementary tables of seven external studies — CRISPR knockout, CRISPRi/a,
-single-cell CRISPRa, organoid, primary-T-cell, and bulk RNA-seq screens — and
-**36–88% of each ranking is explained by set construction alone.** Every input,
-provenance, and rerun command is in [`audits/external/`](audits/external/README.md);
-each number was verified against the source document and re-derived against this
-repo's own `src/audit_screen.py`. One study comes back only partially confounded
-and one candidate table was refused for having no true hit count — the auditor
-discriminates rather than flagging everything. The confound is not ours; it is the
-field's, and it is arithmetic.
+No column renaming. It reads **g:Profiler, DAVID, clusterProfiler, Enrichr/GSEApy, fgsea and GSEA desktop** output as-is — `denali formats` lists them — because the reason a check like this never gets run is that it asks you to reshape your data first.
+
+What comes back is a verdict, a percentile against **1,272 published screens**, and a correction:
+
+```
+CONFOUNDED: 46% of the variance in this ranking is predicted by how the sets
+were built, with no reference to what any gene does.
+
+AGAINST THE FIELD
+This ranking is unusually confounded — worse than nine in ten published
+screens: 90% of 1272 published CRISPR screens are less explained by set
+size than yours.
+```
+
+An R² is not a judgement until you know what normal looks like. The field's median is **0.224**; that output is denali's own screen at **0.465**, and the tool says so about us.
+
+Then `denali rerank` applies the correction and shows you what leaves the top of your list. **On our own screen, three of the top ten hold and seven do not** — see [what the tool does to our own headline](#what-the-tool-does-to-our-own-result).
 
 ---
 
+**Why trust it?** Because the study underneath it is the same check, run on our own data and then on everyone else's, and reported when it came back against us.
+
 We scored all **50 MSigDB Hallmark gene programs** against **9,837 CRISPRi knockdowns** in K562 and asked which programs are *reversible* — which have many knockdowns that measurably move them. Then we asked the question underneath it: how much of that is biology at all. **Between 56% and 75% of the variance in apparent reversibility is explained by a model that never looks at what a program does.** It is a range and not a point because one of our six features is computed from the same matrix as the outcome, so part of the upper figure is arithmetic rather than discovery; **0.561** is the number that survives that objection and we never quote the top alone. The mechanism is size — bigger programs with more co-moving members return more hits regardless of their function, and **program size alone explains 46.5%**.
+
+**And on seven other people's screens.** We ran the identical command on the published supplementary tables of seven external studies — CRISPR knockout, CRISPRi/a, single-cell CRISPRa, organoid, primary-T-cell, and bulk RNA-seq — and **36–88% of each ranking is explained by set construction alone.** Every input, provenance, and rerun command is in [`audits/external/`](audits/external/README.md); each number was verified against the source document and re-derived against this repo's own `src/audit_screen.py`. One study comes back only partially confounded and one candidate table was refused for having no true hit count — the auditor discriminates rather than flagging everything. The confound is not ours; it is the field's, and it is arithmetic.
+
+**And eleven times against ourselves.** Seven of eleven evaluations came back negative, one returned no verdict when our own power rule fired, and all eleven are reported below. The headline was also recomputed by [a second implementation that never read the first](#the-headline-was-recomputed-by-a-second-implementation-that-never-read-the-first).
 
 **New to CRISPR screens?** [Start with the plain-language section](#in-plain-language) — no jargon, and it explains why any of this matters before the method does.
 
@@ -45,6 +61,45 @@ We scored all **50 MSigDB Hallmark gene programs** against **9,837 CRISPRi knock
 ![A program's detail panel, with the falsification condition](docs/img/table-detail.png)
 
 *Click any program: the measured evidence, the generated next experiment, and **what would change my mind** — the specific numeric conditions that would demote this call, stated before the data that would test them.*
+
+## What the tool does to our own result
+
+`denali rerank` applies the correction the audit names and shows what leaves the
+top of the list. Run on **our own screen**, the one this whole repository is
+about:
+
+```bash
+denali rerank our_screen.csv --top 10
+```
+
+> Of your top 10, **3 hold their place** once set size is accounted for and
+> **7 do not**. The ones that move are the entries your current ranking is least
+> able to justify.
+
+| entry | size | hits | rank → size-aware | |
+|---|--:|--:|:--:|--:|
+| `HALLMARK_MYC_TARGETS_V1` | 194 | 5,707 | **1 → 24** | −23 |
+| `HALLMARK_OXIDATIVE_PHOSPHORYLATION` | 193 | 3,321 | 4 → 26 | −22 |
+| `HALLMARK_E2F_TARGETS` | 190 | 5,668 | 2 → 21 | −19 |
+| `HALLMARK_MTORC1_SIGNALING` | 176 | 1,706 | 9 → 27 | −18 |
+| `HALLMARK_G2M_CHECKPOINT` | 182 | 5,229 | 3 → 19 | −16 |
+| `HALLMARK_MITOTIC_SPINDLE` | 158 | 1,754 | 8 → 20 | −12 |
+| `HALLMARK_HEME_METABOLISM` | 133 | 2,428 | 7 → 12 | −5 |
+
+**Our number one falls to twenty-fourth.** `MYC_TARGETS_V1` is the largest set
+in the collection at 194 measured members, it returned the most hits, and once
+you ask how many hits a set that size returns *anyway*, it is unremarkable. The
+three that hold are the three the ranking can actually justify.
+
+Note what the tool refuses to do here. It does not tell you the three survivors
+are real, and it does not hand back a shorter list to go chase. Its own output
+says so: *"Not a candidate list. This says which entries were carried by size,
+not which to chase."* The correction is `log10(1+hits)` regressed on set size,
+ranked by residual — stated in the output, so you can disagree with it.
+
+We put our own screen through this rather than a borrowed example on purpose. A
+tool that demotes its author's top hit by twenty-three places is a stronger
+argument than any paragraph about why you should trust it.
 
 ## What we chose, and why
 

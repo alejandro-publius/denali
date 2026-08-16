@@ -525,6 +525,70 @@ def main() -> int:
         check("offtarget: the swept rules in the JSON match the declared rules",
               json_thr == a1["hit_rules_swept"],
               f"sweep {json_thr} vs declared {a1['hit_rules_swept']}")
+
+    # ---------------- G3. evaluation 9, the Adamson engagement arm ----------------
+    # This arm amended its own pre-registration mid-flight, which is the single
+    # most abusable thing in this repo: an amendment is how you launder a
+    # threshold you did not like. The amendment here is clean, and these checks
+    # are what stop it quietly becoming unclean later. The arm shipped with no
+    # invariants of its own.
+    ad_p = ROOT / "results" / "adamson" / "adamson_evaluation.json"
+    if ad_p.exists():
+        ad = json.loads(ad_p.read_text())
+        pre_txt = (ROOT / "docs" / "ADAMSON_PREREG.md").read_text()
+
+        # The pre-registration is in two parts and only the second may be new.
+        head, sep, tail = pre_txt.partition("# AMENDMENT 1")
+        check("adamson: the amendment is appended below the original, not woven in",
+              bool(sep) and len(head) > 1000 and "AMENDMENT" not in head)
+        check("adamson: the amendment is dated",
+              re.search(r"# AMENDMENT 1 — 20\d\d-\d\d-\d\d", pre_txt) is not None)
+        check("adamson: the amendment states it changed no threshold",
+              "no\nthreshold anywhere in this document is changed" in tail
+              or "no threshold" in tail.split("\n\n")[1].lower())
+
+        # The original is a committed object. Verify the amendment's provenance
+        # claim rather than believing its prose: everything above the amendment
+        # line must still be the pre-registered text, separator aside.
+        import subprocess
+        orig = subprocess.run(["git", "show", "7a98d4d:docs/ADAMSON_PREREG.md"],
+                              cwd=ROOT, capture_output=True, text=True)
+        if orig.returncode == 0:
+            drift = [ln for ln in head.splitlines() if ln.strip() and ln != "---"]
+            base = [ln for ln in orig.stdout.splitlines() if ln.strip() and ln != "---"]
+            check("adamson: no line of the original pre-registration was altered",
+                  drift == base,
+                  f"{sum(a != b for a, b in zip(drift, base))} changed lines, "
+                  f"{len(drift) - len(base):+d} net")
+
+        # The frozen scorer ran unmodified, but the substrate construction is new
+        # code. Conflating those would let "we reused the frozen scorer" cover a
+        # step the hash never saw.
+        check("adamson: the frozen scorer hash is the real one",
+              ad["scorer_sha256"].startswith("2abfdc6f"), ad["scorer_sha256"][:16])
+        check("adamson: construction is declared OUTSIDE the scorer's hash",
+              ad["substrate_construction_covered_by_scorer_hash"] is False)
+        res_txt = (ROOT / "docs" / "ADAMSON_RESULTS.md").read_text()
+        check("adamson: the writeup names the construction step, not a bare rerun",
+              "plus a pre-registered construction step we" in res_txt
+              and 'not** "an\nunmodified rerun."' in res_txt.replace("\r", ""))
+        check("adamson: it refuses the replication framing",
+              "NOT a replication" in ad["scope"])
+        check("adamson: does not revise the frozen primary",
+              "results/frozen/" in ad["does_not_revise"])
+
+        # The result itself: the confound has to survive engagement for the arm
+        # to mean anything, and the K562 comparator must be the frozen one.
+        check("adamson: the engagement premise was established before the test",
+              ad["p0_engagement"]["established"] is True)
+        check("adamson: the K562 comparator is the frozen size-alone value",
+              near(ad["k562_size_alone_r2_for_reference"],
+                   sens["set_size_alone"]["r2"], 5e-3),
+              f"{ad['k562_size_alone_r2_for_reference']} vs "
+              f"{sens['set_size_alone']['r2']}")
+        check("adamson: the control-choice sensitivity is reported, not hidden",
+              len(ad["control_choice_sensitivity"]["per_single_control"]) >= 2)
+
     check("audit refuses to rank or recommend",
           "not a candidate list" in conf["what_this_is_not"].lower()
           and not any("rank_" in k or k == "top" for k in conf))

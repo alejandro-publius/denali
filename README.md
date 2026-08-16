@@ -3,7 +3,7 @@
 **A genome-scale CRISPRi screen, read back to ask what it can and cannot discover — and the answer is mostly an artifact of how the programs are defined, not their biology.**
 
 [![CI](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml/badge.svg)](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-312-brightgreen.svg)](tests/test_frozen_invariants.py)
+[![tests](https://img.shields.io/badge/tests-325-brightgreen.svg)](tests/test_frozen_invariants.py)
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](.python-version)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -50,9 +50,9 @@ have to infer that we picked well.
    it: K562 is an unstressed leukemia line, and our own first program failed its
    known-regulator control for exactly that reason.
 
-3. **Eight evaluations, five of them negative.** Where an evaluation was
+3. **Nine evaluations, six of them negative.** Where an evaluation was
    pre-registered, the alternative claim was named before any value was computed,
-   so a null was a publishable outcome rather than a failure. Five came back
+   so a null was a publishable outcome rather than a failure. Six came back
    negative, one returned no verdict at all because our own power rule fired, and
    two came back positive — one of which is a control, and it is labelled a
    control because that is what it is.
@@ -74,7 +74,7 @@ overstatement.
 
 ## Findings
 
-Eight evaluations. Five negative, one with no verdict because our own power rule fired. All eight are reported. The eighth leaves our own data entirely: it asks the same question of two published clinical CRISPR off-target datasets.
+Nine evaluations. Six negative, one with no verdict because our own power rule fired. All nine are reported. The eighth leaves our own data entirely: it asks the same question of two published clinical CRISPR off-target datasets.
 
 | # | Evaluation | Result | Verdict |
 |---|---|---|---|
@@ -90,6 +90,8 @@ Eight evaluations. Five negative, one with no verdict because our own power rule
 | 7 | Does the confound worsen in the annotations biologists actually use? | **UNDERPOWERED on 3 of 4 collections** — the pre-registered power rule fired before the deciding statistic could be applied. Descriptive, not pre-registered: **98% of Hallmark sets are scoreable against a genome-scale screen; 46% of GO Biological Process sets are** | **NO VERDICT** — and our prediction was wrong in direction |
 
 | 8 | Does the same confound run in clinical CRISPR off-target nomination? | Two published datasets, neither ours. **CHANGE-seq vs GUIDE-seq**, 56 paired guides, 202,043 nominated sites: across seven swept read thresholds, **17.6–33.9% (median 31.2%)** of biochemical–cellular agreement is explained by **search yield**, not the guide. **85.2%** of nominated sites sit at 5–6 mismatches. **CRISPRme**, 14 therapeutic guides: **44.1%** of top-ranked sites score best on an alt allele, but only **12.4%** are absent from the reference | **NEGATIVE** — post-hoc, thresholds swept |
+
+| 9 | Does the confound survive when the program is actually switched on? | Adamson 2016 UPR Perturb-seq, **pre-registered before the substrate was opened**. Engagement established first: mean effect **0.0551** vs a size- and expression-matched null's 99th percentile **0.0487**, p = 0.001. Then size alone explains **R² 0.269**, slope **+0.0072**, p = 1.2×10⁻⁴, **50 of 50** scoreable | **NEGATIVE** — pre-registered claim (a): the confound **persists under engagement** |
 
 **Evaluation 8 leaves our data and the finding survives.** The confound this project found in gene sets is not about gene sets. In a CRISPR off-target list the analogue of set size is **search yield** — how many candidate sites the mismatch budget nominated — and it carries roughly the same share of apparent cross-assay agreement as set size carries of our cross-screen agreement: **31.2% median against our 26%.** Same direction, modestly stronger, and we do not say dramatically. Two things are disclosed rather than buried. First, the *other* regression — search yield against the **biochemical** hit count — returns R² **0.83–1.00** and exactly **1.0000** at the two lowest thresholds, because a nominated site with ≥1 read is a hit by construction; that number is an identity, not a finding, and it is the one this arm would have overstated itself with. Second, on CRISPRme: that variants create off-target sites is **the CRISPRme paper's own finding**, not ours, and the 44.1% figure means a variant makes the site a *better* match — the stricter reading, sites absent from the reference entirely, is **12.4%**. We conflated those two while building this arm; quoting the first while describing the second overstates the effect roughly threefold. The denominator is the top 1,000 by CFD per guide, a ranked shortlist, not the genome. **No guide is named safe or unsafe** — the gene-level refusal, applied where the ranking has a patient at the end of it. → [`docs/OFFTARGET.md`](docs/OFFTARGET.md), `src/offtarget_audit.py`
 
@@ -312,7 +314,7 @@ Each was found only by running from a clean clone, and the third only after the 
 
 ## Tests
 
-`tests/test_frozen_invariants.py` — **312 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
+`tests/test_frozen_invariants.py` — **325 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
 
 Two guards exist because each caught a real defect. The **compile guard** parses every file under `src/` and `tests/` before anything else — added after a shipped module was found not to compile. The **scope guard** builds a gene-symbol universe from the Hallmark GMT and fails the build if any symbol appears within 260 characters of verdict language in the rendered page or the captions, with an allowance for "recovered known answer" and "positive control"; it enforces the −0.019 scope limit mechanically. A third set of checks asserts the page makes **no network calls** — no `fetch`, no `XMLHttpRequest`, no external script or stylesheet — so the interactive explorer cannot break unattended.
 
@@ -388,9 +390,9 @@ This is the part we care most about, so it is built into the code rather than pr
 
 - **We wrote down what would prove us wrong, hashed it, and committed it before running anything.** The pre-registration is recoverable at a named commit.
 - **We held ten pathways back** and only opened them after the model was frozen and hashed. The model **failed** on them — worse than a coin flip, zero true positives. We published that instead of quietly refitting.
-- **Five of our eight evaluations came back negative.** All eight are reported, including the one that clears its bar by only 0.026.
+- **Six of our nine evaluations came back negative.** All nine are reported, including the one that clears its bar by only 0.026.
 - **The one positive is a control, not a discovery.** Run unchanged on a pathway it was never tuned for, the ranking puts that pathway's known master switch at **rank 2 of 11,258**. So the machinery works — it just is not finding what people assume it is finding.
-- **312 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
+- **325 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
 
 ---
 

@@ -16,7 +16,18 @@ findings table ended at 7.
 
 ## The decision
 
-**Evaluation 8 is the off-target arm. The corpus arm becomes evaluation 9.**
+**Evaluation 8 is the off-target arm. The corpus arm is renumbered.**
+
+Final assignment, once the full merge queue was known:
+
+| # | arm | why this number |
+|---|---|---|
+| 8 | off-target — CHANGE-seq / CRISPRme | already on `main`, published and hosted |
+| 9 | Adamson engagement arm | merged next |
+| 10 | corpus — 1,272 published screens | merged after Adamson |
+
+An earlier draft of this file assigned the corpus arm 9, written before the
+Adamson arm entered the queue. The rule did not change — arrival order did.
 
 Two reasons, in order:
 

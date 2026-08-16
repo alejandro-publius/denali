@@ -259,7 +259,7 @@ figure("fig3_measurability.png")
 st.divider()
 
 # ==================================================== 4. FIVE NEGATIVE FINDINGS
-st.subheader("Five evaluations came back negative")
+st.subheader("Six evaluations came back negative")
 cards = [
     ("Most of it is not biology", f"up to {hi}%",
      "A model that never looks at what a program does explains most of how "

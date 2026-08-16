@@ -63,9 +63,9 @@
 
 ---
 
-## 5 · THE ONE POSITIVE — a control, not a headline
+## 5 · THE POSITIVE CONTROL — a control, not a headline
 
-> **"One of the four worked, and it is a control rather than a discovery."**
+> **"Two of the ten came back positive. This one is a control, not a discovery."**
 >
 > **"We took a program we had not scored and asked the pipeline to rank all nine thousand eight hundred knockouts against it. Its master regulator comes back second. That is the textbook answer — we are not claiming we found it."**
 >
@@ -135,13 +135,29 @@ alternative is being walked into it.
 
 > **1. "We ran a held-out evaluation and it failed. Ten programs we had never scored — underpowered, inconclusive, balanced accuracy zero-point-four-four, worse than chance, zero true positives. We report it. A system that only ever reports its successes has no external standard by definition."**
 >
-> **2. "Four controls, all reported. Random genes return nothing. Canonical regulators land where they should on one program and nowhere near it on another — that second one is our null."**
+> **2. "Seven controls, four of them failing, all reported. Random genes return nothing. Canonical regulators land where they should on one program and nowhere near it on another — that second one is our null."**
 >
 > **3. "DepMap is an independent screen we did not run. Every row is joined to it and tiered by it, so 'this knockout moves the program' is separated from 'this knockout kills the cell.'"**
 >
 > **4. "Thresholds were written down before the numbers existed — including the rule that declared the held-out inconclusive. That rule fired against us."**
 >
 > **5. "And we audited our own documents adversarially. Found four numeric inconsistencies and one scope violation. Fixed them, and wrote down that we found them."**
+
+## ⚠ "Seven negatives — you only showed me three." The other arms.
+
+*If asked what the other negatives are, or whether the finding generalises:*
+
+> **"The first three negatives are on our own screen. Four more take it off our screen. Cross-screen agreement — a quarter of what looks like replication, twenty-six percent, is set size, not biology. Clinical off-target nomination — a methods audit of published nominations, no dosing and no recommendation — where a median of thirty-one percent of the biochemical-versus-cellular agreement is search yield, not the guide. Adamson, where the program is actively engaged rather than dormant: the confound persists, and that arm is pre-registered. And 1,272 published screens: the field's median size-confound is 0.224, ours is 0.465 — above the ninetieth percentile."**
+>
+> **"That last one is the honest core. Our headline number is atypical in magnitude, and we published that fact rather than bury it. The mechanism is universal; our screen just shows it more clearly."**
+
+*The second positive, if asked:*
+
+> **"Besides the control, the size effect reproduces in an independent second cell line, RPE1 — pre-registered at zero-point-two-five, and it clears by zero-point-zero-two-six. A positive that makes the negative stronger, not weaker: the confound is real and it replicates."**
+
+*"So seventy-four percent of the replication is biology?"*
+
+> **"Seventy-four percent is everything we did not remove, not everything that is biology. We took out one thing — set size — and a quarter of the apparent replication vanished. That is a floor on the problem, not a ceiling."**
 
 ## Six adversarial questions, ranked by how badly they land
 
@@ -155,7 +171,7 @@ alternative is being walked into it.
 | **6** | **"One review covers 50.4% — is the evidence layer real?"** | **Fatal to calling it an evidence chain; we don't.** *"It's a pointer layer and we labelled it one. Our top source for ATF3 was a paper on integrating single-cell data across species. Nineteen of twenty probe genes returned the same zebrafish methods paper."* Screen: **FIG 4**. |
 
 > ### Pre-empt **#1** in the opening.
-> "Three of four came back negative" defuses it before it is asked. If a judge raises the held-out failure first, everything after reads as damage control.
+> "Seven of ten came back negative" defuses it before it is asked. If a judge raises the held-out failure first, everything after reads as damage control.
 
 ## Cut — answer live if asked, do not narrate
 

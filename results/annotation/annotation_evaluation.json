@@ -8,7 +8,7 @@
   "scorer_sha256": "2abfdc6f730d786180e37f73e2951c303c5a7b42caa27dc3394c74c323d7bbfa",
   "scorer_unmodified": true,
   "seed": 20260815,
-  "sets_scored": 110,
+  "sets_scored": 793,
   "hallmark_bar": 0.4649,
   "per_collection": {
     "hallmark": {
@@ -24,34 +24,34 @@
       "exceeds_hallmark_bar": false
     },
     "wikipathways": {
-      "n_sampled": 20,
-      "n_scoreable": 10,
+      "n_sampled": 246,
+      "n_scoreable": 149,
       "size_range": [
-        8,
-        121
+        5,
+        484
       ],
       "verdict": "UNDERPOWERED"
     },
     "reactome": {
-      "n_sampled": 20,
-      "n_scoreable": 11,
+      "n_sampled": 248,
+      "n_scoreable": 138,
       "size_range": [
         5,
-        217
+        1497
       ],
       "verdict": "UNDERPOWERED"
     },
     "go_bp": {
-      "n_sampled": 20,
-      "n_scoreable": 9,
+      "n_sampled": 249,
+      "n_scoreable": 115,
       "size_range": [
         5,
-        412
+        1060
       ],
       "verdict": "UNDERPOWERED"
     }
   },
-  "verdict": "DOES NOT SCALE WITH ANNOTATION LOOSENESS",
+  "verdict": "UNDERPOWERED -- see preregistered_outcome",
   "claim_supported": "neither",
   "secondary_descriptive": {
     "spearman_size_range_vs_r2": null,
@@ -59,5 +59,57 @@
     "note": "Descriptive. No threshold was set for this and none is applied."
   },
   "scope": "Collection-level statistics only. No set is named as a finding. Nested parent/child overlap in Reactome and GO is part of what is being measured, disclosed rather than adjusted away.",
-  "does_not_revise": "the pre-registered K562 primary in results/frozen/"
+  "does_not_revise": "the pre-registered K562 primary in results/frozen/",
+  "preregistered_outcome": {
+    "verdict": "UNDERPOWERED ON 3 OF 4 COLLECTIONS -- NO VERDICT ISSUED",
+    "rule_that_fired": "fewer than 150 of 250 sets scoreable, fixed before the run",
+    "scoreable": {
+      "hallmark": "49/50",
+      "wikipathways": "149/246",
+      "reactome": "138/248",
+      "go_bp": "115/249"
+    },
+    "note": "The power rule fired before the deciding statistic could be applied, so claim (a) and claim (b) are both unresolved. The R2 values are recorded below for transparency and carry NO verdict.",
+    "what_the_numbers_would_have_shown": "Had they been powered, they would have supported claim (b), not (a): GO-BP 0.2905 and Reactome 0.1846 are both BELOW Hallmark's 0.4649. Our prediction that the confound worsens with looser annotation was wrong in direction. We state that rather than leaving it implied by an underpowered result."
+  },
+  "descriptive_not_preregistered": {
+    "finding": "Scoreability falls monotonically as the collection gets larger and less curated. This was not the question we asked and no threshold was set for it.",
+    "per_collection": {
+      "hallmark": {
+        "sampled": 50,
+        "scoreable": 49,
+        "scoreable_fraction": 0.98,
+        "median_genes_declared": 180,
+        "median_genes_measured_in_screen": 76,
+        "r2_no_verdict_attached": 0.4464
+      },
+      "wikipathways": {
+        "sampled": 246,
+        "scoreable": 149,
+        "scoreable_fraction": 0.606,
+        "median_genes_declared": 27,
+        "median_genes_measured_in_screen": 22,
+        "r2_no_verdict_attached": 0.1017
+      },
+      "reactome": {
+        "sampled": 248,
+        "scoreable": 138,
+        "scoreable_fraction": 0.556,
+        "median_genes_declared": 23,
+        "median_genes_measured_in_screen": 30,
+        "r2_no_verdict_attached": 0.1846
+      },
+      "go_bp": {
+        "sampled": 249,
+        "scoreable": 115,
+        "scoreable_fraction": 0.462,
+        "median_genes_declared": 20,
+        "median_genes_measured_in_screen": 30,
+        "r2_no_verdict_attached": 0.2905
+      }
+    },
+    "spearman_size_range_vs_scoreable_fraction": -0.8,
+    "p": 0.2,
+    "reading": "98% of Hallmark sets can be scored against a genome-scale screen. For GO Biological Process -- the most-used gene-set collection in biology -- it is 46%. The median GO-BP set has 20 declared genes and 8 of them measured. More than half of that collection cannot be evaluated against this screen at all, which is a property of the annotation meeting the assay, not of the biology."
+  }
 }

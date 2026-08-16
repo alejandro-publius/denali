@@ -656,6 +656,35 @@ def main() -> int:
     check("the falsification panel reaches the page",
           '"change_my_mind"' in page and "What would change my mind" in page)
 
+    # ---------------- T. the annotation arm, incl. its own failure ----------------
+    ap_ = ROOT / "results" / "annotation" / "annotation_evaluation.json"
+    apre = ROOT / "docs" / "ANNOTATION_PREREG.md"
+    if ap_.exists() and apre.exists():
+        an = json.loads(ap_.read_text())
+        import hashlib
+        live = hashlib.sha256(apre.read_bytes()).hexdigest()
+        check("annotation: pre-registration unchanged since the run",
+              live == an["preregistration"]["sha256"], live[:16])
+        check("annotation: the frozen scorer was not modified",
+              an["scorer_sha256"].startswith("2abfdc6f"))
+        po = an["preregistered_outcome"]
+        check("annotation: the power rule fired and no verdict was issued",
+              "UNDERPOWERED" in po["verdict"] and "NO VERDICT" in po["verdict"])
+        check("annotation: says plainly that our prediction was wrong in direction",
+              "wrong in direction" in po["what_the_numbers_would_have_shown"])
+        d = an["descriptive_not_preregistered"]["per_collection"]
+        check("annotation: scoreability falls from Hallmark to GO-BP",
+              d["hallmark"]["scoreable_fraction"] > d["go_bp"]["scoreable_fraction"],
+              f"{d['hallmark']['scoreable_fraction']} vs {d['go_bp']['scoreable_fraction']}")
+        check("annotation: the descriptive finding is labelled not pre-registered",
+              "no threshold was set for it" in
+              an["descriptive_not_preregistered"]["finding"])
+        # recompute the headline descriptive number from the raw scored table
+        sc = pd.read_csv(ROOT / "results" / "annotation" / "sets_scored.csv")
+        g = sc[sc.collection == "go_bp"]
+        check("annotation: the GO-BP scoreable fraction recomputes from raw",
+              near(g.scoreable.sum() / len(g), d["go_bp"]["scoreable_fraction"], 2e-3))
+
     # ---------------- F. the docs' own self-description ----------------
     report_readme = (ROOT / "README.md").read_text()
     # These are hand-typed and therefore drift: the badge said 84, the Tests

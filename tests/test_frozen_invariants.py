@@ -800,23 +800,60 @@ def main() -> int:
             val = tokens.get(name, "").strip()
             check(f"DESIGN.md documents --{name} as the code defines it",
                   val and f"`{val}`" in design, f"code has {val!r}")
-        # any hex in page chrome must be a token value or a documented figure colour
-        allowed = {v.strip().lower() for v in tokens.values()}
+        # Allowed = the documented token TABLE (verified against code above) plus
+        # the ColorBrewer figure/diagram palette. Parsing the table, not the whole
+        # doc, keeps prose mentions of retired greys (e.g. #111827 in the
+        # resolved-drift note) from silently re-entering the allow-set. This also
+        # picks up --faint #a3a39b, which the doc declares but index.html renders
+        # via the --rule alpha, so it is absent from the code :root.
+        doc_tokens = dict(re.findall(r"\|\s*`--(\w+)`\s*\|\s*`([^`]+)`", design))
+        allowed = {v.strip().lower() for v in doc_tokens.values()}
         allowed |= {"#b2182b", "#2166ac", "#999999", "#bbbbbb", "#888888",
                     "#444444", "#fff3e0", "#e0a458", "#d9d9d9", "#f4a582",
                     "#1a4d7a", "#eaf0f6", "#eef4ea", "#3d6b2e", "#e3e3e3"}
         css = bp.split('CSS = """')[1].split('"""')[0] if 'CSS = """' in bp else ""
-        stray = sorted({h.lower() for h in re.findall(r"#[0-9a-fA-F]{6}", css)}
-                       - allowed)
-        check("no undocumented colour in the page stylesheet", not stray,
-              ", ".join(stray[:4]))
+        # PALETTE IS CHECKED ON EVERY RENDERED SURFACE, not just index.html.
+        # app.py shipped cool Tailwind greys unseen for weeks because this block
+        # read build_page's CSS alone -- the same one-surface gap that let the
+        # seal framing linger on the Streamlit page. app.py adds a semantic STATUS
+        # palette in chrome (tool-chain ok/warn/fail, loop null/hit/miss) on top
+        # of the neutral tokens, documented in DESIGN.md.
+        m = re.search(r"<style>(.*?)</style>", app_src, re.S)
+        status = {"#1a7f37", "#9a6700", "#b2182b", "#2166ac"}  # app.py chrome, documented
+        # Grandfathered BY NAME, not waved through: the brand pass reached
+        # index.html and not app.py, which still carries the previous generation
+        # of warm neutrals. Enumerating them means the exception is visible and
+        # dies the moment app.py is converged -- see DESIGN.md "Known drift".
+        legacy = {"#1c1c1a", "#8c8c89", "#a3a39b", "#f2f2f0"}
+        STYLESHEETS = {
+            "index.html": (css, allowed),                      # CSS lives in build_page
+            "app.py": (m.group(1) if m else "", allowed | status | legacy),
+        }
+        strays = {}
+        for label, (sheet, ok) in STYLESHEETS.items():
+            s = sorted({h.lower() for h in re.findall(r"#[0-9a-fA-F]{6}", sheet)} - ok)
+            if s:
+                strays[label] = s
+        check("no undocumented colour in any rendered stylesheet", not strays,
+              "; ".join(f"{k}: {', '.join(v[:3])}" for k, v in strays.items()))
+        # A new styled surface must join STYLESHEETS (not just the scope SURFACES),
+        # and app.py's status palette must stay documented.
+        styled = {s for s, src in {"index.html": page, "app.py": app_src,
+                                   "results/figures/CAPTIONS.md": caps,
+                                   "REPORT.md": report}.items() if "<style" in src}
+        check("every styled surface is palette-registered and status palette documented",
+              styled <= set(STYLESHEETS) and "#1a7f37" in design and "#9a6700" in design,
+              f"styled unchecked: {sorted(styled - set(STYLESHEETS))}")
         check("DESIGN.md records the app.py palette drift rather than hiding it",
               "Known drift" in design and "#111827" in design)
+        check("every grandfathered app.py colour is named in DESIGN.md",
+              all(c in design.lower() for c in legacy),
+              f"undocumented: {sorted(c for c in legacy if c not in design.lower())}")
         # The guard's job is that the doc and the code agree on the corner, not
-        # that the corner is any particular value. It used to hardcode 0px, which
-        # meant a deliberate change to the radius read as a test failure rather
-        # than as a design decision. Read the value from :root and hold the doc
-        # to it, so drift still fails but a decision does not.
+        # that the corner is any particular value. Hardcoding 0px meant a
+        # deliberate change to the radius read as a test failure rather than as a
+        # design decision. Read the value from :root and hold the doc to it, so
+        # drift still fails but a decision does not.
         m_rad = re.search(r"--radius:\s*([0-9]+px)", bp)
         check("DESIGN.md documents the radius as the code defines it",
               m_rad and f"`{m_rad.group(1)}`" in design,

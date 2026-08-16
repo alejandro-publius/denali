@@ -38,8 +38,16 @@ Eight tokens. Nothing outside this list appears on the page.
 | `--accent` | `#2EC4A0` | Teal. Links, the metric numerals, and small highlights — **sparingly**. It is the only saturated colour on the page and it marks things you can act on or read a number off. Structure is `--navy`'s job, not the accent's. |
 
 Semantic colour in figures (`#b2182b` red, `#2166ac` blue) comes from
-ColorBrewer's diverging scale and is **only** used inside matplotlib output, never
-in page chrome. It signals direction in data, not emphasis in text.
+ColorBrewer's diverging scale and is **only** used inside matplotlib output on
+index.html, never in its page chrome. It signals direction in data, not emphasis
+in text.
+
+**app.py's status palette.** The Streamlit page carries a semantic status set in
+chrome that the static page does not: `#1a7f37` (ok / green), `#9a6700` (warn /
+amber) and `#b2182b` (fail / red) on the tool-chain strip, plus that red and
+`#2166ac` (blue) marking the loop's null / hit / miss branches. Like the figure
+colours these signal state, not emphasis, and they are the only non-token hexes
+the design invariants permit on that surface.
 
 **Radius is `8px`.** Set once in `:root` as `--radius` and applied to the elements
 that read as surfaces — metric and card grids, figures, code blocks, tables. It is
@@ -139,7 +147,18 @@ Not aspiration — the build fails on these:
 
 ## Known drift
 
-**app.py palette — RESOLVED 2026-08-15.** `app.py` used cool Tailwind greys
+**app.py vs the brand palette — OPEN, opened 2026-08-15.** The brand pass
+(`--ink:#1a1a1a`, `--navy:#1B2A4A`, `--accent:#2EC4A0`) landed on `index.html`
+and did not reach `app.py`, which still carries the previous generation of warm
+neutrals: `#1c1c1a` (ink), `#8c8c89` and `#a3a39b` (soft/faint), `#f2f2f0`
+(fill). Those three are **grandfathered by name** in the palette guard rather
+than waved through, so the exception is enumerated and disappears the moment
+app.py is converged. This is deliberately not fixed here: `app.py` is being
+edited concurrently and re-paletting a file mid-edit produces a conflict, not a
+design. Whoever owns that file next should map those four to the current tokens
+and delete this paragraph along with the grandfather list in the guard.
+
+**app.py cool greys — RESOLVED 2026-08-15.** `app.py` used cool Tailwind greys
 (`#111827 / #6b7280 / #d1d5db / #4b5563 / #374151`) where this document specifies
 warm neutrals, so the two surfaces did not read as siblings. Every grey now maps
 to a declared token: `#111827`/`#374151` → `--ink`, `#6b7280`/`#4b5563` → `--soft`,

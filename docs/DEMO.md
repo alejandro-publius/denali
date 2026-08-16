@@ -189,24 +189,47 @@ alternative is being walked into it.
 
 RPE1 24.2% coverage collision · tier detail · Sanger KY and scbench (not done, claim nothing) · myeloma anchor (never reached) · essentiality null (−0.021, p=0.90 — only if asked).
 
-## Timing
+## Timing — MEASURED, not estimated
 
-| Beat | Target |
-|---|---:|
-| Open | 0:12 |
-| 1 What it is | 0:15 |
-| 2 The loop | 0:28 |
-| 3 Negative one | 0:35 |
-| 4 Negative two | 0:35 |
-| 5 Negative three | 0:35 |
-| 6 The positive | 0:30 |
-| Close | 0:15 |
-| **Total** | **3:05** |
+**704 spoken words. At 150 wpm that is 4:41, not the 3:05 this table used to
+claim.** The old numbers were written by eye and never counted. Counted:
 
-**If long, cut beat 1** — that lands it at 2:50. Never cut beat 5 or the close.
+| Beat | Words | At 150 wpm |
+|---|---:|---:|
+| Open | 30 | 0:12 |
+| 1 What it is | 47 | 0:19 |
+| 2 The loop | 116 | 0:46 |
+| 3 Negative one | 113 | 0:45 |
+| 4 Negative two | 88 | 0:35 |
+| 5 Negative three | 106 | 0:42 |
+| 6 The positive | 147 | 0:59 |
+| Close | 57 | 0:23 |
+| **Total** | **704** | **4:41** |
 
-The loop moved from last to second and gained eight seconds for the eight-laps
-line. That is the deliberate trade: the track is "build an AI scientist," and the
-agent should be on screen inside the first forty seconds rather than after the
-statistics. If the room is running behind, cut the three-proposal table and keep
-the halts — the halts are the part that cannot be faked.
+Recount after any edit:
+
+```bash
+.venv/bin/python -c "import re,pathlib;t=pathlib.Path('docs/DEMO.md').read_text().split('# PREPARED RESPONSES')[0];print(sum(len(re.findall(r'\\S+',q)) for q in re.findall(r'\\*\\*\"(.+?)\"\\*\\*',t,re.S)),'words')"
+```
+
+## If you have three minutes, cut IN THIS ORDER
+
+**Decided now so nobody has to decide it at 10am.** A 3:00 ceiling is 450 words,
+so you need to lose about 254. Delete from the top of this list until it fits;
+each line says what it costs.
+
+| # | Cut | Saves | What you lose |
+|---:|---|---:|---|
+| 1 | **Beat 6, the 17-gene shape sentence** — "What a lucky hit does not produce is the shape…" through "…the brake and it goes up." | ~95w · 38s | The strongest *evidence* that the control is real. Keep it if a judge looks skeptical; it is the best answer to "SREBF2 is just the obvious answer." |
+| 2 | **Beat 1 entirely** | 47w · 19s | The one-sentence "what it is". The hero on screen says it. Your own note already said cut beat 1 first. |
+| 3 | **Beat 3, the circular-features caveat** — "The range is wide because…" through "…We report both ends." | ~38w · 15s | Nothing, *if* you say "fifty-six to seventy-five" and never quote 0.751 alone. It is prepared response #3 verbatim, so you still have it if asked. |
+| 4 | **Beat 2, the three-proposal table narration** | ~30w · 12s | Point at the table instead of describing it. **Never cut the halts sentence** — it is the most on-track line in the talk. |
+
+Cutting 1 and 2 lands at **3:44**. Cutting 1, 2 and 3 lands at **3:29**. All four
+lands at **3:17**. To reach a hard 3:00 you must also drop beat 4 (35s), and at
+that point you are showing three negatives instead of four — which is still the
+claim, because the findings table on screen carries all eleven.
+
+**Never cut:** the open, beat 5 (the held-out failure — the strongest beat), the
+halts sentence in beat 2, or the close. The open and close both carry "seven of
+eleven", which is the number the talk exists to repeat.

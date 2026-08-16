@@ -58,6 +58,22 @@ CONS_ONLY = V(STRIP["construction_only_three"]["adj_r2"], "sensitivity.construct
 
 N_PROGRAMS = V(PROV["tier1"]["programs"], "provenance.tier1.programs")
 N_KD = V(PROV["tier1"]["knockdown_targets"], "provenance.tier1.knockdown_targets")
+
+# The README findings table is the single source of truth for how many evaluations
+# exist and how many were negative -- tests/test_frozen_invariants.py parses the same
+# table. The page reads it too, so the two cannot drift. Four literals lived here
+# before, outside V(), and they were two arms stale by the time anyone noticed: the
+# only numbers on the page that could go wrong silently were the ones that bypassed
+# the tracer.
+_FINDINGS = re.findall(r"^\|\s*(\d+)\s*\|.*\|\s*\*\*([A-Z][A-Z ]+)\*\*",
+                       (ROOT / "README.md").read_text(), re.M)
+N_EVALS = V(len(_FINDINGS), "README.md findings table (row count)")
+N_NEG = V([v.strip() for _, v in _FINDINGS].count("NEGATIVE"),
+          "README.md findings table (NEGATIVE verdicts)")
+_WORDS = {3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine"}
+N_EVALS_W, N_NEG_W = _WORDS.get(N_EVALS, N_EVALS), _WORDS.get(N_NEG, N_NEG)
+_lc = lambda w: w.lower() if isinstance(w, str) else w
+N_EVALS_L, N_NEG_L = _lc(N_EVALS_W), _lc(N_NEG_W)
 N_ZERO = V(gap["programs_with_zero_hits"], "provenance.gap_numbers.programs_with_zero_hits")
 N_GATEFAIL_HITS = V(gap["gate_fail_but_has_hits"], "provenance.gap_numbers.gate_fail_but_has_hits")
 N_GATEPASS_ZERO = V(gap["gate_pass_but_zero_hits"], "provenance.gap_numbers.gate_pass_but_zero_hits")
@@ -548,10 +564,13 @@ HTML = f"""<!doctype html>
 
 <!-- 1. hero -->
 <section class="hero-sec">
-<p class="hero">{PCT_LO}–{PCT_HI}% of what<br>looks like biology<br>is not biology.</p>
-<p class="claim">Across all {N_PROGRAMS} Hallmark gene programs scored against
-{N_KD:,} CRISPRi knockdowns in K562, that share of the variance in <em>apparent</em>
-reversibility is explained without reference to what the program does.</p>
+<p class="hero">Bigger gene sets win,<br>and it has nothing<br>to do with biology.</p>
+<p class="claim">A 200-gene program returns more hits than a 30-gene one regardless of
+what either does &mdash; the way a raw crime count always ranks big cities as the most
+dangerous. Across all {N_PROGRAMS} Hallmark programs scored against {N_KD:,} CRISPRi
+knockdowns in K562, <b>program size alone explains {SIZE_R2*100:.1f}%</b> of what looks
+like discovery, and {PCT_LO}–{PCT_HI}% of the variance is explained without reference
+to what any program does.</p>
 <p class="circ">The range is a range because one of our six features is computed
 from the same matrix as the outcome, so part of {R_HI:.3f} is arithmetic. {R_LO:.3f} is the
 figure that survives that objection, and we never quote the top alone.</p>
@@ -562,19 +581,16 @@ return more hits regardless of what they do — <b>program size alone explains
 
 <!-- 2. metrics -->
 <section>
-<div class="metrics">
-  <div class="metric"><div class="n">4</div><div class="l">evaluations run</div></div>
-  <div class="metric"><div class="n">3</div><div class="l">came back negative</div></div>
-  <div class="metric"><div class="n">1</div><div class="l">came back positive</div></div>
-  <div class="metric"><div class="n">0</div><div class="l">gene-level claims made</div></div>
-</div>
+<p class="lede">{N_EVALS_W} evaluations. {N_NEG_W} came back negative, one returned no
+verdict when our own power rule fired against us, and all {N_EVALS_L} are reported here.
+No gene-level claim is made anywhere, and the build fails if one appears.</p>
 </section>
 
 {figure("fig1_matrix.png")}
 
-<!-- 4. three negatives -->
+<!-- 4. negatives -->
 <section>
-<h2>The three negative findings</h2>
+<h2>Three of the {N_NEG_L} negative findings</h2>
 <div class="cards">
   <div class="card"><h3>Most of it is not biology</h3>
     <p>A model that never looks at what a program <em>does</em> predicts most of how

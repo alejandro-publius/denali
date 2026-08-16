@@ -218,10 +218,13 @@ p.cite{margin-top:26px;font-size:.8125rem;line-height:1.65;color:var(--soft);
 
 <!-- 1. hero -->
 <section class="hero-sec">
-<p class="hero">56–75% of what<br>looks like biology<br>is not biology.</p>
-<p class="claim">Across all 50 Hallmark gene programs scored against
-9,837 CRISPRi knockdowns in K562, that share of the variance in <em>apparent</em>
-reversibility is explained without reference to what the program does.</p>
+<p class="hero">Bigger gene sets win,<br>and it has nothing<br>to do with biology.</p>
+<p class="claim">A 200-gene program returns more hits than a 30-gene one regardless of
+what either does &mdash; the way a raw crime count always ranks big cities as the most
+dangerous. Across all 50 Hallmark programs scored against 9,837 CRISPRi
+knockdowns in K562, <b>program size alone explains 46.5%</b> of what looks
+like discovery, and 56–75% of the variance is explained without reference
+to what any program does.</p>
 <p class="circ">The range is a range because one of our six features is computed
 from the same matrix as the outcome, so part of 0.751 is arithmetic. 0.561 is the
 figure that survives that objection, and we never quote the top alone.</p>
@@ -232,12 +235,9 @@ return more hits regardless of what they do — <b>program size alone explains
 
 <!-- 2. metrics -->
 <section>
-<div class="metrics">
-  <div class="metric"><div class="n">4</div><div class="l">evaluations run</div></div>
-  <div class="metric"><div class="n">3</div><div class="l">came back negative</div></div>
-  <div class="metric"><div class="n">1</div><div class="l">came back positive</div></div>
-  <div class="metric"><div class="n">0</div><div class="l">gene-level claims made</div></div>
-</div>
+<p class="lede">Eight evaluations. Five came back negative, one returned no
+verdict when our own power rule fired against us, and all eight are reported here.
+No gene-level claim is made anywhere, and the build fails if one appears.</p>
 </section>
 
 <figure>
@@ -245,9 +245,9 @@ return more hits regardless of what they do — <b>program size alone explains
   <figcaption><b>The reversal matrix: every knockdown scored against every program.</b> 9,837 CRISPRi knockdowns (rows) scored against all 50 MSigDB Hallmark programs (columns), in K562. Blue means switching that gene off pushed the program down; red means it pushed it up. Programs are ordered left to right by how many knockdowns moved them. The dashed line marks the held-out program.</figcaption>
 </figure>
 
-<!-- 4. three negatives -->
+<!-- 4. negatives -->
 <section>
-<h2>The three negative findings</h2>
+<h2>Three of the five negative findings</h2>
 <div class="cards">
   <div class="card"><h3>Most of it is not biology</h3>
     <p>A model that never looks at what a program <em>does</em> predicts most of how

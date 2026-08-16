@@ -64,3 +64,53 @@ def unscored(program: str, residual_sd: float) -> dict:
         "predictor_validation": VALIDATION,
         "scope_limit": SCOPE,
     }
+
+
+# --------------------------------------------------------------------------
+# Query-time refusal.
+#
+# The build-time scope guard stops US publishing a gene-level claim. It does
+# nothing when an AGENT calls the server, and the agent is the caller we cannot
+# see. Prior art: CRISPR-GPT (Nat Biomed Eng 2025) hard-codes non-bypassable
+# refusals and a single "I don't know" path rather than trusting the model to be
+# careful. Same instinct, different risk surface.
+#
+# Our risk is not that someone asks for a pathogen sequence -- we have none. It
+# is that a caller asks this server to nominate a gene, and the residual column
+# is sitting right there looking like a candidate score. That is the misuse this
+# project exists to prevent, so it is refused rather than served with a caveat.
+
+_GENE_LIKE = __import__("re").compile(r"^[A-Z][A-Z0-9]{1,7}(-[A-Z0-9]+)?$")
+
+REFUSAL = (
+    "Refused: this server answers at the level of gene PROGRAMS, never genes. "
+    f"Guide-pair concordance in this dataset is {CONCORDANCE:+.3f} -- two "
+    "independent reagents against the same gene give uncorrelated scores, so no "
+    "single-gene answer from this data is reproducible, including a flattering "
+    "one. Ask about a program, e.g. HALLMARK_CHOLESTEROL_HOMEOSTASIS.")
+
+NO_NOMINATION = (
+    "Refused: this server does not rank or nominate. The residual column exists "
+    "and is returned per program, but a ranked 'top candidates' list is the exact "
+    "inference the pre-registration refuses to make -- and the predictor behind "
+    f"it failed its own held-out evaluation at balanced accuracy {BAL}. Sort the "
+    "frozen table yourself if you want an ordering; this tool will not hand you "
+    "one that looks endorsed.")
+
+
+def refuse(program: str) -> dict | None:
+    """Return a refusal if this query is asking the tool to misbehave, else None."""
+    q = (program or "").strip()
+    if not q:
+        return {"status": "REFUSED", "reason": "empty query", "scope_limit": SCOPE}
+    # a bare gene symbol, rather than a program name
+    if _GENE_LIKE.match(q) and not q.startswith(("HALLMARK_", "REACTOME_", "GOBP_",
+                                                 "KEGG_", "WP_", "BIOCARTA_")):
+        return {"status": "REFUSED", "query": q, "reason": REFUSAL,
+                "scope_limit": SCOPE}
+    # asking for a ranking / candidate list
+    if any(w in q.lower() for w in ("top ", "best ", "rank", "candidate",
+                                    "nominate", "most promising", "which gene")):
+        return {"status": "REFUSED", "query": q, "reason": NO_NOMINATION,
+                "scope_limit": SCOPE}
+    return None

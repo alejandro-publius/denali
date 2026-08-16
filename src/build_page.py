@@ -622,6 +622,14 @@ the repo.</p>
     }}
   }}
 }}</pre>
+<p class="circ"><b>It also refuses.</b> Ask it about a bare gene symbol and it
+declines, citing the {CONCORD} concordance that makes any single-gene answer
+irreproducible. Ask it to rank or nominate and it declines again, citing its own
+predictor&rsquo;s failure. Those refusals are not advisory text the model may ignore
+&mdash; they are code that returns before the data is read, and eleven tests
+assert they still fire. The build-time scope guard stops <i>us</i> publishing a
+gene-level claim; this is what stops an agent extracting one.</p>
+
 <p class="circ">Paste into Claude Code, Cursor, or any MCP client. Two tools:
 <code>reversibility(program)</code> and <code>provenance()</code>. The first
 returns the measured rank, the share measurability alone predicts, the residual,

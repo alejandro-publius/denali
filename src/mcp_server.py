@@ -15,7 +15,7 @@ from pathlib import Path
 import pandas as pd
 from mcp.server.fastmcp import FastMCP
 
-from src.answers import HELDOUT_WARNING, SCOPE, unscored
+from src.answers import HELDOUT_WARNING, SCOPE, refuse, unscored
 from src.next_experiment import propose
 
 FROZEN = Path("results/frozen")
@@ -37,6 +37,10 @@ def reversibility(program: str) -> dict:
     Args:
         program: MSigDB program name, e.g. HALLMARK_CHOLESTEROL_HOMEOSTASIS
     """
+    blocked = refuse(program)
+    if blocked is not None:
+        return blocked
+
     row = _S[_S.program == program]
     if not row.empty:
         r = row.iloc[0]

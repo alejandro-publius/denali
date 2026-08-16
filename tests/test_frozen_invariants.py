@@ -610,6 +610,29 @@ def main() -> int:
           '"-m", "src.mcp_server"' in page
           and (ROOT / "src" / "mcp_server.py").exists())
 
+    # ---------------- R. the server refuses to be misused ----------------
+    # The scope guard stops US publishing a gene-level claim; it does nothing
+    # when an agent calls the server. Prior art: CRISPR-GPT hard-codes
+    # non-bypassable refusals rather than trusting the model to be careful.
+    from src.answers import refuse as _refuse                   # noqa: E402
+    for q in ("SREBF2", "TP53", "MYC"):
+        r = _refuse(q)
+        check(f"server refuses the bare gene symbol {q}",
+              r is not None and r["status"] == "REFUSED")
+    for q in ("top 10 candidates", "which gene should I chase",
+              "rank the programs", "most promising target"):
+        r = _refuse(q)
+        check(f"server refuses a nomination request: {q!r}",
+              r is not None and r["status"] == "REFUSED")
+    for q in ("HALLMARK_CHOLESTEROL_HOMEOSTASIS",
+              "REACTOME_SCAVENGING_OF_HEME_FROM_PLASMA"):
+        check(f"server still answers a real program: {q[:28]}",
+              _refuse(q) is None)
+    check("the refusal explains itself with the concordance figure",
+          str(float(gp.value.iloc[0])) in _refuse("SREBF2")["reason"])
+    check("the nomination refusal cites the predictor's own failure",
+          str(held["axis2_balanced_accuracy"]) in _refuse("top hits")["reason"])
+
     # ---------------- F. the docs' own self-description ----------------
     report_readme = (ROOT / "README.md").read_text()
     # These are hand-typed and therefore drift: the badge said 84, the Tests

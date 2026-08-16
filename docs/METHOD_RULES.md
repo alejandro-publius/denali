@@ -77,6 +77,15 @@ actually used. Each was found by checking, not by assuming.
 are reported. A null from working machinery is a finding; the positive control
 is what makes it one.
 
+**Enforce the scope rule where the caller is, not only where you are.** Our
+build-time guard stops us publishing a gene-level claim. It does nothing when an
+agent queries the server, and the agent is the caller we cannot see. So the
+callable surface refuses a bare gene symbol and refuses to rank or nominate,
+before it reads any data. Prior art, and worth citing rather than reinventing:
+CRISPR-GPT (Wu et al., *Nature Biomedical Engineering* 9:245, 2025) hard-codes
+non-bypassable refusals and a single "I don't know" path rather than trusting the
+model to be careful. Different risk surface, same instinct.
+
 ## Practice
 
 **Freeze the interface before building anything on top of it.** Everything

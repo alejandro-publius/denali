@@ -1355,14 +1355,23 @@ def main() -> int:
     # the self-count still said 355. The offset is now derived from the loop
     # itself, so the only way to break it is to add a check after this point,
     # which is what the comment above is for.
-    count_claims = [(r"badge/tests-(\d+)-", "the CI badge"),
-                    (r"\*\*(\d+) assertions\*\*", "the Tests section"),
-                    (r"\*\*(\d+) automated checks\*\*", "the plain-language section")]
+    # Every surface that states the count, not only the README's three. Adding
+    # docs/SUBMISSION.md caught this: it restated 355 while the suite was at
+    # 356, and nothing here would have noticed, because the patterns all read
+    # report_readme. A count is a count wherever it is written down.
+    submission = (ROOT / "docs" / "SUBMISSION.md")
+    submission_md = submission.read_text() if submission.exists() else ""
+    count_claims = [
+        (report_readme, r"badge/tests-(\d+)-", "the CI badge"),
+        (report_readme, r"\*\*(\d+) assertions\*\*", "the Tests section"),
+        (report_readme, r"\*\*(\d+) automated checks\*\*", "the plain-language section"),
+        (submission_md, r"\*\*(\d+) automated checks\*\*", "docs/SUBMISSION.md"),
+    ]
     total = len(PASS) + len(FAIL) + len(count_claims)
-    for pat, label in count_claims:
-        m = re.search(pat, report_readme)
+    for src, pat, label in count_claims:
+        m = re.search(pat, src)
         stated = int(m.group(1)) if m else -1
-        check(f"README test count in {label} matches the suite",
+        check(f"test count in {label} matches the suite",
               stated == total, f"says {stated}, suite has {total}")
 
     # ---------------- report ----------------

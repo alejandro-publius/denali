@@ -267,6 +267,17 @@ def main() -> int:
           f"found {sorted(pipeline_mods)}")
     check("modal_sweep is NOT a make-all step (it verifies, it does not produce)",
           "modal_sweep" not in pipeline_mods)
+    # concordance READS results/rpe1/. For hours make all ran concordance without
+    # regenerating its input, so a clean clone silently consumed a committed file
+    # instead of reproducing it. Order matters, so assert the order.
+    _order = re.findall(r"-m\s+src\.(\w+)", all_block)
+    if "concordance" in _order:
+        check("make all regenerates the RPE1 arm before concordance reads it",
+              "rpe1_arm" in _order
+              and _order.index("rpe1_arm") < _order.index("concordance"),
+              f"order: {_order[-6:]}")
+    check("annotation_arm is NOT a make-all step (it needs Modal)",
+          "annotation_arm" not in pipeline_mods)
 
     src_text = "\n".join((ROOT / "src" / f"{m}.py").read_text()
                          for m in sorted(pipeline_mods)

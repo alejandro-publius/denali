@@ -65,11 +65,13 @@ all: check
 	$(PY) -m src.freeze_predictor
 	@echo "== 8/9  score the held-out ten against the frozen model ~3 min"
 	$(PY) -m src.score_heldout
-	@echo "== 9/9  figures + post-freeze sensitivity check          ~1 min"
+	@echo "== 9/10 figures + post-freeze sensitivity checks         ~1 min"
 	$(PY) -m src.figures_matrix
 	$(PY) -m src.sensitivity_stripped
 	$(PY) -m src.vif_camera
 	$(PY) -m src.engagement_bound
+	@echo "== 10/10 second cell line, then cross-screen concordance     ~1 min"
+	$(PY) -m src.rpe1_arm
 	$(PY) -m src.concordance
 	@echo "== freeze the three proposals the page renders          ~1 s"
 	$(PY) -m src.freeze_proposals

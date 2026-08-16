@@ -1,6 +1,11 @@
 # SREBF2 evidence package
 
-The headline. Built to survive interrogation, not to look good.
+**This is the positive control, not the headline.** It says the ranking machinery
+works; it does not say the ranking found anything, and this project claims no
+novelty for it. The headline is the measurement finding — see the README.
+
+Kept in full because a control is only worth something if you can interrogate it,
+and §4 below is where it fails. Written to survive that, not to look good.
 
 ---
 
@@ -118,7 +123,7 @@ against **K562-specific** Chronos (`ACH-000551`), the line we actually scored in
 **Two tier labels in the table above are wrong for K562.** Corrected here rather
 than silently edited, because the table was already committed and pushed.
 
-**The headline is unaffected and slightly stronger:** SREBF2 is **−0.024 by mean
+**The control is unaffected and slightly stronger:** SREBF2 is **−0.024 by mean
 and +0.029 in K562** — not essential by either measure, with more margin in the
 relevant cell type. Top-50 essentiality enrichment is unchanged (26 vs 25 of 50),
 so the 3.32× figure stands. Repo-wide, 555 of 9,333 genes (5.9%) disagree between

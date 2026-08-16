@@ -475,6 +475,31 @@ def main() -> int:
               f"{held['axis2_balanced_accuracy']}" in loop
               and "not refit" in loop.lower())
 
+    # ---------------- M. no broken internal links ----------------
+    # A dead link in the docs index is the cheapest possible thing for a reviewer
+    # to find and the cheapest for us to prevent.
+    for md in [ROOT / "README.md", ROOT / "docs" / "README.md"]:
+        if not md.exists():
+            continue
+        broken = []
+        for target in re.findall(r"\]\(([^)\s#]+)", md.read_text()):
+            if target.startswith(("http://", "https://", "mailto:")):
+                continue
+            if not (md.parent / target).resolve().exists():
+                broken.append(target)
+        check(f"{md.relative_to(ROOT)} has no broken relative links",
+              not broken, ", ".join(broken[:3]))
+
+    # The positive control must never present itself as the headline. It said
+    # "The headline." at the top for hours while section 4 of the same file
+    # called it a recovered known answer.
+    sre = ROOT / "docs" / "SREBF2_EVIDENCE.md"
+    if sre.exists():
+        s = sre.read_text()
+        check("the control document calls itself a control, not the headline",
+              "positive control, not the headline" in s
+              and "not a discovery" in s.lower())
+
     # ---------------- F. the docs' own self-description ----------------
     report_readme = (ROOT / "README.md").read_text()
     # These are hand-typed and therefore drift: the badge said 84, the Tests

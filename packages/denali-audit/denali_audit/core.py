@@ -104,16 +104,38 @@ def audit(sizes, hits, corr=None) -> dict:
     # gene with the same number of guides. The study gets this branch too now,
     # since src/audit_screen.py imports this function rather than copying it.
     if not np.isfinite(share):
+        # WHY the R^2 is undefined decides what to tell the user, and there are
+        # two different reasons. Constant SIZE means the predictor has no
+        # variance; constant HITS (every set returned the same count -- most
+        # often zero, a screen where nothing reached significance) means the
+        # OUTCOME has none. Both land here, and until 2026-08-16 both were
+        # reported as "every set is the same size", which is a false statement
+        # about the user's data whenever it was the hits that were constant.
+        # Found by dropping an all-zero-hits table into the page runner.
         out["verdict"] = "UNDETERMINED"
-        out["reading"] = (
-            "This ranking cannot be audited for size: every set is the same size, "
-            "so set size has no variation with which to explain anything.")
-        out["what_to_do"] = (
-            "This is not an all-clear. Size is ruled out here by construction, but "
-            "the other ways a ranking can be carried by how it was measured -- "
-            "read depth, guide efficacy, replicate count -- are untested and this "
-            "tool does not test them. If your sets do vary in size, check you "
-            "passed the right column.")
+        constant_size = bool(np.std(s) == 0)
+        if constant_size:
+            out["reading"] = (
+                "This ranking cannot be audited for size: every set is the same size, "
+                "so set size has no variation with which to explain anything.")
+            out["what_to_do"] = (
+                "This is not an all-clear. Size is ruled out here by construction, but "
+                "the other ways a ranking can be carried by how it was measured -- "
+                "read depth, guide efficacy, replicate count -- are untested and this "
+                "tool does not test them. If your sets do vary in size, check you "
+                "passed the right column.")
+        else:
+            n_zero = int((h == 0).sum())
+            out["reading"] = (
+                "This ranking cannot be audited for size: every set returned the same "
+                "number of hits" + (" (zero)" if n_zero == n else "") + ", so there is "
+                "no variation in the ranking for set size or anything else to explain.")
+            out["what_to_do"] = (
+                "This is not an all-clear and it is not a ranking. Nothing here "
+                "distinguishes any set from any other, so there is no top to audit. "
+                "If you expected hits, check the significance threshold and the "
+                "column you passed; if the screen genuinely returned nothing, that "
+                "is the result and no re-ranking will change it.")
         out["what_this_is_not"] = (
             "Not a candidate list and not a recommendation. This measures a property "
             "of the ranking, not of any gene or pathway in it.")

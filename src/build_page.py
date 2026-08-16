@@ -894,13 +894,26 @@ function audit(sizes,hits){
   out.share_explained_without_biology=share;
   if(!isFinite(share)){
     out.verdict="UNDETERMINED";
-    out.reading="This ranking cannot be audited for size: every set is the same size, "+
-      "so set size has no variation with which to explain anything.";
-    out.what_to_do="This is not an all-clear. Size is ruled out here by construction, but "+
-      "the other ways a ranking can be carried by how it was measured -- "+
-      "read depth, guide efficacy, replicate count -- are untested and this "+
-      "tool does not test them. If your sets do vary in size, check you "+
-      "passed the right column.";
+    // Two different reasons land here: constant SIZE (no variance in the
+    // predictor) and constant HITS (none in the outcome). See core.py.
+    if(audStd(s)===0){
+      out.reading="This ranking cannot be audited for size: every set is the same size, "+
+        "so set size has no variation with which to explain anything.";
+      out.what_to_do="This is not an all-clear. Size is ruled out here by construction, but "+
+        "the other ways a ranking can be carried by how it was measured -- "+
+        "read depth, guide efficacy, replicate count -- are untested and this "+
+        "tool does not test them. If your sets do vary in size, check you "+
+        "passed the right column.";}
+    else{
+      var nz=0;for(var z=0;z<h.length;z++)if(h[z]===0)nz++;
+      out.reading="This ranking cannot be audited for size: every set returned the same "+
+        "number of hits"+(nz===n?" (zero)":"")+", so there is "+
+        "no variation in the ranking for set size or anything else to explain.";
+      out.what_to_do="This is not an all-clear and it is not a ranking. Nothing here "+
+        "distinguishes any set from any other, so there is no top to audit. "+
+        "If you expected hits, check the significance threshold and the "+
+        "column you passed; if the screen genuinely returned nothing, that "+
+        "is the result and no re-ranking will change it.";}
     out.what_this_is_not="Not a candidate list and not a recommendation. This measures a property "+
       "of the ranking, not of any gene or pathway in it.";
     out.method="VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, "+
@@ -1025,6 +1038,18 @@ function audRender(m,label){
     "a file with fewer than 8 usable rows cannot say anything either way."));return}
   var h='<p class="aud-src">read as '+audEsc(m.fmt)+(m.note?" — "+audEsc(m.note):"")+
     ' &middot; '+audEsc(label)+'</p>';
+  // Rows without a usable size or hits are masked, never imputed -- the same
+  // rule the study applies to its own matrix. Masking silently is the part
+  // that misleads: the user sees a verdict over fewer sets than their file
+  // has and nothing says so. This counts them and says so. It changes no
+  // number, so it stays out of audit() and out of the parity contract.
+  var dropped=0;
+  for(var q=0;q<m.sizes.length;q++)
+    if(!isFinite(m.sizes[q])||!isFinite(m.hits[q]))dropped++;
+  if(dropped)h+='<div class="aud-warn">'+dropped+' of '+m.sizes.length+
+    ' rows had no usable size or hits and were left out — not counted, not '+
+    'guessed at. The verdict below is over the remaining '+
+    (m.sizes.length-dropped)+'.</div>';
   if(m.approximate)h+='<div class="aud-warn">⚠ APPROXIMATE INPUT — see the note '+
     'above; the verdict inherits it.</div>';
   h+='<div class="aud-verdict"><div class="v">'+audEsc(res.verdict)+'</div>'+

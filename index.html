@@ -341,28 +341,42 @@ uploaded anywhere &mdash; it runs locally on the CSV you already have.</p>
 <div class="use">
   <div>
     <h3>1 &middot; audit the ranking</h3>
-    <pre class="cmd">python -m src.audit_screen my_results.csv     --set pathway --size n_genes --hits n_significant</pre>
+    <pre class="cmd">pip install -e packages/denali-audit
+denali audit my_results.csv</pre>
     <pre class="out"><b>CONFOUNDED</b>: 46% of the variance in this
 ranking is predicted by how the sets
 were built, with no reference to what
 any gene does.
 
-&rarr; Re-rank with a size-aware statistic
-  and see which entries survive.</pre>
-    <p class="note">That output is this project&rsquo;s own screen, run through the
-    same command a stranger would type. Verdicts are CONFOUNDED, PARTIALLY
-    CONFOUNDED, or NOT SIZE-DOMINATED. It never names a gene.</p>
+<b>AGAINST THE FIELD</b>
+worse than nine in ten published
+screens: 90% of 1,272 are less
+explained by set size than yours.</pre>
+    <p class="note">No column renaming: it reads <b>g:Profiler, DAVID,
+    clusterProfiler, Enrichr/GSEApy, fgsea and GSEA desktop</b> output as-is
+    (<code>denali formats</code>). An R&sup2; is not a judgement until you know
+    what normal looks like &mdash; the field&rsquo;s median is <b>0.224</b>. That
+    output is <em>our own</em> screen, and the tool says it about us.</p>
   </div>
   <div>
-    <h3>2 &middot; apply the fix, then audit again</h3>
-    <pre class="cmd"># re-rank on the size-corrected residual,
-# then re-run the identical audit</pre>
-    <pre class="out">before   0.4649   <b>CONFOUNDED</b>
-after    0.0000   <b>NOT SIZE-DOMINATED</b></pre>
-    <p class="note"><b>This is the part that matters.</b> The tool names a
-    correction and then grades whether it worked. If the score does not drop, the
-    correction did not work on your data &mdash; and you know that before you
-    publish, not after. On our screen it goes to zero.</p>
+    <h3>2 &middot; see what leaves your top ten</h3>
+    <pre class="cmd">denali rerank my_results.csv --top 10</pre>
+    <pre class="out">Of your top 10, <b>3 hold</b> their place
+once set size is accounted for
+and <b>7 do not</b>.
+
+MYC_TARGETS_V1   194 genes   <b>1 &rarr; 24</b>
+E2F_TARGETS      190 genes   <b>2 &rarr; 21</b>
+G2M_CHECKPOINT   182 genes   <b>3 &rarr; 19</b></pre>
+    <p class="note"><b>That is our own screen, and our own number one.</b> The
+    largest set in the collection returned the most hits, and once you ask how
+    many hits a set that size returns anyway, it falls twenty-three places.</p>
+    <p class="note"><b>Then it grades its own correction.</b> Re-audit the
+    re-ranked list and the score has to drop, or the correction did not work on
+    your data &mdash; and you know that before you publish, not after. On ours:
+    <b>0.4649 CONFOUNDED &rarr; 0.0000 NOT SIZE-DOMINATED</b>. The tool still
+    refuses to say the three survivors are real; it reports what was carried by
+    size, not what to chase.</p>
   </div>
 </div>
 

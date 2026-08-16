@@ -1,5 +1,6 @@
 # denali — reproduce every number on the page from a clean clone.
 #
+#   make judge-check   verify everything, no download, no keys, no network  (~30 s)
 #   make setup     create the venv and install pinned deps
 #   make data      print the ONE manual step (470 MB substrate download)
 #   make all       reproduce everything deterministic   (~13 min, measured 12m05s)
@@ -19,7 +20,7 @@
 PY ?= .venv/bin/python
 RAW := data/raw
 
-.PHONY: all setup data check test retrieval page clean
+.PHONY: all setup data check test judge-check retrieval page clean
 
 setup:
 	uv venv --python 3.12 .venv
@@ -86,6 +87,28 @@ all: check
 test:
 	@$(PY) tests/test_frozen_invariants.py
 	@$(PY) tests/test_cross_surface.py
+
+judge-check:
+	@echo "denali — judge check. No download, no API key, no network, no account."
+	@echo "Everything below runs against files committed in this repository."
+	@echo ""
+	@echo "[1/4] invariants over the frozen interface"
+	@$(PY) tests/test_frozen_invariants.py | tail -1
+	@$(PY) tests/test_cross_surface.py | tail -1
+	@echo ""
+	@echo "[2/4] the packaged tool, and whether it still computes what the paper published"
+	@$(PY) -m pytest packages/denali-audit/tests -q 2>/dev/null | tail -1 || \
+		echo "  (pip install -e packages/denali-audit to run these)"
+	@echo ""
+	@echo "[3/4] the tool, on a g:Profiler-shaped export of our own screen"
+	@PYTHONPATH=packages/denali-audit $(PY) -m denali_audit.cli audit \
+		examples/example_gprofiler.csv | sed -n '1,6p'    
+	@echo ""
+	@echo "[4/4] the correction applied — what leaves the top ten"
+	@PYTHONPATH=packages/denali-audit $(PY) -m denali_audit.cli rerank \
+		examples/example_gprofiler.csv --top 10 | sed -n '3,13p'    
+	@echo ""
+	@echo "Done. Full reproduction from raw data needs the 470 MB substrate: make data && make all"
 
 retrieval:
 	@echo "LIVE API — will NOT reproduce the committed numbers. The indexes change."

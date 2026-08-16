@@ -13,7 +13,6 @@ import json
 from pathlib import Path
 
 import pandas as pd
-from mcp.server.fastmcp import FastMCP
 
 from src.answers import HELDOUT_WARNING, SCOPE, refuse, unscored
 from src.next_experiment import propose
@@ -24,7 +23,26 @@ from src.next_experiment import propose
 # results/frozen/heldout_evaluation.json. Found by starting the server from
 # /tmp the way a client actually would.
 FROZEN = Path(__file__).resolve().parents[1] / "results" / "frozen"
-mcp = FastMCP("denali")
+# `mcp` is an optional dependency. The server ships as a tool for agents; the study
+# reproduces without it. Importing FastMCP at module scope meant a clone that had not
+# installed one extra package could not even IMPORT this file -- which aborted the whole
+# invariant suite, because the suite imports this module to check the refusal paths.
+# Every check above that import already passed and none of them were reported.
+try:
+    from mcp.server.fastmcp import FastMCP
+    mcp = FastMCP("denali")
+except ModuleNotFoundError:                                  # pragma: no cover
+    class _Unserved:
+        """Keeps the tool functions importable and callable without `mcp` present."""
+        @staticmethod
+        def tool(*_a, **_k):
+            return lambda fn: fn
+
+        @staticmethod
+        def run():
+            raise SystemExit("pip install mcp to serve this; the study reproduces "
+                             "without it and every tool function is importable now.")
+    mcp = _Unserved()
 
 _S = pd.read_csv(FROZEN / "program_summary.csv")
 _P = json.loads((FROZEN / "predictor.json").read_text())

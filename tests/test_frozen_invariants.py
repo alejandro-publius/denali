@@ -1353,6 +1353,33 @@ def main() -> int:
     check("README controls count matches controls.csv", claim in report_readme,
           f"frozen: {n_ctrl} controls / {n_ctrl_fail} FAIL; README must say {claim!r}")
 
+    # ---------------- app.py actually renders ----------------
+    # Every other check on app.py reads its SOURCE. That is how the MCP server
+    # shipped working from exactly one directory: the source was fine and
+    # nobody ran it the way a stranger would. Streamlit's own headless harness
+    # executes the script top to bottom in ~1.3 s, so there is no excuse for
+    # asserting about a page nobody has rendered.
+    try:
+        from streamlit.testing.v1 import AppTest       # noqa: E402
+        at = AppTest.from_file(str(ROOT / "app.py"), default_timeout=120).run()
+        rendered = " ".join(str(m.value) for m in at.markdown)             + " " + " ".join(str(s.value) for s in at.subheader)
+        check("app.py renders without raising",
+              len(at.exception) == 0,
+              f"{len(at.exception)} exception(s): "
+              f"{[str(e.value)[:90] for e in at.exception]}"
+              if len(at.exception) else
+              f"{len(at.markdown)} markdown / {len(at.subheader)} subheader / "
+              f"{len(at.dataframe)} dataframe blocks")
+        # and it renders the counts, not just contains them in source
+        check("app.py renders the evaluation counts it claims",
+              f"{_WORDS[n_neg].capitalize()} of {_WORDS[n_eval]} evaluations"
+              in rendered,
+              f"looking for '{_WORDS[n_neg].capitalize()} of {_WORDS[n_eval]} "
+              f"evaluations' in the RENDERED output")
+    except ImportError:
+        check("app.py renders without raising", False,
+              "streamlit.testing.v1 unavailable — this check cannot silently skip")
+
     # ---------------- independent recomputation ----------------
     # The strongest validation artifact here: a second implementation of the
     # headline statistic, written from the README method section without

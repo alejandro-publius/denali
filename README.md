@@ -240,7 +240,13 @@ flowchart TB
   AUD2 --> PKG["packages/denali-audit 📦<br/>pip installable · core.py vendored verbatim"]
   PKG --> DA["denali audit<br/>10 formats auto-detected · verdict + percentile"]
   DA --> DR["denali rerank<br/>applies the correction · 3 of our top 10 hold"]
+  PKG --> WASM["audit.html 🌐<br/>the package itself in WebAssembly<br/>your file, your browser, nothing uploaded"]
   PKG -.->|"anti-drift test: audit() on the frozen<br/>data must return 0.4649 or CI fails"| FROZEN
+  WASM -.->|"page-parity test: the inlined source must<br/>reproduce 0.4649 CONFOUNDED or CI fails"| PKG
+
+  PKG --> BREADTH["results/breadth/<br/>3 domains that are not gene sets<br/>regions · metabolites · microbiome"]
+  BREADTH --> NULL["null_baselines.py<br/>the no-biology value per mapping"]
+  NULL -.->|"BOUNDARY CONDITION, pointing back at the tool:<br/>where hits are counted over the set's own members,<br/>a large R² is arithmetic. None of the three cleared<br/>its own null. Ours does — 0.4649 vs 0.0182"| DA
 
   ORCS["BioGRID ORCS 2.0.18<br/>1,952 human screens · 418 publications"] --> CORP
   CORP["src/corpus_audit.py<br/>eval 10 · 1,272 screens meet the rule"] --> CRES
@@ -575,7 +581,10 @@ The suite has caught, in order: a stat bug reporting 5 evidence sources instead 
 | `results/figures/` | Four figures + `CAPTIONS.md`, the single source of caption wording |
 | `results/prior_work/` | Pre-event ILD evidence — the positive control returning 481–6,532 genes. Not reproducible here |
 | `results/discovery/` | Intermediate scoring outputs |
+| `results/corpus/` | 1,272 published CRISPR screens from BioGRID ORCS — the distribution a verdict is a percentile against |
+| `results/breadth/` | Post-hoc, exploratory. The unmodified `audit()` on three domains that are **not** gene sets — regions, metabolites, microbiome — plus `null_baselines.py`. Reported because it found a boundary condition on the tool, not a fourth confirmation. See scope limit 6 |
 | `audits/external/` | The audit run unchanged on seven **other people's** published screens — standardized inputs, provenance and rerun command per entry |
+| `benchmarks/tasks/` | Three BenchFlow tasks other agents are scored on. `denali-size-carried` derives its ground truth from the shipped `rerank()` rather than a hand-typed key |
 | `packages/denali-audit/` | The packaged CLI a stranger installs. `core.py` is `src/`'s maths vendored verbatim; a test requires it to return 0.4649 on the frozen data. |
 | `src/` | Pipeline modules, run as `python -m src.<module>` |
 | `tests/` | Invariants over the frozen interface |
@@ -583,6 +592,8 @@ The suite has caught, in order: a stat bug reporting 5 evidence sources instead 
 | `data/genesets/` | MSigDB v2026.1.Hs, committed |
 | `data/raw/` | git-ignored substrate — see above |
 | `index.html` | The static page. Self-contained, built from frozen numbers |
+| `audit.html` | **Run the tool on your own file, in the browser.** The package's own source, executed by CPython in WebAssembly — not a JavaScript restatement of it. Nothing is uploaded |
+| `web/` | `build_audit_page.py` inlines the package into `audit.html`; `shoot.py` re-shoots the README images from the current pages |
 | `app.py` | Streamlit view of the same frozen data |
 
 ## Scope limits
@@ -592,6 +603,7 @@ The suite has caught, in order: a stat bug reporting 5 evidence sources instead 
 3. **One cell line, unstressed.** Everything is K562. Measurable is not the same as engaged, and our gate tested the wrong one.
 4. **The attribution is to gene-set construction, not measurement.** A post-freeze check gives 0.152 for measurement-only against 0.697 for construction-only. Better instrumentation would not move the number.
 5. **Transcriptional movement is not phenotypic reversal.** Computational only — no wet-lab protocols, no dosing, no clinical or therapeutic recommendation.
+6. **A large R² is a confound only where `hits` are not counted over the set's own members.** [`results/breadth/`](results/breadth/README.md) ran the unmodified `audit()` across three domains that are not gene sets and found the boundary. Where `hits ≤ size` because both are counted over the same members — which is what classical overlap enrichment does — regressing a count on the number of trials that produced it recovers the trial count, and a large R² there is **arithmetic rather than a confound**. The no-biology value is not zero and depends entirely on the mapping, so the number is interpretable only against the right null. All three domains returned large R² values and **none survived its own null**; our primary screen is the one that does — 0.4649 against a permutation null of 0.0182. [`results/breadth/null_baselines.py`](results/breadth/null_baselines.py) computes the correct null per mapping. This applies to anyone running this check, including us.
 
 ## Citations
 

@@ -140,6 +140,46 @@ def main() -> int:
     print(f"robustness: median R^2 with RAW size predictor (audit_screen's "
           f"transform): {R.r2_size_raw.median():.4f}")
 
+    # ---- the screen is NOT the independent unit ----
+    # 1,272 screens do not come from 1,272 labs. One publication can contribute
+    # hundreds of screens sharing a library, a cell line and a hit rule, so a
+    # screen-level quantile lets a single lab set the median. This is the same
+    # construction confound the project exists to detect, occurring inside our
+    # own audit, so it is measured rather than noted.
+    per_pub = R.groupby("source_id")
+    g = per_pub.size().sort_values(ascending=False)
+    pub = per_pub.r2_size_alone.median()
+    pub_raw = per_pub.r2_size_raw.median()
+    q_pub = pub.quantile([0.10, 0.25, 0.50, 0.75, 0.90]).round(4)
+    print(f"\npseudo-replication: {len(R)} screens from {len(g)} publications")
+    print(f"  screens per publication: median {g.median():.0f}, max {g.max()}")
+    print(f"  largest single publication = {100*g.max()/len(R):.1f}% of the corpus; "
+          f"top 5 = {100*g.head(5).sum()/len(R):.1f}%")
+    print("publication-level (each publication collapsed to its median screen):")
+    for k, v in q_pub.items():
+        print(f"  p{int(k*100):02d}  {v:.4f}")
+    print(f"  median {pub.median():.4f} vs screen-level {R.r2_size_alone.median():.4f}")
+    print(f"  share at or above 0.465: {100*(pub >= 0.465).mean():.1f}% "
+          f"vs screen-level {100*(R.r2_size_alone >= 0.465).mean():.1f}%")
+
+    publication_level = {
+        "why": "The screen is not the independent unit. One publication "
+               "contributes up to hundreds of screens sharing a library, cell "
+               "line and hit rule, so screen-level quantiles let a single lab "
+               "set the median. Each publication is collapsed to its median "
+               "screen first. This correction moves the headline share and is "
+               "reported alongside it, never instead of it.",
+        "n_publications": int(len(g)),
+        "screens_per_publication_median": int(g.median()),
+        "screens_per_publication_max": int(g.max()),
+        "largest_publication_share_pct": round(100 * float(g.max()) / len(R), 1),
+        "top5_publications_share_pct": round(100 * float(g.head(5).sum()) / len(R), 1),
+        "quantiles": {f"p{int(k*100)}": float(v) for k, v in q_pub.items()},
+        "median": round(float(pub.median()), 4),
+        "median_raw_size_predictor": round(float(pub_raw.median()), 4),
+        "pct_at_or_above_denali_0465": round(100 * float((pub >= 0.465).mean()), 1),
+    }
+
     print("\nstratified by hit-list size:")
     bins = [(20, 100), (100, 500), (500, 2000), (2000, 10**9)]
     strat = []
@@ -170,6 +210,7 @@ def main() -> int:
         "pct_at_or_above_denali_0465": round(100 * float((R.r2_size_alone >= 0.465).mean()), 1),
         "pct_at_or_above_025": round(100 * float((R.r2_size_alone >= 0.25).mean()), 1),
         "median_r2_raw_size_predictor": round(float(R.r2_size_raw.median()), 4),
+        "publication_level_pseudo_replication": publication_level,
         "stratified_by_hitlist_size": strat,
     }
     OUTDIR.mkdir(parents=True, exist_ok=True)

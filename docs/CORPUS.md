@@ -32,6 +32,8 @@ assembled by someone else, and each screen reduces to exactly the set/size/hits 
 | mean | 0.253 |
 
 **Only 9.6% of published screens reach our 0.465.** A third (33.6%) clear 0.25.
+**That 9.6% is the most fragile number in this arm — see the pseudo-replication
+correction below, which moves it to 26.7%.**
 
 The effect grows with the size of the hit list:
 
@@ -47,11 +49,41 @@ weakest in the small, selective hit lists and strongest in the permissive ones �
 is the opposite of reassuring, because a permissive hit list is what a genome-scale
 screen usually produces and what a lab usually mines.
 
+## The screen is not the independent unit, and correcting for that halves our claim
+
+**1,272 screens do not come from 1,272 labs. They come from 187 publications.** One
+publication contributes **340 screens — 26.7% of the entire audited corpus** — and the
+top five contribute **58.9%**. The median publication contributes 2. Counting each
+screen as an observation therefore lets a single lab set the median.
+
+Collapse each publication to its median screen first:
+
+| | screen-level | **publication-level** |
+|---|--:|--:|
+| n | 1,272 | **187** |
+| 10th percentile | 0.103 | 0.043 |
+| 25th percentile | 0.186 | 0.108 |
+| **median** | **0.224** | **0.246** |
+| 75th percentile | 0.269 | 0.485 |
+| 90th percentile | 0.455 | 0.654 |
+| **reach our 0.465** | **9.6%** | **26.7%** |
+
+**26.7% of publications reach 0.465, not 9.6%.** Our screen sits above roughly the
+**73rd** percentile of the literature, not the 90th. The publication-level distribution
+is also far wider — 0.043 to 0.654 against 0.103 to 0.455 — so the tightness of the
+screen-level distribution was itself an artifact of counting.
+
+We are reporting this because it makes our own claim weaker. It is also, precisely,
+this project's thesis occurring inside this project's own audit: an apparent property
+of "the field" that is substantially a property of how the corpus was assembled. Both
+numbers are reported and neither is quoted alone.
+
 ## Read against our own headline, honestly
 
-**The median published screen is at 0.224, not 0.465.** Our screen sits above the 90th
-percentile of the field. Three readings, and we are not going to pick the flattering
-one for you:
+**The median published screen is at 0.224, not 0.465** — and the median published
+*paper* is at 0.246. Our screen sits above the 90th percentile of screens but only the
+73rd percentile of publications, and the second figure is the honest one. Three
+readings, and we are not going to pick the flattering one for you:
 
 1. Our number is real but atypical, and quoting 46.5% as though it describes screens
    in general would overstate it by roughly a factor of two.
@@ -85,6 +117,9 @@ places.
 
 ## What would make this wrong
 
+- **Pseudo-replication, quantified above.** The largest single source of instability
+  here: screen-level and publication-level answers differ by nearly 3× on the headline
+  share. Anyone quoting 9.6% without 26.7% is quoting the flattering half.
 - **Heterogeneous hit definitions.** Every publication set its own significance
   threshold, captured in ORCS as `SIGNIFICANCE_CRITERIA`. Hit rates therefore vary by
   orders of magnitude across screens. Stratifying by hit-list size (above) is a partial

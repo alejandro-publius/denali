@@ -1133,8 +1133,43 @@ def main() -> int:
           all(a < b for a, b in zip(c_meds, c_meds[1:])),
           " -> ".join(f"{m:.3f}" for m in c_meds))
 
+    # Pseudo-replication. 1,272 screens come from far fewer publications and one
+    # of them is a quarter of the corpus, so the screen-level share and the
+    # publication-level share differ by nearly 3x. The screen-level figure is the
+    # flattering one, so the correction must recompute and must never be the only
+    # number quoted -- if it is ever dropped, the arm overstates how atypical
+    # denali is and the build should fail rather than allow it.
+    cpub = corp.get("publication_level_pseudo_replication")
+    check("corpus: the pseudo-replication correction survives", cpub is not None)
+    if cpub:
+        g = per.groupby("source_id").size()
+        check("corpus: the publication count recomputes from the per-screen table",
+              len(g) == cpub["n_publications"],
+              f"recomputed {len(g)} vs {cpub['n_publications']}")
+        check("corpus: the publication-level median recomputes",
+              near(per.groupby("source_id").r2_size_alone.median().median(),
+                   cpub["median"]),
+              f"recomputed "
+              f"{per.groupby('source_id').r2_size_alone.median().median():.4f}")
+        check("corpus: the publication-level 0.465 share recomputes",
+              near(100 * (per.groupby("source_id").r2_size_alone.median()
+                          >= 0.465).mean(), cpub["pct_at_or_above_denali_0465"], 0.05),
+              f"json {cpub['pct_at_or_above_denali_0465']}%")
+        check("corpus: the corpus is disclosed as concentrated, not balanced",
+              near(100 * g.max() / len(per), cpub["largest_publication_share_pct"], 0.05)
+              and cpub["largest_publication_share_pct"] > 10,
+              f"largest publication is {100*g.max()/len(per):.1f}% of the corpus")
+
     corpus_md = (ROOT / "docs" / "CORPUS.md").read_text()
     row8 = re.search(r"^\|\s*8\s*\|.*$", report_readme, re.M)
+    if cpub:
+        check("corpus: the doc reports BOTH shares, never the flattering one alone",
+              f"{corp['pct_at_or_above_denali_0465']}%" in corpus_md
+              and f"{cpub['pct_at_or_above_denali_0465']}%" in corpus_md,
+              f"screen {corp['pct_at_or_above_denali_0465']}% / "
+              f"publication {cpub['pct_at_or_above_denali_0465']}%")
+        check("corpus: the doc states the publication count",
+              str(cpub["n_publications"]) in corpus_md)
     check("corpus: labelled post-hoc, not pre-registered, in the doc and the findings row",
           "not pre-registered" in corpus_md.lower()
           and row8 is not None and "post-hoc" in row8.group(0).lower())

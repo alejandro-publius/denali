@@ -19,6 +19,24 @@
   "pct_at_or_above_denali_0465": 9.6,
   "pct_at_or_above_025": 33.6,
   "median_r2_raw_size_predictor": 0.1918,
+  "publication_level_pseudo_replication": {
+    "why": "The screen is not the independent unit. One publication contributes up to hundreds of screens sharing a library, cell line and hit rule, so screen-level quantiles let a single lab set the median. Each publication is collapsed to its median screen first. This correction moves the headline share and is reported alongside it, never instead of it.",
+    "n_publications": 187,
+    "screens_per_publication_median": 2,
+    "screens_per_publication_max": 340,
+    "largest_publication_share_pct": 26.7,
+    "top5_publications_share_pct": 58.9,
+    "quantiles": {
+      "p10": 0.0425,
+      "p25": 0.1076,
+      "p50": 0.2463,
+      "p75": 0.4852,
+      "p90": 0.6543
+    },
+    "median": 0.2463,
+    "median_raw_size_predictor": 0.2193,
+    "pct_at_or_above_denali_0465": 26.7
+  },
   "stratified_by_hitlist_size": [
     {
       "bin": "20-100",

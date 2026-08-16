@@ -1,0 +1,37 @@
+{
+  "screen_1": {
+    "n_sets": 2809,
+    "r2_size_alone": 0.4221,
+    "verdict": "CONFOUNDED"
+  },
+  "screen_2": {
+    "n_sets": 147,
+    "r2_size_alone": 0.6349,
+    "verdict": "CONFOUNDED"
+  },
+  "screen_3": {
+    "n_sets": 1985,
+    "r2_size_alone": 0.5183,
+    "verdict": "CONFOUNDED"
+  },
+  "screen_4": {
+    "n_sets": 85,
+    "r2_size_alone": 0.36,
+    "verdict": "PARTIALLY CONFOUNDED"
+  },
+  "screen_5": {
+    "n_sets": 67,
+    "r2_size_alone": 0.6345,
+    "verdict": "CONFOUNDED"
+  },
+  "screen_6": {
+    "n_sets": 675,
+    "r2_size_alone": 0.7211,
+    "verdict": "CONFOUNDED"
+  },
+  "screen_7": {
+    "n_sets": 17,
+    "r2_size_alone": 0.8826,
+    "verdict": "CONFOUNDED"
+  }
+}

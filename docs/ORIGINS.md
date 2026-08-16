@@ -53,8 +53,8 @@ embarrassing.
 scoring code was written. That ordering is checkable by anyone with `git log`,
 and it is the only claim in this project that no amount of argument can weaken.
 
-**Negatives kept, not buried.** Six of this project's nine evaluations came
-back negative and all nine are reported. A post-freeze sensitivity check — run
+**Negatives kept, not buried.** Seven of this project's ten evaluations came
+back negative and all ten are reported. A post-freeze sensitivity check — run
 because an adversarial critique demanded it, not because we planned it —
 collapsed part of our own headline, and it is documented at the top of
 `LIMITATIONS.md` rather than in an appendix.

@@ -1161,7 +1161,15 @@ def main() -> int:
               f"largest publication is {100*g.max()/len(per):.1f}% of the corpus")
 
     corpus_md = (ROOT / "docs" / "CORPUS.md").read_text()
-    row8 = re.search(r"^\|\s*8\s*\|.*$", report_readme, re.M)
+    # Find this arm's row by CONTENT, not by number. It was written as row 8,
+    # collided with the off-target arm's 8, and became 10 on merge -- and a
+    # number-matched search does not fail when that happens, it silently starts
+    # asserting against a different arm's row.
+    row8 = re.search(r"^\|\s*\d+\s*\|[^|]*headline describe the field.*$",
+                     report_readme, re.M)
+    check("corpus: the findings row is present and found by content",
+          row8 is not None,
+          "no row asks whether the headline describes the field")
     if cpub:
         check("corpus: the doc reports BOTH shares, never the flattering one alone",
               f"{corp['pct_at_or_above_denali_0465']}%" in corpus_md

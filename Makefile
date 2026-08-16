@@ -48,22 +48,22 @@ check:
 	@echo "substrate present"
 
 all: check
-	@echo "== 1/9  score program A (UPR)                          ~11 s"
+	@echo "== 1/10 score program A (UPR)                          ~11 s"
 	$(PY) -m src.score_k562 HALLMARK_UNFOLDED_PROTEIN_RESPONSE results/discovery/k562_upr_reversal.csv
-	@echo "== 2/9  program A: RPE1 arm, DepMap filter, 4 controls  ~4 min"
+	@echo "== 2/10 program A: RPE1 arm, DepMap filter, 4 controls  ~4 min"
 	$(PY) -m src.build2 HALLMARK_UNFOLDED_PROTEIN_RESPONSE results/discovery/k562_upr_reversal.csv results/discovery/upr
-	@echo "== 3/9  score program B (held out)                      ~11 s"
+	@echo "== 3/10 score program B (held out)                      ~11 s"
 	$(PY) -m src.score_k562 HALLMARK_CHOLESTEROL_HOMEOSTASIS results/discovery/k562_chol_reversal.csv
-	@echo "== 4/9  program B: RPE1 arm, DepMap filter, 4 controls  ~4 min"
+	@echo "== 4/10 program B: RPE1 arm, DepMap filter, 4 controls  ~4 min"
 	$(PY) -m src.build2 HALLMARK_CHOLESTEROL_HOMEOSTASIS results/discovery/k562_chol_reversal.csv results/discovery/chol
-	@echo "== 5/9  freeze programs A and B                         ~1 min"
+	@echo "== 5/10 freeze programs A and B                         ~1 min"
 	$(PY) -m src.freeze
-	@echo "== 6/9  sweep all 50 Hallmark programs                  ~9 min"
+	@echo "== 6/10 sweep all 50 Hallmark programs                  ~9 min"
 	$(PY) -m src.sweep
-	@echo "== 7/9  freeze the matrix, then the predictor           ~1 min"
+	@echo "== 7/10 freeze the matrix, then the predictor           ~1 min"
 	$(PY) -m src.freeze_matrix
 	$(PY) -m src.freeze_predictor
-	@echo "== 8/9  score the held-out ten against the frozen model ~3 min"
+	@echo "== 8/10 score the held-out ten against the frozen model ~3 min"
 	$(PY) -m src.score_heldout
 	@echo "== 9/10 figures + post-freeze sensitivity checks         ~1 min"
 	$(PY) -m src.figures_matrix

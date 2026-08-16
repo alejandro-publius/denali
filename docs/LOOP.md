@@ -36,12 +36,12 @@ flowchart TB
 
 Blue is evidence, green is action.
 
-## The loop ran again, and twice it stopped itself
+## The loop ran again, seven more times, and three times it stopped itself
 
 The turn above is the first lap. It is not the only one. Each later lap re-enters
 at **MEASURE** with a different substrate and the same byte-frozen scorer, and
-two of them halted on a rule written before the run rather than on a judgement
-made after it.
+three of them stopped on a rule written before the run rather than on a judgement
+made after it — two halting outright, one gating its own question.
 
 ```mermaid
 flowchart TB
@@ -53,6 +53,10 @@ flowchart TB
   L5["<b>LAP 5 · other annotations</b><br/>793 sets, 4 collections<br/>eval 7 · pre-registered"]
   H2{{"<b>HALT</b> — pre-registered power rule fired<br/>fewer than 150 of 250 sets scoreable<br/>NO VERDICT ISSUED · direction predicted WRONG"}}
   L6["<b>LAP 6 · outside our own data</b><br/>two published off-target datasets<br/>eval 8 · post-hoc, thresholds swept"]
+  L7["<b>LAP 7 · switch the program on</b><br/>Adamson UPR Perturb-seq<br/>eval 9 · pre-registered before the substrate was opened"]
+  G1{{"<b>GATE FIRST</b> — engagement, or no question<br/>0.0551 observed vs null p99 0.0487, p = 0.001<br/>only then is size asked: R² 0.2685"}}
+  L8["<b>LAP 8 · does the headline describe the field?</b><br/>1,272 published screens, BioGRID ORCS<br/>eval 10 · post-hoc"]
+  H3{{"<b>TURNED ON ITSELF</b> — the corpus is not 1,272 labs<br/>187 publications, one contributes 26.7%<br/>collapse to publications: 9.6% → 26.7% reach our 0.465<br/>the correction that costs us the headline"}}
 
   L1 --> L2 --> H1
   H1 -->|"predictor kept, not repaired"| L3
@@ -60,7 +64,11 @@ flowchart TB
   L4 -->|"26% of the agreement is set size"| L5
   L5 --> H2
   H2 -->|"take the confound somewhere it cannot be ours"| L6
-  L6 -->|"17.6–33.9% of assay agreement is search yield"| L6
+  L6 -->|"17.6–33.9% of assay agreement is search yield"| L7
+  L7 --> G1
+  G1 -->|"it persists when the program is engaged"| L8
+  L8 --> H3
+  H3 -->|"the tool's own question, asked of the tool"| H3
 
   style L1 fill:#eaf0f6,stroke:#1a4d7a,stroke-width:2px
   style L2 fill:#eaf0f6,stroke:#1a4d7a,stroke-width:2px
@@ -68,13 +76,17 @@ flowchart TB
   style L4 fill:#eaf0f6,stroke:#1a4d7a,stroke-width:2px
   style L5 fill:#eaf0f6,stroke:#1a4d7a,stroke-width:2px
   style L6 fill:#eaf0f6,stroke:#1a4d7a,stroke-width:2px
+  style L7 fill:#eaf0f6,stroke:#1a4d7a,stroke-width:2px
+  style L8 fill:#eaf0f6,stroke:#1a4d7a,stroke-width:2px
   style H1 fill:#fff,stroke:#8a1a1a,stroke-width:2px,stroke-dasharray:4 3
   style H2 fill:#fff,stroke:#8a1a1a,stroke-width:2px,stroke-dasharray:4 3
+  style G1 fill:#fff,stroke:#3d6b2e,stroke-width:2px,stroke-dasharray:4 3
+  style H3 fill:#fff,stroke:#8a1a1a,stroke-width:2px,stroke-dasharray:4 3
 ```
 
 **The halts are the point.** A loop that only ever continues is not being
-governed by anything. Twice, a rule fixed in advance stopped this one before the
-statistic it was built to compute could be read:
+governed by anything. Twice, a rule fixed in advance stopped this one outright,
+before the statistic it was built to compute could be read:
 
 - **Lap 2, the held-out evaluation.** The rule — inconclusive below 8 of 10
   programs passing the measurability gate — was written before any held-out
@@ -97,11 +109,34 @@ this project's data entirely, to two published off-target datasets, where the
 same confound reappears as a guide's search yield explaining **17.6–33.9%**
 (median 31.2%) of the agreement between a biochemical and a cellular assay.
 
-Laps 4 and 6 are **post-freeze and post-hoc**, and are labelled so wherever they
-appear; laps 3 and 5 were pre-registered and hashed before they ran. Sources:
+**Lap 7 put a gate in front of the question instead of after it.** The standing
+objection to the whole project is that K562 is unstressed, so a null says nothing.
+Lap 7 (Adamson, pre-registered *before the substrate was opened*) could only ask
+its question if engagement was established first, against a null of 1,000 gene
+sets matched on size and control-expression decile: observed **0.0551** against a
+null 99th percentile of **0.0487**, empirical **p = 0.001**. Engagement cleared,
+so the size question was asked and answered — **R² 0.2685**, persists. Had the
+gate not cleared, the arm had no result to report and would have said so. Note
+what this lap does *not* claim: a targeted UPR library is the worst substrate
+imaginable for a claim about unbiased screens, so it is used only for engagement,
+and its single-cell construction is new code outside the frozen scorer's hash.
+
+**Lap 8 turned the audit on the audit.** Having asked the field's screens how much
+of their rankings is construction, it asked the same of its own corpus — and the
+corpus failed. Those 1,272 screens come from **187 publications**; one contributes
+**26.7%** of them. Collapse each publication to its median screen and the share of
+the literature reaching our 0.465 moves from **9.6% to 26.7%**, putting denali at
+roughly the 73rd percentile rather than the 90th. **The tightness of the
+screen-level distribution was itself an artifact of how the corpus was counted** —
+which is this project's own thesis, occurring inside this project's own audit. It
+leads the writeup because it costs us the number.
+
+Laps 4, 6 and 8 are **post-freeze or post-hoc**, and are labelled so wherever they
+appear; laps 3, 5 and 7 were pre-registered and hashed before they ran. Sources:
 `results/frozen/heldout_evaluation.json`, `results/rpe1/`,
 `results/concordance/`, `results/annotation/annotation_evaluation.json`,
-`results/offtarget/offtarget_evaluation.json`.
+`results/offtarget/offtarget_evaluation.json`,
+`results/adamson/adamson_evaluation.json`, `results/corpus/corpus_audit.json`.
 
 ## Why this is a loop and not a flowchart
 
@@ -174,6 +209,8 @@ Run it against any program:
 | lap 4: 26% of cross-screen agreement is set size | `results/concordance/cross_screen.json` |
 | lap 5: 150-of-250 power rule, no verdict issued, direction wrong | `results/annotation/annotation_evaluation.json` |
 | lap 6: 17.6–33.9% (median 31.2%) of assay agreement is search yield | `results/offtarget/offtarget_evaluation.json` |
+| lap 7: engagement 0.0551 vs null p99 0.0487, p = 0.001; size R² 0.2685 | `results/adamson/adamson_evaluation.json` |
+| lap 8: 1,272 screens / 187 publications, 9.6% → 26.7% after collapsing | `results/corpus/corpus_audit.json` |
 
 ## Scope
 

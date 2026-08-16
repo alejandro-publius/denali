@@ -574,9 +574,6 @@ to what any program does.</p>
 <p class="circ">The range is a range because one of our six features is computed
 from the same matrix as the outcome, so part of {R_HI:.3f} is arithmetic. {R_LO:.3f} is the
 figure that survives that objection, and we never quote the top alone.</p>
-<p class="mech">The mechanism is size. Bigger programs with more co-moving members
-return more hits regardless of what they do — <b>program size alone explains
-{SIZE_R2*100:.1f}%</b>.</p>
 </section>
 
 <!-- 2. metrics -->

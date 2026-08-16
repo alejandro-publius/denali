@@ -500,6 +500,34 @@ def main() -> int:
               "positive control, not the headline" in s
               and "not a discovery" in s.lower())
 
+    # ---------------- N. the design system is real ----------------
+    # docs/DESIGN.md documents a palette and a type scale. A design doc nobody
+    # checks is decoration, so check it: every colour the page uses must be a
+    # declared token, and the token values must match what the doc claims.
+    design_p = ROOT / "docs" / "DESIGN.md"
+    bp = (ROOT / "src" / "build_page.py").read_text()
+    if design_p.exists():
+        design = design_p.read_text()
+        tokens = dict(re.findall(r"--([a-z]+):\s*([^;]+);", bp))
+        for name in ("ink", "soft", "rule", "fill", "paper", "accent"):
+            val = tokens.get(name, "").strip()
+            check(f"DESIGN.md documents --{name} as the code defines it",
+                  val and f"`{val}`" in design, f"code has {val!r}")
+        # any hex in page chrome must be a token value or a documented figure colour
+        allowed = {v.strip().lower() for v in tokens.values()}
+        allowed |= {"#b2182b", "#2166ac", "#999999", "#bbbbbb", "#888888",
+                    "#444444", "#fff3e0", "#e0a458", "#d9d9d9", "#f4a582",
+                    "#1a4d7a", "#eaf0f6", "#eef4ea", "#3d6b2e", "#e3e3e3"}
+        css = bp.split('CSS = """')[1].split('"""')[0] if 'CSS = """' in bp else ""
+        stray = sorted({h.lower() for h in re.findall(r"#[0-9a-fA-F]{6}", css)}
+                       - allowed)
+        check("no undocumented colour in the page stylesheet", not stray,
+              ", ".join(stray[:4]))
+        check("DESIGN.md records the app.py palette drift rather than hiding it",
+              "Known drift" in design and "#111827" in design)
+        check("radius is zero globally, as documented",
+              "--radius:0px" in bp.replace(" ", "") and "`0px`" in design)
+
     # ---------------- F. the docs' own self-description ----------------
     report_readme = (ROOT / "README.md").read_text()
     # These are hand-typed and therefore drift: the badge said 84, the Tests

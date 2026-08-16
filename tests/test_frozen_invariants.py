@@ -812,8 +812,22 @@ def main() -> int:
               ", ".join(stray[:4]))
         check("DESIGN.md records the app.py palette drift rather than hiding it",
               "Known drift" in design and "#111827" in design)
-        check("radius is zero globally, as documented",
-              "--radius:0px" in bp.replace(" ", "") and "`0px`" in design)
+        # The guard's job is that the doc and the code agree on the corner, not
+        # that the corner is any particular value. It used to hardcode 0px, which
+        # meant a deliberate change to the radius read as a test failure rather
+        # than as a design decision. Read the value from :root and hold the doc
+        # to it, so drift still fails but a decision does not.
+        m_rad = re.search(r"--radius:\s*([0-9]+px)", bp)
+        check("DESIGN.md documents the radius as the code defines it",
+              m_rad and f"`{m_rad.group(1)}`" in design,
+              f"code has {m_rad.group(1) if m_rad else 'no --radius'}")
+        # A non-zero radius must not be applied with `*`: that rounds every
+        # hairline and rule on the page, which is never what is wanted.
+        m_star = re.search(r"\*\{([^}]*)\}", css)
+        star_has_radius = bool(m_star and "border-radius" in m_star.group(1))
+        check("a non-zero radius is not applied with the universal selector",
+              m_rad and (m_rad.group(1) == "0px" or not star_has_radius),
+              f"radius {m_rad.group(1) if m_rad else '?'} applied via *")
 
     # ---------------- O. the RPE1 arm ----------------
     # The only positive result in this project that is not a control, so it gets
@@ -1049,6 +1063,13 @@ def main() -> int:
         return int(t) if t.isdigit() else next(
             (k for k, v in _WORDS.items() if v == t), -1)
 
+    # How many negative findings the page actually sets out as cards. The
+    # heading has to agree with this, not with a number someone typed once.
+    _neg_sec = re.search(r"<h2>\w+ of the \w+ negative findings</h2>.*?</section>",
+                         page, re.S)
+    n_neg_cards = len(re.findall(r'<div class="card">', _neg_sec.group(0))) \
+        if _neg_sec else -1
+
     # (file, pattern, expected group values in order, what the sentence is)
     prose_claims = [
         ("README.md", r"(\w+) evaluations\. (\w+) negative,",
@@ -1080,6 +1101,22 @@ def main() -> int:
          (n_neg, n_eval), "the demo close"),
         ("app.py", r'st\.subheader\("(\w+) evaluations came back negative"\)',
          (n_neg,), "the streamlit negatives heading"),
+        # index.html was the one rendered surface this registry never named, and
+        # it drifted exactly the way app.py did before it was added: the page
+        # still said "4 evaluations / 3 came back negative / The three negative
+        # findings" for three arms after the count reached 7 and 4. The tally and
+        # the heading are hand-typed, so they are checked against the same source
+        # every other surface is checked against.
+        ("index.html",
+         r'class="n">(\d+)</div><div class="l">evaluations run',
+         (n_eval,), "the headline tally, evaluations"),
+        ("index.html",
+         r'class="n">(\d+)</div><div class="l">came back negative',
+         (n_neg,), "the headline tally, negatives"),
+        # "Three of the four negative findings" — the first number is how many
+        # cards that section actually renders, the second is the true total.
+        ("index.html", r"<h2>(\w+) of the (\w+) negative findings</h2>",
+         (n_neg_cards, n_neg), "the negatives heading"),
         ("README.md", r"(\d+) values pass through a `V\(\)` helper",
          (n_traced,), "the traced-value feature bullet"),
         ("README.md", r"\*\*(\d+)\*\* values are traced",

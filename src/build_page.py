@@ -27,6 +27,33 @@ FROZEN = ROOT / "results" / "frozen"
 FIGS = ROOT / "results" / "figures"
 SENS = ROOT / "results" / "sensitivity"
 OUT = ROOT / "index.html"
+ASSETS = ROOT / "assets"
+
+# Fonts and brand marks are inlined as base64 for the same reason the figures
+# are: tests/test_frozen_invariants.py asserts the page makes no network call,
+# so it renders identically on an expo machine with no wifi. No CDN.
+_FACES = [("Poppins", 400, "poppins-400.woff2"),
+          ("Poppins", 500, "poppins-500.woff2"),
+          ("Poppins", 600, "poppins-600.woff2"),
+          ("JetBrains Mono", 400, "jetbrainsmono-400.woff2")]
+
+
+def font_faces() -> str:
+    out = []
+    for family, weight, fn in _FACES:
+        b64 = base64.b64encode((ASSETS / "fonts" / fn).read_bytes()).decode()
+        out.append(
+            f"@font-face{{font-family:'{family}';font-style:normal;"
+            f"font-weight:{weight};font-display:swap;"
+            f"src:url(data:font/woff2;base64,{b64}) format('woff2')}}")
+    return "\n".join(out)
+
+
+def asset_b64(name: str) -> str:
+    return base64.b64encode((ASSETS / name).read_bytes()).decode()
+
+
+FONTS = font_faces()
 
 PROV = json.loads((FROZEN / "provenance.json").read_text())
 HELD = json.loads((FROZEN / "heldout_evaluation.json").read_text())
@@ -319,19 +346,34 @@ CSS = """
    Typography, palette, hairline rules and the two-touch accent are hers.
    Every number, figure and sentence is ours, from results/frozen/. */
 :root{
-  --ink:#1c1c1a;          /* warm near-black */
-  --soft:#8c8c89;         /* warm muted */
-  --rule:rgba(0,0,0,.11); /* hairline */
-  --fill:#f2f2f0;         /* figure ground */
-  --accent:#4a6fa5;       /* used TWICE: pull-quote rule, footer link */
+  --ink:#1a1a1a;          /* body text */
+  --soft:#6B7280;         /* secondary */
+  --rule:rgba(27,42,74,.14); /* hairline, navy-tinted */
+  --fill:#f5f7f9;         /* figure and code ground */
+  --accent:#2EC4A0;       /* teal: links, metric numerals, small highlights */
+  --navy:#1B2A4A;         /* headers, headings, footer */
+  --tint:#E6F7F2;         /* card ground */
   --paper:#fff;
-  --radius:0px;
+  --radius:8px;
 }
-*{box-sizing:border-box;margin:0;padding:0;border-radius:var(--radius)}
+/* NOT on `*` — with a non-zero radius that rounds every hairline and rule too.
+   Applied to the elements that actually read as surfaces. */
+*{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%;font-size:16px}
 body{background:var(--paper);color:var(--ink);
   font:400 16px/1.62 "Source Serif 4",Georgia,"Times New Roman",serif;
   padding:0 40px;-webkit-font-smoothing:antialiased}
+
+/* headings in Poppins; prose stays serif because the page is read, not scanned */
+.hero,h2,h3,.metric .n,.masthead{font-family:"Poppins",-apple-system,
+  BlinkMacSystemFont,"Segoe UI",sans-serif}
+.hero,h2,h3{color:var(--navy)}
+.metrics,.cards,.card,figure img,pre,table,.use{border-radius:var(--radius)}
+
+/* masthead — the emblem only. The full lockup is in assets/denali-logo.png,
+   but at 40px tall its wordmark renders about 5px and stops being readable. */
+.masthead{padding:0 0 32px}
+.masthead img{height:40px;width:auto;display:block}
 main{max-width:1100px;margin:0 auto;padding:44px 0 96px}
 
 /* four sizes: hero / heading / body / small */
@@ -351,14 +393,19 @@ figure{padding:44px 0;border-bottom:1px solid var(--rule);margin:0}
 /* shared-rule grids: cells divided by hairlines, no floating boxes */
 .metrics{display:grid;grid-template-columns:repeat(4,1fr);
   border:1px solid var(--rule);background:var(--rule);gap:1px}
+/* the headline tally is the one 5-up grid: 4 negative + 2 positive + 1 no
+   verdict = the 7 evaluations, plus the gene-claim count. The other two grids
+   are 4-up, so this is a modifier rather than a change to .metrics. */
+.metrics.tally{grid-template-columns:repeat(5,1fr)}
 .metric{background:var(--paper);padding:22px 24px}
-.metric .n{font-size:1.25rem;font-weight:600;line-height:1;margin-bottom:9px;
+.metric .n{color:var(--accent);
+  font-size:1.25rem;font-weight:600;line-height:1;margin-bottom:9px;
   font-variant-numeric:tabular-nums}
 .metric .l{font-size:.8125rem;line-height:1.4;color:var(--soft)}
 
 .cards{display:grid;grid-template-columns:repeat(3,1fr);
   border:1px solid var(--rule);background:var(--rule);gap:1px}
-.card{background:var(--paper);padding:24px 26px}
+.card{background:var(--tint);padding:24px 26px}
 .card h3{font-size:.8125rem;font-weight:600;text-transform:uppercase;
   letter-spacing:.1em;color:var(--soft);margin:0 0 14px}
 .card p{font-size:1rem;line-height:1.62}
@@ -521,7 +568,7 @@ pre.wire .k{color:var(--soft)}
 p.cite{margin-top:26px;font-size:.8125rem;line-height:1.65;color:var(--soft);
   max-width:60em}
 @media(max-width:1000px){
-  .metrics,.cards,ol.limits{grid-template-columns:1fr}
+  .metrics,.metrics.tally,.cards,ol.limits{grid-template-columns:1fr}
   table.tools .stat,table.tools thead th:nth-child(2){display:none}
   body{padding:0 22px}main{padding:40px 0 64px}}
 """
@@ -558,9 +605,13 @@ V(PRED["residual_sd"], "predictor.residual_sd -> MCP wire example")
 HTML = f"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>denali — what a genome-scale screen can and cannot discover</title>
-<style>{CSS}</style>
+<title>denali</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,{asset_b64("denali-favicon.png")}">
+<style>{FONTS}
+{CSS}</style>
 <main>
+
+<header class="masthead"><img src="data:image/png;base64,{asset_b64("denali-mark.png")}" alt="denali"></header>
 
 <!-- 1. hero -->
 <section class="hero-sec">

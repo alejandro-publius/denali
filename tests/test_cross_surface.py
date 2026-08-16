@@ -137,6 +137,38 @@ def main() -> int:
           "; ".join(f"{k!r} in {sorted(x.split('/')[-1] for x in v)}"
                     for k, v in wrong.items()))
 
+    # A claim of the form "git diff X..HEAD matches nothing under src/" is
+    # checkable, and three of them shipped returning the opposite of the
+    # sentence beside them. Any surface that argues from a commit range must
+    # have that argument still be true, or not make it.
+    import subprocess
+    for s, txt in texts.items():
+        for m in re.finditer(
+                r"`git diff --name-only ([0-9a-f]{7,40})\.\.HEAD`[^.]{0,120}?"
+                r"matches nothing under `src/`", txt):
+            sha = m.group(1)
+            try:
+                out = subprocess.run(
+                    ["git", "diff", "--name-only", f"{sha}..HEAD", "--", "src", "Makefile"],
+                    cwd=ROOT, capture_output=True, text=True, timeout=30).stdout.strip()
+            except Exception as e:                       # noqa: BLE001
+                out = f"(could not run: {e})"
+            check(f"cross-surface: {s} 'nothing under src/' since {sha} is still true",
+                  out == "",
+                  f"git says: {out.replace(chr(10), ', ') or '(empty)'}")
+        # Same shape, counted rather than listed. Skip text inside *italics* or
+        # "quotes": the README explains this failure mode by quoting the bad
+        # sentence, and a guard that cannot tell a cautionary example from a
+        # live claim would make documenting the lesson impossible.
+        for m in re.finditer(r"[Tt]he (one|two|three|four|five) commits? after it", txt):
+            ctx = txt[max(0, m.start() - 60):m.start()]
+            if ctx.rstrip().endswith(('*"', '"', '*', "'")) or '*"' in ctx[-30:]:
+                continue
+            check(f"cross-surface: {s} does not count commits that had not been written",
+                  False,
+                  f"{m.group(0)!r} -- a commit count after a named SHA goes stale "
+                  "the moment anyone pushes; name the commit and let the reader re-run")
+
     for p in passed:
         print(f"PASS  {p}")
     for f in failed:

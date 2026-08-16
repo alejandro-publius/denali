@@ -1,5 +1,20 @@
 # Sponsor tool status — verified 2026-08-15
 
+> ⚠ **The venv was rebuilt from `requirements.txt` at 19:12 on 2026-08-15, and
+> four of these tools are no longer installed in it.** `paperclip` survives at
+> `~/.local/bin/paperclip`; `modal`, `proto-tools`, `bench` and `esm` do not
+> resolve any more, because `requirements.txt` deliberately pins only what
+> `make all` needs. The table below is kept as written — it was true when it was
+> checked, and the runs it records really happened, with their outputs committed
+> at `results/tools/proto_validation.json`, `benchmarks/tasks/denali-gate-trap/`
+> and `results/modal/`. But **"checked against this machine" is no longer true of
+> this machine as it stands right now**, and that sentence is worth more if it is
+> corrected than if it is left to be discovered. Nothing here changes a reported
+> number: a clean clone reproduced every file in `results/` byte-identical with
+> none of these four present, which is the same fact the "Touched a number"
+> column already records. To restore them: `uv pip install --python .venv/bin/python`
+> plus the install commands in each row.
+
 Every row below was checked against this machine, not recalled. The column that
 matters is the last one: whether anything in `results/frozen/` would differ if
 the tool had not run. Most answers are still no, and that is the point of the

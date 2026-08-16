@@ -546,6 +546,7 @@ different programs and stops somewhere else.</p>
   <button id="agRun" class="btn">Run the agent</button>
   <button id="agStep" class="btn ghost">Step once</button>
   <button id="agReset" class="btn ghost">Reset</button>
+  <button id="agSave" class="btn ghost" disabled>Export this run</button>
   <label>policy
     <select id="agPolicy">
       <option value="coverage">cover the size range</option>
@@ -769,6 +770,7 @@ function render(d,r2){{
   $("agR2").textContent=r2===null?"—":r2.toFixed(3);
   $("agCount").textContent=AG.seen.length+" of "+DATA.length+" visited";
   $("agStatus").textContent=AG.halted?"HALTED":"running";
+  $("agSave").disabled=AG.seen.length===0;
 
   if(AG.halted){{
     const f=document.createElement("div");
@@ -796,6 +798,7 @@ function render(d,r2){{
       '</div></div>';
     log.appendChild(f); log.scrollTop=log.scrollHeight;
     $("agRun").disabled=$("agStep").disabled=true;
+    $("agSave").disabled=false;
   }}
 }}
 
@@ -816,9 +819,48 @@ $("agReset").onclick=()=>{{
   $("agStatus").textContent="idle";
   $("agCount").textContent="0 of "+DATA.length+" visited";
   $("agRun").disabled=$("agStep").disabled=false;
+  $("agSave").disabled=true;
   $("agRun").textContent="Run the agent";
 }};
 $("agPolicy").onchange=$("agTol").onchange=()=>$("agReset").click();
+$("agSave").onclick=()=>{{
+  const fr=AG.r2hist.length?AG.r2hist[AG.r2hist.length-1]:null;
+  const trace={{
+    what:"denali agent run. Reproduce by re-running the same policy and halt rule "+
+         "on index.html; the loop is deterministic given both.",
+    policy:$("agPolicy").value,
+    halt_rule:"delta running R2 < "+$("agTol").value+" for 3 consecutive steps",
+    halted:AG.halted, halt_reason:AG.reason,
+    programs_read:AG.seen.length, programs_available:DATA.length,
+    running_r2_at_halt:fr,
+    same_statistic_over_all_50:ALL50,
+    early_stop_gap:fr===null?null:+(fr-ALL50).toFixed(4),
+    gap_note:"A subset chosen to span the size range has more spread than the "+
+             "full set, which flatters the fit. Reported, not hidden.",
+    not_the_preregistered_statistic:
+      "This is a plain goodness-of-fit on a subset. The pre-registered figure is "+
+      "an adjusted OLS fit over all 50 programs, {R_LO}-{R_HI}.",
+    steps:AG.seen.map((d,i)=>({{
+      order:i+1, program:d.program, n_present:d.n_present,
+      n_hits_q05:d.n_hits_q05, R_p:d.R_p,
+      predicted_from_measurability:d.R_p_predicted_from_measurability,
+      residual:d.R_p_residual_after_measurability,
+      passes_measurability_gate:d.passes_measurability_gate,
+      running_r2:AG.r2hist[i]===undefined?null:+AG.r2hist[i].toFixed(4),
+      verdict:verdict(d)[0],
+      proposed_next_experiment:(d.proposal||{{}}).next_experiment||null
+    }})),
+    scope:"Pathway level only. Guide-pair concordance is {CONCORD}, so no "+
+          "gene-level claim is made and no novel gene is named. These are "+
+          "proposals, reported and not endorsed: the predictor behind them "+
+          "failed its own held-out evaluation at {BAL}."
+  }};
+  const blob=new Blob([JSON.stringify(trace,null,2)],{{type:"application/json"}});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="denali-agent-run-"+$("agPolicy").value+".json";
+  a.click(); URL.revokeObjectURL(a.href);
+}};
 </script>
 
 {figure("fig2_gate_failure.png")}

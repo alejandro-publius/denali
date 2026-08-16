@@ -146,6 +146,40 @@ def audit(sizes, hits, corr=None) -> dict:
             "Set size does not explain much of this ranking. That is the good "
             "case, and it is worth stating explicitly -- most published set-level "
             "rankings never check.")
+    # Does one enormous entry carry the whole verdict?
+    #
+    # Real case, found by running this on a published screen rather than on a
+    # fixture: a pooled library pools every non-targeting guide into one control
+    # pseudo-gene, which then has hundreds of guides where every real gene has
+    # four. On the full 19,326-gene screen that single row is harmless (R^2
+    # 0.0067 with it, 0.0099 without). Take a 130-row slice of the same file and
+    # it becomes 0.4137 with and 0.0237 without -- CONFOUNDED, on the strength of
+    # one control row. A tool whose entire argument is that rankings get carried
+    # by arithmetic cannot itself hand out a verdict carried by one point and say
+    # nothing. Nothing is dropped; the dependence is reported.
+    extreme = s >= 10.0 * float(np.median(s)) if np.median(s) > 0 else np.zeros(n, bool)
+    if extreme.any() and (n - int(extreme.sum())) >= MIN_SETS:
+        r2_without = _r2(s[~extreme], y[~extreme])
+        out["n_extreme_entries"] = int(extreme.sum())
+        out["r2_without_extreme_entries"] = (None if not np.isfinite(r2_without)
+                                             else round(r2_without, 4))
+        def _band(v):
+            if not np.isfinite(v): return "UNDETERMINED"
+            return ("CONFOUNDED" if v >= CONFOUNDED
+                    else "PARTIALLY CONFOUNDED" if v >= PARTIAL else "NOT SIZE-DOMINATED")
+        if _band(r2_without) != out["verdict"]:
+            out["verdict_depends_on_extreme_entries"] = True
+            k_x = int(extreme.sum())
+            out["caution"] = (
+                f"This verdict rests on {k_x} "
+                f"{'entry' if k_x == 1 else 'entries'} at least 10x "
+                f"the median size. Without {'it' if k_x == 1 else 'them'} "
+                f"the same check returns "
+                f"{_band(r2_without)} (R^2 {out['r2_without_extreme_entries']}). In a "
+                "pooled library that entry is usually the non-targeting control "
+                "pseudo-gene rather than a set of interest. Nothing has been dropped "
+                "-- decide which table you meant to audit, and rerun.")
+
     out["what_this_is_not"] = (
         "Not a candidate list and not a recommendation. This measures a property "
         "of the ranking, not of any gene or pathway in it.")

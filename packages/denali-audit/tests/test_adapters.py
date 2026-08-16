@@ -175,3 +175,79 @@ def test_approximate_inputs_carry_their_warning_into_the_result(name):
     m = detect(read(name))
     assert m.approximate and len(m.note) > 40
     assert "stand-in" in m.note
+
+
+# ------------------------------------------------- a REAL screen, not a mock
+# fixtures/mageck_real_slice.txt is every 150th row of the RRA gene_summary.txt
+# published with MAGeCKFlute (Liu lab, DFCI), plus the control pseudo-gene, kept
+# whole: real column names, real guide counts, real hit counts. The synthetic
+# fixtures above pin the FORMAT. These pin what the tool actually says when the
+# input was not built to make a point.
+
+def test_real_screen_is_read_without_flags():
+    m = detect(read("mageck_real_slice.txt"))
+    assert m.fmt == "MAGeCK (gene_summary)"
+    assert not m.approximate
+
+
+def test_real_screen_flags_the_control_pseudo_gene_as_high_leverage():
+    """One row pools every non-targeting guide and is 245x a normal gene. It is
+    a lever on a straight-line fit, so it is named. It is not removed."""
+    m = detect(read("mageck_real_slice.txt"))
+    assert "10x the median size or more" in m.note
+    assert "Nothing is dropped" in m.note
+
+
+def test_one_control_row_can_manufacture_a_verdict_and_the_tool_says_so():
+    """The finding that came from running this on a real file instead of a mock.
+
+    A pooled library pools every non-targeting guide into one control
+    pseudo-gene, so that row has hundreds of guides where every real gene has
+    four. On the FULL published screen (19,326 genes) it is harmless: R^2 0.0067
+    with it, 0.0099 without. On this 130-row slice of the same file it carries
+    the fit -- 0.4137 with, 0.0237 without -- and flips the verdict to
+    CONFOUNDED. A tool arguing that rankings get carried by arithmetic must not
+    hand out a verdict carried by one point in silence.
+    """
+    df = read("mageck_real_slice.txt")
+    m = detect(df)
+    r = audit(m.size, m.hits)
+    assert r["verdict"] == "CONFOUNDED"
+    assert r["verdict_depends_on_extreme_entries"] is True
+    assert r["r2_without_extreme_entries"] < 0.20
+    assert "Nothing has been dropped" in r["caution"]
+    assert "1 entry at least 10x" in r["caution"], "must not read 'entry(ies)'"
+
+
+def test_the_same_check_is_quiet_when_no_entry_dominates():
+    """The caution must be earned. On sets of comparable size -- which is what
+    every enrichment format produces -- none of this machinery fires at all."""
+    import numpy as np
+    rng = np.random.default_rng(7)
+    size = rng.integers(10, 600, 40)                  # sets of comparable size
+    hits = np.clip(size * 0.08 + rng.normal(0, 3.0, 40), 0, None).round()
+    r = audit(size, hits)
+    assert "caution" not in r
+    assert "n_extreme_entries" not in r
+
+
+def test_a_standard_library_is_not_size_confounded_at_the_gene_level():
+    """The uncomfortable one, and the reason it is written down.
+
+    A pooled library gives nearly every real gene the same number of guides by
+    design, so at the GENE level there is very little for set size to explain.
+    The full published screen this fixture came from returns R^2 0.0067, NOT
+    SIZE-DOMINATED. denali's 46% headline is a PATHWAY-level result, where set
+    sizes span an order of magnitude. docs/USERS.md hedges the "run it the
+    moment your screen finishes" claim for exactly this reason; if this ever
+    changes, revisit that document.
+
+    Measured here on the slice with the control row excluded, which is the
+    honest comparison: the slice WITH it is a leverage artefact, tested above.
+    """
+    df = read("mageck_real_slice.txt")
+    real = df[df["num"] < 100]
+    r = audit(real["num"], real["neg|goodsgrna"])
+    assert r["verdict"] == "NOT SIZE-DOMINATED"
+    assert r["r2_size_alone"] < 0.10
+    assert "does not explain much" in r["what_to_do"]

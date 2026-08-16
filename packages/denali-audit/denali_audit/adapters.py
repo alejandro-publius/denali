@@ -107,6 +107,35 @@ def _fgsea(df):
     return None
 
 
+def _outlier_note(size: pd.Series) -> str:
+    """Flag a single set that dwarfs the rest.
+
+    Found on a real screen, not imagined: MAGeCKFlute's published RRA output has
+    19,325 genes with 1-4 guides and one row, `NO_CURRENT`, with 979 -- a control
+    pseudo-gene pooling every non-targeting guide. It is 245x a normal gene and
+    sits alone at the far end of the x axis, which is the definition of a
+    high-leverage point in a straight-line fit. On that screen it barely moves
+    the answer (0.0067 vs 0.0099 without it, both NOT SIZE-DOMINATED); on a
+    smaller or noisier one it could carry the fit by itself.
+
+    It is reported, never dropped. Silently deleting rows from a check about
+    silently invented inputs would be the same sin twice.
+    """
+    s = pd.to_numeric(size, errors="coerce").dropna()
+    if len(s) < 3:
+        return ""
+    med = s.median()
+    top = s.max()
+    if med > 0 and top >= 10 * med:
+        n = int((s >= 10 * med).sum())
+        return (f". NOTE: {n} of {len(s)} entries are 10x the median size or more "
+                f"(largest {int(top)} vs median {int(med)}). In a pooled library that "
+                "is usually the non-targeting control pseudo-gene, and it is a "
+                "high-leverage point in this fit. Nothing is dropped -- rerun with "
+                "that row removed and see whether the verdict holds")
+    return ""
+
+
 def _mageck(df):
     """MAGeCK `mageck test` gene_summary.txt — the file a screener is actually
     holding when the screen finishes, before any enrichment step has run.
@@ -127,6 +156,7 @@ def _mageck(df):
     if size.nunique(dropna=True) == 1:
         note += (". Guides-per-gene is constant in this library, so guide count "
                  "cannot explain this ranking — the audit will say so")
+    note += _outlier_note(size)
     return Mapping("MAGeCK (gene_summary)", _col(df, "id"),
                    size, pd.to_numeric(df[_col(df, "neg|goodsgrna")], errors="coerce"),
                    note=note)

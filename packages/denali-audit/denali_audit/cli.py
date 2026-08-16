@@ -49,6 +49,8 @@ def _emit(result, as_json: bool, header: str = "") -> None:
             print(f"  with inter-gene correlation (full VIF): R2 {result['r2_vif']}")
         if result.get("sets_with_zero_hits"):
             print(f"  {result['sets_with_zero_hits']} sets returned nothing")
+        if result.get("caution"):
+            print(f"\n  ⚠ ONE ENTRY IS CARRYING THIS\n  {result['caution']}")
         if "corpus_percentile" in result:
             print(f"\n  AGAINST THE FIELD\n  {result['corpus_reading']}")
             print(f"  {result['corpus_caveat']}")

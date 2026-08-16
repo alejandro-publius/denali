@@ -36,13 +36,28 @@ stage, not seven.
 ### Beat 2, precisely
 
 1. Land on `#loop`. The panel is already there — do not scroll past it and come back.
-2. Press **Run**. Do not narrate the loading; say the policy line while it runs.
+2. Press **Run** once. Do not narrate the loading; say the policy line while it runs.
 3. Let it **halt on its own.** Do not press stop. The halt is the beat.
 4. Point at the overstatement line — *stopping early overstated its own answer by 0.081* — and say that sentence out loud. It is the single most on-track sentence in the talk.
 
-If the panel does not start within three seconds, say *"it halts at ten of
-fifty — here's the recorded run"* and cut to `docs/img/agent-loop.png`. Do not
-press Run twice in front of judges.
+**Measured on the deployed page**, default settings (policy `coverage`,
+tolerance `0.01`):
+
+| | |
+|---|---|
+| Idle → `HALTED` | **4.2 s** |
+| Stops at | **10 of 50 visited** |
+| Reports | R² **0.863** on what it read · **0.782** over all 50 · gap **0.081** |
+| Log | 55 lines; the overstatement sentence is in the last six |
+| External fetches | **0** · JS errors **0** |
+
+Four seconds is long enough to keep talking through and short enough that you
+must not pause for it. **Say the policy sentence while it runs**, and it will
+halt roughly as you finish.
+
+If it has not halted by ten seconds, say *"it halts at ten of fifty — here's the
+recorded run"* and cut to `docs/img/agent-loop.png`. **Do not press Run twice in
+front of judges.**
 
 ---
 

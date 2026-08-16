@@ -397,6 +397,8 @@ We also checked the obvious fix. If you filter out poorly-measured pathways, you
 
 Because the expensive mistake in this field is not missing a hit. It is **chasing one that was never there.** A false lead costs a year of a graduate student's life and a grant cycle.
 
+That has a published price. Freedman, Cockburn & Simcoe put the cumulative prevalence of irreproducible preclinical research **above 50%**, costing roughly **US$28 billion a year in the United States alone** ([PLOS Biology 2015](https://doi.org/10.1371/journal.pbio.1002165)). We quote it the way it should be quoted: it aggregates several categories of irreproducibility, not only false leads from screens, and it is contested at the margins — but it is the standard citation and the right order of magnitude. denali does not address all of that. It addresses one mechanism inside it, and it measures how much that mechanism costs on a real screen instead of asserting that it matters.
+
 denali is a cheap check that runs before that decision. It does not find new drug targets and does not claim to. It tells you which parts of your ranking are measurement artifacts, and it proposes a next experiment that **changes when your results change** — if a pathway comes back empty it tells you to raise statistical power and re-run; if it comes back strong it tells you to validate in a second, independently screened cell type.
 
 It is a tool for deciding what *not* to chase. That is unglamorous, and it is where the money goes.

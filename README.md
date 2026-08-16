@@ -14,7 +14,7 @@ pip install -e packages/denali-audit
 denali audit my_results.csv
 ```
 
-No column renaming. It reads **g:Profiler, DAVID, clusterProfiler, Enrichr/GSEApy, fgsea and GSEA desktop** output as-is — `denali formats` lists them — because the reason a check like this never gets run is that it asks you to reshape your data first.
+No column renaming. It reads **ten formats** as-is — g:Profiler, DAVID, clusterProfiler, Enrichr/GSEApy, MAGeCK `gene_summary`, fgsea, GSEA desktop, drugZ, BAGEL2 and this project's own output; `denali formats` lists them. Four of the ten report no per-set hit count, so the tool stands one in and **prints an APPROXIMATE flag above the verdict** rather than hiding the substitution. The reason any of this matters is that a check which asks you to reshape your data first is a check nobody runs.
 
 What comes back is a verdict, a percentile against **1,272 published screens**, and a correction:
 
@@ -184,7 +184,7 @@ Also measured: essentiality density is flat at program level, coefficient **−0
 
 - **An agent that chooses its own next step and halts on its own** — it picks which program to read by a stated policy, updates a running estimate, emits a next experiment, and stops when the estimate stops moving. Change the policy or the halt rule and it visits different programs and stops elsewhere. On halting it reports that stopping early **overstated its own answer by 0.081**, and names the gap
 - **A next experiment that changes when the results change** — zero hits proposes raising statistical power and re-running; a strong result proposes pathway-level validation in a second cell type. No branch tests a program name
-- **A packaged CLI anyone can install** — `pip install -e packages/denali-audit` puts `denali` on PATH with four subcommands: `audit` (verdict + corpus percentile), `rerank` (apply the correction, see what leaves your top N), `replication` (two screens agreed — how much of that is set size?) and `formats` (the six tool outputs read without renaming a column). `core.py` is this repository's own maths vendored verbatim, and a test requires it to return exactly **0.4649** on the frozen research data, so the tool and the paper cannot drift apart
+- **A packaged CLI anyone can install** — `pip install -e packages/denali-audit` puts `denali` on PATH with four subcommands: `audit` (verdict + corpus percentile), `rerank` (apply the correction, see what leaves your top N), `replication` (two screens agreed — how much of that is set size?) and `formats` (the ten tool outputs read without renaming a column, four of them flagged approximate on the verdict itself). `core.py` is this repository's own maths vendored verbatim, and a test requires it to return exactly **0.4649** on the frozen research data, so the tool and the paper cannot drift apart
 - **The check runs on other people's screens, and here it is doing so** — `src/audit_screen.py` takes any gene-set results table and reports the same estimate; validated against synthetic screens with known answers, and it reproduces our own figure exactly. [`audits/external/`](audits/external/README.md) is the same command run unchanged on the published supplementary tables of **seven studies we did not run and did not choose** — CRISPR-KO, CRISPRi/a, single-cell CRISPRa, organoid, primary T cell and bulk RNA-seq — where **36–88%** of each ranking is explained by set construction alone. One comes back only partially confounded and one candidate table was refused for having no true hit count, so the auditor discriminates rather than flagging everything
 - **Genome-scale sweep** — every one of 9,837 knockdown targets scored against all 50 Hallmark programs, 491,850 cells; the full matrix ships in the repo rather than a filtered top-N
 - **Rank-based reversal statistic** — Mann–Whitney of program-member effects against the rest of the transcriptome, per perturbation, with cosine similarity and mean effect size reported alongside so no single number carries the claim
@@ -236,11 +236,20 @@ flowchart TB
   FROZEN --> BENCH["benchmarks/denali-gate-trap<br/>our finding, as a task for other agents"]
   FROZEN --> AUD2["src/audit_screen.py<br/>the same check, on anyone's screen"]
   AUD2 --> PKG["packages/denali-audit 📦<br/>pip installable · core.py vendored verbatim"]
-  FROZEN --> REF["denali_audit/reference.py<br/>1,272 published screens → percentile"]
-  REF --> DA
-  PKG --> DA["denali audit<br/>6 formats auto-detected · verdict + percentile"]
+  PKG --> DA["denali audit<br/>10 formats auto-detected · verdict + percentile"]
   DA --> DR["denali rerank<br/>applies the correction · 3 of our top 10 hold"]
   PKG -.->|"anti-drift test: audit() on the frozen<br/>data must return 0.4649 or CI fails"| FROZEN
+
+  ORCS["BioGRID ORCS 2.0.18<br/>1,952 human screens · 418 publications"] --> CORP
+  CORP["src/corpus_audit.py<br/>eval 10 · 1,272 screens meet the rule"] --> CRES
+  CRES["results/corpus/<br/>median 0.224 · ours above the 90th pct"] --> REF
+  REF["denali_audit/reference.py<br/>the corpus, embedded → percentile"] --> DA
+  CRES --> CRR["src/corpus_rerank.py<br/>post-hoc · imports the shipped rerank()"]
+  PKG -.->|"the same correction, run on<br/>the literature rather than on us"| CRR
+  CRR --> CRRES["results/corpus_rerank/<br/>median screen keeps 9 of 10; we keep 3"]
+
+  REP --> IND["src/independent_recompute.py<br/>reimplemented from the method section,<br/>never from the code"]
+  IND -.->|"scipy · statsmodels at every step<br/>agrees to 0.000049 · asserted by the suite"| FROZEN
   FROZEN --> RP["src/rpe1_arm.py 🔒<br/>eval 5 · 2nd cell line, pre-registered"]
   RP --> CONC["src/concordance.py<br/>eval 6 · 26% of 'it replicated' is set size"]
   FROZEN --> CONC
@@ -271,6 +280,11 @@ flowchart TB
   style DA fill:#eef4ea,stroke:#3d6b2e,stroke-width:2px
   style DR fill:#eef4ea,stroke:#3d6b2e,stroke-width:2px
   style REF fill:#f7f7f8,stroke:#8c8c89
+  style CORP fill:#fff,stroke:#1a4d7a,stroke-width:2px
+  style CRES fill:#f7f7f8,stroke:#8c8c89
+  style CRR fill:#fff,stroke:#1a4d7a,stroke-width:2px
+  style CRRES fill:#f7f7f8,stroke:#8c8c89
+  style IND fill:#fff,stroke:#1a4d7a,stroke-width:2px
 ```
 
 **The freeze boundary is the load-bearing part.** `results/frozen/` is written once per run and read by everything downstream; nothing after it recomputes. The predictor is fit on the 50 scored programs, serialised, and **hashed** — and only then are the ten held-out programs scored, with `src/score_heldout.py` verifying the hash at load and aborting on mismatch. Scoring them before the freeze would have let the model see its own test set; scoring them after means the failure it produced is a real failure.
@@ -282,6 +296,8 @@ flowchart TB
 **The dashed edges are claims you can check, and there are now four of them.** Modal points *into* `results/frozen/` rather than out of it: `src/modal_sweep.py` re-runs the sweep across ten containers and reproduces all 50 programs identically, so it verifies the frozen result without being allowed to produce it — it is deliberately not a `make all` step, and a test asserts that. The VIF edge points *outward*, to a statistical result published in 2012: our two dominant features turn out to be the two terms of CAMERA's variance-inflation factor, which we recovered from data rather than fitted to.
 
 **The packaged tool is drawn downstream of the freeze, with one edge pointing back.** `packages/denali-audit` is what a stranger installs, and it is not a rewrite: `core.py` is the study's own maths vendored verbatim, `reference.py` carries the 1,272-screen corpus so an audit can say where a ranking sits rather than only what its R² is, and `denali rerank` applies the correction. The dashed edge back into `results/frozen/` is the claim that makes the whole arrangement honest — **a test runs the packaged `audit()` against the frozen research data and requires exactly `0.4649`**, the published headline. If the tool and the paper ever disagree, CI fails rather than the two quietly diverging and the README continuing to cite a number the shipped code no longer produces. That is the difference between a tool that came out of a study and a tool that merely resembles one.
+
+**The two strongest validation artifacts are now drawn, because leaving them out flattered the diagram.** The first is the corpus: `src/corpus_audit.py` reads BioGRID ORCS 2.0.18, keeps the 1,272 screens that meet a stated inclusion rule, and writes `results/corpus/` — and the edge that matters runs from there into `denali_audit/reference.py`, because that is where the percentile a stranger sees comes from. Without that edge the tool appears to assert "worse than nine in ten screens" out of nowhere; with it, the claim has a substrate, an inclusion rule and a file. `src/corpus_rerank.py` then takes the *shipped* `rerank()` — imported from the package, not reimplemented — and runs it over the same 1,272 screens, which is why its edge comes from `packages/denali-audit` rather than from the study. The second is `src/independent_recompute.py`, which rebuilt the headline from this README's method section without reading the frozen code, and whose dashed edge into `results/frozen/` is an agreement to 0.000049 that the suite asserts. Both are checks *on* the project rather than steps *in* it, which is exactly why they were the easiest two to forget to draw.
 
 **Paperclip is drawn as a side branch that terminates in the retrieval audit, because that is what it is.** It produced per-gene citations and a blind probe, and those numbers appear on the page — but nothing it generated feeds `matrix.csv`, the predictor, or any frozen result. The per-gene divergence table that once consumed it was withdrawn when guide-pair concordance made per-gene verdicts indefensible.
 
@@ -546,6 +562,33 @@ The suite has caught, in order: a stat bug reporting 5 evidence sources instead 
 3. **One cell line, unstressed.** Everything is K562. Measurable is not the same as engaged, and our gate tested the wrong one.
 4. **The attribution is to gene-set construction, not measurement.** A post-freeze check gives 0.152 for measurement-only against 0.697 for construction-only. Better instrumentation would not move the number.
 5. **Transcriptional movement is not phenotypic reversal.** Computational only — no wet-lab protocols, no dosing, no clinical or therapeutic recommendation.
+
+## Citations
+
+Everything quantitative here rests on data and methods someone else published.
+Nothing in this list was generated by this project, and each entry names what it
+was used **for**, so a reader can check the use rather than only the source.
+
+**Data.**
+
+| Source | Used for | Licence |
+|---|---|---|
+| Replogle et al. 2022, genome-scale Perturb-seq (K562 and RPE1), figshare `10.25452/figshare.plus.20029387.v1` | The substrate. Every hit count in `results/frozen/` and the RPE1 arm | CC BY 4.0 |
+| DepMap 24Q4, Chronos gene effect across 1,178 lines | The essentiality tier on every row — separating "moves the program" from "kills the cell" | CC BY 4.0 |
+| MSigDB v2026.1.Hs — Hallmark, Reactome, WikiPathways, GO-BP | The 50 programs, the held-out ten, and the 793-set annotation arm | MSigDB terms |
+| BioGRID ORCS 2.0.18, human. Oughtred R et al., *Protein Science* 2021;30(1):187–200, [doi:10.1002/pro.3978](https://doi.org/10.1002/pro.3978) | Evaluation 10's 1,272 published screens, and the percentile the shipped tool reports | MIT |
+| Adamson et al. 2016, UPR Perturb-seq, [doi:10.1016/j.cell.2016.11.048](https://doi.org/10.1016/j.cell.2016.11.048) | Evaluation 9 — the one substrate where engagement can be established rather than assumed | per publisher |
+| Lazzarotto et al. 2020, CHANGE-seq, *Nat Biotechnol*, [doi:10.1038/s41587-020-0555-7](https://doi.org/10.1038/s41587-020-0555-7) | Evaluation 8, arm 1. Not our data; a methods audit of published nominations | per publisher |
+| Cancellieri et al. 2022, CRISPRme, *Nat Genet*, [doi:10.1038/s41588-022-01257-y](https://doi.org/10.1038/s41588-022-01257-y) | Evaluation 8, arm 2. That variants create off-target sites is **their** finding, not ours | per publisher |
+
+**Methods and prior art.** These are the standards this work is judged against
+rather than sources it consumes — see [`docs/LANDSCAPE.md`](docs/LANDSCAPE.md)
+for the full review and [`docs/PRIOR_WORK.md`](docs/PRIOR_WORK.md) for what
+predates the project.
+
+- **Wu & Smyth 2012, CAMERA**, *Nucleic Acids Research* 40(17):e133, [doi:10.1093/nar/gks461](https://doi.org/10.1093/nar/gks461) — `VIF = 1 + (m−1)ρ̄`. Our two dominant features turn out to be its two terms, which we recovered from data before we knew the theory named it. The correction `denali rerank` applies is a cheaper relative of this, and the tool says so in its own output.
+- **Freedman, Cockburn & Simcoe 2015**, *PLOS Biology* 13(6):e1002165, [doi:10.1371/journal.pbio.1002165](https://doi.org/10.1371/journal.pbio.1002165) — irreproducible preclinical research above 50%, ~US$28 bn/yr. Quoted for the order of magnitude and the motivation, not as a measurement of this mechanism.
+- **Gene-length bias in RNA-seq enrichment**, [doi:10.1371/journal.pbio.3000481](https://doi.org/10.1371/journal.pbio.3000481), and **category false-positive rates in spatial brain transcriptomics**, [doi:10.1038/s41467-021-22862-1](https://doi.org/10.1038/s41467-021-22862-1) — the same construction confound, found independently in two fields that share no biology with ours.
 
 ---
 

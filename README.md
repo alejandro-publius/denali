@@ -19,6 +19,10 @@ We scored all **50 MSigDB Hallmark gene programs** against **9,837 CRISPRi knock
 
 There is no hosted instance. `index.html` is a single self-contained file — open it by double-clicking, no server, no network. Everything in it is injected from `results/frozen/` at build time. A Streamlit view of the same frozen data lives in `app.py` (`streamlit run app.py`); both read `results/frozen/` and neither recomputes.
 
+![Running the audit on your own screen, and re-auditing after the fix](docs/img/use-it.png)
+
+*What a user does: audit the ranking they already have, apply the correction the tool names, re-run the identical audit and watch the score drop. Or connect the frozen matrix to their agent — no API key, nothing hosted.*
+
 ![The agent choosing what to read next and halting on its own](docs/img/agent-loop.png)
 
 *The loop, mid-run. It picks each program by a stated policy, halts when its estimate stops moving, and reports that stopping early overstated its own answer by 0.081.*
@@ -134,6 +138,9 @@ flowchart TB
   FROZEN --> VIF["src/vif_camera.py<br/>post-freeze: VIF = 1+(m−1)ρ̄"]
   FROZEN --> BENCH["benchmarks/denali-gate-trap<br/>our finding, as a task for other agents"]
   FROZEN --> AUD2["src/audit_screen.py<br/>the same check, on anyone's screen"]
+  FROZEN --> RP["src/rpe1_arm.py 🔒<br/>2nd cell line, pre-registered"]
+  RP --> CONC["src/concordance.py<br/>26% of 'it replicated' is set size"]
+  FROZEN --> CONC
 
   MOD["src/modal_sweep.py<br/>50 programs / 10 containers"] -.->|"reproduces, does not produce"| FROZEN
   VIF -.->|"external theory<br/>Wu &amp; Smyth 2012"| CAM(["CAMERA"])
@@ -145,6 +152,7 @@ flowchart TB
   style sub fill:#fff,stroke:#e3e3e3,stroke-dasharray:3 3
   style MOD fill:#fff,stroke:#8c8c89,stroke-dasharray:4 3
   style CAM fill:#f2f2f0,stroke:#1a4d7a
+  style RP fill:#fff,stroke:#1a4d7a,stroke-width:2px
 ```
 
 **The freeze boundary is the load-bearing part.** `results/frozen/` is written once per run and read by everything downstream; nothing after it recomputes. The predictor is fit on the 50 scored programs, serialised, and **hashed** — and only then are the ten held-out programs scored, with `src/score_heldout.py` verifying the hash at load and aborting on mismatch. Scoring them before the freeze would have let the model see its own test set; scoring them after means the failure it produced is a real failure.

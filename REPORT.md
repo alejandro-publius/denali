@@ -173,6 +173,44 @@ well their genes were measured. Better instrumentation would not change it.
 
 Full record: `results/sensitivity/README.md`.
 
+## A second cell line, and what replication is worth
+
+**RPE1 arm — pre-registered.** Thresholds fixed and hashed (`ae62feda…`,
+committed `f509baa`) before the sweep ran. The same byte-frozen scorer, only the
+substrate path differs.
+
+| | |
+|---|---|
+| Size alone, in RPE1 | **R² 0.2758**, slope **+0.0116**, p = 1.1×10⁻⁴ |
+| Scoreable | 49 of 50, against a pre-registered floor of 35 |
+| Pre-registered bar | ≥ 0.25 → **REPRODUCES**, claim (a) |
+
+It clears by **0.026**. That is thin and we say so: a slightly noisier screen
+would have missed it. What it supports is that the size effect is a property of
+set-level statistics rather than of K562 alone. It is a **generalisation test,
+not a replication** — RPE1 covers 24.3% of K562's targets and that quarter is
+disproportionately essential genes, our own `rpe1_coverage_collision` control,
+which **FAILS** at 94.1% vs 11.3%.
+
+**Cross-screen concordance — post-freeze, not pre-registered.** Prompted by our
+own landscape review noticing we had no right to claim a number here.
+
+| | |
+|---|---|
+| Raw rank agreement, K562 vs RPE1 | ρ **+0.663**, p = 1.5×10⁻⁷ |
+| After removing set size from both | ρ **+0.493**, p = 2.7×10⁻⁴ |
+| Share of the agreement that is size | **26%** |
+| Top-10 overlap: observed / size alone / chance | **0.8 / 0.6 / 0.2** |
+
+**Six of the top ten programs in an independent cell line are predictable from
+set size alone.** "It replicated in a second system" is the strongest evidence
+most hit lists ever get; both screens are confounded the same way, so agreeing
+for the same wrong reason is indistinguishable from agreeing for the right one
+unless someone checks.
+
+Limits: 50 programs, two cell lines, one lab, one assay. A measurement on these
+two screens, not a general estimate of cross-screen reproducibility.
+
 ## Limitations
 
 Full document: **`docs/LIMITATIONS.md`**. In brief:

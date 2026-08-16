@@ -85,6 +85,7 @@ all: check
 
 test:
 	@$(PY) tests/test_frozen_invariants.py
+	@$(PY) tests/test_cross_surface.py
 
 retrieval:
 	@echo "LIVE API — will NOT reproduce the committed numbers. The indexes change."

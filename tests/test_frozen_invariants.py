@@ -151,6 +151,17 @@ def main() -> int:
         check(f"page makes no network call: {label}",
               not re.search(pat, page, re.I))
     check("explorer data is embedded, not fetched", "const DATA = [" in page)
+    # The page went up on GitHub Pages, which made "there is no hosted instance"
+    # false everywhere it was written. The offline property is still true and is
+    # still the point -- a single static file with everything inlined -- but it
+    # has to be claimed as "no backend", not "not hosted". Nothing was checking
+    # the difference, so the sentence sat there wrong.
+    for label, txt in [("index.html", page),
+                       ("README.md", (ROOT / "README.md").read_text())]:
+        stale = re.search(r"no hosted instance|nothing hosted(?![^.]*MCP)", txt, re.I)
+        ok = stale is None or "mcp" in txt[max(0, stale.start() - 220):stale.end() + 80].lower()
+        check(f"no stale 'not hosted' claim in {label}", ok,
+              txt[max(0, stale.start() - 60):stale.end() + 60].replace("\n", " ") if stale and not ok else "")
     check("all 50 programs embedded in the explorer",
           page.count('"program":"HALLMARK_') == 50,
           f"got {page.count(chr(34) + 'program' + chr(34) + ':' + chr(34) + 'HALLMARK_')}")

@@ -722,9 +722,12 @@ gene-level claim; this is what stops an agent extracting one.</p>
 returns the measured rank, the share measurability alone predicts, the residual,
 and a generated next experiment &mdash; and for a program we never scored it
 volunteers the predictor&rsquo;s own failure before answering. There is deliberately
-no hosted instance and no key to manage: the page you are reading makes zero
-network calls, which is enforced by five tests, and adding a backend would mean
-this demo could fail in front of you.</p>
+no <em>backend</em> and no key to manage: this page is a single static file that
+makes zero network calls, enforced by five tests. It is served from GitHub Pages
+for convenience, and that copy is byte-identical to the file in the repository
+&mdash; downloading it and opening it offline gets you the same page, because
+every figure, font and number is already inlined. A backend would mean this demo
+could fail in front of you.</p>
 </div>
 </section>
 

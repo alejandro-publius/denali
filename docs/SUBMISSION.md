@@ -102,7 +102,7 @@ scaffolding around it.
 - **A byte-frozen scorer.** Every sweep verifies the scorer's sha256 on load and
   aborts if it moved. If that hash changes, the run is not the one these numbers
   came from.
-- **355 automated checks** that hold the prose to the data. The findings table in
+- **356 automated checks** that hold the prose to the data. The findings table in
   the README is the single source of truth; 15 restatements of the count across 7
   files fail the build if any one drifts.
 - **A clean-clone reproduction check.** Clone at a commit, run `make all`,

@@ -174,6 +174,7 @@ Also measured: essentiality density is flat at program level, coefficient **−0
 
 - **An agent that chooses its own next step and halts on its own** — it picks which program to read by a stated policy, updates a running estimate, emits a next experiment, and stops when the estimate stops moving. Change the policy or the halt rule and it visits different programs and stops elsewhere. On halting it reports that stopping early **overstated its own answer by 0.081**, and names the gap
 - **A next experiment that changes when the results change** — zero hits proposes raising statistical power and re-running; a strong result proposes pathway-level validation in a second cell type. No branch tests a program name
+- **A packaged CLI anyone can install** — `pip install -e packages/denali-audit` puts `denali` on PATH with four subcommands: `audit` (verdict + corpus percentile), `rerank` (apply the correction, see what leaves your top N), `replication` (two screens agreed — how much of that is set size?) and `formats` (the six tool outputs read without renaming a column). `core.py` is this repository's own maths vendored verbatim, and a test requires it to return exactly **0.4649** on the frozen research data, so the tool and the paper cannot drift apart
 - **The check runs on other people's screens, and here it is doing so** — `src/audit_screen.py` takes any gene-set results table and reports the same estimate; validated against synthetic screens with known answers, and it reproduces our own figure exactly. [`audits/external/`](audits/external/README.md) is the same command run unchanged on the published supplementary tables of **seven studies we did not run and did not choose** — CRISPR-KO, CRISPRi/a, single-cell CRISPRa, organoid, primary T cell and bulk RNA-seq — where **36–88%** of each ranking is explained by set construction alone. One comes back only partially confounded and one candidate table was refused for having no true hit count, so the auditor discriminates rather than flagging everything
 - **Genome-scale sweep** — every one of 9,837 knockdown targets scored against all 50 Hallmark programs, 491,850 cells; the full matrix ships in the repo rather than a filtered top-N
 - **Rank-based reversal statistic** — Mann–Whitney of program-member effects against the rest of the transcriptome, per perturbation, with cosine similarity and mean effect size reported alongside so no single number carries the claim
@@ -384,7 +385,8 @@ and the outputs land byte-identical — but it is not what you asked for.
 | the whole pipeline | `make all` |
 | the tests | `make test` |
 | the page | `make page` |
-| **to audit your own screen** | `python -m src.audit_screen --help` — the one real CLI |
+| **to audit your own screen** | `denali audit` — the packaged CLI, see the top of this file |
+| the same check without installing | `python -m src.audit_screen --help` — the in-repo original |
 | a next-experiment proposal | `python -m src.next_experiment --demo` |
 | the MCP server | `python -m src.mcp_server` |
 

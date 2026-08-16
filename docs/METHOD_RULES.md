@@ -73,7 +73,7 @@ parse the same identifiers into different gene counts, and an essentiality
 statistic averaged over 1,178 cell lines that disagrees with the one line we
 actually used. Each was found by checking, not by assuming.
 
-**Preserve negatives.** Four of seven evaluations here are negative and all seven
+**Preserve negatives.** Five of eight evaluations here are negative and all eight
 are reported. A null from working machinery is a finding; the positive control
 is what makes it one.
 

@@ -1,13 +1,13 @@
 # Demo — under 3 minutes spoken
 
 **Read the bold. The rest is stage direction.** `[pause]` = stop, let the screen carry it.
-**The repeated number is FOUR OF SEVEN.** Say it in the first sentence and the last.
+**The repeated number is FIVE OF EIGHT.** Say it in the first sentence and the last.
 
 ---
 
 ## OPEN
 
-> ### **"We ran seven evaluations on this project. Four of them came back negative. We're reporting all seven, and the four negatives are the reason the positive control is worth anything."**
+> ### **"We ran eight evaluations on this project. Five of them came back negative. We're reporting all eight, and the five negatives are the reason the positive control is worth anything."**
 
 `[pause — 2 beats]`
 
@@ -96,7 +96,7 @@
 
 ## CLOSE
 
-> **"Four of seven evaluations negative. Every one reported, and the ones that were not pre-registered say so. Scope is pathway-level only — concordance is minus nought-one-nine, so we name no novel gene anywhere in this project. Everything is frozen with a data dictionary, and the failures are in the repo next to the results. Take it apart."**
+> **"Five of eight evaluations negative. Every one reported, and the ones that were not pre-registered say so. Scope is pathway-level only — concordance is minus nought-one-nine, so we name no novel gene anywhere in this project. Everything is frozen with a data dictionary, and the failures are in the repo next to the results. Take it apart."**
 
 ---
 

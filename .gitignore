@@ -8,6 +8,8 @@ __pycache__/
 # --- large public raw data: re-downloadable, see docs/DATASETS.md ---
 data/raw/
 data/validation_raw/
+# published supplementary workbooks for evaluation 8; URLs in docs/OFFTARGET.md
+data/offtarget/
 
 # --- OS / editor ---
 .DS_Store

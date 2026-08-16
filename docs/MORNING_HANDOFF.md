@@ -13,10 +13,10 @@ claims. Remaining work is communication and hardening only.
 We scored all 50 MSigDB Hallmark gene programs against 9,837 CRISPRi knockdowns
 in K562 and asked which programs are "reversible" — i.e. which have many
 knockdowns that move them. **Most of the answer turns out to be measurement, not
-biology.** Seven evaluations were run, four came back negative, and all seven are
+biology.** Eight evaluations were run, five came back negative, and all eight are
 reported.
 
-## 2. The seven results
+## 2. The eight results
 
 | | Result | Verdict |
 |---|---|---|

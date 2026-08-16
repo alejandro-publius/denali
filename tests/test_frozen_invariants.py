@@ -396,6 +396,91 @@ def main() -> int:
     check("audit reproduces our own frozen size-alone value",
           near(audit(summary.n_present, summary.n_hits_q05)["r2_size_alone"],
                sens["set_size_alone"]["r2"], 5e-3))
+
+    # ---------------- G2. evaluation 8, the off-target arm ----------------
+    # Two published datasets, neither ours. The source workbooks are git-ignored,
+    # so these checks are skipped on a clone that has not fetched them -- but the
+    # committed JSON is always checked for labelling, and the numbers are
+    # recomputed from the sheets whenever they are present.
+    off_p = ROOT / "results" / "offtarget" / "offtarget_evaluation.json"
+    if off_p.exists():
+        off = json.loads(off_p.read_text())
+        a1, a2 = off["arm1_assay_concordance"], off["arm2_variant_driven_sites"]
+
+        check("offtarget: labelled post-hoc with thresholds swept",
+              "POST-HOC" in off["status"] and "SWEPT" in off["status"],
+              off["status"])
+        check("offtarget: does not revise the frozen primary",
+              "results/frozen/" in off["does_not_revise"])
+
+        # the sweep must actually be a sweep, not one threshold with a range glued on
+        shares = [s["share_of_agreement_that_is_search_yield"]
+                  for s in a1["sweep"] if "share_of_agreement_that_is_search_yield" in s]
+        check("offtarget: every hit rule in the sweep produced a result",
+              len(shares) == len(a1["hit_rules_swept"]),
+              f"{len(shares)} of {len(a1['hit_rules_swept'])} rules scored")
+        rng_ = a1["share_of_agreement_that_is_search_yield"]
+        check("offtarget: the reported share range spans the whole sweep",
+              near(rng_["min"], min(shares), 1e-9) and near(rng_["max"], max(shares), 1e-9),
+              f"reported {rng_['min']}-{rng_['max']} vs sweep {min(shares)}-{max(shares)}")
+
+        # The tautological direction must stay disclosed. It is the number this
+        # arm would have overstated itself with: at the lowest thresholds a
+        # nominated site with >=1 read is a hit by construction, so R2 is exactly 1.
+        taut = a1["r2_tautological_biochemical_direction"]
+        check("offtarget: the circular regression is disclosed, not dropped",
+              "a_tautology_we_refused_to_report" in a1 and len(taut) == len(shares))
+        check("offtarget: the circular direction really is degenerate",
+              max(taut) >= 0.99 and max(taut) > max(
+                  s["r2_search_yield_predicts_cellular_hits"] for s in a1["sweep"]
+                  if "r2_search_yield_predicts_cellular_hits" in s),
+              f"tautological max {max(taut)}")
+
+        # arm 2: the two fractions are different quantities and must stay separate
+        alt, absent = a2["alt_allele_best_alignment"], a2["absent_from_reference"]
+        check("offtarget: alt-allele and absent-from-reference are reported apart",
+              alt["fraction"] > absent["fraction"] * 2,
+              f"{alt['fraction']} vs {absent['fraction']}")
+        check("offtarget: the ranked denominator is stated",
+              "RANKED SELECTION" in a2["denominator_warning"])
+        check("offtarget: recovering CRISPRme's own finding is not called new",
+              "not a discovery" in a2["not_a_discovery"].lower()
+              or "is not presented as new" in a2["not_a_discovery"])
+
+        # no guide may be named safe or unsafe -- the gene-symbol scope rule,
+        # applied to guides, in a domain where the ranking has a patient at the end
+        # Same shape as the gene-symbol guard: a verdict word is only a violation
+        # when it is NOT sitting inside a refusal. The disclaimers necessarily
+        # contain the words they forbid.
+        blob = json.dumps(off).lower()
+        SAFEWORD = re.compile(r"\b(safe|unsafe|safest|riskiest|recommend\w*|"
+                              r"best guide|worst guide|use this guide)\b")
+        REFUSAL = re.compile(r"(no guide is named|named safe or unsafe|would be "
+                             r"committing|not a recommendation|none is ranked|"
+                             r"not verdicts|refus\w+)")
+        bad = [m.group(0) for m in SAFEWORD.finditer(blob)
+               if not REFUSAL.search(blob[max(0, m.start() - 200):m.end() + 200])]
+        check("offtarget: no guide is named safe or unsafe", not bad, str(bad[:3]))
+
+        # --- recompute from the source sheets when they are present ---
+        sheets = ROOT / "data" / "offtarget" / "crisprme.xlsx"
+        if sheets.exists():
+            xl = pd.ExcelFile(sheets)
+            tot = alt_n = abs_n = 0
+            for s in xl.sheet_names:
+                d = pd.read_excel(xl, sheet_name=s)
+                tot += len(d)
+                alt_n += int((d["REF/ALT_origin_(highest_CFD)"]
+                              .astype(str).str.strip().str.lower() == "alt").sum())
+                abs_n += int((d["Not_found_in_REF"]
+                              .astype(str).str.strip().str.lower() == "y").sum())
+            check("offtarget: the alt-allele fraction recomputes from the sheets",
+                  alt_n == alt["n"] and near(alt_n / tot, alt["fraction"], 5e-4),
+                  f"recomputed {alt_n}/{tot}={alt_n / tot:.4f} vs "
+                  f"{alt['n']}/{a2['sites_ranked_total']}={alt['fraction']}")
+            check("offtarget: the absent-from-reference fraction recomputes",
+                  abs_n == absent["n"] and near(abs_n / tot, absent["fraction"], 5e-4),
+                  f"recomputed {abs_n}/{tot}={abs_n / tot:.4f} vs {absent['fraction']}")
     check("audit refuses to rank or recommend",
           "not a candidate list" in conf["what_this_is_not"].lower()
           and not any("rank_" in k or k == "top" for k in conf))

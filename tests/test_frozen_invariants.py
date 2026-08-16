@@ -492,6 +492,39 @@ def main() -> int:
         check("offtarget: both source workbooks are pinned by sha256",
               len(re.findall(r"\b[0-9a-f]{64}\b", offdoc)) >= 2,
               f"found {len(re.findall(r'[0-9a-f]{64}', offdoc))} hashes in docs/OFFTARGET.md")
+
+        # --- ported from the offtarget-arm branch before deleting it ---
+        # That branch was a parallel preservation of this same arm (identical
+        # JSON, script and both CSVs), so it was not merged. These three checks
+        # were the part of it this suite did not already have.
+
+        # The JSON promises it does not revise the freeze. This checks the CODE
+        # cannot: every write call in the arm must target OUT. Searching for the
+        # bare path would fire on the honest does_not_revise disclosure, which
+        # names results/frozen/ deliberately -- so inspect the writes, not the
+        # mentions.
+        arm_src = (ROOT / "src" / "offtarget_audit.py").read_text()
+        writes = [ln.strip() for ln in arm_src.splitlines()
+                  if any(w in ln for w in ("to_csv(", "write_text(", "to_json(",
+                                           "savefig(", "open("))]
+        stray = [ln for ln in writes if "OUT /" not in ln]
+        check("offtarget: every write in the arm targets results/offtarget/",
+              bool(writes) and not stray,
+              " | ".join(ln[:60] for ln in stray) or f"{len(writes)} writes, all to OUT")
+
+        # The JSON and the CSV are two renderings of one sweep. If they drift,
+        # a reader gets a different answer depending on which file they open.
+        sweep_csv = pd.read_csv(ROOT / "results" / "offtarget" / "changeseq_sweep.csv")
+        json_thr = [r["read_threshold"] for r in a1["sweep"]]
+        json_shr = [r["share_of_agreement_that_is_search_yield"] for r in a1["sweep"]]
+        check("offtarget: the JSON sweep and the sweep CSV agree row-for-row",
+              json_thr == sweep_csv.read_threshold.tolist()
+              and all(near(a, b, 1e-9) for a, b in
+                      zip(json_shr, sweep_csv.share_of_agreement_that_is_search_yield)),
+              f"json {json_thr} vs csv {sweep_csv.read_threshold.tolist()}")
+        check("offtarget: the swept rules in the JSON match the declared rules",
+              json_thr == a1["hit_rules_swept"],
+              f"sweep {json_thr} vs declared {a1['hit_rules_swept']}")
     check("audit refuses to rank or recommend",
           "not a candidate list" in conf["what_this_is_not"].lower()
           and not any("rank_" in k or k == "top" for k in conf))

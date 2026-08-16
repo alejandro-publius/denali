@@ -224,6 +224,12 @@ flowchart TB
   FROZEN --> VIF["src/vif_camera.py<br/>post-freeze: VIF = 1+(m−1)ρ̄"]
   FROZEN --> BENCH["benchmarks/denali-gate-trap<br/>our finding, as a task for other agents"]
   FROZEN --> AUD2["src/audit_screen.py<br/>the same check, on anyone's screen"]
+  AUD2 --> PKG["packages/denali-audit 📦<br/>pip installable · core.py vendored verbatim"]
+  FROZEN --> REF["denali_audit/reference.py<br/>1,272 published screens → percentile"]
+  REF --> DA
+  PKG --> DA["denali audit<br/>6 formats auto-detected · verdict + percentile"]
+  DA --> DR["denali rerank<br/>applies the correction · 3 of our top 10 hold"]
+  PKG -.->|"anti-drift test: audit() on the frozen<br/>data must return 0.4649 or CI fails"| FROZEN
   FROZEN --> RP["src/rpe1_arm.py 🔒<br/>eval 5 · 2nd cell line, pre-registered"]
   RP --> CONC["src/concordance.py<br/>eval 6 · 26% of 'it replicated' is set size"]
   FROZEN --> CONC
@@ -250,6 +256,10 @@ flowchart TB
   style ANN fill:#fff,stroke:#1a4d7a,stroke-width:2px
   style ARES fill:#f7f7f8,stroke:#8c8c89
   style ORES fill:#f7f7f8,stroke:#8c8c89
+  style PKG fill:#eef4ea,stroke:#3d6b2e,stroke-width:2px
+  style DA fill:#eef4ea,stroke:#3d6b2e,stroke-width:2px
+  style DR fill:#eef4ea,stroke:#3d6b2e,stroke-width:2px
+  style REF fill:#f7f7f8,stroke:#8c8c89
 ```
 
 **The freeze boundary is the load-bearing part.** `results/frozen/` is written once per run and read by everything downstream; nothing after it recomputes. The predictor is fit on the 50 scored programs, serialised, and **hashed** — and only then are the ten held-out programs scored, with `src/score_heldout.py` verifying the hash at load and aborting on mismatch. Scoring them before the freeze would have let the model see its own test set; scoring them after means the failure it produced is a real failure.
@@ -259,6 +269,8 @@ flowchart TB
 **`src/freeze_proposals.py` is drawn as the only writer of `proposals.json` because that turned out to matter.** The three generated proposals the page renders are produced by `src/next_experiment.py` and serialised once by that script. It went stale — the generator gained a falsification field and the artifact was never rewritten — and because nothing checked the artifact against its generator, `make all` on a clean clone silently rewrote it and made the byte-identical reproduction claim false while every other test stayed green. The edge back into `results/frozen/` now carries that check.
 
 **Two edges are dashed on purpose, and both are claims you can check.** Modal points *into* `results/frozen/` rather than out of it: `src/modal_sweep.py` re-runs the sweep across ten containers and reproduces all 50 programs identically, so it verifies the frozen result without being allowed to produce it — it is deliberately not a `make all` step, and a test asserts that. The VIF edge points *outward*, to a statistical result published in 2012: our two dominant features turn out to be the two terms of CAMERA's variance-inflation factor, which we recovered from data rather than fitted to.
+
+**The packaged tool is drawn downstream of the freeze, with one edge pointing back.** `packages/denali-audit` is what a stranger installs, and it is not a rewrite: `core.py` is the study's own maths vendored verbatim, `reference.py` carries the 1,272-screen corpus so an audit can say where a ranking sits rather than only what its R² is, and `denali rerank` applies the correction. The dashed edge back into `results/frozen/` is the claim that makes the whole arrangement honest — **a test runs the packaged `audit()` against the frozen research data and requires exactly `0.4649`**, the published headline. If the tool and the paper ever disagree, CI fails rather than the two quietly diverging and the README continuing to cite a number the shipped code no longer produces. That is the difference between a tool that came out of a study and a tool that merely resembles one.
 
 **Paperclip is drawn as a side branch that terminates in the retrieval audit, because that is what it is.** It produced per-gene citations and a blind probe, and those numbers appear on the page — but nothing it generated feeds `matrix.csv`, the predictor, or any frozen result. The per-gene divergence table that once consumed it was withdrawn when guide-pair concordance made per-gene verdicts indefensible.
 

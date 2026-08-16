@@ -585,6 +585,31 @@ def main() -> int:
         check("replication auditor refuses too few paired sets",
               _raises(audit_replication, [1, 2, 3], [1, 2, 3], [1, 2, 3]))
 
+    # ---------------- Q. the user-facing loop actually closes ----------------
+    # The page claims: audit says CONFOUNDED, you apply the correction it names,
+    # you re-audit and the score drops to zero. That is the product's whole
+    # argument, so run it rather than asserting it.
+    import numpy as _np
+    import statsmodels.api as _sm
+    from src.audit_screen import audit as _audit                # noqa: E402
+    _before = _audit(summary.n_present, summary.n_hits_q05)
+    _y = _np.log10(1 + summary.n_hits_q05)
+    _r = _sm.OLS(_y, _sm.add_constant(summary.n_present)).fit().resid
+    _after = _audit(summary.n_present, (10 ** (_r - _r.min())) - 1)
+    check("the correction the tool recommends actually lowers its own score",
+          _after["r2_size_alone"] < _before["r2_size_alone"],
+          f"{_before['r2_size_alone']} -> {_after['r2_size_alone']}")
+    check("audit flags our own screen before the correction",
+          _before["verdict"] == "CONFOUNDED", _before["verdict"])
+    check("audit clears our own screen after the correction",
+          _after["verdict"] == "NOT SIZE-DOMINATED", _after["verdict"])
+    check("the page states the before/after the test just reproduced",
+          f"{_before['r2_size_alone']}" in page and "NOT SIZE-DOMINATED" in page)
+    # the connect snippet must name a module that exists and is runnable
+    check("the MCP snippet on the page points at a real module",
+          '"-m", "src.mcp_server"' in page
+          and (ROOT / "src" / "mcp_server.py").exists())
+
     # ---------------- F. the docs' own self-description ----------------
     report_readme = (ROOT / "README.md").read_text()
     # These are hand-typed and therefore drift: the badge said 84, the Tests

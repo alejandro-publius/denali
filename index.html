@@ -120,6 +120,24 @@ table.ex tbody tr.sel{background:var(--fill)}
 .detail .prop b{display:block;font-size:.75rem;text-transform:uppercase;
   letter-spacing:.08em;color:var(--soft);margin-bottom:6px}
 .detail .prop p{margin:0 0 10px}
+/* use-it — terminal-ish, but the same paper, no chrome */
+.use{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--rule);
+  background:var(--rule);gap:1px;margin-top:24px}
+.use>div{background:var(--paper);padding:22px 24px}
+.use h3{font:600 .6875rem/1.4 "JetBrains Mono",ui-monospace,monospace;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--soft);margin:0 0 14px}
+pre.cmd{margin:0 0 14px;padding:14px 16px;background:var(--fill);
+  border:1px solid var(--rule);overflow-x:auto;white-space:pre-wrap;
+  word-break:break-word;
+  font:400 .78125rem/1.7 "JetBrains Mono",ui-monospace,SFMono-Regular,monospace}
+pre.out{margin:0;padding:14px 16px;border-left:2px solid var(--accent);
+  background:transparent;overflow-x:auto;white-space:pre-wrap;
+  font:400 .78125rem/1.7 "JetBrains Mono",ui-monospace,SFMono-Regular,monospace;
+  color:var(--ink)}
+pre.out b{font-weight:600}
+.use .note{font-size:.8125rem;line-height:1.6;color:var(--soft);margin-top:14px}
+@media(max-width:1000px){.use{grid-template-columns:1fr}}
+
 /* the agent — same hairline grammar, nothing new introduced */
 .btn{font:600 .8125rem/1 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   padding:9px 16px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);
@@ -239,6 +257,66 @@ return more hits regardless of what they do — <b>program size alone explains
     finished. Only 1 of 10 was measurable, so by our own pre-registered
     rule the evaluation is underpowered and inconclusive. Balanced accuracy
     0.4375 — worse than chance, 0 true positives. We did not refit.</p></div>
+</div>
+</section>
+
+<!-- 3b. use it -->
+<section>
+<div class="label">Use it on your own screen</div>
+<h2>Two minutes, before the year.</h2>
+<p class="claim">Your analysis already produced a table: set name, how many genes
+were in it, how many hits it returned. That is the whole input. Nothing is
+uploaded anywhere &mdash; it runs locally on the CSV you already have.</p>
+
+<div class="use">
+  <div>
+    <h3>1 &middot; audit the ranking</h3>
+    <pre class="cmd">python -m src.audit_screen my_results.csv     --set pathway --size n_genes --hits n_significant</pre>
+    <pre class="out"><b>CONFOUNDED</b>: 46% of the variance in this
+ranking is predicted by how the sets
+were built, with no reference to what
+any gene does.
+
+&rarr; Re-rank with a size-aware statistic
+  and see which entries survive.</pre>
+    <p class="note">That output is this project&rsquo;s own screen, run through the
+    same command a stranger would type. Verdicts are CONFOUNDED, PARTIALLY
+    CONFOUNDED, or NOT SIZE-DOMINATED. It never names a gene.</p>
+  </div>
+  <div>
+    <h3>2 &middot; apply the fix, then audit again</h3>
+    <pre class="cmd"># re-rank on the size-corrected residual,
+# then re-run the identical audit</pre>
+    <pre class="out">before   0.4649   <b>CONFOUNDED</b>
+after    0.0000   <b>NOT SIZE-DOMINATED</b></pre>
+    <p class="note"><b>This is the part that matters.</b> The tool names a
+    correction and then grades whether it worked. If the score does not drop, the
+    correction did not work on your data &mdash; and you know that before you
+    publish, not after. On our screen it goes to zero.</p>
+  </div>
+</div>
+
+<div class="callable" style="margin-top:34px">
+<h3>Or connect it to your agent</h3>
+<p>The frozen matrix is an MCP server, so any agent can query it directly. No API
+key, no account, nothing hosted &mdash; it runs on your machine against files in
+the repo.</p>
+<pre class="wire">{
+  "mcpServers": {
+    "denali": {
+      "command": "python",
+      "args": ["-m", "src.mcp_server"]
+    }
+  }
+}</pre>
+<p class="circ">Paste into Claude Code, Cursor, or any MCP client. Two tools:
+<code>reversibility(program)</code> and <code>provenance()</code>. The first
+returns the measured rank, the share measurability alone predicts, the residual,
+and a generated next experiment &mdash; and for a program we never scored it
+volunteers the predictor&rsquo;s own failure before answering. There is deliberately
+no hosted instance and no key to manage: the page you are reading makes zero
+network calls, which is enforced by five tests, and adding a backend would mean
+this demo could fail in front of you.</p>
 </div>
 </section>
 

@@ -1,0 +1,46 @@
+{
+  "arm": "evaluation 11 \u2014 literature audit",
+  "labelling": "PRE-REGISTERED as to claim, power rule and search terms (docs/LITERATURE_PREREG.md, sha256 165d91a2..., commit b0c5e35, committed before this ran). The ARM is post-freeze and says so, as evaluations 6, 8 and 10 do.",
+  "question": "Of the publications behind the corpus arm's 1,272 screens, how many discuss gene-set size or set-level statistical confounding anywhere in their full text?",
+  "index": "Paperclip \u2014 PubMed Central / bioRxiv / medRxiv / arXiv",
+  "n_publications_queried": 187,
+  "n_resolved_to_full_text": 111,
+  "resolution_rate": 0.5936,
+  "power_floor": 60,
+  "underpowered": false,
+  "verdict": "CLAIM (b) \u2014 mostly unacknowledged",
+  "claim": "Tier A fell below 50% of resolved publications, so the pre-registered branch (b) fires: most of the publications whose screens we audited do not mention set size anywhere in their full text.",
+  "tier_a_explicit_size": {
+    "n": 4,
+    "of_resolved": 0.036,
+    "patterns": [
+      "gene[- ]set size",
+      "pathway size",
+      "set size",
+      "size bias",
+      "size[- ]dependent",
+      "larger gene sets",
+      "number of genes in the (gene )?set"
+    ]
+  },
+  "tier_b_competitive_test": {
+    "n": 16,
+    "of_resolved": 0.1441,
+    "patterns": [
+      "CAMERA",
+      "competitive (gene set )?test",
+      "self[- ]contained test",
+      "inter[- ]gene correlation",
+      "variance inflation"
+    ],
+    "uninformative": false,
+    "note": "Pre-registered: above 90% this tier is reported as uninformative, because it would be matching boilerplate rather than engagement."
+  },
+  "union_either_tier": {
+    "n": 20,
+    "of_resolved": 0.1802
+  },
+  "what_this_does_not_show": "A regex match is evidence a topic is MENTIONED, not that it is handled correctly. This measures mention, not understanding, and claiming otherwise would be the overreach this project exists to detect.",
+  "denominator_warning": "Every fraction is a fraction of what resolved in PubMed Central (111 of 187), not of the literature. Open access is not a random sample of publishing.",
+  "scope": "Aggregate counts only. No publication is named here or on any rendered surface; the corpus scope invariant already fails the build if a PMID appears."
+}

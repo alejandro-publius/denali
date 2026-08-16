@@ -1,13 +1,13 @@
 # Demo — under 3 minutes spoken
 
 **Read the bold. The rest is stage direction.** `[pause]` = stop, let the screen carry it.
-**The repeated number is SEVEN OF TEN.** Say it in the first sentence and the last.
+**The repeated number is SEVEN OF ELEVEN.** Say it in the first sentence and the last.
 
 ---
 
 ## OPEN
 
-> ### **"We ran ten evaluations on this project. Seven of them came back negative. We're reporting all ten, and the seven negatives are the reason the positive control is worth anything."**
+> ### **"We ran eleven evaluations on this project. Seven of them came back negative. We're reporting all eleven, and the seven negatives are the reason the positive control is worth anything."**
 
 `[pause — 2 beats]`
 
@@ -106,7 +106,7 @@ This beat also sets up the three negatives: two of them are the loop halting.
 
 ## CLOSE
 
-> **"Seven of ten evaluations negative. Every one reported, and the ones that were not pre-registered say so. Scope is pathway-level only — concordance is minus nought-one-nine, so we name no novel gene anywhere in this project. Everything is frozen with a data dictionary, and the failures are in the repo next to the results. Take it apart."**
+> **"Seven of eleven evaluations negative. Every one reported, and the ones that were not pre-registered say so. Scope is pathway-level only — concordance is minus nought-one-nine, so we name no novel gene anywhere in this project. Everything is frozen with a data dictionary, and the failures are in the repo next to the results. Take it apart."**
 
 ---
 
@@ -181,7 +181,7 @@ alternative is being walked into it.
 | **6** | **"One review covers 50.4% — is the evidence layer real?"** | **Fatal to calling it an evidence chain; we don't.** *"It's a pointer layer and we labelled it one. Our top source for ATF3 was a paper on integrating single-cell data across species. Nineteen of twenty probe genes returned the same zebrafish methods paper."* Screen: **FIG 4**. |
 
 > ### Pre-empt **#1** in the opening.
-> "Seven of ten came back negative" defuses it before it is asked. If a judge raises the held-out failure first, everything after reads as damage control.
+> "Seven of eleven came back negative" defuses it before it is asked. If a judge raises the held-out failure first, everything after reads as damage control.
 
 ## Cut — answer live if asked, do not narrate
 

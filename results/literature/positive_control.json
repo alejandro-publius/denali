@@ -1,0 +1,21 @@
+{
+  "docs": {
+    "PMC7373179": [
+      "pathway size"
+    ],
+    "PMC5336655": [
+      "gene[- ]set size",
+      "set size",
+      "larger gene sets"
+    ],
+    "PMC2661051": [
+      "gene[- ]set size",
+      "set size",
+      "number of genes in the (gene )?set"
+    ]
+  },
+  "n_matched": 3,
+  "n_docs": 3,
+  "passed": true,
+  "why": "Gene-set-enrichment methods papers. If Tier A does not fire on these, a low rate over the corpus is a broken regex rather than a finding, and the two are indistinguishable without this check."
+}

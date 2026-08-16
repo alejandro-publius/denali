@@ -93,7 +93,38 @@ def tier_hits(doc: str, patterns: list[str]) -> list[str]:
     return hit
 
 
+# Three gene-set-enrichment METHODS papers, which must discuss set size or the
+# Tier A regex is not measuring anything. A near-zero hit rate over the corpus
+# and a broken query look identical in the output -- this is the difference.
+# Found by topic search, not cherry-picked for matching.
+CONTROL_DOCS = ["PMC7373179", "PMC5336655", "PMC2661051"]
+
+
+def positive_control() -> dict:
+    """Tier A must fire on papers that certainly discuss set size."""
+    out = {}
+    for doc in CONTROL_DOCS:
+        out[doc] = tier_hits(doc, TIER_A)
+    n_ok = sum(1 for v in out.values() if v)
+    return {
+        "docs": out,
+        "n_matched": n_ok,
+        "n_docs": len(CONTROL_DOCS),
+        "passed": n_ok == len(CONTROL_DOCS),
+        "why": ("Gene-set-enrichment methods papers. If Tier A does not fire on "
+                "these, a low rate over the corpus is a broken regex rather "
+                "than a finding, and the two are indistinguishable without "
+                "this check."),
+    }
+
+
 def main() -> int:
+    if "--control" in sys.argv:
+        c = positive_control()
+        OUT.mkdir(parents=True, exist_ok=True)
+        (OUT / "positive_control.json").write_text(json.dumps(c, indent=2) + "\n")
+        print(json.dumps(c, indent=2))
+        return 0 if c["passed"] else 1
     if not CORPUS.exists():
         print(f"missing {CORPUS}", file=sys.stderr)
         return 1

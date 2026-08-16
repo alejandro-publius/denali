@@ -1106,7 +1106,8 @@ def main() -> int:
     check("build_page traces at least one value per frozen source", n_traced > 0)
 
     _WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six",
-              7: "seven", 8: "eight", 9: "nine", 10: "ten"}
+              7: "seven", 8: "eight", 9: "nine", 10: "ten", 11: "eleven",
+              12: "twelve"}
 
     def _count(tok: str) -> int:
         """'Seven' | 'seven' | '7' -> 7.  -1 if the token is not a count."""
@@ -1326,6 +1327,67 @@ def main() -> int:
     # rather than as a failure: "README lacks ..." on a PASS line reads as a bug.
     check("README controls count matches controls.csv", claim in report_readme,
           f"frozen: {n_ctrl} controls / {n_ctrl_fail} FAIL; README must say {claim!r}")
+
+    # ---------------- evaluation 11: the literature arm ----------------
+    # Live-index arm, so the numbers are a dated observation and not
+    # reproducible by `make all`. What IS checkable is that the doc, the README
+    # row and the stored JSON agree, that the power rule was honoured, and that
+    # the positive control passed -- without which a low rate is a dead regex.
+    lit_json = ROOT / "results" / "literature" / "literature_audit.json"
+    lit_ctrl = ROOT / "results" / "literature" / "positive_control.json"
+    lit_doc = ROOT / "docs" / "LITERATURE.md"
+    if lit_json.exists():
+        lit = json.loads(lit_json.read_text())
+        litmd = lit_doc.read_text() if lit_doc.exists() else ""
+        lit_row = re.search(r"^\|\s*\d+\s*\|\s*Does the field say so\?.*$",
+                            report_readme, re.M)
+
+        n_q = lit["n_publications_queried"]
+        n_r = lit["n_resolved_to_full_text"]
+        n_a = lit["tier_a_explicit_size"]["n"]
+        pct_a = lit["tier_a_explicit_size"]["of_resolved"]
+
+        check("literature: the query set is the corpus arm's publications",
+              n_q == int(per.source_id.nunique()),
+              f"arm says {n_q}, corpus_per_screen.csv has {per.source_id.nunique()}")
+        check("literature: the pre-registered power rule was applied, not skipped",
+              lit["underpowered"] == (n_r < lit["power_floor"]),
+              f"resolved {n_r} vs floor {lit['power_floor']}, "
+              f"underpowered={lit['underpowered']}")
+        check("literature: the verdict matches the branch the numbers select",
+              ("NO VERDICT" in lit["verdict"]) if lit["underpowered"]
+              else (("(a)" in lit["verdict"]) == (pct_a >= 0.50)),
+              lit["verdict"])
+        # The whole arm rests on this: a near-zero rate and a broken regex are
+        # indistinguishable without a control that must fire.
+        if lit_ctrl.exists():
+            ctrl = json.loads(lit_ctrl.read_text())
+            check("literature: the Tier A positive control fired on every "
+                  "methods paper", ctrl["passed"] and ctrl["n_docs"] >= 3,
+                  f"{ctrl['n_matched']}/{ctrl['n_docs']} matched")
+        else:
+            check("literature: the Tier A positive control fired on every "
+                  "methods paper", False, "positive_control.json missing")
+        check("literature: doc and README row quote the stored numbers",
+              all(s in litmd for s in (str(n_q), str(n_r), f"{pct_a*100:.1f}%"))
+              and lit_row is not None
+              and all(s in lit_row.group(0) for s in (str(n_q), str(n_r),
+                                                      f"{pct_a*100:.1f}%")),
+              f"n_q={n_q} n_r={n_r} tier_a={pct_a*100:.1f}%")
+        check("literature: the open-access denominator is stated in both surfaces",
+              "59.4%" in litmd and "59.4%" in (lit_row.group(0) if lit_row else ""),
+              "resolution rate must appear beside the fraction, not only in JSON")
+        check("literature: labelled as measuring mention rather than understanding",
+              "mention, not understanding" in litmd.lower()
+              and "mention, not understanding" in (lit_row.group(0) or "").lower())
+        # Same scope rule the corpus arm has: aggregate only, no publication named.
+        for label, text in {"docs/LITERATURE.md": litmd,
+                            "the README literature row":
+                                lit_row.group(0) if lit_row else ""}.items():
+            named = [p for p in pmids
+                     if re.search(rf"(?<![\d.]){re.escape(p)}(?![\d.])", text)]
+            check(f"literature scope: no publication named in {label}",
+                  not named, f"found {named[:5]}" if named else "")
 
     # ---------------- demo deep links ----------------
     # docs/DECK.md navigates the live page by anchor during the talk. A renamed

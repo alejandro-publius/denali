@@ -3,7 +3,7 @@
 **A genome-scale CRISPRi screen, read back to ask what it can and cannot discover — and the answer is mostly an artifact of how the programs are defined, not their biology.**
 
 [![CI](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml/badge.svg)](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-358-brightgreen.svg)](tests/test_frozen_invariants.py)
+[![tests](https://img.shields.io/badge/tests-367-brightgreen.svg)](tests/test_frozen_invariants.py)
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](.python-version)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -63,7 +63,7 @@ have to infer that we picked well.
    it: K562 is an unstressed leukemia line, and our own first program failed its
    known-regulator control for exactly that reason.
 
-3. **Ten evaluations, seven of them negative.** Where an evaluation was
+3. **Eleven evaluations, seven of them negative.** Where an evaluation was
    pre-registered, the alternative claim was named before any value was computed,
    so a null was a publishable outcome rather than a failure. Seven came back
    negative, one returned no verdict at all because our own power rule fired, and
@@ -87,7 +87,7 @@ overstatement.
 
 ## Findings
 
-Ten evaluations. Seven negative, one with no verdict because our own power rule fired. All ten are reported. The eighth leaves our own data entirely: it asks the same question of two published clinical CRISPR off-target datasets.
+Eleven evaluations. Seven negative, one with no verdict because our own power rule fired. All eleven are reported. The eighth leaves our own data entirely: it asks the same question of two published clinical CRISPR off-target datasets. The eleventh leaves the data altogether and asks the literature.
 
 | # | Evaluation | Result | Verdict |
 |---|---|---|---|
@@ -108,6 +108,7 @@ Ten evaluations. Seven negative, one with no verdict because our own power rule 
 
 **Evaluation 8 leaves our data and the finding survives.** The confound this project found in gene sets is not about gene sets. In a CRISPR off-target list the analogue of set size is **search yield** — how many candidate sites the mismatch budget nominated — and it carries roughly the same share of apparent cross-assay agreement as set size carries of our cross-screen agreement: **31.2% median against our 26%.** Same direction, modestly stronger, and we do not say dramatically. Two things are disclosed rather than buried. First, the *other* regression — search yield against the **biochemical** hit count — returns R² **0.83–1.00** and exactly **1.0000** at the two lowest thresholds, because a nominated site with ≥1 read is a hit by construction; that number is an identity, not a finding, and it is the one this arm would have overstated itself with. Second, on CRISPRme: that variants create off-target sites is **the CRISPRme paper's own finding**, not ours, and the 44.1% figure means a variant makes the site a *better* match — the stricter reading, sites absent from the reference entirely, is **12.4%**. We conflated those two while building this arm; quoting the first while describing the second overstates the effect roughly threefold. The denominator is the top 1,000 by CFD per guide, a ranked shortlist, not the genome. **No guide is named safe or unsafe** — the gene-level refusal, applied where the ranking has a patient at the end of it. → [`docs/OFFTARGET.md`](docs/OFFTARGET.md), `src/offtarget_audit.py`
 | 10 | Does our headline describe the field, or just our screen? | **1,272** published screens (BioGRID ORCS) from **187** publications: median size-alone R² **0.224**, mean 0.253; **9.6%** of screens reach our 0.465 — but **26.7%** of *publications* do, because one publication is 26.7% of the corpus; the gradient across hit-list-size bins (0.056 → 0.184 → 0.226 → 0.263) is monotonic | **NEGATIVE** — post-hoc, not pre-registered. Our screen is above the field's 90th percentile by screen but only its **73rd by publication**, and quoting 46.5% as typical would overstate the field ~2× |
+| 11 | Does the field say so? | Of the **187** publications behind those screens, **111** resolved to full text in PubMed Central and **4** — **3.6%** — mention gene-set size anywhere; 14.4% use competitive-test machinery. Positive control: all three enrichment-methods papers fire, so the low rate is a rate and not a dead query | **POSITIVE** — pre-registered branch (b) fired (`docs/LITERATURE_PREREG.md`, sha256 `165d91a2…`, sealed at `b0c5e35` before the run). Arm is post-freeze. Measures **mention, not understanding**, over a **59.4%** open-access denominator |
 
 **Evaluation 10 ran our audit on the field itself, and our own headline came back atypical.** BioGRID ORCS 2.0.18 ships 1,952 curated human CRISPR screens from 418 publications with an explicit HIT column; 1,272 meet the inclusion rule. The median published screen shows size-alone R² **0.224** — our 0.465 sits above the field's 90th percentile, so quoting it as if it described screens generally would overstate the field by roughly 2×. The two numbers are **not the same estimand** (different unit, outcome and predictor — the comparison table is in `docs/CORPUS.md`), a smaller field median does not falsify ours, and an independent execution of the same idea landed near 0.10 and could not be reconciled, so neither number is "the field's value." Post-hoc, not pre-registered, names no screen and no publication. See `docs/CORPUS.md` and `results/corpus/`.
 
@@ -334,7 +335,7 @@ Each was found only by running from a clean clone, and the third only after the 
 
 ## Tests
 
-`tests/test_frozen_invariants.py` — **358 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
+`tests/test_frozen_invariants.py` — **367 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
 
 Two guards exist because each caught a real defect. The **compile guard** parses every file under `src/` and `tests/` before anything else — added after a shipped module was found not to compile. The **scope guard** builds a gene-symbol universe from the Hallmark GMT and fails the build if any symbol appears within 260 characters of verdict language in the rendered page or the captions, with an allowance for "recovered known answer" and "positive control"; it enforces the −0.019 scope limit mechanically. A third set of checks asserts the page makes **no network calls** — no `fetch`, no `XMLHttpRequest`, no external script or stylesheet — so the interactive explorer cannot break unattended.
 
@@ -413,9 +414,9 @@ This is the part we care most about, so it is built into the code rather than pr
 
 - **We wrote down what would prove us wrong, hashed it, and committed it before running anything.** The pre-registration is recoverable at a named commit.
 - **We held ten pathways back** and only opened them after the model was frozen and hashed. The model **failed** on them — worse than a coin flip, zero true positives. We published that instead of quietly refitting.
-- **Seven of our ten evaluations came back negative.** All ten are reported, including the one that clears its bar by only 0.026.
+- **Seven of our eleven evaluations came back negative.** All eleven are reported, including the one that clears its bar by only 0.026.
 - **The one positive is a control, not a discovery.** Run unchanged on a pathway it was never tuned for, the ranking puts that pathway's known master switch at **rank 2 of 11,258**. So the machinery works — it just is not finding what people assume it is finding.
-- **358 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
+- **367 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
 
 ---
 

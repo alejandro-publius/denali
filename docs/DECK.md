@@ -19,7 +19,7 @@ renamed or dropped, the build fails rather than the demo doing so.
 
 | # | Beat | On screen | Jump to |
 |---:|---|---|---|
-| 0 | OPEN | Title card 1 — *ten evaluations · seven negative · all ten reported* | — |
+| 0 | OPEN | Title card 1 — *eleven evaluations · seven negative · all eleven reported* | — |
 | 1 | What it is | FIG 1, the matrix | `denali/#findings` |
 | 2 | **The loop** | **The agent panel, live. Press Run.** | `denali/#loop` |
 | 3 | Negative one | FIG 3 | `denali/#findings` |
@@ -68,7 +68,7 @@ project. No stock imagery, no logos but ours.
 
 | Card | Content | Why it is a card and not the page |
 |---|---|---|
-| **1 · Open** | `TEN EVALUATIONS` / `SEVEN NEGATIVE` / `ALL TEN REPORTED` | The page opens on the finding; the talk opens on the posture. |
+| **1 · Open** | `ELEVEN EVALUATIONS` / `SEVEN NEGATIVE` / `ALL ELEVEN REPORTED` | The page opens on the finding; the talk opens on the posture. |
 | **2 · Heme** | *Highest predicted. One measured gene. Zero hits.* — with the program name | The strongest beat is one row, and the table view buries it among fifty. |
 | **3 · Close** | `github.com/alejandro-publius/denali` — and nothing else | A judge writing the URL down needs it legible from the back of a room. |
 
@@ -93,13 +93,13 @@ bookmarks, extensions and notifications; use a fresh profile so no autocomplete
 drops a real email into a URL bar on camera.
 
 **Say the number, don't just show it.** A judge half-watching at 2× hears
-"seven of ten came back negative" and stops scrubbing.
+"seven of eleven came back negative" and stops scrubbing.
 
 ### Checklist before upload
 
 - [ ] Under 3:00
 - [ ] The halt is visible and un-cut in beat 2
-- [ ] "Seven of ten" is audible in the first 15 seconds and the last 15
+- [ ] "Seven of eleven" is audible in the first 15 seconds and the last 15
 - [ ] No gene named that isn't the recovered known control
 - [ ] URL legible in the final frame for at least 4 seconds
 - [ ] Watched once at 2× with sound off — the beats still read
@@ -111,5 +111,5 @@ drops a real email into a URL bar on camera.
 
 - **No architecture diagram.** It is in the README for readers; on stage it costs 20 seconds and lands nothing.
 - **No sponsor-tool montage.** `docs/TOOLS.md` is stronger *because* it lists what we set up and declined, and that nuance dies in a logo grid.
-- **No roadmap slide.** Ten evaluations with seven negatives is the claim. A future-work slide invites "so it doesn't work yet."
+- **No roadmap slide.** Eleven evaluations with seven negatives is the claim. A future-work slide invites "so it doesn't work yet."
 - **No "built in N hours."** House rule, and it makes the work sound like a stunt.

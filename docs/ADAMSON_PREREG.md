@@ -243,3 +243,12 @@ Every threshold, power rule and verdict band in the original stands untouched:
 P0 at the 99th percentile, P1 at 35 of 50, P2 at 15 of 50, R² ≥ 0.25 for claim
 (a), R² < 0.10 or negative slope for claim (b). The scorer is still imported
 unmodified. `results/frozen/` is still not touched.
+
+> **Commit references, after integration.** This arm was rebased onto `main`
+> when it merged, which rewrote its commit hashes. `7a98d4d` → **`555ea5c`**
+> (pre-registration) and `9b96318` → **`fe4afa9`** (amendment). The original
+> hashes appear above and in `adamson_evaluation.json` because that is what
+> was true when the arm ran, and rewriting a result artifact to match a later
+> rebase would be the opposite of what this document is for. The content is
+> unchanged and is verified by sha256, not by commit: the text above the
+> amendment line still hashes to `4a7ece03…`, and a test asserts it.

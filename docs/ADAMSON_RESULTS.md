@@ -118,3 +118,12 @@ vector, **pooled**, = `63(mod)_pBA580` (6,010) + `Gal4-4(mod)_pBA582` (1,283) =
   no novel gene is named.
 - Computational only. Transcriptional movement is not phenotypic reversal; no
   wet-lab, dosing, clinical or therapeutic claim follows.
+
+> **Commit references, after integration.** This arm was rebased onto `main`
+> when it merged, which rewrote its commit hashes. `7a98d4d` → **`555ea5c`**
+> (pre-registration) and `9b96318` → **`fe4afa9`** (amendment). The original
+> hashes appear above and in `adamson_evaluation.json` because that is what
+> was true when the arm ran, and rewriting a result artifact to match a later
+> rebase would be the opposite of what this document is for. The content is
+> unchanged and is verified by sha256, not by commit: the text above the
+> amendment line still hashes to `4a7ece03…`, and a test asserts it.

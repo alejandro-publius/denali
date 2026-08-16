@@ -558,19 +558,22 @@ def main() -> int:
               "no\nthreshold anywhere in this document is changed" in tail
               or "no threshold" in tail.split("\n\n")[1].lower())
 
-        # The original is a committed object. Verify the amendment's provenance
-        # claim rather than believing its prose: everything above the amendment
-        # line must still be the pre-registered text, separator aside.
-        import subprocess
-        orig = subprocess.run(["git", "show", "7a98d4d:docs/ADAMSON_PREREG.md"],
-                              cwd=ROOT, capture_output=True, text=True)
-        if orig.returncode == 0:
-            drift = [ln for ln in head.splitlines() if ln.strip() and ln != "---"]
-            base = [ln for ln in orig.stdout.splitlines() if ln.strip() and ln != "---"]
-            check("adamson: no line of the original pre-registration was altered",
-                  drift == base,
-                  f"{sum(a != b for a, b in zip(drift, base))} changed lines, "
-                  f"{len(drift) - len(base):+d} net")
+        # Verify the amendment's provenance claim rather than believing its prose:
+        # the text above the amendment line must still hash to the sha256 the
+        # amendment cites. CONTENT-ADDRESSED ON PURPOSE. The first version of this
+        # check ran `git show <sha>:docs/ADAMSON_PREREG.md`, and that sha stopped
+        # existing the moment the branch was rebased and deleted -- so the check
+        # silently skipped in a fresh clone and the suite counted 350 there against
+        # 351 here. A guard that needs a particular commit to exist is a guard that
+        # disappears when history is rewritten; hashing the bytes needs no history
+        # at all.
+        import hashlib
+        cited = re.search(r"sha256 `([0-9a-f]{8})…`", tail)
+        original_text = head.rstrip().removesuffix("---").rstrip() + "\n"
+        digest = hashlib.sha256(original_text.encode()).hexdigest()
+        check("adamson: the pre-amendment text still hashes to the cited sha256",
+              cited is not None and digest.startswith(cited.group(1)),
+              f"computed {digest[:16]} vs cited {cited.group(1) if cited else 'none'}")
 
         # The frozen scorer ran unmodified, but the substrate construction is new
         # code. Conflating those would let "we reused the frozen scorer" cover a

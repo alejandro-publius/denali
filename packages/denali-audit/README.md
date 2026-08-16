@@ -8,7 +8,8 @@ the way a raw crime count always ranks big cities as the most dangerous. This me
 how much of your ranking that explains, before you commit.
 
 ```bash
-pip install denali-audit
+# not on PyPI yet -- install from a clone of the repository
+pip install -e packages/denali-audit
 denali audit my_results.csv
 ```
 

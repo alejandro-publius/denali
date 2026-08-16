@@ -37,7 +37,16 @@ SURFACES = [
     "docs/CORPUS.md", "docs/ADVERSARIAL.md", "docs/MORNING_HANDOFF.md",
     "docs/LIMITATIONS.md", "docs/LOOP.md", "docs/OFFTARGET.md",
     "results/figures/CAPTIONS.md", "results/corpus_rerank/README.md",
+    # Added after both drifted unnoticed: SUBMISSION_IMPACTFORGE.md stated a
+    # stale cross-surface count and stale dependency floors, and the package
+    # README told readers to install from PyPI where nothing is published.
+    # A prose surface nobody registered is a prose surface nobody checks.
+    "docs/SUBMISSION_IMPACTFORGE.md", "packages/denali-audit/README.md",
 ]
+
+# Any .md a reader can reach that states a headline number should be in
+# SURFACES above. This catches the ones nobody remembered to add.
+_UNREGISTERED_HINT = ("docs", "packages")
 
 # label -> (context regex with ONE capture group, canonical value, equivalents)
 # The regex must anchor on words, so a surface stating a WRONG value is found

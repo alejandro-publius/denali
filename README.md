@@ -28,7 +28,9 @@ screens: 90% of 1272 published CRISPR screens are less explained by set
 size than yours.
 ```
 
-An R² is not a judgement until you know what normal looks like. The field's median is **0.224**; that output is denali's own screen at **0.465**, and the tool says so about us.
+An R² is not a judgement until you know what normal looks like. The field's median is **0.224** and that output is denali's own screen at **0.465** — the tool says it about us.
+
+**One caveat we would rather state than have found.** Those two numbers are not computed the same way: the corpus median fits log size, the audit fits raw size. On a like-for-like raw predictor the field's median is **0.192**, which makes our screen look *more* unusual rather than less, so the comparison is not flattering us — but it is a comparison across transforms and the percentile is indicative rather than exact. `docs/CORPUS.md` carries the sensitivity; the tool's own output says the reference is indicative too.
 
 Then `denali rerank` applies the correction and shows you what leaves the top of your list. **On our own screen, three of the top ten hold and seven do not** — see [what the tool does to our own headline](#what-the-tool-does-to-our-own-result).
 
@@ -50,7 +52,7 @@ We scored all **50 MSigDB Hallmark gene programs** against **9,837 CRISPRi knock
 
 ![Running the audit on your own screen, and re-auditing after the fix](docs/img/use-it.png)
 
-*What a user does: audit the ranking they already have, apply the correction the tool names, re-run the identical audit and watch the score drop. Or connect the frozen matrix to their agent — no API key, no backend.*
+*What a user does: audit the ranking they already have and see where it sits against 1,272 published screens, then `denali rerank` to see what leaves the top ten. Or connect the frozen matrix to their agent — no API key, no backend.*
 
 ![The agent choosing what to read next and halting on its own](docs/img/agent-loop.png)
 
@@ -69,6 +71,10 @@ top of the list. Run on **our own screen**, the one this whole repository is
 about:
 
 ```bash
+# build the input from this repo's own frozen results, then rerank it
+python -c "import pandas as pd; d=pd.read_csv('results/frozen/program_summary.csv'); \
+  d[['program','n_present','n_hits_q05']].rename(columns={'program':'set','n_present':'size','n_hits_q05':'hits'}) \
+  .to_csv('our_screen.csv', index=False)"
 denali rerank our_screen.csv --top 10
 ```
 
@@ -88,8 +94,12 @@ denali rerank our_screen.csv --top 10
 
 **Our number one falls to twenty-fourth.** `MYC_TARGETS_V1` is the largest set
 in the collection at 194 measured members, it returned the most hits, and once
-you ask how many hits a set that size returns *anyway*, it is unremarkable. The
-three that hold are the three the ranking can actually justify.
+you ask how many hits a set that size returns *anyway*, it is unremarkable.
+
+**The three that hold are not thereby real.** They are the three this ranking
+is not obviously unable to justify, which is a weaker statement and the only one
+the data supports. The tool says the same thing in its own output and we are not
+going to say more than it does.
 
 Note what the tool refuses to do here. It does not tell you the three survivors
 are real, and it does not hand back a shorter list to go chase. Its own output
@@ -269,7 +279,7 @@ flowchart TB
 
 **`src/freeze_proposals.py` is drawn as the only writer of `proposals.json` because that turned out to matter.** The three generated proposals the page renders are produced by `src/next_experiment.py` and serialised once by that script. It went stale — the generator gained a falsification field and the artifact was never rewritten — and because nothing checked the artifact against its generator, `make all` on a clean clone silently rewrote it and made the byte-identical reproduction claim false while every other test stayed green. The edge back into `results/frozen/` now carries that check.
 
-**Two edges are dashed on purpose, and both are claims you can check.** Modal points *into* `results/frozen/` rather than out of it: `src/modal_sweep.py` re-runs the sweep across ten containers and reproduces all 50 programs identically, so it verifies the frozen result without being allowed to produce it — it is deliberately not a `make all` step, and a test asserts that. The VIF edge points *outward*, to a statistical result published in 2012: our two dominant features turn out to be the two terms of CAMERA's variance-inflation factor, which we recovered from data rather than fitted to.
+**The dashed edges are claims you can check, and there are now four of them.** Modal points *into* `results/frozen/` rather than out of it: `src/modal_sweep.py` re-runs the sweep across ten containers and reproduces all 50 programs identically, so it verifies the frozen result without being allowed to produce it — it is deliberately not a `make all` step, and a test asserts that. The VIF edge points *outward*, to a statistical result published in 2012: our two dominant features turn out to be the two terms of CAMERA's variance-inflation factor, which we recovered from data rather than fitted to.
 
 **The packaged tool is drawn downstream of the freeze, with one edge pointing back.** `packages/denali-audit` is what a stranger installs, and it is not a rewrite: `core.py` is the study's own maths vendored verbatim, `reference.py` carries the 1,272-screen corpus so an audit can say where a ranking sits rather than only what its R² is, and `denali rerank` applies the correction. The dashed edge back into `results/frozen/` is the claim that makes the whole arrangement honest — **a test runs the packaged `audit()` against the frozen research data and requires exactly `0.4649`**, the published headline. If the tool and the paper ever disagree, CI fails rather than the two quietly diverging and the README continuing to cite a number the shipped code no longer produces. That is the difference between a tool that came out of a study and a tool that merely resembles one.
 
@@ -520,6 +530,7 @@ The suite has caught, in order: a stat bug reporting 5 evidence sources instead 
 | `results/prior_work/` | Pre-event ILD evidence — the positive control returning 481–6,532 genes. Not reproducible here |
 | `results/discovery/` | Intermediate scoring outputs |
 | `audits/external/` | The audit run unchanged on seven **other people's** published screens — standardized inputs, provenance and rerun command per entry |
+| `packages/denali-audit/` | The packaged CLI a stranger installs. `core.py` is `src/`'s maths vendored verbatim; a test requires it to return 0.4649 on the frozen data. |
 | `src/` | Pipeline modules, run as `python -m src.<module>` |
 | `tests/` | Invariants over the frozen interface |
 | `docs/` | Report, limitations, method rules, origins, prior work, data dictionary, pre-registrations |

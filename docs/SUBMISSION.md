@@ -240,7 +240,7 @@ the build if an "unused" claim stops being true.
 |---|---|
 | Results page (zero network calls) | https://alejandro-publius.github.io/denali/ |
 | Repository | https://github.com/alejandro-publius/denali |
-| Audit your own screen | `python -m src.audit_screen <your_table.csv>` |
+| Audit your own screen | `pip install -e packages/denali-audit` then `denali audit <your_table.csv>` |
 | Watch the agent choose and halt | `python -m src.next_experiment --demo` |
 | Falsify the loop claim in ten seconds | `grep -n 'HALLMARK_\|REACTOME_' src/next_experiment.py` |
 

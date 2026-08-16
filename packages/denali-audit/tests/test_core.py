@@ -18,10 +18,22 @@ from denali_audit.reference import N_SCREENS, percentile
 
 PUBLISHED_HEADLINE = 0.4649
 
-# Set DENALI_RESEARCH_REPO to a clone of github.com/alejandro-publius/denali to run
-# the identity test. Skipped rather than failed when absent, so the package stays
-# installable without a 100 MB checkout.
-RESEARCH = os.environ.get("DENALI_RESEARCH_REPO")
+# The identity test needs the study's frozen data. Two ways to find it, in order:
+#
+#   1. this file's own location -- the package is vendored INSIDE the research
+#      repo at packages/denali-audit, so when you are working in the repo the
+#      data is three directories up and no configuration is required.
+#   2. DENALI_RESEARCH_REPO, for a standalone checkout of the package.
+#
+# Path 1 exists because relying on the env var alone meant this test skipped
+# everywhere -- including CI -- while the README and the architecture diagram
+# both advertised it as the thing that stops the tool and the paper drifting
+# apart. A guard nobody runs cannot hold a claim up, and asserting that it does
+# is worse than not having it.
+_vendored = Path(__file__).resolve().parents[3]
+RESEARCH = os.environ.get("DENALI_RESEARCH_REPO") or (
+    str(_vendored) if (_vendored / "results" / "frozen" / "program_summary.csv").exists()
+    else None)
 FROZEN = Path(RESEARCH) / "results" / "frozen" / "program_summary.csv" if RESEARCH else None
 
 

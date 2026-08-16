@@ -28,6 +28,7 @@ to check.
 | [`LIMITATIONS.md#7`](LIMITATIONS.md) §7 | Four errors we found in our own work and published, including one where we blamed a tool that works fine. |
 | [`DESIGN.md`](DESIGN.md) | The visual system: seven colour tokens, four type sizes, and why the page is deliberately plain — a page arguing that most apparent discovery is artifact cannot itself look like a dashboard selling a result. |
 | [`ORIGINS.md`](ORIGINS.md) | Why the project looks the way it does. |
+| [`LANDSCAPE.md`](LANDSCAPE.md) | Where this sits in the field, researched not assumed: the $28B/year irreproducibility figure, the same confound documented in three adjacent domains, and an honest note on which of them is already solved. |
 | [`PRIOR_WORK.md`](PRIOR_WORK.md) | What predates the event, so nothing pre-built is presented as new. |
 
 ## Reference

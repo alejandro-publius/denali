@@ -159,6 +159,8 @@ alternative is being walked into it.
 
 > **"The first three negatives are on our own screen. Four more take it off our screen. Cross-screen agreement — a quarter of what looks like replication, twenty-six percent, is set size, not biology. Clinical off-target nomination — a methods audit of published nominations, no dosing and no recommendation — where a median of thirty-one percent of the biochemical-versus-cellular agreement is search yield, not the guide. Adamson, where the program is actively engaged rather than dormant: the confound persists, and that arm is pre-registered. And 1,272 published screens: the field's median size-confound is 0.224, ours is 0.465 — above the ninetieth percentile."**
 >
+> **"And the eleventh asks whether the field says so. Of the hundred and eighty-seven publications behind those screens, a hundred and eleven are open access, and four of them — three and a half percent — mention gene-set size anywhere in the paper. That one is pre-registered, and it measures whether they mention it, not whether they understood it."**
+>
 > **"That last one is the honest core. Our headline number is atypical in magnitude, and we published that fact rather than bury it. The mechanism is universal; our screen just shows it more clearly."**
 
 *The second positive, if asked:*

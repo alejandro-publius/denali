@@ -18,13 +18,13 @@ is stale — say so rather than reconciling it live.
 ## Tagline (≤ 200 characters)
 
 > An AI scientist that audits genetic screens — including its own. It scored 50
-> biological programs against 9,837 CRISPRi knockdowns, ran ten evaluations,
-> and seven came back negative. All ten are reported.
+> biological programs against 9,837 CRISPRi knockdowns, ran eleven evaluations,
+> and seven came back negative. All eleven are reported.
 
 Alternate, if the field is shorter:
 
-> Ten evaluations. Seven negative. All ten reported. An agent that audits genetic
-> screens, and halts itself when its own rules say stop.
+> Eleven evaluations. Seven negative. All eleven reported. An agent that audits
+> genetic screens, and halts itself when its own rules say stop.
 
 ## Elevator pitch
 
@@ -83,6 +83,14 @@ about intent.
 gene-set analysis already produces — set, size, hits — and reports the same
 estimate for your screen. We ran it on seven published external studies and on
 1,272 screens from the literature.
+
+**And then it asks whether the field knows.** Of the 187 publications behind
+those 1,272 screens, 111 are open access, and **4 of them — 3.6% — mention
+gene-set size anywhere in the full text.** Pre-registered before the run, with a
+positive control that fires on three enrichment-methods papers, because a 3.6%
+rate and a broken search look identical without one. It measures **mention, not
+understanding**, over a 59.4% denominator, and both limits are stated wherever
+the number appears.
 
 **It ships as a tool, not only as a result.** An MCP server exposes the frozen
 matrix to any agent; a static results page runs with **zero network calls**; a
@@ -148,7 +156,7 @@ positives.
 
 ## Accomplishments we're proud of
 
-**Seven of ten evaluations came back negative, and all ten are reported.** One
+**Seven of eleven evaluations came back negative, and all eleven are reported.** One
 returned no verdict at all because our own pre-registered power rule fired
 against us, and we did not refit.
 
@@ -204,6 +212,17 @@ assay before any of it is worth more than a construction statistic.
 `python` · `numpy` · `pandas` · `scipy` · `statsmodels` · `h5py` · `streamlit` ·
 `mermaid` · Claude Code · Paperclip · Modal · Model Context Protocol ·
 CZ Biohub ESMC · Proto (Evo Design) · Benchflow · GitHub Pages
+
+Two of these do more than get imported. **Paperclip is both an audited object
+and an instrument**: we probed its retrieval with 20 genes and 19 came back with
+the same unrelated paper (FIG 4), and then used it properly for evaluation 11's
+literature audit over 187 publications — the failure and the working use are
+both reported. **BenchFlow carries two tasks**, one per finding, in
+`benchmarks/`: `denali-gate-trap` (predict which programs returned hits, given
+only measurability — the naive filter scores 0.6981) and
+`denali-confound-estimate` (estimate the size confound on seven real published
+screens, truth spanning 0.36–0.88). Both grade other people's agents; no denali
+result depends on either.
 
 Honest tool status — including what we set up and deliberately did **not** use,
 with the reason — is in [`docs/TOOLS.md`](TOOLS.md), and an automated check fails

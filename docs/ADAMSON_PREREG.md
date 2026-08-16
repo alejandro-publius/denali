@@ -183,3 +183,63 @@ it will not be quietly re-run with a different threshold.
    **not** covered by the scorer's hash are stated wherever the result is stated.
 6. No wet-lab, dosing, clinical or therapeutic claim. Transcriptional movement is
    not phenotypic reversal.
+
+---
+
+# AMENDMENT 1 — 2026-08-15
+
+**Appended below the original. No text above this line is altered, and no
+threshold anywhere in this document is changed.** The original is diffable at
+commit `7a98d4d`, sha256 `4a7ece03…`.
+
+## What was ambiguous
+
+The original §"Substrate construction" step 3 said to identify control cells by
+"the substrate's own non-targeting/control label in `obs.perturbation`". On
+opening the substrate, **no label is spelled `control` or `non-targeting`**. The
+arm correctly refused to run rather than relax the step, which is the behaviour
+the pre-registration specifies.
+
+Two constructs are plausibly the control. Choosing between them *after seeing the
+data* is precisely the researcher degree of freedom this document exists to
+close, so the resolution below is a rule about **construct identity**, decidable
+without reference to any result.
+
+## The rule
+
+> **Control = every construct that carries `(mod)` and is a `pBA` vector.**
+
+This is checkable by anyone and independent of any outcome:
+
+- All **100** targeting guides are `GENE_pDS###` — the gene symbol is in the name.
+- Of the **13** `pBA` constructs, **10** name a human UPR gene (`ATF4`, `ATF6`,
+  `EIF2AK3`, `ERN1`, `XBP1`) and are targeting.
+- The remaining **3** carry `(mod)` and name **no human gene**:
+  `63(mod)_pBA580`, `Gal4-4(mod)_pBA582`, `62(mod)_pBA581`. Gal4 is a yeast
+  transcription factor with no human homolog.
+- No `_pDS` label contains `(mod)`.
+
+**Controls are pooled, not chosen.** Pooling is the power-preserving option and
+is decided here on that ground alone: `Gal4-4` alone would discard 82% of the
+available control cells for no stated reason.
+
+`62(mod)_pBA581` contributes **2 cells** and is therefore excluded by the
+**already pre-registered** 25-cell floor in step 4 — no new threshold is
+introduced to exclude it. The pooled control is `63(mod)_pBA580` (6,010) +
+`Gal4-4(mod)_pBA582` (1,283) = **7,293 cells**. The pooled control vector is the
+cell-weighted mean, i.e. the mean over the pooled cells.
+
+## Added secondary, reported but not deciding
+
+The single-control split is reported as a **stated sensitivity**: the deciding
+statistic recomputed against `63(mod)` alone and against `Gal4-4` alone, with the
+**pooled definition remaining the primary**. This is added so a reader can see
+that the control choice did not manufacture the result. No threshold is applied
+to the sensitivity and no verdict is issued from it.
+
+## What is unchanged
+
+Every threshold, power rule and verdict band in the original stands untouched:
+P0 at the 99th percentile, P1 at 35 of 50, P2 at 15 of 50, R² ≥ 0.25 for claim
+(a), R² < 0.10 or negative slope for claim (b). The scorer is still imported
+unmodified. `results/frozen/` is still not touched.

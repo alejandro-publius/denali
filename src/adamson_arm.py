@@ -47,7 +47,10 @@ ADAMSON = Path("data/raw/AdamsonWeissman2016_GSM2406681_10X010.h5ad")
 FROZEN = Path("results/frozen")
 OUT = Path("results/adamson")
 
-PREREG_SHA = "4a7ece0376e2aac0433277d5dd7bd891bcaabf347d0c7505cb3e5859643101d9"
+PREREG_ORIGINAL_SHA = "4a7ece0376e2aac0433277d5dd7bd891bcaabf347d0c7505cb3e5859643101d9"
+# Amendment 1 (2026-08-15) appended BELOW the original text; no threshold moved.
+# The original is diffable at 7a98d4d under the hash above.
+PREREG_SHA = "b83e7308a62e041c2096bd6625ce7c46c086525346ec8b22f3e22fa54e361fb5"
 SCORER_SHA = "2abfdc6f730d786180e37f73e2951c303c5a7b42caa27dc3394c74c323d7bbfa"
 
 # every one of these is from docs/ADAMSON_PREREG.md and none may move
@@ -62,8 +65,12 @@ N_NULL = 1000               # P0
 P0_PERCENTILE = 99.0
 SEED = 0
 
-CONTROL_TOKENS = ("control", "ctrl", "non-targeting", "nontargeting",
-                  "non_targeting", "ntc", "unperturbed")
+# Amendment 1: control is defined by CONSTRUCT IDENTITY, not by picking a label
+# after seeing the data. All 100 targeting guides are GENE_pDS###; of the 13 pBA
+# constructs, 10 name a human UPR gene. The rest carry (mod) and name no human
+# gene -- Gal4 is a yeast TF with no human homolog. Controls are POOLED.
+def _is_control(label: str) -> bool:
+    return "(mod)" in label and "_pBA" in label
 
 
 def _sha(p: Path) -> str:
@@ -135,24 +142,24 @@ def load_substrate() -> dict:
     M = sparse.diags((COUNTS_PER_CELL / tot).astype(np.float32)) @ M
     M.data = np.log1p(M.data)
 
-    # 3. control label, resolved from the substrate and recorded verbatim
+    # 3-4. pseudobulk per construct, >= 25 cells. The floor is the ORIGINAL
+    # pre-registered one and applies to controls too -- 62(mod)_pBA581 has 2
+    # cells and is excluded by it, not by anything added after the fact.
     labels = pd.Series(pert)
-    uniq = labels.unique()
-    ctrl = next((u for u in uniq
-                 if any(t in str(u).lower() for t in CONTROL_TOKENS)), None)
-    if ctrl is None:
-        raise SystemExit(
-            "NOT RUNNABLE: no control label in obs.perturbation. The "
-            "pre-registration forbids relaxing this step. Labels: "
-            f"{sorted(map(str, uniq))[:20]}")
-
-    # 4. pseudobulk per perturbation, >= 25 cells
+    uniq = list(labels.unique())
     counts = labels.value_counts()
     kept = [u for u in uniq if counts[u] >= MIN_CELLS_PER_PERT]
     dropped = sorted(str(u) for u in uniq if counts[u] < MIN_CELLS_PER_PERT)
-    if ctrl not in kept:
-        raise SystemExit(f"NOT RUNNABLE: control '{ctrl}' has {counts[ctrl]} "
-                         f"cells, below the pre-registered {MIN_CELLS_PER_PERT}.")
+
+    controls = [u for u in kept if _is_control(str(u))]
+    excluded_ctrl = [str(u) for u in uniq
+                     if _is_control(str(u)) and u not in kept]
+    if not controls:
+        raise SystemExit(
+            "NOT RUNNABLE: no (mod)_pBA control construct survives the "
+            f"{MIN_CELLS_PER_PERT}-cell floor. The pre-registration forbids "
+            "relaxing this step.")
+
     order = {u: i for i, u in enumerate(kept)}
     col = np.array([order.get(u, -1) for u in labels])
     sel = col >= 0
@@ -161,21 +168,32 @@ def load_substrate() -> dict:
          (col[sel], np.nonzero(sel)[0])), shape=(len(kept), n_cells))
     PB = np.asarray((G @ M).todense())
 
-    # 5. effect = pseudobulk(perturbation) - pseudobulk(control), control dropped
-    ci = order[ctrl]
-    control_expr = PB[ci].copy()
-    rows = [u for u in kept if u != ctrl]
-    X = np.vstack([PB[order[u]] for u in rows]) - control_expr
+    # 5. POOLED control (Amendment 1): cell-weighted mean over the control
+    # constructs, i.e. the mean over the pooled control cells.
+    w = np.array([counts[c] for c in controls], dtype=np.float64)
+    pooled = (np.vstack([PB[order[c]] for c in controls]) * w[:, None]).sum(0) / w.sum()
 
-    # 6. mask, never impute
-    X[~np.isfinite(X)] = np.nan
+    rows = [u for u in kept if u not in set(controls)]
+    Xt = np.vstack([PB[order[u]] for u in rows])
 
-    return {"X": X, "symbols": np.asarray(symbols, dtype=object),
+    def _effect(ref):
+        E = Xt - ref
+        E[~np.isfinite(E)] = np.nan          # 6. mask, never impute
+        return E
+
+    return {"X": _effect(pooled), "symbols": np.asarray(symbols, dtype=object),
             "perturbations": np.array([str(u) for u in rows], dtype=object),
-            "control_label": str(ctrl), "control_expr": control_expr,
+            "control_labels": [str(c) for c in controls],
+            "control_definition": "(mod) AND _pBA — construct identity, Amendment 1",
+            "control_expr": pooled,
+            "single_control_effects": {
+                str(c): _effect(PB[order[c]]) for c in controls},
             "n_cells": int(n_cells), "n_genes_raw": int(n_genes),
             "n_genes_kept": int(keep.sum()), "gene_field": gene_field,
-            "encoding": enc, "n_cells_control": int(counts[ctrl]),
+            "encoding": enc,
+            "n_cells_control_pooled": int(w.sum()),
+            "n_cells_per_control": {str(c): int(counts[c]) for c in controls},
+            "control_constructs_excluded_by_cell_floor": excluded_ctrl,
             "dropped_perturbations": dropped,
             "median_cells_per_perturbation": float(counts[kept].median())}
 
@@ -216,6 +234,37 @@ def engagement_p0(X, symbols, control_expr, program) -> dict:
             "matched_on": "set size and control-expression decile"}
 
 
+def score_programs(X, symbols, sets, progress=False) -> pd.DataFrame:
+    """Score all 50 Hallmark programs with the frozen scorer, unmodified."""
+    rows = []
+    for i, (name, program) in enumerate(sorted(sets.items()), 1):
+        u_z, cos, delta, n_present = SC.score(X, symbols, program)
+        p = 2 * norm.sf(np.abs(u_z))
+        ok = np.isfinite(p)
+        q = np.full_like(p, np.nan)
+        if ok.sum():
+            q[ok] = multipletests(p[ok], method="fdr_bh")[1]
+        n_hits = int(np.nansum(q < SW.ALPHA))
+        rows.append({"program": name, "n_declared": len(program),
+                     "n_present": n_present,
+                     "frac_present": round(n_present / len(program), 4),
+                     "n_hits_q05": n_hits,
+                     "R_p": round(float(np.log10(1 + n_hits)), 4),
+                     "scoreable": bool(n_present >= 2 and np.isfinite(u_z).any())})
+        if progress and i % 10 == 0:
+            print(f"  {i}/50 …")
+    return pd.DataFrame(rows)
+
+
+def fit_size(d: pd.DataFrame) -> dict:
+    """The deciding statistic: R2 of R_p on n_present alone, OLS, one predictor."""
+    fit = sm.OLS(d.R_p, sm.add_constant(d.n_present)).fit()
+    return {"size_alone_r2": round(float(fit.rsquared), 4),
+            "slope": round(float(fit.params.iloc[1]), 6),
+            "slope_p": float(f"{fit.pvalues.iloc[1]:.4g}"),
+            "n_scoreable": int(len(d))}
+
+
 def main() -> None:
     # The scorer must be the frozen one; the pre-registration says abandon rather
     # than edit. Same for the pre-registration itself.
@@ -232,8 +281,11 @@ def main() -> None:
     X, symbols = sub["X"], sub["symbols"]
     print(f"Adamson substrate: {sub['n_cells']:,} cells x {sub['n_genes_raw']:,} "
           f"genes -> {sub['n_genes_kept']:,} kept")
-    print(f"  control label    : {sub['control_label']!r} "
-          f"({sub['n_cells_control']:,} cells)")
+    print(f"  control (pooled) : {sub['control_labels']} "
+          f"= {sub['n_cells_control_pooled']:,} cells")
+    if sub["control_constructs_excluded_by_cell_floor"]:
+        print(f"  excluded by the {MIN_CELLS_PER_PERT}-cell floor: "
+              f"{sub['control_constructs_excluded_by_cell_floor']}")
     print(f"  effect matrix    : {X.shape[0]} perturbations x {X.shape[1]} genes")
     print(f"  dropped (<{MIN_CELLS_PER_PERT} cells): {len(sub['dropped_perturbations'])}")
 
@@ -246,25 +298,7 @@ def main() -> None:
           f"  observed {p0.get('observed_mean_abs_effect')} vs null p99 "
           f"{p0.get('null_p99')}  (p={p0.get('empirical_p')})")
 
-    rows = []
-    for i, (name, program) in enumerate(sorted(sets.items()), 1):
-        u_z, cos, delta, n_present = SC.score(X, symbols, program)
-        p = 2 * norm.sf(np.abs(u_z))
-        ok = np.isfinite(p)
-        q = np.full_like(p, np.nan)
-        if ok.sum():
-            q[ok] = multipletests(p[ok], method="fdr_bh")[1]
-        n_hits = int(np.nansum(q < SW.ALPHA))
-        rows.append({"program": name, "n_declared": len(program),
-                     "n_present": n_present,
-                     "frac_present": round(n_present / len(program), 4),
-                     "n_hits_q05": n_hits,
-                     "R_p": round(float(np.log10(1 + n_hits)), 4),
-                     "scoreable": bool(n_present >= 2 and np.isfinite(u_z).any())})
-        if i % 10 == 0:
-            print(f"  {i}/50 …")
-
-    S = pd.DataFrame(rows)
+    S = score_programs(X, symbols, sets, progress=True)
     OUT.mkdir(parents=True, exist_ok=True)
     S.to_csv(OUT / "program_summary_adamson.csv", index=False)
 
@@ -285,14 +319,27 @@ def main() -> None:
             "gene_detect_frac": MIN_GENE_DETECT_FRAC,
             "counts_per_cell": COUNTS_PER_CELL,
             "min_cells_per_perturbation": MIN_CELLS_PER_PERT,
-            "control_label": sub["control_label"],
-            "n_cells_control": sub["n_cells_control"],
+            "control_definition": sub["control_definition"],
+            "control_labels": sub["control_labels"],
+            "n_cells_control_pooled": sub["n_cells_control_pooled"],
+            "n_cells_per_control": sub["n_cells_per_control"],
+            "control_constructs_excluded_by_cell_floor":
+                sub["control_constructs_excluded_by_cell_floor"],
             "gene_field": sub["gene_field"], "encoding": sub["encoding"],
             "n_cells": sub["n_cells"], "n_genes_raw": sub["n_genes_raw"],
             "n_genes_kept": sub["n_genes_kept"],
             "n_perturbations": int(X.shape[0]),
             "median_cells_per_perturbation": sub["median_cells_per_perturbation"],
             "dropped_perturbations": sub["dropped_perturbations"],
+        },
+        "preregistration_amendment": {
+            "amendment": 1, "date": "2026-08-15",
+            "original_sha256": PREREG_ORIGINAL_SHA, "original_commit": "7a98d4d",
+            "what_changed": "Resolved which construct is the control, by a rule "
+                            "about construct identity ((mod) AND _pBA, pooled), "
+                            "appended BELOW the original text.",
+            "thresholds_changed": "none — P0, P1, P2 and the R2 bands are "
+                                  "untouched and the original is diffable",
         },
         "p0_engagement": p0,
         "n_programs": len(S), "n_scoreable": n_scoreable,
@@ -318,8 +365,8 @@ def main() -> None:
                           f"{MIN_WITH_HITS}. R_p is degenerate and a regression on "
                           f"it would not be a measurement.")
     else:
-        fit = sm.OLS(d.R_p, sm.add_constant(d.n_present)).fit()
-        r2, slope = float(fit.rsquared), float(fit.params.iloc[1])
+        f = fit_size(d)
+        r2, slope = f["size_alone_r2"], f["slope"]
         if r2 >= R2_PERSISTS and slope > 0:
             v, c = "PERSISTS UNDER ENGAGEMENT", "(a)"
         elif r2 < R2_FLOOR or slope <= 0:
@@ -327,11 +374,26 @@ def main() -> None:
         else:
             v, c = "INCONCLUSIVE", None
         res.update(verdict=v, claim_supported=c,
-                   size_alone_r2=round(r2, 4), slope=round(slope, 6),
-                   slope_p=float(f"{fit.pvalues.iloc[1]:.4g}"),
+                   size_alone_r2=r2, slope=slope, slope_p=f["slope_p"],
                    k562_size_alone_r2_for_reference=json.loads(
                        Path("results/sensitivity/stripped_model.json").read_text()
                    )["set_size_alone"]["r2"])
+
+    # ---- Amendment 1 secondary: did the control choice manufacture this? ----
+    # Reported whatever it says. No threshold is applied and no verdict issues
+    # from it; the pooled definition remains the primary.
+    sens = {}
+    for lab, Xs in sub["single_control_effects"].items():
+        Ss = score_programs(Xs, symbols, sets)
+        ds = Ss[Ss.scoreable & (Ss.n_present > 0)]
+        sens[lab] = {**fit_size(ds), "n_cells": sub["n_cells_per_control"][lab],
+                     "n_with_at_least_one_hit": int((ds.n_hits_q05 > 0).sum())}
+    res["control_choice_sensitivity"] = {
+        "primary": "pooled non-targeting constructs, per Amendment 1",
+        "note": "Reported so a reader can see the control definition did not "
+                "manufacture the result. Descriptive: no threshold, no verdict.",
+        "per_single_control": sens,
+    }
 
     # ---- secondary, descriptive, no thresholds ----
     k562 = pd.read_csv(FROZEN / "program_summary.csv")

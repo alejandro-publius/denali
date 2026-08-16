@@ -11,6 +11,10 @@ dist/
 .ipynb_checkpoints/
 
 # --- large public raw data: re-downloadable, see docs/DATASETS.md ---
+# Both spellings on purpose. `data/raw/` matches a directory and does NOT match
+# a symlink of the same name, so when one was committed here it was tracked in
+# defiance of this file, and every clone got it.
+data/raw
 data/raw/
 data/validation_raw/
 

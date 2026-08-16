@@ -528,6 +528,37 @@ def main() -> int:
         check("radius is zero globally, as documented",
               "--radius:0px" in bp.replace(" ", "") and "`0px`" in design)
 
+    # ---------------- O. the RPE1 arm ----------------
+    # The only positive result in this project that is not a control, so it gets
+    # the most hostile invariants: the thresholds must match the pre-registration
+    # that was committed before the run, the scorer must be untouched, and the
+    # margin must be stated because it is thin.
+    rp = ROOT / "results" / "rpe1" / "rpe1_evaluation.json"
+    pre_p = ROOT / "docs" / "RPE1_PREREG.md"
+    if rp.exists() and pre_p.exists():
+        r = json.loads(rp.read_text())
+        import hashlib
+        live = hashlib.sha256(pre_p.read_bytes()).hexdigest()
+        check("RPE1: pre-registration unchanged since the run",
+              live == r["preregistration"]["sha256"], live[:16])
+        check("RPE1: thresholds in the doc match the ones applied",
+              "**0.25**" in pre_p.read_text() and "**0.10**" in pre_p.read_text())
+        check("RPE1: the frozen scorer was not modified",
+              r["scorer_sha256"].startswith("2abfdc6f") and r["scorer_unmodified"])
+        check("RPE1: verdict follows its own rule",
+              (r["size_alone_r2"] >= 0.25 and r["slope"] > 0)
+              == (r["verdict"] == "REPRODUCES"),
+              f"r2={r['size_alone_r2']} slope={r['slope']}")
+        check("RPE1: scoreable count clears the pre-registered floor of 35",
+              r["n_scoreable"] >= 35, f"got {r['n_scoreable']}")
+        check("RPE1: the 24.3% coverage caveat travels with the result",
+              "24.3%" in r["scope"] and "NOT a replication" in r["scope"])
+        check("RPE1: does not revise the frozen primary",
+              "does not revise" in " ".join(r).lower()
+              or "does_not_revise" in r)
+        check("RPE1: results are outside results/frozen/",
+              not (FROZEN / "rpe1_evaluation.json").exists())
+
     # ---------------- F. the docs' own self-description ----------------
     report_readme = (ROOT / "README.md").read_text()
     # These are hand-typed and therefore drift: the badge said 84, the Tests

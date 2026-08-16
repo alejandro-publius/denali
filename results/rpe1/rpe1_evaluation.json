@@ -1,0 +1,29 @@
+{
+  "preregistration": {
+    "file": "docs/RPE1_PREREG.md",
+    "sha256": "ae62fedaab26a2fadb9b555547cb2ab2cfeb6cb6f3cbbbd76bb63f14efef0df7",
+    "committed": "f509baa",
+    "committed_before_this_ran": true
+  },
+  "scorer_sha256": "2abfdc6f730d786180e37f73e2951c303c5a7b42caa27dc3394c74c323d7bbfa",
+  "scorer_unmodified": true,
+  "substrate": "rpe1_normalized_bulk_01.h5ad",
+  "n_unique_targets": 2386,
+  "n_programs": 50,
+  "n_scoreable": 49,
+  "n_zero_hit_programs": 6,
+  "size_alone_r2": 0.2758,
+  "slope": 0.0116,
+  "slope_p": 0.0001069,
+  "k562_size_alone_r2_for_reference": 0.4649,
+  "verdict": "REPRODUCES",
+  "claim_supported": "(a)",
+  "secondary_descriptive": {
+    "spearman_k562_vs_rpe1_R_p": 0.6486,
+    "p": 4.655e-07,
+    "n_programs": 49,
+    "note": "Descriptive only. No threshold was set for this and none is applied after the fact."
+  },
+  "scope": "NOT a replication. RPE1 covers 24.3% of K562's knockdown targets and that subset is disproportionately essential genes -- see the rpe1_coverage_collision control in results/frozen/controls.csv, which FAILS at 94.1% vs 11.3% coverage. This arm tests whether the structure holds in a second cell line, nothing more.",
+  "does_not_revise": "the pre-registered K562 primary in results/frozen/"
+}

@@ -1,0 +1,109 @@
+{
+ "preregistration": {
+  "file": "docs/ADAMSON_PREREG.md",
+  "sha256": "b83e7308a62e041c2096bd6625ce7c46c086525346ec8b22f3e22fa54e361fb5",
+  "committed": "7a98d4d",
+  "committed_before_this_ran": true
+ },
+ "scorer_sha256": "2abfdc6f730d786180e37f73e2951c303c5a7b42caa27dc3394c74c323d7bbfa",
+ "scorer_unmodified": true,
+ "substrate": "AdamsonWeissman2016_GSM2406681_10X010.h5ad",
+ "substrate_construction_covered_by_scorer_hash": false,
+ "construction": {
+  "note": "single-cell counts -> perturbation-effect matrix. NEW code, pre-specified in the pre-registration, NOT part of the frozen scorer. This is the arm's one real degree of freedom.",
+  "gene_detect_frac": 0.01,
+  "counts_per_cell": 10000.0,
+  "min_cells_per_perturbation": 25,
+  "control_definition": "(mod) AND _pBA \u2014 construct identity, Amendment 1",
+  "control_labels": [
+   "63(mod)_pBA580",
+   "Gal4-4(mod)_pBA582"
+  ],
+  "n_cells_control_pooled": 7293,
+  "n_cells_per_control": {
+   "63(mod)_pBA580": 6010,
+   "Gal4-4(mod)_pBA582": 1283
+  },
+  "control_constructs_excluded_by_cell_floor": [
+   "62(mod)_pBA581"
+  ],
+  "gene_field": "gene_symbol",
+  "encoding": "csc_matrix",
+  "n_cells": 65337,
+  "n_genes_raw": 32738,
+  "n_genes_kept": 11987,
+  "n_perturbations": 103,
+  "median_cells_per_perturbation": 582.0,
+  "dropped_perturbations": [
+   "62(mod)_pBA581",
+   "ATF4_pBA576",
+   "ATF4_pBA577",
+   "ATF6_pBA586",
+   "C7orf26_pDS004",
+   "CCND3_pDS005",
+   "EIF2AK3_pBA573",
+   "PSMD12_pDS009",
+   "STT3A_pDS010",
+   "YIPF5_pDS001"
+  ]
+ },
+ "preregistration_amendment": {
+  "amendment": 1,
+  "date": "2026-08-15",
+  "original_sha256": "4a7ece0376e2aac0433277d5dd7bd891bcaabf347d0c7505cb3e5859643101d9",
+  "original_commit": "7a98d4d",
+  "what_changed": "Resolved which construct is the control, by a rule about construct identity ((mod) AND _pBA, pooled), appended BELOW the original text.",
+  "thresholds_changed": "none \u2014 P0, P1, P2 and the R2 bands are untouched and the original is diffable"
+ },
+ "p0_engagement": {
+  "established": true,
+  "observed_mean_abs_effect": 0.055088,
+  "null_p99": 0.048675,
+  "null_mean": 0.042217,
+  "empirical_p": 0.000999000999000999,
+  "n_measured": 101,
+  "n_null_sets": 1000,
+  "seed": 0,
+  "matched_on": "set size and control-expression decile"
+ },
+ "n_programs": 50,
+ "n_scoreable": 50,
+ "n_with_at_least_one_hit": 39,
+ "n_zero_hit_programs": 11,
+ "verdict": "PERSISTS UNDER ENGAGEMENT",
+ "claim_supported": "(a)",
+ "size_alone_r2": 0.2685,
+ "slope": 0.007187,
+ "slope_p": 0.0001162,
+ "k562_size_alone_r2_for_reference": 0.4649,
+ "control_choice_sensitivity": {
+  "primary": "pooled non-targeting constructs, per Amendment 1",
+  "note": "Reported so a reader can see the control definition did not manufacture the result. Descriptive: no threshold, no verdict.",
+  "per_single_control": {
+   "63(mod)_pBA580": {
+    "size_alone_r2": 0.2398,
+    "slope": 0.007013,
+    "slope_p": 0.000307,
+    "n_scoreable": 50,
+    "n_cells": 6010,
+    "n_with_at_least_one_hit": 38
+   },
+   "Gal4-4(mod)_pBA582": {
+    "size_alone_r2": 0.2699,
+    "slope": 0.006991,
+    "slope_p": 0.0001104,
+    "n_scoreable": 50,
+    "n_cells": 1283,
+    "n_with_at_least_one_hit": 41
+   }
+  }
+ },
+ "secondary_descriptive": {
+  "spearman_k562_vs_adamson_R_p": 0.7218,
+  "p": 3.328e-09,
+  "n_programs": 50,
+  "note": "Descriptive only. No threshold was set for this and none is applied after the fact. The library designs differ by two orders of magnitude in size and by intent."
+ },
+ "scope": "NOT a replication of the K562 genome-scale result. Adamson is a TARGETED UPR library of 103 retained perturbations against K562's 9,837 genome-scale knockdowns -- deliberately enriched for regulators of the program under test. It is the worst substrate for a claim about unbiased screens and the best available one for a claim about engagement, and it is used only for the second. The single-cell to perturbation-effect construction is new code and is NOT covered by the frozen scorer's hash.",
+ "does_not_revise": "the pre-registered K562 primary in results/frozen/"
+}

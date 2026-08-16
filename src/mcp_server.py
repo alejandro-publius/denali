@@ -46,9 +46,16 @@ def reversibility(program: str) -> dict:
     if blocked is not None:
         return blocked
 
-    row = _S[_S.program == program]
+    # Case-insensitive, matching the refusals. A companion fix made `refuse()`
+    # case-insensitive and left the LOOKUP exact, which is the worse half of the
+    # asymmetry: a lowercase program name returned UNSCORED, i.e. a confident
+    # wrong answer ("not in the frozen matrix") rather than a refusal. Agents
+    # normalise case; MSigDB names are conventionally upper.
+    _q = (program or "").strip()
+    row = _S[_S.program.str.upper() == _q.upper()]
     if not row.empty:
         r = row.iloc[0]
+        program = r.program          # answer under the canonical name
         return {
             "program": program, "status": "MEASURED",
             "rank_of_50": int(r.rank_by_R_p),

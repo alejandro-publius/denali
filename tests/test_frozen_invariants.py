@@ -304,6 +304,25 @@ def main() -> int:
     for label, s in [("predictor_validation", VALIDATION), ("scope_limit", SCOPE)]:
         check(f"page quotes the server's {label} verbatim",
               html_unescape_contains(page, s), s[:52] + "\u2026")
+    # The refusal path and the lookup path must normalise the same way. They
+    # drifted once: refuse() was made case-insensitive while the program lookup
+    # stayed exact, so a lowercase name returned UNSCORED -- a confident wrong
+    # answer rather than a refusal, which is the worse failure of the two.
+    import importlib
+    _mcp = importlib.import_module("src.mcp_server")
+    _canon = str(summary.program.iloc[0])
+    _forms = [_canon, _canon.lower(), _canon.title(), f"  {_canon.lower()}  "]
+    _got = [_mcp.reversibility(f) for f in _forms]
+    check("MCP lookup normalises case the same way the refusals do",
+          all(g.get("status") == "MEASURED" and g.get("program") == _canon
+              for g in _got),
+          f"{[g.get('status') for g in _got]} for {len(_forms)} spellings of one name")
+    check("MCP still refuses a gene symbol in any case",
+          all(_mcp.reversibility(s).get("status") == "REFUSED"
+              for s in ("SREBF2", "srebf2", "SrebF2")))
+    check("MCP still reports a genuinely unscored program as UNSCORED",
+          _mcp.reversibility("HALLMARK_NOT_A_REAL_PROGRAM").get("status") == "UNSCORED")
+
     check("the server volunteers its failure unasked",
           wire["predictor_validation"] is VALIDATION and "worse than chance" in VALIDATION)
     check("the wire example carries the frozen balanced accuracy",

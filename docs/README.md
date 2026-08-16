@@ -46,6 +46,9 @@ came to check.
 | [`GATE_C1_PREREGISTRATION.md`](GATE_C1_PREREGISTRATION.md) · [`GATE_C1_RESULTS.md`](GATE_C1_RESULTS.md) | The measurability gate that selected the first program, pre-registered and then scored. |
 | [`HELDOUT_PROGRAM.md`](HELDOUT_PROGRAM.md) | The held-out program, named before the scoring code existed. |
 | [`DEMO.md`](DEMO.md) | The spoken demo, under three minutes. |
+| [`DECK.md`](DECK.md) | What is on screen while `DEMO.md` is spoken — the shot list, the three title cards, and the video settings. The deck is the live page, not slides. |
+| [`SUBMISSION.md`](SUBMISSION.md) | Paste-ready submission copy, every figure carried from `results/`. |
+| [`NUMBERING.md`](NUMBERING.md) | Why evaluation 8 is the off-target arm, and the disposition of all eleven branches. |
 
 ## Working documents, kept unedited on purpose
 

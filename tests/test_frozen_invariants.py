@@ -1116,7 +1116,7 @@ def main() -> int:
 
     # How many negative findings the page actually sets out as cards. The
     # heading has to agree with this, not with a number someone typed once.
-    _neg_sec = re.search(r"<h2>\w+ of the \w+ negative findings</h2>.*?</section>",
+    _neg_sec = re.search(r"<h2[^>]*>\w+ of the \w+ negative findings</h2>.*?</section>",
                          page, re.S)
     n_neg_cards = len(re.findall(r'<div class="card">', _neg_sec.group(0))) \
         if _neg_sec else -1
@@ -1168,7 +1168,10 @@ def main() -> int:
          (n_neg,), "the page lede, negative count"),
         # "Three of the four negative findings" — the first number is how many
         # cards that section actually renders, the second is the true total.
-        ("index.html", r"<h2>(\w+) of the (\w+) negative findings</h2>",
+        # `<h2[^>]*>` and not `<h2>`: adding an anchor id to the heading broke
+        # this once. The check is about the two counts, not about whether the
+        # tag carries attributes.
+        ("index.html", r"<h2[^>]*>(\w+) of the (\w+) negative findings</h2>",
          (n_neg_cards, n_neg), "the negatives heading"),
         # The objection-handling line in the demo. It sat at "Three of four" for
         # three arms -- through 8, 9 and 10 -- because it phrases the tally as
@@ -1281,7 +1284,7 @@ def main() -> int:
           "estimand" in corpus_md.lower()
           and row8 is not None and "not the same estimand" in
           report_readme[row8.start():row8.start() + 6000].lower())
-    check("corpus: README row 8 quotes the numbers the table recomputes",
+    check("corpus: the README corpus row quotes the numbers the table recomputes",
           row8 is not None and all(s in row8.group(0)
                                    for s in ("0.224", "9.6%", "1,272")))
     # The unreconciled independent run is the other load-bearing caveat in this
@@ -1303,7 +1306,7 @@ def main() -> int:
     # take: an explicit SCREEN_<id> token, or a PubMed id (source_id, >=5
     # digits — small-integer counts like "418 publications" stay legal).
     corpus_surfaces = {"docs/CORPUS.md": corpus_md,
-                       "README row 8": row8.group(0) if row8 else ""}
+                       "the README corpus row": row8.group(0) if row8 else ""}
     pmids = {s for s in per.source_id.dropna().astype(str) if len(s) >= 5}
     for label, text in corpus_surfaces.items():
         named = [p for p in pmids
@@ -1314,19 +1317,6 @@ def main() -> int:
               f"found {(named + screen_tok)[:5]}" if named or screen_tok else "")
 
 
-    # These are hand-typed and therefore drift: the badge said 84, the Tests
-    # section said 84, and the plain-language section said 86, while the suite
-    # was at 99. A judge who finds a stale test count stops trusting every other
-    # number, so the suite now counts itself and checks what the README claims.
-    total = len(PASS) + len(FAIL) + 4    # +4: the three below, plus the controls one
-    for pat, label in [(r"badge/tests-(\d+)-", "the CI badge"),
-                       (r"\*\*(\d+) assertions\*\*", "the Tests section"),
-                       (r"\*\*(\d+) automated checks\*\*", "the plain-language section")]:
-        m = re.search(pat, report_readme)
-        stated = int(m.group(1)) if m else -1
-        check(f"README test count in {label} matches the suite",
-              stated == total, f"says {stated}, suite has {total}")
-
     # Same failure mode, different number: controls.csv is the only truth.
     n_ctrl, n_ctrl_fail = len(controls), int((controls.verdict == "FAIL").sum())
     words = {3: "three", 4: "four", 5: "five", 6: "six", 7: "Seven", 8: "eight"}
@@ -1336,6 +1326,44 @@ def main() -> int:
     # rather than as a failure: "README lacks ..." on a PASS line reads as a bug.
     check("README controls count matches controls.csv", claim in report_readme,
           f"frozen: {n_ctrl} controls / {n_ctrl_fail} FAIL; README must say {claim!r}")
+
+    # ---------------- demo deep links ----------------
+    # docs/DECK.md navigates the live page by anchor during the talk. A renamed
+    # or dropped heading id turns a demo beat into a scroll hunt in front of
+    # judges, and nothing else in this suite would notice. Anchors are read out
+    # of the deck rather than hardcoded here, so adding a beat that jumps
+    # somewhere new is covered the moment it is written down.
+    deck = (ROOT / "docs" / "DECK.md")
+    if deck.exists():
+        wanted = sorted(set(re.findall(r"denali/#([a-z][a-z0-9-]*)", deck.read_text())))
+        have = set(re.findall(r'<h2 id="([^"]+)"', page))
+        missing = [a for a in wanted if a not in have]
+        check("every anchor the deck jumps to exists on the page",
+              wanted and not missing,
+              f"deck links to {len(wanted)}: {', '.join(wanted)}"
+              + (f" — MISSING {missing}" if missing else ""))
+
+    # ---------------- the suite counts itself: KEEP THIS LAST ----------------
+    # These are hand-typed and therefore drift: the badge said 84, the Tests
+    # section said 84, and the plain-language section said 86, while the suite
+    # was at 99. A judge who finds a stale test count stops trusting every other
+    # number, so the suite now counts itself and checks what the README claims.
+    #
+    # This block must stay at the bottom of main(). It used to sit mid-file with
+    # a hand-maintained "+4" for the checks that followed it, which meant a check
+    # added anywhere below was silently uncounted -- the run printed 356 while
+    # the self-count still said 355. The offset is now derived from the loop
+    # itself, so the only way to break it is to add a check after this point,
+    # which is what the comment above is for.
+    count_claims = [(r"badge/tests-(\d+)-", "the CI badge"),
+                    (r"\*\*(\d+) assertions\*\*", "the Tests section"),
+                    (r"\*\*(\d+) automated checks\*\*", "the plain-language section")]
+    total = len(PASS) + len(FAIL) + len(count_claims)
+    for pat, label in count_claims:
+        m = re.search(pat, report_readme)
+        stated = int(m.group(1)) if m else -1
+        check(f"README test count in {label} matches the suite",
+              stated == total, f"says {stated}, suite has {total}")
 
     # ---------------- report ----------------
     for p in PASS:

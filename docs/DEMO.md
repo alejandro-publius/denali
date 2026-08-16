@@ -21,7 +21,33 @@
 
 ---
 
-## 2 · NEGATIVE ONE — most of what looks like biology isn't biology
+## 2 · THE LOOP — it chooses, it proposes, and twice it stopped itself
+
+**Moved to the front deliberately.** The track is "build an AI scientist," and a
+judge scoring criterion 1 should not have to wait two minutes to see the agent.
+This beat also sets up the three negatives: two of them are the loop halting.
+
+*Screen: **the agent panel**, mid-run — picking its next program, halting on its own.*
+
+> **"Here it is running. It picks which program to read next by a stated policy, updates a running estimate, and stops when the estimate stops moving. When it halts it tells you that stopping early overstated its own answer by nought-point-oh-eight-one."**
+
+*Screen: the three proposals, side by side. Point at it; don't read it aloud.*
+
+| Result | Proposal it generates | Read from |
+|---|---|---|
+| **Null**, 0 hits | *"Members expressed and variable, nothing significant → power limit, not biology. Raise depth."* **Falsified if** doubling depth still yields nothing. | `expr_ratio`, `sd_ratio` |
+| **Hit**, 5,707 | *"Validate pathway-level, both tails, second cell type."* **Not gene-level, because concordance is −0.019.** | hits, residual |
+| **Unscored** | *"Predicted R_p 3.48, SD 0.58. The informative part is the residual."* | 6 features, no scoring |
+
+> **"Same code, three results, three different proposals. No branch in it tests a program name — grep the file for a pathway name and it returns nothing."**
+>
+> **"That loop ran eight laps. Three of them stopped on a rule we wrote before the run: two halted outright, and one refused to ask its question until it had proved the program was switched on. Two of those halts are the next two minutes of this talk."**
+
+`[pause]`
+
+---
+
+## 3 · NEGATIVE ONE — most of what looks like biology isn't biology
 
 > **"Between fifty-six and seventy-five percent of the variance in which programs look reversible is explained by how the programs were defined — chiefly their size — not biology."**
 >
@@ -36,7 +62,7 @@
 
 ---
 
-## 3 · NEGATIVE TWO — the filter anyone would build is wrong
+## 4 · NEGATIVE TWO — the filter anyone would build is wrong
 
 > **"We built the obvious quality filter: enough members measured, expressed above background, variable above background. Across fifty programs it's wrong twenty times. Twenty fail the filter and produce hits anyway."**
 >
@@ -49,7 +75,7 @@
 
 ---
 
-## 4 · NEGATIVE THREE — the held-out test failed
+## 5 · NEGATIVE THREE — the held-out test failed
 
 > **"Ten programs from a different collection, chosen by a public rule, not scored until the model was finished and frozen."**
 >
@@ -63,7 +89,7 @@
 
 ---
 
-## 5 · THE POSITIVE CONTROL — a control, not a headline
+## 6 · THE POSITIVE CONTROL — a control, not a headline
 
 > **"Two of the ten came back positive. This one is a control, not a discovery."**
 >
@@ -74,22 +100,6 @@
 > **"That tells you the ranking works. It does not tell you the ranking discovered anything, and we do not say that it did."**
 
 *Screen: the 17-gene rank distribution, both tails highlighted.*
-`[pause]`
-
----
-
-## 6 · THE LOOP — same agent, three results, three proposals
-
-*Screen: all three side by side. Point at it; don't read it aloud.*
-
-| Result | Proposal it generates | Read from |
-|---|---|---|
-| **Null**, 0 hits | *"Members expressed and variable, nothing significant → power limit, not biology. Raise depth."* **Falsified if** doubling depth still yields nothing. | `expr_ratio`, `sd_ratio` |
-| **Hit**, 5,707 | *"Validate pathway-level, both tails, second cell type."* **Not gene-level, because concordance is −0.019.** | hits, residual |
-| **Unscored** | *"Predicted R_p 3.48, SD 0.58. The informative part is the residual."* | 6 features, no scoring |
-
-> **"Same code, three results, three different proposals. No branch in it tests a program name."**
-
 `[pause]`
 
 ---
@@ -183,12 +193,18 @@ RPE1 24.2% coverage collision · tier detail · Sanger KY and scbench (not done,
 |---|---:|
 | Open | 0:12 |
 | 1 What it is | 0:15 |
-| 2 Negative one | 0:35 |
-| 3 Negative two | 0:35 |
-| 4 Negative three | 0:35 |
-| 5 The positive | 0:30 |
-| 6 The loop | 0:20 |
+| 2 The loop | 0:28 |
+| 3 Negative one | 0:35 |
+| 4 Negative two | 0:35 |
+| 5 Negative three | 0:35 |
+| 6 The positive | 0:30 |
 | Close | 0:15 |
-| **Total** | **2:57** |
+| **Total** | **3:05** |
 
-**If long, cut beat 1.** Never cut beat 4 or the close.
+**If long, cut beat 1** — that lands it at 2:50. Never cut beat 5 or the close.
+
+The loop moved from last to second and gained eight seconds for the eight-laps
+line. That is the deliberate trade: the track is "build an AI scientist," and the
+agent should be on screen inside the first forty seconds rather than after the
+statistics. If the room is running behind, cut the three-proposal table and keep
+the halts — the halts are the part that cannot be faked.

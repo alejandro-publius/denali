@@ -37,8 +37,16 @@ Seven tokens. Nothing outside this list appears on the page.
 | `--accent` | `#4a6fa5` | A muted slate blue. **Spent exactly twice** on the original page: the pull-quote rule and the footer link. Interactive additions have extended it — checkbox accent, the proposal rail, the halt heading — and that is the budget's edge. Adding an eighth use means removing one. |
 
 Semantic colour in figures (`#b2182b` red, `#2166ac` blue) comes from
-ColorBrewer's diverging scale and is **only** used inside matplotlib output, never
-in page chrome. It signals direction in data, not emphasis in text.
+ColorBrewer's diverging scale and is **only** used inside matplotlib output on
+index.html, never in its page chrome. It signals direction in data, not emphasis
+in text.
+
+**app.py's status palette.** The Streamlit page carries a semantic status set in
+chrome that the static page does not: `#1a7f37` (ok / green), `#9a6700` (warn /
+amber) and `#b2182b` (fail / red) on the tool-chain strip, plus that red and
+`#2166ac` (blue) marking the loop's null / hit / miss branches. Like the figure
+colours these signal state, not emphasis, and they are the only non-token hexes
+the design invariants permit on that surface.
 
 **Radius is `0px`, globally.** Set once in `:root` and applied with `*`. Every
 corner on the page is square, and that is a decision, not an oversight.

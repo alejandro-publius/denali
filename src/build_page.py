@@ -92,6 +92,29 @@ EV_PROBE = V(ev["probe_genes_returning_same_zebrafish_methods_paper"], "provenan
 EV_N = V(ev["probe_genes"], "provenance.evidence_layer.probe_genes")
 
 
+# ---------------- the two arms added after the freeze ----------------
+_rp = ROOT / "results" / "rpe1" / "rpe1_evaluation.json"
+_cc = ROOT / "results" / "concordance" / "cross_screen.json"
+RPE1 = json.loads(_rp.read_text()) if _rp.exists() else None
+CONC = json.loads(_cc.read_text()) if _cc.exists() else None
+
+if RPE1:
+    RP_R2 = V(RPE1["size_alone_r2"], "rpe1_evaluation.size_alone_r2")
+    RP_P = V(RPE1["slope_p"], "rpe1_evaluation.slope_p")
+    RP_N = V(RPE1["n_scoreable"], "rpe1_evaluation.n_scoreable")
+    RP_TGT = V(RPE1["n_unique_targets"], "rpe1_evaluation.n_unique_targets")
+if CONC:
+    CC_RAW = V(CONC["raw_agreement"]["spearman_rho"], "cross_screen.spearman_rho")
+    CC_PAR = V(CONC["how_much_is_size"]["spearman_after_removing_size"],
+               "cross_screen.spearman_after_removing_size")
+    CC_SHARE = round(abs(CC_RAW - CC_PAR) / abs(CC_RAW) * 100)
+    CC_TOP = V(CONC["raw_agreement"]["top_k_overlap"]["top_10"],
+               "cross_screen.top_10_overlap")
+    CC_SIZE = V(CONC["how_much_is_size"]["top_k_overlap_using_SIZE_ALONE_to_predict_rpe1"]["top_10"],
+                "cross_screen.top_10_from_size_alone")
+    CC_CHANCE = V(CONC["raw_agreement"]["top_k_overlap_expected_by_chance"]["top_10"],
+                  "cross_screen.top_10_by_chance")
+
 # ---------------------------------------------------------------- explorer data
 # Every row and every proposal is computed at build time from results/frozen/.
 # Embedded as JSON so the page needs no network and no server.
@@ -864,6 +887,47 @@ $("agSave").onclick=()=>{{
 </script>
 
 {figure("fig2_gate_failure.png")}
+
+<!-- 5b. two screens -->
+<section>
+<div class="label">Added after the freeze</div>
+<h2>&ldquo;It replicated in a second cell line&rdquo; is the strongest evidence a hit
+list ever gets. We measured what that evidence is worth.</h2>
+
+<p class="claim">A second, independently screened cell line &mdash; RPE1, {RP_TGT:,}
+knockdown targets against K562&rsquo;s {N_KD:,} &mdash; scored with the same frozen
+code. Two questions: does the size effect hold there, and when the two screens
+agree, is that biology?</p>
+
+<div class="metrics" style="margin-top:26px">
+  <div class="metric"><div class="n">{RP_R2}</div>
+    <div class="l">size alone, in RPE1. Pre-registered bar was 0.25, fixed and
+    hashed before the sweep ran. It clears by {RP_R2 - 0.25:.3f} &mdash; thin, and
+    we say so. p&nbsp;=&nbsp;{RP_P}, {RP_N} of 50 scoreable</div></div>
+  <div class="metric"><div class="n">{CC_RAW:+.3f}</div>
+    <div class="l">raw rank agreement between the two screens. This is the number
+    a replication claim rests on</div></div>
+  <div class="metric"><div class="n">{CC_PAR:+.3f}</div>
+    <div class="l">the same agreement after removing set size from both.
+    <b>{CC_SHARE}% of the replication was set size</b></div></div>
+  <div class="metric"><div class="n">{CC_SIZE}</div>
+    <div class="l">of the top 10 programs in the second screen, predictable from
+    set size alone. Observed overlap {CC_TOP}; chance {CC_CHANCE}</div></div>
+</div>
+
+<blockquote style="margin-top:30px"><p>Six of the top ten programs in an
+independent cell line can be predicted using nothing but how many genes are in
+each set. Both screens are confounded the same way, so agreeing for the same
+wrong reason looks exactly like agreeing for the right one.</p></blockquote>
+
+<p class="circ">The RPE1 arm was pre-registered; the concordance measurement was
+not, and is labelled post-freeze wherever it appears. RPE1 covers 24.3% of K562&rsquo;s
+targets and that quarter is disproportionately essential genes &mdash; our own
+coverage control, which <b>fails</b> at 94.1% versus 11.3%. So this is a
+generalisation test, not a replication, and the number above is a measurement on
+these two screens rather than a general estimate of anything. Both run on anyone
+else&rsquo;s paired screens: <code>audit_screen.py --hits-b</code>.</p>
+</section>
 
 <!-- 6. the heme example -->
 <section>

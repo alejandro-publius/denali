@@ -579,6 +579,47 @@ $("agSave").onclick=()=>{
   <figcaption><b>The filter anyone would build is wrong 20 times out of 50.</b> Each point is one program. Left: programs that fail our measurability filter. Right: programs that pass. Height is how many knockdowns moved the program, on a log scale. The shaded region is the failure mode: 20 of 50 programs fail the filter and produce hits anyway. Only one program passes the filter and returns nothing. Circled in red is the held-out program — it fails the filter on an expression ratio of 0.92, and still ranks 11th of 50 with 773 hits. We built a filter that would have discarded our own best result, and we only found that by scoring every program rather than the ones the filter approved.</figcaption>
 </figure>
 
+<!-- 5b. two screens -->
+<section>
+<div class="label">Added after the freeze</div>
+<h2>&ldquo;It replicated in a second cell line&rdquo; is the strongest evidence a hit
+list ever gets. We measured what that evidence is worth.</h2>
+
+<p class="claim">A second, independently screened cell line &mdash; RPE1, 2,386
+knockdown targets against K562&rsquo;s 9,837 &mdash; scored with the same frozen
+code. Two questions: does the size effect hold there, and when the two screens
+agree, is that biology?</p>
+
+<div class="metrics" style="margin-top:26px">
+  <div class="metric"><div class="n">0.2758</div>
+    <div class="l">size alone, in RPE1. Pre-registered bar was 0.25, fixed and
+    hashed before the sweep ran. It clears by 0.026 &mdash; thin, and
+    we say so. p&nbsp;=&nbsp;0.0001069, 49 of 50 scoreable</div></div>
+  <div class="metric"><div class="n">+0.663</div>
+    <div class="l">raw rank agreement between the two screens. This is the number
+    a replication claim rests on</div></div>
+  <div class="metric"><div class="n">+0.493</div>
+    <div class="l">the same agreement after removing set size from both.
+    <b>26% of the replication was set size</b></div></div>
+  <div class="metric"><div class="n">0.6</div>
+    <div class="l">of the top 10 programs in the second screen, predictable from
+    set size alone. Observed overlap 0.8; chance 0.2</div></div>
+</div>
+
+<blockquote style="margin-top:30px"><p>Six of the top ten programs in an
+independent cell line can be predicted using nothing but how many genes are in
+each set. Both screens are confounded the same way, so agreeing for the same
+wrong reason looks exactly like agreeing for the right one.</p></blockquote>
+
+<p class="circ">The RPE1 arm was pre-registered; the concordance measurement was
+not, and is labelled post-freeze wherever it appears. RPE1 covers 24.3% of K562&rsquo;s
+targets and that quarter is disproportionately essential genes &mdash; our own
+coverage control, which <b>fails</b> at 94.1% versus 11.3%. So this is a
+generalisation test, not a replication, and the number above is a measurement on
+these two screens rather than a general estimate of anything. Both run on anyone
+else&rsquo;s paired screens: <code>audit_screen.py --hits-b</code>.</p>
+</section>
+
 <!-- 6. the heme example -->
 <section>
 <blockquote><p>One held-out row carries the whole result. <b>REACTOME_SCAVENGING_OF_HEME_FROM_PLASMA</b> drew

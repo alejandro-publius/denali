@@ -99,7 +99,7 @@ Also measured: essentiality density is flat at program level, coefficient **−0
 - **Seven controls with published outcomes, four of them failing** — a pre-committed nonsense program returns zero hits against 517 and 773; guide-pair concordance is −0.019; top-50 essentiality enrichment is 4.09×. The failures are kept, not dropped
 - **Literature layer with per-gene provenance and a measured retrieval audit** — 113 genes, one citation each via Paperclip, then a blind 20-gene probe that found **19 of 20 returning the same unrelated paper**; we report the audit, not the layer
 - **Scope guard that fails the build** — the test suite scans the rendered page and the captions for any gene symbol within 260 characters of verdict language, so "no novel gene is named" is enforced by code rather than by memory
-- **Static page with every number injected from frozen files** — 32 values pass through a `V()` helper that records each source; a number that cannot be traced does not render
+- **Static page with every number injected from frozen files** — 42 values pass through a `V()` helper that records each source; a number that cannot be traced does not render
 - **Client-side program explorer** — all 50 programs sortable and filterable, one toggle isolating the 20 that fail the gate and produce hits anyway, held-out programs tagged, and a generated next-experiment proposal per program; embedded as JSON, zero network calls
 - **MCP server** exposing the matrix to agents, whose unscored branch reports the predictor's own failure verbatim
 - **The loop is drawn and falsifiable** — [`docs/LOOP.md`](docs/LOOP.md) shows the measure → model → gate → propose → audit cycle, names the file behind each stage, and publishes the one-line grep that would prove the claim false

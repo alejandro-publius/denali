@@ -1,0 +1,110 @@
+{
+  "status": "Pre-registered in docs/DOMAINS_PREREG.md (6d40a079..., a2776f7); CORRECTION 1 at 8d2296a.",
+  "recipe": "core.audit raw-size R^2 (verdict line), the log-size variant for percentile placement against the committed 1,272-screen CRISPR corpus, and core.rerank top-10 survival.",
+  "verdict": {
+    "n_rows": 6,
+    "n_defensible": 6,
+    "n_at_or_above_0.20_raw": 5,
+    "n_non_gene_at_or_above_0.40_raw": 2,
+    "claim_a_supported": true,
+    "claim": "(a) IT IS ARITHMETIC \u2014 the confound appears in domains that share no biology",
+    "thresholds_fixed_in": "docs/DOMAINS_PREREG.md, commit a2776f7, before any domain substrate was downloaded"
+  },
+  "rows": [
+    {
+      "domain": "1 \u00b7 gene sets (CRISPR screens)",
+      "substrate": "BioGRID ORCS 2.0.18 x Hallmark, 1,272 screens",
+      "n_sets": "50 per screen",
+      "size_range": "varies by screen",
+      "r2_size_alone_raw": 0.1918,
+      "r2_size_alone_log": 0.2244,
+      "verdict": "reference distribution",
+      "corpus_percentile_logsize": 50.0,
+      "rerank_top10_survived": null,
+      "note": "Pre-event work, cited not recomputed. This IS the reference distribution the other rows are placed against, so its percentile is 50 by construction.",
+      "headline_source": "results/corpus/corpus_audit.json"
+    },
+    {
+      "domain": "6 \u00b7 yeast genetic interaction",
+      "substrate": "Costanzo 2016 global network x SGD GO Slim",
+      "n_sets": 117,
+      "size_range": [
+        7,
+        1377
+      ],
+      "r2_size_alone_raw": 0.3567,
+      "r2_size_alone_log": 0.6806,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "corpus_percentile_logsize": 96.1,
+      "rerank_top10_survived": 5,
+      "note": "The best-annotated organism in biology. Registered expectation was 'at or above the corpus 25th percentile'.",
+      "headline_source": "results/domains/yeast.json"
+    },
+    {
+      "domain": "2 \u00b7 region sets",
+      "substrate": "ChIP-Atlas hg38 peak calls x GWAS Catalog SNPs",
+      "n_sets": 300,
+      "size_range": [
+        15,
+        84580
+      ],
+      "r2_size_alone_raw": 0.648,
+      "r2_size_alone_log": 0.8931,
+      "verdict": "CONFOUNDED",
+      "corpus_percentile_logsize": 99.6,
+      "rerank_top10_survived": 0,
+      "note": "No gene identifiers anywhere. Size is peaks called; 5638.7x size range.",
+      "headline_source": "results/domains/regions.json"
+    },
+    {
+      "domain": "3 \u00b7 metabolite sets (boundary condition)",
+      "substrate": "MetaboAnalyst cachexia x SMPDB",
+      "n_sets": 91,
+      "size_range": [
+        3,
+        8
+      ],
+      "r2_size_alone_raw": 0.3305,
+      "r2_size_alone_log": 0.2991,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "corpus_percentile_logsize": 81.8,
+      "rerank_top10_survived": 10,
+      "note": "Sets are 3-8 members. HEADLINE IS THE POST-HOC STRICT-HIT VARIANT: the registered BH q<0.05 rule made 86% of metabolites hits, so hits = rate x size by identity (R^2 0.9126, printed here and not used).",
+      "headline_source": "results/domains/metabolite.json"
+    },
+    {
+      "domain": "4 \u00b7 protein sets",
+      "substrate": "CPTAC COAD proteome x Reactome",
+      "n_sets": 1277,
+      "size_range": [
+        5,
+        399
+      ],
+      "r2_size_alone_raw": 0.3706,
+      "r2_size_alone_log": 0.4305,
+      "verdict": "PARTIALLY CONFOUNDED",
+      "corpus_percentile_logsize": 89.2,
+      "rerank_top10_survived": 1,
+      "note": "HEADLINE IS THE REGISTERED VARIANT: the pre-registered hit-fraction guard fired at 75% and required it (degenerate primary R^2 0.6969, printed here and not used).",
+      "headline_source": "results/domains/protein.json"
+    },
+    {
+      "domain": "5 \u00b7 microbiome functions",
+      "substrate": "curatedMetagenomicData, 5 of 11 CRC cohorts scoreable",
+      "n_sets": "5 cohorts",
+      "size_range": [
+        5,
+        570
+      ],
+      "r2_size_alone_raw": 0.6333,
+      "r2_size_alone_log": 0.4463,
+      "verdict": "CONFOUNDED (4/5 cohorts)",
+      "corpus_percentile_logsize": 89.7,
+      "rerank_top10_survived": 1.0,
+      "note": "DEVIATION (correction 1): sets = pathways, members = the species carrying them. 6 of 11 cohorts return NO significant stratum and are UNSCOREABLE, not scored as clean.",
+      "headline_source": "results/domains/microbiome.json"
+    }
+  ],
+  "caveat": "Percentiles place each domain against the CRISPR corpus using the SAME log-size transform on both sides. The raw and log columns are different transforms of the same data and are never compared to each other.",
+  "scope": "No individual set, experiment, cohort, trait or publication is named as a finding."
+}

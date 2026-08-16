@@ -87,6 +87,7 @@ all: check
 test:
 	@$(PY) tests/test_frozen_invariants.py
 	@$(PY) tests/test_cross_surface.py
+	@$(PY) tests/test_bigswing_invariants.py
 
 judge-check:
 	@echo "denali — judge check. No download, no API key, no network, no account."

@@ -3,7 +3,7 @@
 **A genome-scale CRISPRi screen, read back to ask what it can and cannot discover — and the answer is mostly an artifact of how the programs are defined, not their biology.**
 
 [![CI](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml/badge.svg)](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-384-brightgreen.svg)](tests/test_frozen_invariants.py)
+[![tests](https://img.shields.io/badge/tests-393-brightgreen.svg)](tests/test_frozen_invariants.py)
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](.python-version)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -169,6 +169,27 @@ Eleven evaluations. Seven negative, one with no verdict because our own power ru
 **On evaluation 5, the margin is thin and we are not going to pretend otherwise.** The pre-registered bar was R² ≥ 0.25 and the result is 0.2758 — it clears by 0.026. It is a genuine pre-registered positive, the threshold was fixed and hashed before the sweep ran ([`docs/RPE1_PREREG.md`](docs/RPE1_PREREG.md), sha256 `ae62feda…`, committed at `f509baa`), and the same byte-frozen scorer was used unmodified. But a bar cleared by that little would have been missed by a slightly noisier screen, and **this is a generalisation test, not a replication**: RPE1 covers 24.3% of K562's targets and that quarter is disproportionately essential genes — our own `rpe1_coverage_collision` control, which **FAILS** at 94.1% vs 11.3%. What it supports is that the size effect is a property of set-level statistics rather than of K562 alone. It does not make the K562 number more precise, and it does not revise the frozen primary.
 
 Also measured: essentiality density is flat at program level, coefficient **−0.021**, p = 0.90. It dominates individual hit lists and predicts nothing about whether a program is reversible.
+
+## Post-deadline extension — three arms, on a branch, not part of the eleven
+
+**These are not evaluations 12–14 and the table above is not renumbered.** The
+eleven closed evaluations stand unrevised and `results/frozen/` is untouched.
+This is later work testing whether the confound is *arithmetic* — which would
+mean it must appear wherever a score is aggregated over sets of varying size,
+including outside biology. Each arm was pre-registered and hashed before its
+data was downloaded.
+
+| arm | question | headline |
+|---|---|---|
+| [**Benchmarks**](docs/BENCHMARKS.md) | Is an AI leaderboard position predicted by subset size? | **No — and that is the finding.** Across 5,452 models on MMLU, the *count* layer is confounded exactly as hard as genomics (median R² **0.598**), and normalisation defeats it: rates are clean (ρ 0.12), and 0.9% of two benchmarks' agreement is shared weighting. Expected in advance and written down. `results/benchmarks/` |
+| [**Corrections**](docs/CORRECTIONS.md) | Do the published fixes work on real data at scale? | Six corrections × **1,272 screens**. CAMERA's variance inflation removes **85%** of the size dependence and makes 1.8% of screens worse; **denali's own residualisation removes marginally more but breaks 6.3%** — so the tool should recommend CAMERA's, not its own. The same competitive test *without* the inflation term is the worst method in the table. `results/corrections/` |
+| [**Six domains**](docs/DOMAINS.md) | Does it appear in fields that share no biology? | Yes, in all six, including **yeast at the 96th percentile** of the CRISPR corpus — the best-annotated organism in biology, so the confound is not sloppy curation — and **region sets at the 99.6th**, where a "set" is a pile of genomic intervals and its size is antibody and sequencing depth. `results/domains/TABLE.md` |
+
+Two registered hit rules turned out **degenerate** (75% and 86% of features
+called hits, making hits ≈ rate × size by identity); both are reported beside
+the usable variants rather than published as findings. Six of eleven microbiome
+cohorts are **UNSCOREABLE** rather than clean. `tests/test_bigswing_invariants.py`
+holds all three arms to their pre-registrations by hash.
 
 ## Features
 
@@ -499,7 +520,7 @@ Each was found only by running from a clean clone, and the third only after the 
 
 ## Tests
 
-`tests/test_frozen_invariants.py` — **384 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
+`tests/test_frozen_invariants.py` — **393 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
 
 Two guards exist because each caught a real defect. The **compile guard** parses every file under `src/` and `tests/` before anything else — added after a shipped module was found not to compile. The **scope guard** builds a gene-symbol universe from the Hallmark GMT and fails the build if any symbol appears within 260 characters of verdict language in the rendered page or the captions, with an allowance for "recovered known answer" and "positive control"; it enforces the −0.019 scope limit mechanically. A third set of checks asserts the page makes **no network calls** — no `fetch`, no `XMLHttpRequest`, no external script or stylesheet — so the interactive explorer cannot break unattended.
 
@@ -580,7 +601,7 @@ This is the part we care most about, so it is built into the code rather than pr
 - **We held ten pathways back** and only opened them after the model was frozen and hashed. The model **failed** on them — worse than a coin flip, zero true positives. We published that instead of quietly refitting.
 - **Seven of our eleven evaluations came back negative.** All eleven are reported, including the one that clears its bar by only 0.026.
 - **The one positive is a control, not a discovery.** Run unchanged on a pathway it was never tuned for, the ranking puts that pathway's known master switch at **rank 2 of 11,258**. So the machinery works — it just is not finding what people assume it is finding.
-- **384 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
+- **393 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
 
 ---
 

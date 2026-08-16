@@ -96,6 +96,71 @@
       "verdict": "WORKS ON MEDIAN, UNRELIABLE TAIL"
     }
   },
+  "top10_overlap_with_uncorrected_ranking": {
+    "why": "Hit counts are small integers with heavy ties, so the top of a Hallmark ranking is often tie-determined. A correction can collapse the size dependence while leaving the same sets at the top -- and in the screens where the confound is weakest that is exactly what happens. Where the baseline confound is strongest, the top ten does move.",
+    "n_screens_per_stratum": {
+      "<0.05": 122,
+      "0.05-0.10": 427,
+      "0.10-0.20": 518,
+      ">0.20": 205
+    },
+    "by_correction": {
+      "C1_hypergeom": {
+        "overall_median_overlap": 9.0,
+        "by_baseline_confound": {
+          "<0.05": 8.0,
+          "0.05-0.10": 9.0,
+          "0.10-0.20": 9.0,
+          ">0.20": 7.0
+        }
+      },
+      "C2_perm_z": {
+        "overall_median_overlap": 9.0,
+        "by_baseline_confound": {
+          "<0.05": 8.0,
+          "0.05-0.10": 9.0,
+          "0.10-0.20": 9.0,
+          ">0.20": 7.0
+        }
+      },
+      "C3_camera_rho0": {
+        "overall_median_overlap": 9.0,
+        "by_baseline_confound": {
+          "<0.05": 4.0,
+          "0.05-0.10": 9.0,
+          "0.10-0.20": 9.0,
+          ">0.20": 4.0
+        }
+      },
+      "C4_vif_rho01": {
+        "overall_median_overlap": 9.0,
+        "by_baseline_confound": {
+          "<0.05": 3.5,
+          "0.05-0.10": 9.0,
+          "0.10-0.20": 9.0,
+          ">0.20": 3.0
+        }
+      },
+      "C4_vif_rho05": {
+        "overall_median_overlap": 9.0,
+        "by_baseline_confound": {
+          "<0.05": 3.0,
+          "0.05-0.10": 9.0,
+          "0.10-0.20": 9.0,
+          ">0.20": 3.0
+        }
+      },
+      "C5_residual": {
+        "overall_median_overlap": 9.0,
+        "by_baseline_confound": {
+          "<0.05": 8.0,
+          "0.05-0.10": 9.0,
+          "0.10-0.20": 9.0,
+          ">0.20": 6.0
+        }
+      }
+    }
+  },
   "caveat": "Driving the size correlation to zero proves size-decoupling, not correctness; a correction that deleted all biology would also score perfectly here. No ground truth exists in this corpus.",
   "not_applicable": {
     "GOseq": "corrects a per-gene covariate (transcript length), not set size",

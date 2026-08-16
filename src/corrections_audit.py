@@ -295,6 +295,26 @@ def main() -> int:
             continue
         results[c] = aggregate(sub, c)
 
+    # ---- SECONDARY, registered as descriptive: does the top of the list move?
+    # The headline metric is how much size dependence survives a correction.
+    # That is not the same question as whether the sets a biologist would
+    # actually chase change places, and the two answers differ sharply, so
+    # both are reported. Stratified by how confounded the screen was to begin
+    # with, because a correction has nothing to remove from a clean screen.
+    R["stratum"] = pd.cut(R.before_rho2, [-1, 0.05, 0.10, 0.20, 1],
+                          labels=["<0.05", "0.05-0.10", "0.10-0.20", ">0.20"])
+    top10 = {}
+    for c in CORRECTIONS:
+        col = f"{c}_top10"
+        if col not in R:
+            continue
+        sub = R if not c.startswith(("C3", "C4")) else R[R.has_scores]
+        g = sub.groupby("stratum", observed=True)[col].median()
+        top10[c] = {"overall_median_overlap": float(sub[col].median()),
+                    "by_baseline_confound": {str(k): float(v) for k, v in g.items()}}
+    strata_n = {str(k): int(v) for k, v in
+                R.stratum.value_counts().sort_index().items()}
+
     summary = {
         "status": "Pre-registered in docs/CORRECTIONS_PREREG.md "
                   "(d58fa082..., commit a2776f7).",
@@ -306,6 +326,16 @@ def main() -> int:
         "before_rho2_median": round(float(R.before_rho2.median()), 4),
         "primary_metric": "squared Spearman correlation of ranked statistic vs set size",
         "corrections": results,
+        "top10_overlap_with_uncorrected_ranking": {
+            "why": "Hit counts are small integers with heavy ties, so the top "
+                   "of a Hallmark ranking is often tie-determined. A correction "
+                   "can collapse the size dependence while leaving the same "
+                   "sets at the top -- and in the screens where the confound is "
+                   "weakest that is exactly what happens. Where the baseline "
+                   "confound is strongest, the top ten does move.",
+            "n_screens_per_stratum": strata_n,
+            "by_correction": top10,
+        },
         "caveat": "Driving the size correlation to zero proves size-decoupling, "
                   "not correctness; a correction that deleted all biology would "
                   "also score perfectly here. No ground truth exists in this corpus.",

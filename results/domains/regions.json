@@ -1,0 +1,34 @@
+{
+  "domain": "region sets",
+  "status": "Pre-registered in docs/DOMAINS_PREREG.md (6d40a079..., a2776f7).",
+  "why_this_domain": "Shares no gene identifiers, no annotation database and no curation with the gene-set machinery. A set is a pile of intervals and its size is a property of antibody, depth and peak caller.",
+  "substrate": "NHGRI-EBI GWAS Catalog (GRCh38) x ChIP-Atlas hg38 peak calls at q < 1e-05",
+  "construction": {
+    "query_trait": "body height",
+    "query_rule": "MAPPED_TRAIT with the most associations at p < 5e-08; deterministic and capability-blind",
+    "n_query_snps": 27613,
+    "set_rule": "hg38 'TFs and others' experiments in the cell-type class with the most such experiments, sorted by ID, first 300",
+    "n_experiments_available": 7474,
+    "n_experiments_selected": 300,
+    "n_experiments_audited": 300,
+    "n_bed_files_missing": 0,
+    "metadata_peak_count_agreement": "300/300",
+    "tissue_matching": "NONE. Trait and cell-type class are selected by independent rules; this is not a biological claim about either."
+  },
+  "n_sets": 300,
+  "size_range": [
+    15,
+    84580
+  ],
+  "median_set_size": 2811,
+  "size_fold_range": 5638.7,
+  "r2_size_alone_raw": 0.648,
+  "r2_size_alone_log": 0.8931,
+  "spearman_size_vs_hits": 0.9552,
+  "verdict": "CONFOUNDED",
+  "corpus_percentile_logsize": 99.6,
+  "rerank_top10_survived": 0,
+  "rerank_top10_left": 10,
+  "sets_with_zero_hits": 85,
+  "scope": "No experiment, antigen or publication is named as a finding."
+}

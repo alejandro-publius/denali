@@ -221,17 +221,28 @@ def figure(name: str):
 
 
 # ==================================================== 1. HEADLINE  (above fold)
-st.markdown(f"<div class='huge'>{lo}–{hi}%</div>", unsafe_allow_html=True)
+# Mechanism first, matching index.html's hero. The crime-count analogy carries
+# the point; the numbers live inside sentences that carry their own caveats,
+# rather than as a bare stat the reader has to interpret alone.
 st.markdown(
-    "<div class='sub'>of how reversible a program looks is explained by how the "
-    "program was defined — chiefly its size — not by its biology.</div>",
+    "<div class='huge'>Bigger gene sets win, and it has nothing to do with "
+    "biology.</div>", unsafe_allow_html=True)
+st.markdown(
+    "<div class='sub'>A 200-gene program returns more hits than a 30-gene one "
+    "regardless of what either does — the way a raw crime count always ranks big "
+    "cities as the most dangerous.</div>", unsafe_allow_html=True)
+st.markdown(
+    f"<div class='circ'>Across all 50 Hallmark programs and 9,837 CRISPRi "
+    f"knockdowns in K562, program size alone explains {CAP['_size_pct']}% of what "
+    f"looks like discovery, and {lo}–{hi}% of the variance in apparent "
+    f"reversibility is explained without reference to what any program does.</div>",
     unsafe_allow_html=True)
 st.markdown(
-    "<div class='circ'>The range is that wide because one of our own features is "
-    "partly circular, and we report both ends.</div>", unsafe_allow_html=True)
-st.markdown(
-    f"<div class='size'>Program size alone explains {CAP['_size_pct']}%.</div>",
-    unsafe_allow_html=True)
+    f"<div class='size'>A range, not a point: one of our six features is computed "
+    f"from the same matrix as the outcome, so part of "
+    f"{ds['adjusted_r2_all_six']:.3f} is arithmetic — "
+    f"{ds['adjusted_r2_x_independent_only']:.3f} is the floor that survives it, and "
+    f"we never quote the top alone.</div>", unsafe_allow_html=True)
 
 st.write("")
 

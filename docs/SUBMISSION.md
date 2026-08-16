@@ -116,7 +116,7 @@ scaffolding around it.
 - **A byte-frozen scorer.** Every sweep verifies the scorer's sha256 on load and
   aborts if it moved. If that hash changes, the run is not the one these numbers
   came from.
-- **429 automated checks** that hold the prose to the data. The findings table in
+- **470 automated checks** that hold the prose to the data. The findings table in
   the README is the single source of truth; 15 restatements of the count across 7
   files fail the build if any one drifts.
 - **A clean-clone reproduction check.** Clone at a commit, run `make all`,
@@ -223,12 +223,16 @@ Two of these do more than get imported. **Paperclip is both an audited object
 and an instrument**: we probed its retrieval with 20 genes and 19 came back with
 the same unrelated paper (FIG 4), and then used it properly for evaluation 11's
 literature audit over 187 publications — the failure and the working use are
-both reported. **BenchFlow carries two tasks**, one per finding, in
+both reported. **BenchFlow carries three tasks** — two on the findings, one on the product — in
 `benchmarks/`: `denali-gate-trap` (predict which programs returned hits, given
 only measurability — the naive filter scores 0.6981) and
 `denali-confound-estimate` (estimate the size confound on seven real published
-screens, truth spanning 0.36–0.88). Both grade other people's agents; no denali
-result depends on either.
+screens, truth spanning 0.36–0.88), plus `denali-size-carried`, which scores
+whether an agent can apply the correction the tool ships rather than restate what
+we measured — which entries of a published top ten are carried by set size,
+graded against the size-aware residual. All three grade other people's agents
+deterministically in code, with no model judging; no denali result depends on any
+of them.
 
 Honest tool status — including what we set up and deliberately did **not** use,
 with the reason — is in [`docs/TOOLS.md`](TOOLS.md), and an automated check fails

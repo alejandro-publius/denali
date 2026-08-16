@@ -1,11 +1,18 @@
 # denali as a benchmark
 
-Two BenchFlow tasks, built because their framing — *a benchmark is just a frozen
+Three BenchFlow tasks, built because their framing — *a benchmark is just a frozen
 environment* — describes what this repository already was.
 
-Each turns one of this project's findings into a test of somebody else. Neither
-grades us: no denali result depends on either, and the answer keys live with the
-verifiers, outside the containers.
+Two turn a **finding** into a test of somebody else. The third turns the
+**product** into one: `denali-size-carried` scores whether an agent can apply the
+correction this project ships, not whether it can restate what we measured. That
+is a stronger version of the same move — a finding graded is a fact somebody has
+to reproduce, but a tool graded is a capability somebody has to have.
+
+None of them grades us: no denali result depends on any of the three, and every
+answer key lives with its verifier, outside the container. All three are graded
+deterministically in code. No model judges any of these tasks, including the two
+whose subject is a model's reasoning.
 
 ## `tasks/denali-gate-trap`
 
@@ -84,12 +91,53 @@ genes gets roughly twice the chances, and that is linear in size; compressing
 that axis measures a weaker, different thing. Corrected, the oracle reproduces
 all seven values exactly (MAE 0.000000).
 
+## `tasks/denali-size-carried`
+
+The other two grade a finding. This one grades **the product**: it hands an agent
+a ranked hit list and asks which entries are size-carried — which of the top ten
+are there because the set is big rather than because much came back. That is
+exactly what `denali rerank` does, so an agent scoring well on this task has the
+capability the tool packages, and one scoring zero does not.
+
+Same seven real published screens as `denali-confound-estimate`, plus the pinned
+top-10 ranking for each. Ranks and row indices are given rather than re-derived,
+because hit counts tie at one screen's top-10 boundary and another screen has two
+sets with the same name.
+
+Ground truth is the size-aware residual, verbatim from `denali_audit.core.rerank`:
+fit `log10(1+hits)` on raw size across **all** sets in the screen, re-rank by the
+residual, and an entry is size-carried if it is top ten by hits and not top ten by
+residual. **47 of the 70 entries are size-carried and one screen loses all ten.**
+
+| Strategy | Balanced accuracy | Reward |
+|---|--:|--:|
+| Call every entry size-carried | 0.5000 | 0.0000 |
+| Call no entry size-carried | 0.5000 | 0.0000 |
+| Call the largest 30% of each top 10 carried | 0.6910 | 0.3821 |
+| Call the lowest hits-per-gene 70% carried | 0.6975 | 0.3950 |
+| **Call the largest 70% of each top 10 carried** | **0.7623** | **0.5245** |
+| Reference solution (`oracle/solve.sh`) | 1.0000 | 1.0000 |
+
+Scoring is `max(0, 2 × balanced_accuracy − 1)` over all 70 decisions pooled.
+Balanced accuracy rather than accuracy or F1 because the classes are unbalanced
+47/23 — and the useful property is that **both constants score exactly 0.5, so
+both earn exactly zero, by arithmetic rather than by a tuned baseline.** The zero
+point does not move if the key is regenerated on different screens. That matters
+here more than in the other two tasks: since most entries are carried, "say
+everything is carried" is the obvious shortcut and it must be worth nothing.
+
+The size heuristics are listed because they are what a careful agent reaches for
+instead of running the correction. The best of them earns about half credit —
+right about the direction, wrong about which entries. Telling 10-of-10 from
+2-of-10 requires the residual.
+
 ## Validated
 
 ```
 bench tasks check tasks/denali-gate-trap          # valid (structural)
 bench tasks check tasks/denali-confound-estimate  # valid (structural)
-oracle -> verifier                                # 0.7413 / 1.0000
+bench tasks check tasks/denali-size-carried       # valid (structural)
+oracle -> verifier                                # 0.7413 / 1.0000 / 1.0000
 ```
 
 Checked against **benchflow 0.6.9**. Two findings from that revalidation:
@@ -110,3 +158,18 @@ Both verifiers discriminate rather than rubber-stamping. For
 | Constant 0.5 · constant true mean · all zeros · all ones | 0.0000 |
 | One screen missing · value outside [0,1] · string instead of number | 0.0 |
 | Malformed JSON · no answer file at all | 0.0 |
+
+For `denali-size-carried`, measured across twelve adversarial cases in the
+container:
+
+| Answer | Reward |
+|---|--:|
+| Oracle, exact | **1.0000** |
+| All carried · none carried | 0.0000 |
+| One screen missing · rank 11 · rank 0 | 0.0 |
+| String rank · boolean rank · value not a list · top level not an object | 0.0 |
+| Malformed JSON · no answer file at all | 0.0 |
+
+Note that "all carried" and "none carried" score 0.0000 rather than merely low.
+That is the design: they are the two answers an agent gives when it has noticed
+the confound exists but cannot locate it.

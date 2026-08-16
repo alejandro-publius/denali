@@ -1130,6 +1130,95 @@ def main() -> int:
     check("the asymmetry is justified by the predictor's own failure",
           str(held["axis2_balanced_accuracy"]) in _rdme)
 
+    # ---------------- R3. the benchmark task built on the PRODUCT -------------
+    # denali-gate-trap and denali-confound-estimate score a FINDING: can you
+    # reproduce what we measured. denali-size-carried scores the product: can you
+    # apply the correction the tool ships. Its answer key is therefore not a
+    # transcription of anything -- it is re-derived here from the packaged
+    # rerank() and must match the committed key exactly, so a change to the tool
+    # either updates the benchmark or fails the build.
+    import numpy as np                                          # noqa: E402
+    _sc = ROOT / "benchmarks" / "tasks" / "denali-size-carried"
+    _key = json.loads((_sc / "verifier" / "answer_key.json").read_text())
+    _ranked = json.loads((_sc / "environment" / "data" / "ranked_top10.json").read_text())
+    check("the size-carried task has all seven screens keyed",
+          len(_key) == 7 and set(_key) == set(_ranked), f"{sorted(_key)}")
+
+    _tp = _fp = _tn = _fn = 0
+    _all_true, _all_pred_big = [], []
+    for _s in sorted(_key):
+        _d = pd.read_csv(_sc / "environment" / "data" / f"{_s}.csv")
+        _rr = _pkg_core.rerank(_d["size"], _d["hits"], _d["set"], top=10)
+        # Re-derive size-carried by RANK, the way the verifier grades it.
+        _y = np.log10(1.0 + _d["hits"].values.astype(float))
+        _sz = _d["size"].values.astype(float)
+        _b = np.polyfit(_sz, _y, 1)
+        _res = _y - np.polyval(_b, _sz)
+        _crank = (-_res).argsort(kind="stable").argsort(kind="stable") + 1
+        _derived = sorted(e["rank"] for e in _ranked[_s] if _crank[e["row"]] > 10)
+        check(f"size-carried key re-derives from the packaged rerank: {_s}",
+              _derived == sorted(_key[_s]["size_carried_ranks"]),
+              f"derived {_derived} vs key {_key[_s]['size_carried_ranks']}")
+        check(f"size-carried key agrees with rerank's own survivor count: {_s}",
+              len(_derived) == _rr["left_top_n"] == 10 - _key[_s]["survived_top_n"],
+              f"{len(_derived)} vs {_rr['left_top_n']}")
+        # the pinned ranking must be the real top 10 by hits, in order
+        check(f"the pinned top 10 is the actual hit ranking: {_s}",
+              [e["hits"] for e in _ranked[_s]]
+              == sorted((e["hits"] for e in _ranked[_s]), reverse=True))
+        check(f"pinned rows point at the entries they claim: {_s}",
+              all(int(_d["hits"].values[e["row"]]) == e["hits"]
+                  and int(_d["size"].values[e["row"]]) == e["size"]
+                  for e in _ranked[_s]))
+        _t = set(_key[_s]["size_carried_ranks"])
+        _all_true.append((_s, _t))
+        _big = {e["rank"] for e in sorted(_ranked[_s], key=lambda e: -e["size"])[:7]}
+        _all_pred_big.append((_s, _big))
+
+    _n_carried = sum(len(t) for _, t in _all_true)
+    check("the size-carried task is 47 of 70 decisions, as documented",
+          _n_carried == 47 and 10 * len(_key) == 70, f"{_n_carried}/70")
+
+    def _bal(pred_by_screen):
+        tp = fp = tn = fn = 0
+        for (s, t), (_s2, p) in zip(_all_true, pred_by_screen):
+            tp += len(p & t); fp += len(p - t); fn += len(t - p)
+            tn += 10 - len(p & t) - len(p - t) - len(t - p)
+        sens = tp / (tp + fn) if tp + fn else 0.0
+        spec = tn / (tn + fp) if tn + fp else 0.0
+        return 0.5 * (sens + spec)
+
+    # The zero point is the whole design: BOTH constants must score exactly 0.5,
+    # so the shortcut "everything is carried" earns nothing. This is arithmetic,
+    # not a tuned baseline, and asserting it stops a future metric change from
+    # quietly making the shortcut pay.
+    _all_yes = [(s, set(range(1, 11))) for s, _ in _all_true]
+    _all_no = [(s, set()) for s, _ in _all_true]
+    check("size-carried: calling everything carried scores exactly 0.5",
+          abs(_bal(_all_yes) - 0.5) < 1e-12, f"{_bal(_all_yes)}")
+    check("size-carried: calling nothing carried scores exactly 0.5",
+          abs(_bal(_all_no) - 0.5) < 1e-12, f"{_bal(_all_no)}")
+    check("size-carried: the oracle's answer scores 1.0",
+          abs(_bal(_all_true) - 1.0) < 1e-12, f"{_bal(_all_true)}")
+    # And the documented naive baseline is re-derived, not transcribed.
+    _big_bal = _bal(_all_pred_big)
+    _bench_md = (ROOT / "benchmarks" / "README.md").read_text()
+    _task_md = (_sc / "task.md").read_text()
+    check("size-carried: the largest-70% baseline is the documented 0.7623",
+          near(_big_bal, 0.7623, 5e-5), f"{_big_bal:.4f}")
+    for _doc, _lbl in ((_bench_md, "benchmarks/README.md"), (_task_md, "task.md")):
+        check(f"{_lbl} states the re-derived 0.7623 baseline",
+              f"{_big_bal:.4f}" in _doc)
+        check(f"{_lbl} states the {max(0.0, 2 * _big_bal - 1):.4f} reward it earns",
+              f"{max(0.0, 2 * _big_bal - 1):.4f}" in _doc)
+    check("the size-carried task grades in code, with no model judging it",
+          not (_sc / "verifier" / "rubrics").exists()
+          and "No model judges" in _task_md)
+    check("the size-carried task names no gene",
+          "No gene is named in this task" in _task_md)
+    check("benchmarks/README says three tasks, two findings and one product",
+          "Three BenchFlow tasks" in _bench_md and "turns the\n**product**" in _bench_md)
+
     # ---------------- S. every branch says what would demote it ----------------
     # A proposal that cannot be wrong is not a proposal. The hit branch had no
     # falsification condition for hours, which is backwards -- that is the branch

@@ -1,0 +1,506 @@
+{
+  "screen_1": [
+    {
+      "rank": 1,
+      "row": 2592,
+      "set": "regulation of transcription, DNA-templated (GO:0006355)",
+      "size": 2244,
+      "hits": 58
+    },
+    {
+      "rank": 2,
+      "row": 2677,
+      "set": "regulation of transcription by RNA polymerase II (GO:0006357)",
+      "size": 2206,
+      "hits": 55
+    },
+    {
+      "rank": 3,
+      "row": 0,
+      "set": "cellular macromolecule biosynthetic process (GO:0034645)",
+      "size": 314,
+      "hits": 42
+    },
+    {
+      "rank": 4,
+      "row": 605,
+      "set": "regulation of gene expression (GO:0010468)",
+      "size": 1079,
+      "hits": 37
+    },
+    {
+      "rank": 5,
+      "row": 1545,
+      "set": "positive regulation of transcription, DNA-templated (GO:0045893)",
+      "size": 1183,
+      "hits": 36
+    },
+    {
+      "rank": 6,
+      "row": 7,
+      "set": "DNA metabolic process (GO:0006259)",
+      "size": 277,
+      "hits": 34
+    },
+    {
+      "rank": 7,
+      "row": 136,
+      "set": "regulation of apoptotic process (GO:0042981)",
+      "size": 742,
+      "hits": 33
+    },
+    {
+      "rank": 8,
+      "row": 1007,
+      "set": "negative regulation of transcription, DNA-templated (GO:0045892)",
+      "size": 948,
+      "hits": 31
+    },
+    {
+      "rank": 9,
+      "row": 437,
+      "set": "regulation of cell population proliferation (GO:0042127)",
+      "size": 764,
+      "hits": 29
+    },
+    {
+      "rank": 10,
+      "row": 1286,
+      "set": "positive regulation of transcription by RNA polymerase II (GO:0045944)",
+      "size": 908,
+      "hits": 29
+    }
+  ],
+  "screen_2": [
+    {
+      "rank": 1,
+      "row": 0,
+      "set": "GO:0006357~regulation of transcription by RNA polymerase II",
+      "size": 1721,
+      "hits": 809
+    },
+    {
+      "rank": 2,
+      "row": 2,
+      "set": "GO:0000981~DNA-binding transcription factor activity, RNA polymerase II-specific",
+      "size": 1285,
+      "hits": 639
+    },
+    {
+      "rank": 3,
+      "row": 1,
+      "set": "GO:0000978~RNA polymerase II cis-regulatory region sequence-specific DNA binding",
+      "size": 1198,
+      "hits": 637
+    },
+    {
+      "rank": 4,
+      "row": 3,
+      "set": "GO:0000398~mRNA splicing, via spliceosome",
+      "size": 196,
+      "hits": 94
+    },
+    {
+      "rank": 5,
+      "row": 6,
+      "set": "hsa03040:Spliceosome",
+      "size": 217,
+      "hits": 60
+    },
+    {
+      "rank": 6,
+      "row": 4,
+      "set": "GO:0005681~spliceosomal complex",
+      "size": 139,
+      "hits": 56
+    },
+    {
+      "rank": 7,
+      "row": 5,
+      "set": "GO:0071013~catalytic step 2 spliceosome",
+      "size": 96,
+      "hits": 44
+    },
+    {
+      "rank": 8,
+      "row": 7,
+      "set": "GO:0060261~positive regulation of transcription initiation by RNA polymerase II",
+      "size": 60,
+      "hits": 44
+    },
+    {
+      "rank": 9,
+      "row": 75,
+      "set": "hsa03082:ATP-dependent chromatin remodeling",
+      "size": 117,
+      "hits": 41
+    },
+    {
+      "rank": 10,
+      "row": 95,
+      "set": "GO:0003689~DNA clamp loader activity",
+      "size": 160,
+      "hits": 39
+    }
+  ],
+  "screen_3": [
+    {
+      "rank": 1,
+      "row": 1853,
+      "set": "hsa05022 Pathways of neurodegeneration - multiple diseases",
+      "size": 476,
+      "hits": 79
+    },
+    {
+      "rank": 2,
+      "row": 1856,
+      "set": "hsa05010 Alzheimer disease",
+      "size": 384,
+      "hits": 58
+    },
+    {
+      "rank": 3,
+      "row": 1854,
+      "set": "hsa05012 Parkinson disease",
+      "size": 266,
+      "hits": 52
+    },
+    {
+      "rank": 4,
+      "row": 1860,
+      "set": "hsa05014 Amyotrophic lateral sclerosis",
+      "size": 364,
+      "hits": 50
+    },
+    {
+      "rank": 5,
+      "row": 1858,
+      "set": "hsa05208 Chemical carcinogenesis - reactive oxygen species",
+      "size": 223,
+      "hits": 46
+    },
+    {
+      "rank": 6,
+      "row": 1,
+      "set": "GO:2001233 regulation of apoptotic signaling pathway",
+      "size": 370,
+      "hits": 45
+    },
+    {
+      "rank": 7,
+      "row": 1713,
+      "set": "GO:0031625 ubiquitin protein ligase binding",
+      "size": 298,
+      "hits": 44
+    },
+    {
+      "rank": 8,
+      "row": 1714,
+      "set": "GO:0044389 ubiquitin-like protein ligase binding",
+      "size": 317,
+      "hits": 44
+    },
+    {
+      "rank": 9,
+      "row": 1862,
+      "set": "hsa05020 Prion disease",
+      "size": 273,
+      "hits": 44
+    },
+    {
+      "rank": 10,
+      "row": 1866,
+      "set": "hsa05016 Huntington disease",
+      "size": 306,
+      "hits": 44
+    }
+  ],
+  "screen_4": [
+    {
+      "rank": 1,
+      "row": 16,
+      "set": "GOBP_CELLULAR_MACROMOLECULE_BIOSYNTHETIC_PROCESS",
+      "size": 1557,
+      "hits": 52
+    },
+    {
+      "rank": 2,
+      "row": 19,
+      "set": "GOBP_ORGANONITROGEN_COMPOUND_BIOSYNTHETIC_PROCESS",
+      "size": 1703,
+      "hits": 52
+    },
+    {
+      "rank": 3,
+      "row": 20,
+      "set": "GOBP_PROTEIN_CONTAINING_COMPLEX_ORGANIZATION",
+      "size": 1763,
+      "hits": 52
+    },
+    {
+      "rank": 4,
+      "row": 2,
+      "set": "GOBP_MITOCHONDRION_ORGANIZATION",
+      "size": 518,
+      "hits": 50
+    },
+    {
+      "rank": 5,
+      "row": 17,
+      "set": "GOBP_PEPTIDE_METABOLIC_PROCESS",
+      "size": 908,
+      "hits": 41
+    },
+    {
+      "rank": 6,
+      "row": 21,
+      "set": "GOBP_CELLULAR_AMIDE_METABOLIC_PROCESS",
+      "size": 1181,
+      "hits": 41
+    },
+    {
+      "rank": 7,
+      "row": 14,
+      "set": "GOBP_PEPTIDE_BIOSYNTHETIC_PROCESS",
+      "size": 740,
+      "hits": 40
+    },
+    {
+      "rank": 8,
+      "row": 18,
+      "set": "GOBP_AMIDE_BIOSYNTHETIC_PROCESS",
+      "size": 870,
+      "hits": 40
+    },
+    {
+      "rank": 9,
+      "row": 0,
+      "set": "GOBP_MITOCHONDRIAL_RESPIRATORY_CHAIN_COMPLEX_ASSEMBLY",
+      "size": 94,
+      "hits": 38
+    },
+    {
+      "rank": 10,
+      "row": 15,
+      "set": "GOBP_GENERATION_OF_PRECURSOR_METABOLITES_AND_ENERGY",
+      "size": 494,
+      "hits": 34
+    }
+  ],
+  "screen_5": [
+    {
+      "rank": 1,
+      "row": 14,
+      "set": "intracellular anatomical structure",
+      "size": 14808,
+      "hits": 350
+    },
+    {
+      "rank": 2,
+      "row": 29,
+      "set": "organelle",
+      "size": 14027,
+      "hits": 331
+    },
+    {
+      "rank": 3,
+      "row": 20,
+      "set": "membrane-bounded organelle",
+      "size": 13201,
+      "hits": 317
+    },
+    {
+      "rank": 4,
+      "row": 51,
+      "set": "intracellular organelle",
+      "size": 13117,
+      "hits": 310
+    },
+    {
+      "rank": 5,
+      "row": 35,
+      "set": "intracellular membrane-bounded organelle",
+      "size": 12046,
+      "hits": 291
+    },
+    {
+      "rank": 6,
+      "row": 57,
+      "set": "protein-containing complex",
+      "size": 5541,
+      "hits": 147
+    },
+    {
+      "rank": 7,
+      "row": 37,
+      "set": "endomembrane system",
+      "size": 4651,
+      "hits": 129
+    },
+    {
+      "rank": 8,
+      "row": 41,
+      "set": "cellular localization",
+      "size": 3519,
+      "hits": 110
+    },
+    {
+      "rank": 9,
+      "row": 46,
+      "set": "macromolecule localization",
+      "size": 3148,
+      "hits": 99
+    },
+    {
+      "rank": 10,
+      "row": 39,
+      "set": "protein localization",
+      "size": 2670,
+      "hits": 88
+    }
+  ],
+  "screen_6": [
+    {
+      "rank": 1,
+      "row": 580,
+      "set": "GO:0005524",
+      "size": 386,
+      "hits": 177
+    },
+    {
+      "rank": 2,
+      "row": 0,
+      "set": "bta05022",
+      "size": 490,
+      "hits": 171
+    },
+    {
+      "rank": 3,
+      "row": 460,
+      "set": "GO:0005886",
+      "size": 477,
+      "hits": 169
+    },
+    {
+      "rank": 4,
+      "row": 461,
+      "set": "GO:0005654",
+      "size": 366,
+      "hits": 145
+    },
+    {
+      "rank": 5,
+      "row": 1,
+      "set": "bta05010",
+      "size": 385,
+      "hits": 140
+    },
+    {
+      "rank": 6,
+      "row": 2,
+      "set": "bta05014",
+      "size": 384,
+      "hits": 137
+    },
+    {
+      "rank": 7,
+      "row": 3,
+      "set": "bta04151",
+      "size": 379,
+      "hits": 133
+    },
+    {
+      "rank": 8,
+      "row": 4,
+      "set": "bta05165",
+      "size": 352,
+      "hits": 127
+    },
+    {
+      "rank": 9,
+      "row": 7,
+      "set": "bta05016",
+      "size": 319,
+      "hits": 112
+    },
+    {
+      "rank": 10,
+      "row": 5,
+      "set": "bta04010",
+      "size": 292,
+      "hits": 111
+    }
+  ],
+  "screen_7": [
+    {
+      "rank": 1,
+      "row": 8,
+      "set": "cytoskeleton",
+      "size": 92,
+      "hits": 14
+    },
+    {
+      "rank": 2,
+      "row": 5,
+      "set": "cytoskeletal protein binding",
+      "size": 66,
+      "hits": 11
+    },
+    {
+      "rank": 3,
+      "row": 7,
+      "set": "polymeric cytoskeletal fiber",
+      "size": 50,
+      "hits": 10
+    },
+    {
+      "rank": 4,
+      "row": 10,
+      "set": "supramolecular polymer",
+      "size": 57,
+      "hits": 10
+    },
+    {
+      "rank": 5,
+      "row": 11,
+      "set": "supramolecular complex",
+      "size": 57,
+      "hits": 10
+    },
+    {
+      "rank": 6,
+      "row": 12,
+      "set": "supramolecular fiber",
+      "size": 57,
+      "hits": 10
+    },
+    {
+      "rank": 7,
+      "row": 1,
+      "set": "actin filament-based process",
+      "size": 37,
+      "hits": 9
+    },
+    {
+      "rank": 8,
+      "row": 4,
+      "set": "cell adhesion",
+      "size": 49,
+      "hits": 9
+    },
+    {
+      "rank": 9,
+      "row": 15,
+      "set": "extracellular matrix",
+      "size": 49,
+      "hits": 9
+    },
+    {
+      "rank": 10,
+      "row": 3,
+      "set": "actin cytoskeleton organization",
+      "size": 30,
+      "hits": 8
+    }
+  ]
+}

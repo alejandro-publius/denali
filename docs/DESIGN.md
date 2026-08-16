@@ -127,6 +127,62 @@ browser print or PDF stays legible and spends no ink on backgrounds. The one
 accepted risk is a wide table clipping at page width: `overflow-x:auto` handles
 it on screen and a printer cannot scroll.
 
+## The page as a judge meets it — measured 2026-08-16
+
+Four conditions nobody had tested until the night before submission. All four
+were run against the built artifact, not asserted.
+
+### Slow network — the single-file design holds
+
+The page is one 1,088 KB file with every asset inlined, which sounds like the
+worst possible shape for a bad connection. It is not, because of where the
+weight sits:
+
+| | offset | note |
+|---|---:|---|
+| `</style>` ends | 75 KB | includes all four woff2 faces, `font-display:swap` |
+| `<h1 class="hero">` | 90 KB | 8.3% into the file |
+| four inlined PNG figures | 91–1,077 KB | 903 KB, all **after** the hero |
+
+Throttled to slow 3G (400 kbps, 400 ms latency) against the hosted URL:
+
+| | |
+|---|---:|
+| **hero text painted** | **1.79 s** |
+| explorer table populated | 7.33 s |
+| document complete | 15.65 s |
+
+**The dead interval is 1.8 seconds, not 15.** A first pass at this measurement
+reported 15.5 s and was wrong: it timed `domcontentloaded`, which waits for all
+1,088 KB to parse, rather than when anything is actually on screen. The
+distinction matters because it is the difference between "this design is broken
+on venue wifi" and "this design is fine", and only one of those is true.
+
+Nothing here needs fixing. If it ever does, the lever is the 903 KB of figures,
+not the 75 KB head — and moving them out of the file would cost the zero-network
+property, which is worth more than four seconds of figure loading.
+
+### Safari / WebKit
+
+Tested in WebKit at 1200 px and 390 px, not just Chromium — it is a Mac room.
+No overflow at either width, one `h1`, all 50 explorer rows, inlined Poppins
+resolves (so the woff2 data URIs work), zero broken images, the agent reaches
+`HALTED`, keyboard `Enter` selects a row, and **zero page errors or console
+errors**.
+
+### Fully offline
+
+Every non-`file:`/`data:` request aborted at the network layer: zero requests
+were even attempted, because there are none to attempt. 50 rows, agent halts,
+detail panel populates, no broken images, fonts loaded. Clone the repo and
+double-click `index.html` and the page is complete.
+
+### Print
+
+A4 PDF renders at 1.19 MB with nothing wider than the 794 px print column, so no
+table clips and no code block splits. The clipping risk noted above does not
+currently occur.
+
 ## Type
 
 Four sizes, and a fifth only for the hero. Anything else is drift.

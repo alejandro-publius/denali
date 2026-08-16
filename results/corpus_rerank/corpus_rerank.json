@@ -1,0 +1,83 @@
+{
+  "status": "POST-HOC, exploratory. Not pre-registered.",
+  "question": "Of each published screen's top 10 sets (ranked by hits per set), how many keep a top-10 place once set size is regressed out?",
+  "correction": "denali_audit.core.rerank, the packaged code path, verbatim: log10(1+hits) regressed on set size; ranked by residual",
+  "estimand_warning": "The ranking corrected here is the naive hits-per-set ordering, the same construction evaluation 10's R^2 measures -- NOT any publication's own enrichment ranking, which ORCS does not carry. The rerank residualises RAW set size (the packaged tool's correction); evaluation 10's headline R^2 uses log size. Neither substitutes for the other.",
+  "source": "BioGRID ORCS 2.0.18, human, MIT licence. 1,952 screens / 418 publications.",
+  "gene_sets": "MSigDB Hallmark v2026.1.Hs, 50 sets",
+  "inclusion": "identical to evaluation 10: HIT=YES count >= 20 and >= 10,000 genes measured; >= 8 usable sets (>= 5 measured members)",
+  "n_screen_files": 1952,
+  "n_parse_failed": 0,
+  "n_excluded_by_rule": 680,
+  "n_screens_audited": 1272,
+  "sanity_gates": {
+    "join": {
+      "screens_matched_row_for_row": 1272,
+      "max_abs_r2_delta_vs_committed": 0.0
+    },
+    "own_screen": {
+      "r2_size_alone": 0.4649,
+      "corpus_p90": 0.4548,
+      "above_p90": true,
+      "survivors_top10": 3,
+      "matches_published_3_of_10": true
+    }
+  },
+  "quantiles": {
+    "p10": 6.0,
+    "p25": 8.0,
+    "p50": 9.0,
+    "p75": 9.0,
+    "p90": 9.0
+  },
+  "mean": 8.08,
+  "n_zero_survivors": 0,
+  "pct_zero_survivors": 0.0,
+  "n_all_ten_hold": 65,
+  "pct_all_ten_hold": 5.1,
+  "stratified_by_hitlist_size": [
+    {
+      "bin": "20-100",
+      "n": 118,
+      "median_survivors": 8.0,
+      "median_r2": 0.0564
+    },
+    {
+      "bin": "100-500",
+      "n": 166,
+      "median_survivors": 8.0,
+      "median_r2": 0.1837
+    },
+    {
+      "bin": "500-2000",
+      "n": 784,
+      "median_survivors": 9.0,
+      "median_r2": 0.2264
+    },
+    {
+      "bin": "2000-inf",
+      "n": 204,
+      "median_survivors": 9.0,
+      "median_r2": 0.2626
+    }
+  ],
+  "publication_level_pseudo_replication": {
+    "why": "Same correction as evaluation 10: one publication contributes up to hundreds of screens, so each is collapsed to its median screen before quantiles. Reported alongside the screen-level figures, never instead of them.",
+    "n_publications": 187,
+    "quantiles": {
+      "p10": 4.3,
+      "p25": 5.75,
+      "p50": 7.0,
+      "p75": 8.0,
+      "p90": 9.0
+    },
+    "median": 7.0
+  },
+  "tie_sensitivity": {
+    "why": "Hit counts tie, and the packaged rerank breaks ties by input order. Screens whose top-10 boundary sits on a tie are the ones where that arbitrary choice could move the count.",
+    "pct_screens_with_tied_top10_boundary": 36.3,
+    "median_survivors_untied_screens_only": 9.0,
+    "n_untied": 810
+  },
+  "spearman_r2_vs_survivors": -0.267
+}

@@ -1342,6 +1342,132 @@ def main() -> int:
               not named and not screen_tok,
               f"found {(named + screen_tok)[:5]}" if named or screen_tok else "")
 
+    # ---------------- H. the corpus rerank arm (post-hoc) ----------------
+    # Evaluation 10 measured how much of each published ranking size explains.
+    # This arm applies the packaged correction to the same screens and counts
+    # what leaves the top ten. It is guarded the same way: every number quoted
+    # recomputes from the committed per-screen table, and the arm's own join to
+    # evaluation 10 is asserted here rather than trusted, because a silent join
+    # drift would leave a plausible distribution computed over the wrong screens.
+    rr_dir = ROOT / "results" / "corpus_rerank"
+    rrj = json.loads((rr_dir / "corpus_rerank.json").read_text())
+    rper = pd.read_csv(rr_dir / "corpus_rerank_per_screen.csv", dtype={"screen_id": str})
+    rr_md = (rr_dir / "README.md").read_text()
+
+    check("corpus rerank: audited count matches the per-screen table "
+          "and the accounting closes",
+          rrj["n_screens_audited"] == len(rper)
+          and rrj["n_screen_files"]
+              == rrj["n_parse_failed"] + rrj["n_excluded_by_rule"] + len(rper),
+          f"{rrj['n_screen_files']} files = {rrj['n_parse_failed']} unparseable "
+          f"+ {rrj['n_excluded_by_rule']} excluded + {len(rper)} audited")
+    # The join to evaluation 10 IS the sanity check the arm rests on. Same screens,
+    # same R2 values, or the distribution describes something else entirely.
+    # The committed evaluation 10 table reads screen_id as an integer and this
+    # one as a string; comparing them as-is silently finds zero overlap.
+    per_ids = set(per.screen_id.astype(str))
+    rper["screen_id"] = rper.screen_id.astype(str)
+    check("corpus rerank: the screen set is evaluation 10's, exactly",
+          set(rper.screen_id) == per_ids and len(rper) == len(per),
+          f"rerank {len(rper)} vs corpus {len(per)}; "
+          f"symmetric difference {len(set(rper.screen_id) ^ per_ids)}")
+    _j = rper.merge(per.assign(screen_id=per.screen_id.astype(str)),
+                    on="screen_id", suffixes=("", "_c"))
+    _dr2 = float((_j.r2_size_alone - _j.r2_size_alone_c).abs().max())
+    check("corpus rerank: size-alone R2 agrees with evaluation 10 screen by screen",
+          _dr2 <= 1e-6, f"max |dR2| = {_dr2}")
+
+    rq = rper.survivors_top10.quantile([0.10, 0.25, 0.50, 0.75, 0.90])
+    check("corpus rerank: all five quantiles recompute from the per-screen table",
+          all(near(float(v), rrj["quantiles"][f"p{int(k * 100)}"], 0.005)
+              for k, v in rq.items()),
+          " ".join(f"p{int(k*100)}={v:g}" for k, v in rq.items()))
+    r_med = float(rper.survivors_top10.median())
+    check("corpus rerank: the headline median is nine and recomputes",
+          near(r_med, rrj["quantiles"]["p50"], 0.005) and near(r_med, 9.0, 0.005),
+          f"recomputed {r_med:g}")
+    check("corpus rerank: the zero-survivor and all-ten counts recompute",
+          int((rper.survivors_top10 == 0).sum()) == rrj["n_zero_survivors"]
+          and int((rper.survivors_top10 == 10).sum()) == rrj["n_all_ten_hold"],
+          f"recomputed zero={int((rper.survivors_top10 == 0).sum())} "
+          f"all-ten={int((rper.survivors_top10 == 10).sum())}")
+    check("corpus rerank: survivor counts stay inside 0..10",
+          bool(rper.survivors_top10.between(0, 10).all()),
+          f"range {rper.survivors_top10.min()}-{rper.survivors_top10.max()}")
+
+    r_meds = [float(rper[(rper.n_hits >= lo) & (rper.n_hits < hi)]
+                    .survivors_top10.median()) for lo, hi in c_bins]
+    check("corpus rerank: all four hit-list-size strata recompute",
+          len(rrj["stratified_by_hitlist_size"]) == 4
+          and all(near(a, s["median_survivors"], 0.005)
+                  for a, s in zip(r_meds, rrj["stratified_by_hitlist_size"])),
+          f"recomputed {r_meds}")
+    # Evaluation 10's R2 gradient is monotonic; this arm's survivor "gradient" is
+    # not the same quantity and mostly reflects tie density. The doc says so, and
+    # the check exists so nobody later quietly promotes it to a finding.
+    _rr_flat = " ".join(rr_md.split())
+    check("corpus rerank: the doc refuses to read the strata as a gradient",
+          "does **not** reappear as a survivor gradient" in _rr_flat,
+          "the doc must say evaluation 10's gradient does not reappear here")
+    check("corpus rerank: the tie sensitivity is disclosed and recomputes",
+          near(100 * float(rper.top10_boundary_tied.mean()),
+               rrj["tie_sensitivity"]["pct_screens_with_tied_top10_boundary"], 0.05)
+          and near(float(rper[~rper.top10_boundary_tied].survivors_top10.median()),
+                   rrj["tie_sensitivity"]["median_survivors_untied_screens_only"],
+                   0.005),
+          f"tied boundary in "
+          f"{100 * float(rper.top10_boundary_tied.mean()):.1f}% of screens")
+
+    rpub = rper.groupby("source_id").survivors_top10.median()
+    rrpub = rrj["publication_level_pseudo_replication"]
+    check("corpus rerank: the pseudo-replication correction survives",
+          rrpub is not None and len(rpub) == rrpub["n_publications"],
+          f"recomputed {len(rpub)} publications")
+    check("corpus rerank: the publication-level median recomputes and is lower",
+          near(float(rpub.median()), rrpub["median"], 0.005)
+          and rrpub["median"] < rrj["quantiles"]["p50"],
+          f"publication {float(rpub.median()):g} vs screen {r_med:g}")
+    check("corpus rerank: the doc reports BOTH medians, never the stable one alone",
+          f"| **{r_med:.0f}** | **{rrpub['median']:.0f}** |" in rr_md
+          or (f"**{r_med:.0f}**" in rr_md and f"**{rrpub['median']:.0f}**" in rr_md),
+          f"screen-level {r_med:.0f} and publication-level {rrpub['median']:.0f}")
+
+    # Both gates are the arm's licence to exist. If either is ever recorded as
+    # failed while the outputs remain, the outputs were written against a broken
+    # join and every number above is noise.
+    rg = rrj["sanity_gates"]
+    check("corpus rerank: the join gate is recorded as passed",
+          rg["join"]["screens_matched_row_for_row"] == len(rper)
+          and rg["join"]["max_abs_r2_delta_vs_committed"] <= 1e-6)
+    check("corpus rerank: the own-screen gate reproduces the published 3 of 10 "
+          "above the corpus 90th percentile",
+          rg["own_screen"]["above_p90"]
+          and near(rg["own_screen"]["r2_size_alone"], 0.4649)
+          and near(rg["own_screen"]["corpus_p90"],
+                   float(per.r2_size_alone.quantile(0.90)))
+          and rg["own_screen"]["survivors_top10"] == 3,
+          f"own R2 {rg['own_screen']['r2_size_alone']} vs p90 "
+          f"{rg['own_screen']['corpus_p90']}, {rg['own_screen']['survivors_top10']}/10")
+    # The result that bounds this project rather than flattering it: our own screen
+    # is at the churning tail, not the middle. Stated in the doc, checked here.
+    _own_pct = 100 * float((rper.survivors_top10 <= 3).mean())
+    check("corpus rerank: the doc states how atypical our own 3-of-10 is",
+          f"{_own_pct:.1f}%" in rr_md, f"recomputed {_own_pct:.1f}% at or below 3/10")
+
+    check("corpus rerank: labelled post-hoc, not pre-registered, in both surfaces",
+          "not pre-registered" in rr_md.lower()
+          and "not pre-registered" in rrj["status"].lower())
+    check("corpus rerank: the estimand warning survives in both surfaces",
+          "estimand" in rr_md.lower() and "estimand_warning" in rrj)
+    check("corpus rerank: the arm states it nominates nothing",
+          "nominates" in rr_md.lower() or "not a candidate" in rr_md.lower())
+    # Same scope rule as evaluation 10: the unit of inference is the distribution.
+    _rr_named = [p for p in pmids
+                 if re.search(rf"(?<![\d.]){re.escape(p)}(?![\d.])", rr_md)]
+    _rr_tok = re.findall(r"SCREEN[_ ]?\d+", rr_md)
+    check("corpus rerank scope: no screen or publication named in the arm's README",
+          not _rr_named and not _rr_tok,
+          f"found {(_rr_named + _rr_tok)[:5]}" if _rr_named or _rr_tok else "")
 
     # Same failure mode, different number: controls.csv is the only truth.
     n_ctrl, n_ctrl_fail = len(controls), int((controls.verdict == "FAIL").sum())

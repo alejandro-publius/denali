@@ -36,7 +36,7 @@ SURFACES = [
     "docs/DEMO.md", "docs/SUBMISSION.md", "docs/DECK.md", "docs/LITERATURE.md",
     "docs/CORPUS.md", "docs/ADVERSARIAL.md", "docs/MORNING_HANDOFF.md",
     "docs/LIMITATIONS.md", "docs/LOOP.md", "docs/OFFTARGET.md",
-    "results/figures/CAPTIONS.md",
+    "results/figures/CAPTIONS.md", "results/corpus_rerank/README.md",
 ]
 
 # label -> (context regex with ONE capture group, canonical value, equivalents)

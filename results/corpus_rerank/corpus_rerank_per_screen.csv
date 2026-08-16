@@ -1,0 +1,1273 @@
+screen_id,survivors_top10,top10_boundary_tied,r2_size_alone,n_hits,n_measured,n_sets_used,source_id,cell_line,phenotype,library
+100,8,True,0.0744,84,20245,50,28145866,Calu-1,response to chemicals,GECKO v2
+1000,10,False,0.203,1211,17986,50,30971826,TE-10,cell proliferation,Human CRISPR Library v.1.1
+1001,10,True,0.1928,1530,17986,50,30971826,TE-4,cell proliferation,Human CRISPR Library v.1.1
+1002,10,False,0.1854,1363,17986,50,30971826,TE-5,cell proliferation,Human CRISPR Library v.1.1
+1003,9,False,0.1919,1835,17986,50,30971826,TE-8,cell proliferation,Human CRISPR Library v.1.1
+1004,9,False,0.1288,1344,17986,50,30971826,TE-9,cell proliferation,Human CRISPR Library v.1.1
+1005,9,True,0.2058,1629,17986,50,30971826,TGW,cell proliferation,Human CRISPR Library v.1.1
+1006,8,False,0.199,1458,17986,50,30971826,TMK-1,cell proliferation,Human CRISPR Library v.1.1
+1007,9,False,0.2208,1818,17986,50,30971826,TOV-112D,cell proliferation,Human CRISPR Library v.1.1
+1008,9,False,0.1762,1213,17986,50,30971826,TOV-21G,cell proliferation,Human CRISPR Library v.1.1
+1009,9,False,0.1573,1765,17986,50,30971826,TYK-nu,cell proliferation,Human CRISPR Library v.1.1
+1010,8,True,0.1395,1296,17986,50,30971826,U-87MG ATCC,cell proliferation,Human CRISPR Library v.1.1
+1011,9,True,0.1565,1483,17986,50,30971826,U-251MG,cell proliferation,Human CRISPR Library v.1.1
+1012,10,True,0.2136,1227,17986,50,30971826,UACC-893,cell proliferation,Human CRISPR Library v.1.1
+1013,9,False,0.2521,1344,17986,50,30971826,UWB1.289,cell proliferation,Human CRISPR Library v.1.1
+1014,9,False,0.2292,1629,17986,50,30971826,VMRC-LCD,cell proliferation,Human CRISPR Library v.1.1
+1015,9,False,0.1322,440,17986,50,30971826,YH-13,cell proliferation,Human CRISPR Library v.1.1
+1017,6,True,0.4508,538,16932,50,30655525,Huh-7.5.1,response to virus,GECKO v2
+1018,8,True,0.0462,21,20787,50,30951565,HEK293T,response to toxin,GECKO v2
+1019,7,True,0.013,27,18926,50,30951565,HEK293T,response to toxin,GECKO v2
+1020,9,False,0.2754,2074,18046,50,30995489,G549NS-Cas9,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1021,10,False,0.2613,1984,18045,50,30995489,G583NS-Cas9,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1022,6,True,0.5648,2002,16971,50,30995489,G523NS-Cas9,cell proliferation,TKO (Toronto Knockout) v1
+1023,5,False,0.6235,2901,16971,50,30995489,G564NS-Cas9,cell proliferation,TKO (Toronto Knockout) v1
+1024,9,False,0.3639,1931,16971,50,30995489,G477NS-Cas9,cell proliferation,TKO (Toronto Knockout) v1
+1025,10,False,0.371,1737,16971,50,30995489,G432NS-Cas9,cell proliferation,TKO (Toronto Knockout) v1
+1026,9,False,0.3397,1752,16971,50,30995489,G440NS-Cas9,cell proliferation,TKO (Toronto Knockout) v1
+1027,9,False,0.2773,1756,16971,50,30995489,G472NS-Cas9,cell proliferation,TKO (Toronto Knockout) v1
+1028,9,False,0.3295,1971,16971,50,30995489,G510NS-Cas9,cell proliferation,TKO (Toronto Knockout) v1
+1029,9,False,0.2388,1566,16971,50,30995489,G361NS-Cas9,cell proliferation,TKO (Toronto Knockout) v1
+1030,7,True,0.5533,3381,18046,50,30995489,HF7450-Cas9,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1031,8,False,0.5224,3037,18046,50,30995489,HF6562-Cas9,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1032,7,True,0.3181,1594,11632,50,31316073,K-562,cell proliferation,Mini-human
+1033,8,False,0.3675,1536,11632,50,31316073,K-562,cell proliferation,Human Activity-optimized genome-wide library
+1034,6,False,0.4338,1614,11632,50,31316073,K-562,cell proliferation,GECKO v2
+1045,8,True,0.1919,110,18776,50,31294695,LK-2,response to chemicals,CRISPRi-v2 (inhibition)
+1048,6,True,0.3484,811,18519,50,29987050,T-47D,cell proliferation,GECKO v2
+1050,8,False,0.5196,1036,18519,50,29987050,T-47D,cell proliferation,GECKO v2
+1052,6,False,0.4695,968,18519,50,29987050,MCF-7,cell proliferation,GECKO v2
+1053,7,False,0.5009,1061,18519,50,29987050,MCF-7,cell proliferation,GECKO v2
+1062,7,False,0.2138,173,16931,50,30995489,G432NS-Cas9,response to chemicals,TKO (Toronto Knockout) v1
+1063,8,True,0.28,199,16931,50,30995489,G472NS-Cas9,response to chemicals,TKO (Toronto Knockout) v1
+1064,7,False,0.1657,157,16930,50,30995489,G361NS-Cas9,response to chemicals,TKO (Toronto Knockout) v1
+1065,5,True,0.3331,281,16931,50,30995489,G523NS-Cas9,response to chemicals,TKO (Toronto Knockout) v1
+1066,7,True,0.3687,285,16931,50,30995489,G510NS-Cas9,response to chemicals,TKO (Toronto Knockout) v1
+1067,7,True,0.3878,417,16931,50,30995489,G583NS-Cas9,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1075,6,True,0.204,177,18134,50,28700943,HCT 116,cell proliferation,"CRISPRn (Martin, 2017)"
+1076,8,True,0.0456,62,17862,50,28700943,LS513,cell proliferation,"CRISPRn (Martin, 2017)"
+1081,4,False,0.8913,5792,20617,50,31921143,K-562,cell proliferation,GECKO v2
+1082,1,True,0.9622,5822,20617,50,31921143,K-562,cell proliferation,GECKO v2
+1083,1,True,0.9258,6349,20617,50,31921143,K-562,cell proliferation,GECKO v2
+1092,8,True,0.1228,186,20522,50,31540829,U-937,response to bacteria,Bassik Human CRISPR Knockout Library
+1104,2,False,0.771,1021,18661,50,31353312,HeLa,protein/peptide accumulation,GECKO v2
+1107,7,False,0.7138,3787,19100,50,30449619,CD8+ T s (primary-derived),protein/peptide accumulation,Brunello (human)
+1109,4,True,0.4516,559,19100,50,30449619,CD8+ T s (primary-derived),protein/peptide accumulation,Brunello (human)
+1110,5,True,0.4946,618,19106,50,30449619,CD8+ T s (primary-derived),protein/peptide accumulation,Brunello (human)
+1111,8,False,0.1316,747,20401,50,30581143,K-562,protein/peptide accumulation,Bassik Human CRISPR Knockout Library
+1112,8,True,0.1116,476,20407,50,30581143,K-562,protein/peptide accumulation,Bassik Human CRISPR Knockout Library
+1113,7,True,0.4315,565,20395,50,30581143,K-562,protein/peptide accumulation,Bassik Human CRISPR Knockout Library
+1114,8,True,0.175,710,20400,50,30581143,K-562,protein/peptide accumulation,Bassik Human CRISPR Knockout Library
+1119,7,True,0.0786,101,20393,50,30397336,U-937,phagocytosis,Bassik Human CRISPR Knockout Library
+1121,9,True,0.1466,84,20394,50,30397336,U-937,phagocytosis,Bassik Human CRISPR Knockout Library
+1123,9,True,0.133,91,20397,50,30397336,U-937,phagocytosis,Bassik Human CRISPR Knockout Library
+1125,8,False,0.1003,128,20374,50,30397336,U-937,phagocytosis,Bassik Human CRISPR Knockout Library
+1135,9,True,0.1607,36,20396,50,30397336,U-937,phagocytosis,Bassik Human CRISPR Knockout Library
+1137,7,True,0.1927,171,20396,50,30397336,U-937,phagocytosis,Bassik Human CRISPR Knockout Library
+1140,6,False,0.298,260,20398,50,30397336,U-937,phagocytosis,Bassik Human CRISPR Knockout Library
+1142,8,True,0.197,85,20396,50,30397336,U-937,phagocytosis,Bassik Human CRISPR Knockout Library
+1144,5,True,0.4877,141,19049,50,30647128,THP-1,pyroptosis,"CRISPRn (Hoffman and Nyfeler, 2016)"
+1145,10,False,0.1105,213,19113,50,32259488,K-562,cell proliferation,Brunello (human)
+1146,8,False,0.0882,109,19113,50,32259488,K-562,cell proliferation,Brunello (human)
+1147,9,True,0.2758,600,19106,50,32542389,PaTu 8988t,cell proliferation,Brunello (human)
+1153,6,True,0.601,1467,18491,50,27018887,K-562,response to chemicals,"CRISPRn (Bassik, 2016)"
+1155,8,True,0.028,23,20431,50,31452512,K-562,cell proliferation,"CRISPRn (Settleman, 2019)"
+1159,6,True,0.5715,2798,18612,50,31761535,BJ,response to chemicals,Avana
+1160,8,True,0.0814,22,20431,50,31452512,K-562,cell proliferation,"CRISPRn (Settleman, 2019)"
+1161,7,True,0.2898,457,15964,50,25307932,K-562,response to toxin,"CRISPRi (Weissman, 2014)"
+1162,8,True,0.1907,132,15965,50,25307932,K-562,response to toxin,"CRISPRa (Weissman, 2014)"
+1163,8,True,0.0251,22,19049,50,31801065,HepG2-NTCP1 HBV Cas9,response to virus,"CRISPRn (Helliwell, 2018)"
+1164,10,False,0.0118,38,19049,50,31801065,HepG2-NTCP1 HBV Cas9,response to virus,"CRISPRn (Helliwell, 2018)"
+1168,7,True,0.0301,30,21594,50,27383987,Huh-7.5.1,response to virus,GECKO v2
+1169,9,True,0.0545,30,21570,50,27383987,Huh-7.5.1,response to virus,GECKO v2
+1170,6,True,0.5782,1013,21705,50,31527793,H1-HeLa+CHDR3,response to virus,GECKO v2
+1171,4,True,0.7396,981,21641,50,31527793,H1-HeLa+CHDR3,response to virus,GECKO v2
+1172,8,True,0.1025,133,18373,50,31019072,iPSC derived neural progenitor,response to virus,Human Activity-optimized genome-wide library
+1176,8,False,0.2202,619,31965,50,28985505,K-562,response to chemicals,"CRISPRi (Weissman, 2014)"
+1177,6,False,0.5533,666,31965,50,28985505,K-562,response to chemicals,"CRISPRa (Weissman, 2014)"
+1187,9,True,0.0262,52,18646,50,32728216,K-562,protein/peptide accumulation,CRISPRi-v2 (inhibition)
+1188,8,True,0.0085,25,20386,50,29211708,K-562,protein/peptide accumulation,Bassik Human CRISPR Knockout Library
+1192,8,False,0.1959,528,19253,50,31727847,T-47D,cell proliferation,"CRISPRn (Liu and Brown, 2019)"
+1193,9,False,0.1748,281,19253,50,31727847,LNCaP,cell proliferation,"CRISPRn (Liu and Brown, 2019)"
+1199,8,True,0.1662,177,19106,50,31519728,U2OS,protein/peptide accumulation,Brunello (human)
+1203,9,True,0.0516,191,19455,50,27667664,K-562,viability,Avana-4
+1204,9,False,0.212,1218,19455,50,27667664,K-562,viability,Avana-4
+1205,8,False,0.1919,930,18958,50,31551363,PLC/PRF/5,cell proliferation,GECKO v2
+1206,7,True,0.0733,58,18958,50,31551363,PLC/PRF/5,cell proliferation,GECKO v2
+1209,3,True,0.5586,936,18408,50,31142663,HuH-7,response to virus,Human SAM library in lentiSAMv2 backbone
+1210,3,True,0.691,957,18411,50,31142663,HuH-7,response to virus,Human SAM library in lentiSAMv2 backbone
+1220,6,False,0.201,431,20806,50,33333024,Huh-7.5.1,response to virus,GECKO v2
+1221,5,False,0.2379,560,20806,50,33333024,Huh-7.5.1,response to virus,GECKO v2
+1222,5,False,0.3949,596,20806,50,33333024,Huh-7.5.1,response to virus,GECKO v2
+1224,9,True,0.177,100,18001,50,27351204,H4,protein/peptide accumulation,"CRISPRn (Hoffman and Nyfeler, 2016)"
+1225,9,True,0.1169,102,18001,50,27351204,H4,protein/peptide accumulation,"CRISPRn (Hoffman and Nyfeler, 2016)"
+1227,7,True,0.0408,20,18603,50,29736038,U-937,response to toxin,"CRISPRn (Spaan, 2018)"
+1228,8,True,0.185,386,20570,50,29507424,K-562,cell proliferation,Bassik Human CRISPR Knockout Library
+1229,6,True,0.1965,214,20568,50,29507424,K-562,cell proliferation,Bassik Human CRISPR Knockout Library
+1238,6,False,0.4551,2811,19948,50,32238925,NCI-H23,cell proliferation,Bassik Human CRISPR Knockout Library
+1239,8,True,0.2332,154,19854,50,32238925,NCI-H23,response to chemicals,Bassik Human CRISPR Knockout Library
+1240,7,False,0.5175,2431,19948,50,32238925,NCI-H23,cell proliferation,Bassik Human CRISPR Knockout Library
+1241,6,True,0.1445,167,19842,50,32238925,NCI-H23,response to chemicals,Bassik Human CRISPR Knockout Library
+1242,7,False,0.3291,605,19849,50,32238925,NCI-H23,cell proliferation,Bassik Human CRISPR Knockout Library
+1243,7,False,0.3394,2703,19963,50,32238925,NCI-H2009,cell proliferation,Bassik Human CRISPR Knockout Library
+1244,7,False,0.3179,1933,19963,50,32238925,NCI-H2009,cell proliferation,Bassik Human CRISPR Knockout Library
+1245,7,True,0.3409,491,19938,50,32238925,NCI-H2009,cell proliferation,Bassik Human CRISPR Knockout Library
+1246,7,True,0.4194,2965,19971,50,32238925,NCI-H1975,cell proliferation,Bassik Human CRISPR Knockout Library
+1247,7,True,0.3784,2440,19971,50,32238925,NCI-H1975,cell proliferation,Bassik Human CRISPR Knockout Library
+1248,5,True,0.324,332,19807,50,32238925,NCI-H1975,cell proliferation,Bassik Human CRISPR Knockout Library
+1249,7,True,0.3268,392,18979,50,32755594,NALM-6,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1250,9,True,0.0818,104,18988,50,32755594,NALM-6,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1251,9,False,0.1497,399,18983,50,32755594,NALM-6,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1255,6,True,0.5771,1098,21594,50,31855178,LNCaP,response to chemicals,GECKO
+1256,2,True,0.7623,1469,23970,50,30962421,786-O,response to chemicals,Brunello (human)
+1257,6,False,0.6056,2051,23970,50,30962421,786-O,response to chemicals,Brunello (human)
+1258,5,False,0.6048,1815,23970,50,30962421,786-O,response to chemicals,Brunello (human)
+1291,8,True,0.3261,129,15601,50,30154076,hTERT-RPE1,cell proliferation,TKO (Toronto Knockout) v1
+1292,9,False,0.1638,1140,17988,50,32990596,ORL-48,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1293,9,False,0.1548,993,17986,50,32990596,ORL-115,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1294,9,False,0.2357,1109,17979,50,32990596,ORL-136,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1295,9,False,0.1903,1192,17979,50,32990596,ORL-150,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1296,8,False,0.2211,1082,17979,50,32990596,ORL-153,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1297,8,False,0.1396,554,17985,50,32990596,ORL-166,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1298,10,False,0.1905,525,17979,50,32990596,ORL-156,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1299,8,False,0.2149,1234,17986,50,32990596,ORL-174,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1300,8,False,0.2139,1133,17986,50,32990596,ORL-188,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1301,9,False,0.1579,1033,17986,50,32990596,ORL-195,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1302,8,False,0.2077,779,17981,50,32990596,ORL-204,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1303,9,True,0.1858,1269,17979,50,32990596,ORL-207,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1304,9,False,0.2049,1131,17986,50,32990596,ORL-214,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1305,9,False,0.2183,1399,17986,50,32990596,ORL-215,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1306,9,False,0.2038,1229,17979,50,32990596,PE/CA-PJ15,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1307,9,False,0.1811,1321,17979,50,32990596,SAS,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1308,8,True,0.1704,961,17988,50,32990596,SCC-9,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1309,9,False,0.1694,1383,17986,50,32990596,BICR 10,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1310,10,False,0.2398,1028,17988,50,32990596,HO-1-u-1,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1311,9,True,0.1265,1188,17986,50,32990596,HSC-2,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1312,9,False,0.1658,1362,17986,50,32990596,HSC-4,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1313,7,True,0.0603,72,17376,50,32649862,hTERT-RPE1,response to chemicals,TKOv2
+1314,4,True,0.033,69,17258,50,32649862,hTERT-RPE1,response to chemicals,TKOv2
+1315,8,True,0.0135,72,17343,50,32649862,hTERT-RPE1,response to chemicals,TKOv2
+1316,8,True,0.0598,37,17344,50,32649862,hTERT-RPE1,response to chemicals,TKOv2
+1317,10,False,0.0448,50,17309,50,32649862,hTERT-RPE1,cell proliferation,TKOv2
+1318,7,True,0.0813,93,17362,50,32649862,hTERT-RPE1,response to chemicals,TKOv2
+1319,5,True,0.0009,37,17364,50,32649862,hTERT-RPE1,response to chemicals,TKOv2
+1320,7,True,0.0941,109,17363,50,32649862,hTERT-RPE1,response to chemicals,TKOv2
+1321,9,True,0.0045,90,17368,50,32649862,hTERT-RPE1,response to chemicals,TKOv2
+1322,6,True,0.1624,127,17355,50,32649862,hTERT-RPE1,cell proliferation,TKOv2
+1323,7,True,0.0743,57,17265,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1324,8,True,0.0738,41,17271,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1325,9,True,0.0457,99,17266,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1326,6,True,0.1225,117,17243,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1327,6,True,0.1397,140,17266,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1328,7,True,0.1683,122,17300,50,32649862,hTERT-RPE1,response to chemicals,TKOv2
+1329,7,True,0.0926,73,17287,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1330,6,True,0.0398,67,17292,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1331,9,True,0.0821,61,17291,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1332,6,True,0.014,26,17294,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1334,7,True,0.2136,68,17376,50,32649862,hTERT-RPE1,response to chemicals,TKOv2
+1335,8,True,0.0307,127,17374,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1336,9,True,0.052,232,17374,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1337,9,True,0.0763,137,17374,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1338,7,True,0.1528,175,17374,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1339,8,True,0.0221,117,17374,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1340,10,False,0.0513,140,17374,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1341,7,True,0.0739,69,17373,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1342,8,True,0.2112,121,17373,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1343,8,False,0.1324,67,17374,50,32649862,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+1348,8,True,0.063,63,15459,50,29973717,HeLa,response to chemicals,TKO (Toronto Knockout) v1
+1349,8,True,0.0579,107,15459,50,29973717,SUM149PT,response to chemicals,TKO (Toronto Knockout) v1
+1350,8,True,0.007,61,15459,50,29973717,hTERT-RPE1,response to chemicals,TKO (Toronto Knockout) v1
+1351,4,True,0.5994,966,17230,50,29973717,hTERT-RPE1,response to chemicals,TKO (Toronto Knockout) v1
+1352,5,True,0.6002,987,17230,50,29973717,HeLa,response to chemicals,TKO (Toronto Knockout) v1
+1353,6,False,0.2845,171,20426,50,31451760,Ramos,response to chemicals,Bassik Human CRISPR Knockout Library
+1355,7,True,0.049,127,21619,50,30991026,CCRF-CEM,response to chemicals,GECKO v2
+1360,8,True,0.2021,137,18835,50,30862715,WA09,response to chemicals,GECKO v2
+1361,4,False,0.7098,877,17998,50,31048320,MOLM-13,response to chemicals,Human Improved Genome-wide Knockout CRISPR Library
+1362,3,False,0.6922,916,17998,50,31048320,MOLM-13,response to chemicals,Human Improved Genome-wide Knockout CRISPR Library
+1363,3,True,0.6145,951,19106,50,31048320,MOLM-13,response to chemicals,Brunello (human)
+1364,9,True,0.1234,40,11100,50,31730859,K-562,cell proliferation,Brunello (human)
+1365,9,True,0.0293,23,18975,50,32094149,NALM-6,response to chemicals,Extended Knockout Library (EKO)
+1366,8,True,0.0216,24,18977,50,32094149,NALM-6,response to chemicals,Extended Knockout Library (EKO)
+1367,9,True,0.1604,80,11100,50,31730859,K-562,cell proliferation,Brunello (human)
+1369,9,True,0.1505,56,11100,50,31730859,K-562,cell proliferation,Brunello (human)
+1371,9,True,0.1007,112,11100,50,31730859,K-562,cell proliferation,Brunello (human)
+1382,5,True,0.037,21,19356,50,33382968,Huh-7.5,response to virus,Brunello (human)
+1383,8,True,0.0797,50,19356,50,33382968,Huh-7.5,response to virus,Brunello (human)
+1384,6,True,0.0347,86,19356,50,33382968,Huh-7.5,response to virus,Brunello (human)
+1385,9,False,0.2099,172,19356,50,33382968,Huh-7.5,response to virus,Brunello (human)
+1386,8,True,0.1181,147,19356,50,33382968,Huh-7.5,response to virus,Brunello (human)
+1389,5,True,0.4809,610,18236,50,30556811,K-562,vesicle distribution,CRISPR/Cas9-bEXOmiR (minus MMM sub-library)
+1392,5,True,0.5872,680,19109,50,31048321,MOLM-13,response to chemicals,Brunello (human)
+1393,6,True,0.5094,1142,19109,50,31048321,MOLM-13,response to chemicals,Brunello (human)
+1396,7,True,0.4177,901,19107,50,33189395,K-562,response to chemicals,Brunello (human)
+1397,7,True,0.4568,971,19107,50,33189395,K-562,response to chemicals,Brunello (human)
+141,7,False,0.2627,2174,17217,50,27869803,HPAF-II,cell proliferation,TKO (Toronto Knockout) v1
+142,9,False,0.3308,2072,17217,50,27869803,PaTu 8988s,cell proliferation,TKO (Toronto Knockout) v1
+1425,9,True,0.0737,110,20511,50,33144569,HeLa,protein/peptide accumulation,Bassik Human CRISPR Knockout Library
+1429,9,True,0.2874,146,11465,50,33122441,TIME,response to virus,Human Activity-optimized genome-wide library
+143,8,False,0.2017,936,17217,50,27869803,AsPC-1,cell proliferation,TKO (Toronto Knockout) v1
+1430,1,False,0.7641,1630,11466,50,33122441,TIME,response to virus,Human Activity-optimized genome-wide library
+1431,4,False,0.6162,999,18945,50,33147445,A-549,response to virus,GECKO v2
+1433,4,True,0.5871,999,18945,50,33147445,A-549,response to virus,GECKO v2
+1434,2,True,0.642,938,19106,50,32690708,SV589j,protein/peptide accumulation,Brunello (human)
+1441,9,False,0.2312,749,18457,50,32416067,SUM149PT,cell proliferation,"Liu Human CRISPR Knockout Library (CRISPRn H1 H2, H1/H2)"
+1442,8,False,0.3468,587,18457,50,32416067,SUM159PT,cell proliferation,"Liu Human CRISPR Knockout Library (CRISPRn H1 H2, H1/H2)"
+1443,8,False,0.2661,594,18457,50,32416067,SUM159R,cell proliferation,"Liu Human CRISPR Knockout Library (CRISPRn H1 H2, H1/H2)"
+1444,9,False,0.1012,444,18457,50,32416067,SUM149PT,cell proliferation,"Liu Human CRISPR Knockout Library (CRISPRn H1 H2, H1/H2)"
+1445,7,True,0.308,214,18457,50,32416067,SUM149PT,response to chemicals,"Liu Human CRISPR Knockout Library (CRISPRn H1 H2, H1/H2)"
+1446,7,True,0.0922,248,18457,50,32416067,SUM159PT,response to chemicals,"Liu Human CRISPR Knockout Library (CRISPRn H1 H2, H1/H2)"
+1447,7,True,0.236,111,18457,50,32416067,SUM149R,response to chemicals,"Liu Human CRISPR Knockout Library (CRISPRn H1 H2, H1/H2)"
+1448,8,False,0.1824,123,18457,50,32416067,SUM159R,response to chemicals,"Liu Human CRISPR Knockout Library (CRISPRn H1 H2, H1/H2)"
+1449,4,True,0.6811,1011,20806,50,31040274,HAP-1,response to toxin,GECKO v2
+1451,8,True,0.0639,44,18822,50,32585766,OCI-Ly7,response to chemicals,GECKO v2
+1452,8,True,0.0952,47,18822,50,32585766,OCI-Ly7,response to chemicals,GECKO v2
+1454,5,True,0.6825,968,13990,50,33110234,HEK-293,response to chemicals,GECKO v2
+1455,5,False,0.7537,961,19107,50,33257658,HeLa,response to chemicals,Brunello (human)
+1456,9,False,0.1439,214,19107,50,33257658,HeLa,response to chemicals,Brunello (human)
+1458,8,False,0.1958,1938,18343,50,33228647,HAP-1,cell proliferation,Heidelberg (HD) CRISPR library
+1459,9,False,0.208,1925,18343,50,33228647,HAP-1,cell proliferation,Heidelberg (HD) CRISPR library
+1479,6,True,0.2027,154,19639,50,33172989,HT-29,response to bacteria,Avana
+1480,8,True,0.0844,147,19639,50,33172989,HT-29,response to bacteria,Avana
+149,10,False,0.2838,1874,18142,50,26472758,KBM-7,cell proliferation,Human Activity-optimized genome-wide library
+150,9,False,0.3383,1656,18142,50,26472758,K-562,cell proliferation,Human Activity-optimized genome-wide library
+151,9,False,0.2312,1629,18142,50,26472758,Jiyoye,cell proliferation,Human Activity-optimized genome-wide library
+152,9,False,0.2454,1463,18142,50,26472758,Raji,cell proliferation,Human Activity-optimized genome-wide library
+1524,9,True,0.1174,124,19099,50,32699298,HEK293SF,response to virus,Brunello (human)
+153,8,False,0.269,2236,18881,50,29038160,NALM-6,cell proliferation,Extended Knockout Library (EKO)
+154,9,False,0.2181,2151,17998,50,27760321,HT-29,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+155,8,True,0.2659,1278,17998,50,27760321,HL-60,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+156,9,True,0.2521,1730,17998,50,27760321,HT-1080,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+1561,8,True,0.0168,206,20807,50,33730579,Huh-7.5.1,response to virus,GECKO v2
+1568,5,True,0.0072,34,17228,50,33476303,OCI-AML-2,response to chemicals,TKO (Toronto Knockout) v1
+157,8,False,0.247,2370,20420,50,28474669,Ramos,cell proliferation,Bassik Human CRISPR Knockout Library
+1571,3,False,0.8203,3855,17980,50,31519875,HEK293T,protein/peptide accumulation,"CRISPRn (Cong, 2019)"
+1573,5,True,0.6169,917,20575,50,31692446,H4,protein/peptide accumulation,GECKO v2
+158,8,True,0.2791,2441,20420,50,28474669,K-562,cell proliferation,Bassik Human CRISPR Knockout Library
+1581,4,True,0.5016,384,19109,50,33686287,HuH-7,response to virus,Brunello (human)
+1584,5,True,0.5017,378,18221,50,33686287,HuH-7,response to virus,Brunello (human)
+159,8,False,0.2584,2259,20420,50,28474669,U-937,cell proliferation,Bassik Human CRISPR Knockout Library
+1591,9,True,0.1279,216,19107,50,33226137,K-562,protein/peptide accumulation,Brunello (human)
+1592,8,True,0.0683,200,19107,50,33226137,K-562,protein/peptide accumulation,Brunello (human)
+1593,9,True,0.0988,197,19107,50,33226137,K-562,protein/peptide accumulation,Brunello (human)
+16,9,False,0.2618,2073,17620,50,26627737,HCT 116,cell proliferation,TKO (Toronto Knockout) v1
+1621,8,True,0.0186,20,19847,50,31508509,A2780,response to chemicals,GECKO v2
+1622,8,True,0.003,34,19106,50,33574281,A549-ACE2,response to virus,Brunello (human)
+1623,7,False,0.3522,456,19106,50,33137164,HeLa,response to chemicals,Brunello (human)
+1624,8,True,0.2018,393,19106,50,33137164,HeLa,response to chemicals,Brunello (human)
+1625,7,True,0.128,235,18878,50,33137164,HeLa,response to chemicals,Human CRISPR Activation Pooled Library (Calabrese)
+1626,6,True,0.3426,208,18878,50,33137164,MCF-10A,response to chemicals,Human CRISPR Activation Pooled Library (Calabrese)
+1627,7,True,0.2289,241,18878,50,33137164,HeLa,response to chemicals,Human CRISPR Activation Pooled Library (Calabrese)
+1628,7,True,0.2663,280,18878,50,33137164,MCF-10A,response to chemicals,Human CRISPR Activation Pooled Library (Calabrese)
+1633,1,False,0.8842,3479,14504,50,31406246,A-549,response to chemicals,GECKO v2
+1636,6,False,0.7268,1274,11758,50,31406246,A-549,cell proliferation,GECKO v2
+1639,2,True,0.8775,2722,18522,50,34049503,PANC-1,response to chemicals,SAM v1 (Zeomycin)
+1640,1,True,0.846,3701,17828,50,34049503,PANC-1,response to chemicals,SAM v1 (Zeomycin)
+1641,2,True,0.8968,2941,18584,50,34049503,PANC-1,response to chemicals,SAM v1 (Zeomycin)
+1642,1,True,0.8991,2987,18494,50,34049503,PANC-1,response to chemicals,SAM v1 (Zeomycin)
+1643,3,False,0.5782,1011,18936,50,34049503,BxPC-3,response to chemicals,SAM v1 (Zeomycin)
+1644,5,False,0.6805,962,18936,50,34049503,BxPC-3,response to chemicals,SAM v1 (Zeomycin)
+1645,5,True,0.6388,1055,18936,50,34049503,BxPC-3,response to chemicals,SAM v1 (Zeomycin)
+1646,3,True,0.7272,1127,18936,50,34049503,BxPC-3,response to chemicals,SAM v1 (Zeomycin)
+1647,7,True,0.1165,231,20547,50,34049503,PANC-1,response to chemicals,GECKO v2
+1648,4,False,0.3951,482,20577,50,34049503,PANC-1,response to chemicals,GECKO v2
+1649,7,True,0.2259,340,20528,50,34049503,PANC-1,response to chemicals,GECKO v2
+1650,7,True,0.1147,256,20518,50,34049503,PANC-1,response to chemicals,GECKO v2
+1651,6,False,0.32,330,20570,50,34049503,BxPC-3,response to chemicals,GECKO v2
+1652,4,True,0.1864,251,20572,50,34049503,BxPC-3,response to chemicals,GECKO v2
+1653,9,False,0.145,179,20561,50,34049503,BxPC-3,response to chemicals,GECKO v2
+1654,5,False,0.2648,278,20569,50,34049503,BxPC-3,response to chemicals,GECKO v2
+1656,2,True,0.7831,1821,20106,50,34253920,HT-29,cell proliferation,Brunello (human)
+1657,1,True,0.6889,2124,21581,50,34253920,HCT 15,cell proliferation,GECKO v2
+1658,6,True,0.758,1638,20106,50,34253920,SW620,cell proliferation,Brunello (human)
+1669,5,True,0.7246,1040,19356,50,34615851,Mel JuSo,response to chemicals,Brunello (human)
+1670,6,False,0.5546,988,19356,50,34615851,Mel JuSo,response to chemicals,Brunello (human)
+17,9,False,0.2488,1696,17638,50,26627737,HeLa,cell proliferation,TKO (Toronto Knockout) v1
+1704,9,True,0.0691,60,19106,50,35879412,Calu-3,response to virus,Brunello (human)
+1705,1,True,0.9596,7341,16475,50,30414698,MGH-U4,response to chemicals,GECKO
+1706,8,True,0.1064,43,18878,50,35879412,Calu-3,response to virus,Human CRISPR Activation Pooled Library (Calabrese)
+1708,7,True,0.1842,91,18878,50,35879412,Calu-3,response to virus,Human CRISPR Activation Pooled Library (Calabrese)
+1710,8,True,0.073,33,18954,50,33604667,A-375,response to chemicals,Brunello (human)
+172,7,True,0.0605,170,18669,50,28215525,HEK-293,regulation of signal transduction phenotype,"CRISPRn (Zavolan, 2017)"
+1725,9,True,0.1554,173,20024,50,33483422,HEK293T,protein/peptide accumulation,Human Activity-optimized genome-wide library
+173,9,True,0.0148,176,18669,50,28215525,HEK-293,regulation of signal transduction phenotype,"CRISPRn (Zavolan, 2017)"
+1733,8,False,0.2804,169,18407,50,35050652,HeLa RelA-mNeonGreen,protein/peptide distribution,"CRISPRn (Steinmetz, 2022)"
+1735,9,True,0.1884,127,19106,50,https://www.biorxiv.org/content/10.1101/2020.08.27.270819v1.full,HT-29,response to chemicals,Brunello (human)
+1736,7,False,0.2866,1330,19106,50,https://www.biorxiv.org/content/10.1101/2020.08.27.270819v1.full,HT-29,response to chemicals,Brunello (human)
+1737,7,True,0.3298,1230,19106,50,https://www.biorxiv.org/content/10.1101/2020.08.27.270819v1.full,HT-29,response to chemicals,Brunello (human)
+1738,8,False,0.2142,173,19106,50,https://www.biorxiv.org/content/10.1101/2020.08.27.270819v1.full,HT-29,response to chemicals,Brunello (human)
+1739,10,True,0.0624,57,19106,50,https://www.biorxiv.org/content/10.1101/2020.08.27.270819v1.full,HT-29,response to chemicals,Brunello (human)
+174,7,True,0.167,319,18667,50,28215525,HEK-293,regulation of signal transduction phenotype,"CRISPRn (Zavolan, 2017)"
+1742,9,True,0.1918,190,19107,50,34431042,HEK293T-CRISPRa,response to virus,"CRISPRa sgRNA-eBAR library (Zhu, 2021)"
+1749,9,True,0.1047,60,18750,50,34686207,H1HeLa,cell proliferation,"CRISPRn (Liu, 2021)"
+175,6,False,0.3011,171,18667,50,28215525,HEK-293,regulation of signal transduction phenotype,"CRISPRn (Zavolan, 2017)"
+1751,7,True,0.0672,45,18750,50,34686207,H1HeLa,response to virus,"CRISPRn (Liu, 2021)"
+176,8,True,0.268,371,18667,50,28215525,HEK-293,regulation of signal transduction phenotype,"CRISPRn (Zavolan, 2017)"
+1768,8,True,0.1087,76,21583,50,33513160,HuH-7,protein/peptide accumulation,GECKO v2
+1769,7,True,0.1092,47,21583,50,33513160,HuH-7,protein/peptide accumulation,GECKO v2
+177,9,True,0.1036,113,18667,50,28215525,HEK-293,regulation of signal transduction phenotype,"CRISPRn (Zavolan, 2017)"
+178,7,False,0.1878,329,18654,50,28894007,HeLa,protein transport,GECKO v2
+1787,9,False,0.2926,2028,17828,50,34155407,HeLa,cell proliferation,BARBEKO sgRNA library
+1788,8,False,0.331,2417,17828,50,34155407,HeLa,cell proliferation,BARBEKO sgRNA library
+1789,9,False,0.2228,1149,17828,50,34155407,K-562,cell proliferation,BARBEKO sgRNA library
+179,9,False,0.2248,1966,17665,50,29083409,143B,cell proliferation,Avana
+1790,8,False,0.2462,1234,17828,50,34155407,K-562,cell proliferation,BARBEKO sgRNA library
+1791,8,False,0.2739,2123,17828,50,34155407,hTERT-RPE1,cell proliferation,BARBEKO sgRNA library
+1792,8,False,0.2568,1878,17827,50,34155407,hTERT-RPE1,cell proliferation,BARBEKO sgRNA library
+1793,8,False,0.238,1603,19358,50,34373451,PC-9,cell proliferation,Brunello (human)
+1794,9,False,0.3016,1487,19358,50,34373451,PC-9,response to chemicals,Brunello (human)
+1795,8,False,0.2565,1637,19358,50,34373451,PC-9,cell proliferation,Brunello (human)
+1796,8,False,0.2404,1454,19358,50,34373451,PC-9,response to chemicals,Brunello (human)
+1797,8,True,0.281,1421,19358,50,34373451,PC-9,cell proliferation,Brunello (human)
+1798,9,False,0.2649,1371,19358,50,34373451,PC-9,response to chemicals,Brunello (human)
+18,8,False,0.4868,1877,18488,50,27159373,K-562,cell proliferation,"CRISPRn (Bassik, 2016)"
+180,9,False,0.2502,2060,17665,50,29083409,5637,cell proliferation,Avana
+1803,7,True,0.0216,44,21581,50,35231079,HuH-7,protein/peptide distribution,GECKO v2
+1804,5,True,0.4738,681,20807,50,35192680,NALM-6,response to chemicals,GECKO v2
+1805,6,False,0.5847,983,20807,50,35192680,NALM-6,response to chemicals,GECKO v2
+1806,5,True,0.0259,48,21581,50,35231079,HuH-7,protein/peptide distribution,GECKO v2
+181,9,False,0.2206,1919,17665,50,29083409,8305C,cell proliferation,Avana
+1811,9,False,0.2435,2321,17668,50,31160565,D283 Med,cell proliferation,Avana
+1812,9,False,0.2596,2455,17668,50,31160565,D458 Med,cell proliferation,Avana
+1813,9,False,0.183,1703,17668,50,31160565,D341 Med,cell proliferation,Avana
+1814,9,False,0.2491,2233,17668,50,31160565,D425 Med,cell proliferation,Avana
+1815,5,True,0.4587,733,21593,50,34962926,HuH-7,response to virus,GECKO v2
+1816,1,True,0.5787,528,21593,50,34962926,HuH-7,response to virus,GECKO v2
+1817,5,True,0.6336,926,21592,50,34962926,HuH-7,response to virus,GECKO v2
+1818,5,True,0.4077,377,21592,50,34962926,HuH-7,response to virus,GECKO v2
+182,8,True,0.0593,60,18703,50,29269392,HEK293T,protein/peptide accumulation,"CRISPRn (Helliwell, 2018)"
+1821,6,True,0.0323,49,19107,50,35086559,HEK293T/ACE2,response to virus,Brunello (human)
+1822,9,True,0.003,73,19107,50,35086559,HEK293T/ACE2,response to virus,Brunello (human)
+1823,8,True,0.0683,41,19107,50,35086559,HEK293T/ACE2,response to virus,Brunello (human)
+1824,7,True,0.0109,61,19107,50,35086559,HEK293T/ACE2,response to virus,Brunello (human)
+1826,10,False,0.0001,39,19107,50,35086559,HEK293T/ACE2,response to virus,Brunello (human)
+1827,7,True,0.0319,61,19107,50,35086559,HEK293T/ACE2,response to virus,Brunello (human)
+1828,8,True,0.0222,43,19107,50,35086559,HEK293T/ACE2,response to virus,Brunello (human)
+1829,10,False,0.1345,95,19106,50,35086559,HEK293T/ACE2,response to virus,Brunello (human)
+183,8,True,0.026,53,18703,50,29269392,HEK-293,protein/peptide accumulation,"CRISPRn (Helliwell, 2018)"
+1830,9,True,0.1244,88,19107,50,35086559,HEK293T/ACE2,response to virus,Brunello (human)
+184,9,False,0.2182,1978,17665,50,29083409,A2058,cell proliferation,Avana
+1843,6,True,0.3561,792,17785,50,33355125,HeLa,response to chemicals,GECKO v2
+1845,9,False,0.2794,1846,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1846,9,True,0.2111,2016,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1847,9,False,0.2811,2075,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1848,9,False,0.2625,2166,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1849,9,False,0.2414,1944,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+185,9,True,0.2085,2078,17665,50,29083409,A2780,cell proliferation,Avana
+1850,10,False,0.2691,1859,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1851,10,False,0.2423,1966,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1852,9,False,0.2716,1939,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1853,8,True,0.2974,2186,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1854,9,False,0.3052,2149,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1855,9,False,0.2874,2034,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1856,10,False,0.2365,1984,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1857,9,True,0.2698,2066,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1858,9,True,0.2773,2093,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1859,10,False,0.2691,1964,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+186,9,False,0.2483,1943,17665,50,29083409,A-549,cell proliferation,Avana
+1860,10,False,0.2938,2050,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1861,9,True,0.3101,1988,18047,50,35559673,HEK293-A,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1862,7,True,0.121,101,20511,50,35879413,Calu-3,response to virus,Gattinara (human)
+1863,7,True,0.196,119,19999,50,35879413,Calu-3,response to virus,Human CRISPR Activation Pooled Library (Calabrese)
+1864,6,True,0.5708,654,18804,50,35879413,Caco-2-ACE2,response to virus,Brunello (human)
+187,9,False,0.2352,1998,17665,50,29083409,AGS,cell proliferation,Avana
+1879,7,True,0.1543,86,20103,50,35570209,HK-2,response to chemicals,Brunello (human)
+188,9,True,0.2354,1905,17665,50,29083409,AU565,cell proliferation,Avana
+1880,9,True,0.0345,90,20421,50,34497417,Ramos,cell proliferation,Bassik Human CRISPR Knockout Library
+1885,5,True,0.3146,343,18897,50,34497417,Ramos,cell proliferation,CRISPRa-v2 (activation)
+189,8,True,0.2121,1841,17665,50,29083409,BHY,cell proliferation,Avana
+190,9,False,0.2211,1989,17665,50,29083409,CAL-27,cell proliferation,Avana
+1900,6,True,0.6013,906,19358,50,36002574,Primary T-cells,cell proliferation,Brunello (human)
+1901,3,True,0.7052,927,14788,50,36002574,Primary T-cells,cell proliferation,Brunello (human)
+1902,3,True,0.7448,955,14788,50,36002574,Primary T-cells,cell proliferation,Brunello (human)
+1903,2,True,0.6158,964,19341,50,36002574,Primary T-cells,cell proliferation,Brunello (human)
+1904,4,True,0.6284,895,19356,50,36002574,Primary T-cells,cell proliferation,Brunello (human)
+1905,4,True,0.4562,707,19356,50,36002574,Primary T-cells,cell proliferation,Brunello (human)
+1909,4,True,0.688,2267,21400,50,35420441,HeLa,response to virus,GECKO v2
+191,9,False,0.2441,1677,17665,50,29083409,Caov-3,cell proliferation,Avana
+192,9,False,0.2166,2188,17665,50,29083409,YKG-1,cell proliferation,Avana
+193,9,False,0.2351,1881,17665,50,29083409,YAPC,cell proliferation,Avana
+1932,5,True,0.3264,891,20779,50,32268084,hTERT-RPE1,cell proliferation,GECKO v2
+1933,9,True,0.0633,128,20781,50,32268084,hTERT-RPE1,cell proliferation,GECKO v2
+1934,5,True,0.072,96,20787,50,32268084,hTERT-RPE1,cell proliferation,GECKO v2
+1935,8,True,0.0924,93,20787,50,32268084,hTERT-RPE1,cell proliferation,GECKO v2
+1938,5,True,0.7324,2429,19106,50,35439318,NCI-H1373,response to chemicals,Brunello (human)
+1939,4,False,0.7655,2248,19106,50,35439318,NCI-H1373,response to chemicals,Brunello (human)
+194,9,False,0.2561,1984,17665,50,29083409,WM793,cell proliferation,Avana
+1947,8,True,0.1117,169,16089,50,34230586,cardiomyocyte cell line,response to chemicals,Brunello (human)
+195,9,False,0.2366,2086,17665,50,29083409,WM266-4,cell proliferation,Avana
+1953,6,False,0.3152,884,20079,50,36548402,HuP-T3,cell proliferation,Brunello (human)
+1954,5,True,0.3681,532,20079,50,36548402,KP-4,cell proliferation,Brunello (human)
+1955,8,True,0.0526,26,19108,50,35469023,Calu-3,response to virus,Brunello (human)
+196,9,False,0.2314,1583,17665,50,29083409,WM115,cell proliferation,Avana
+1966,9,True,0.0869,26,18409,50,34937946,Unknown,cell proliferation,Brunello (human)
+1967,7,True,0.0505,40,20098,50,34004147,THP-1,RNA accumulation,Brunello (human)
+1969,6,True,0.5539,546,20101,50,34004147,THP-1,response to chemicals,Brunello (human)
+197,9,False,0.2593,1912,17665,50,29083409,UACC-62,cell proliferation,Avana
+1970,6,True,0.3979,554,20099,50,34004147,THP-1,response to chemicals,Brunello (human)
+1971,6,True,0.3362,465,20100,50,34004147,THP-1,response to chemicals,Brunello (human)
+1972,7,True,0.3237,270,20099,50,34004147,THP-1,response to chemicals,Brunello (human)
+1973,5,True,0.6823,760,21597,50,34004147,THP-1,response to chemicals,GECKO v2
+1974,5,True,0.2341,395,21603,50,34004147,THP-1,response to chemicals,GECKO v2
+1975,6,True,0.4892,1450,21610,50,34004147,THP-1,response to chemicals,GECKO v2
+1976,7,True,0.6457,1323,21608,50,34004147,THP-1,response to chemicals,GECKO v2
+1977,7,False,0.4942,1765,21615,50,34004147,THP-1,response to chemicals,GECKO v2
+1978,7,False,0.5155,1580,21612,50,34004147,THP-1,response to chemicals,GECKO v2
+1979,8,True,0.1972,90,19969,50,34004147,MV4-11,response to chemicals,Brunello (human)
+198,9,False,0.2193,1758,17665,50,29083409,UACC-257,cell proliferation,Avana
+1980,8,True,0.4864,222,20017,50,34004147,MV4-11,response to chemicals,Brunello (human)
+1981,6,True,0.066,110,19904,50,34004147,MV4-11,response to chemicals,Brunello (human)
+1982,5,True,0.0163,59,19959,50,34004147,MV4-11,response to chemicals,Brunello (human)
+1983,8,True,0.0808,70,18998,50,36305789,NALM-6,response to chemicals,Extended Knockout Library (EKO)
+1985,8,True,0.1276,216,18980,50,34731885,NALM-6,response to chemicals,Extended Knockout Library (EKO)
+1986,7,True,0.1398,278,18978,50,34662547,NALM-6,response to chemicals,Extended Knockout Library (EKO)
+1987,7,False,0.2943,439,21806,50,10.1101/2023.01.23.525275,HEK293T,regulation of viral programmed -1 ribosomal frameshifting (-1 PRF),GECKO v2
+1988,7,False,0.2916,441,21806,50,10.1101/2023.01.23.525275,HEK293T,regulation of viral programmed -1 ribosomal frameshifting (-1 PRF),GECKO v2
+1989,8,True,0.1604,44,20605,50,33417871,OCI-AML-1,response to chemicals,Extended Knockout Library (EKO)
+199,9,False,0.2737,2376,17665,50,29083409,U-937,cell proliferation,Avana
+1990,8,True,0.2627,546,20605,50,33417871,OCI-AML-1,response to chemicals,Extended Knockout Library (EKO)
+1991,8,True,0.1274,33,18890,50,33417871,OCI-AML-5,response to chemicals,Extended Knockout Library (EKO)
+1993,4,False,0.5449,542,19104,50,37193694,HAP-1,response to toxin,Brunello (human)
+1995,8,True,0.0954,109,18958,50,33660365,NALM-6,response to chemicals,Extended Knockout Library (EKO)
+1996,6,True,0.4219,378,18049,50,33660365,NALM-6,cell proliferation,Toronto Knockout version 3 (TKOv3)
+1997,7,True,0.0286,20,19108,50,35469023,Calu-3,response to virus,Brunello (human)
+1999,4,False,0.8123,1989,19109,50,35469023,Calu-3,viability,Brunello (human)
+200,9,False,0.1737,1558,17665,50,29083409,U-87MG ATCC,cell proliferation,Avana
+2003,6,True,0.0199,21,18658,50,34316707,NALM-6,response to chemicals,Extended Knockout Library (EKO)
+201,8,False,0.1956,1948,17665,50,29083409,U-343MGa,cell proliferation,Avana
+2012,9,False,0.2875,501,18518,50,36841242,Calu-6,response to chemicals,Human Activity-optimized genome-wide library
+2016,4,False,0.5684,618,18924,50,35981571,BxPC-3,response to chemicals,Human SAM library in lentiSAMv2 backbone
+2017,5,True,0.5554,654,11689,50,36055241,stem cell-derived islets,cell proliferation,Brunello (human)
+202,9,False,0.2339,2112,17665,50,29083409,U2OS,cell proliferation,Avana
+203,9,False,0.1987,1987,17665,50,29083409,U-251MG,cell proliferation,Avana
+204,9,False,0.2182,1659,17665,50,29083409,TUHR4TKB,cell proliferation,Avana
+2048,6,True,0.2585,129,19107,50,34373448,PLC/PRF/5,response to toxin,Brunello (human)
+205,9,False,0.2217,1244,17665,50,29083409,TUHR10TKB,cell proliferation,Avana
+2050,7,True,0.4452,1525,18045,50,35723366,OVISE,cell proliferation,Toronto Knockout version 3 (TKOv3)
+2051,5,False,0.8088,7395,18045,50,35723366,JHOC-5,cell proliferation,Toronto Knockout version 3 (TKOv3)
+2052,6,False,0.5687,4610,18045,50,35723366,ES-2,cell proliferation,Toronto Knockout version 3 (TKOv3)
+2053,8,False,0.4672,1401,18045,50,35723366,TOV-21G,cell proliferation,Toronto Knockout version 3 (TKOv3)
+2054,3,True,0.7769,949,18876,50,37435859,SK-N-DZ,response to chemicals,Human CRISPR Activation Pooled Library (Calabrese)
+2055,2,False,0.7001,1016,18877,50,37435859,SK-N-DZ,response to chemicals,Human CRISPR Activation Pooled Library (Calabrese)
+206,9,False,0.2512,1924,17665,50,29083409,THP-1,cell proliferation,Avana
+2060,7,True,0.0919,103,20805,50,36124427,Calu1-ACE2,viability,GECKO v2
+2061,8,False,0.3569,2092,18046,50,36597481,Calu-3,cell proliferation,Toronto Knockout version 3 (TKOv3)
+2062,9,False,0.3283,2058,18045,50,36597481,HEK293-ACE2-TMPRSS2,cell proliferation,Toronto Knockout version 3 (TKOv3)
+2063,9,False,0.1989,2093,18046,50,36597481,HuH-7,cell proliferation,Toronto Knockout version 3 (TKOv3)
+2064,7,False,0.3152,2024,18045,50,36597481,UM-UC-4,cell proliferation,Toronto Knockout version 3 (TKOv3)
+207,9,False,0.2209,1747,17665,50,29083409,8-MG-BA,cell proliferation,Avana
+2071,5,True,0.0514,25,17807,50,36597481,HuH-7,response to virus,Toronto Knockout version 3 (TKOv3)
+2074,9,True,0.0198,31,11834,50,36597481,Vero-E6|VERO C1008,response to virus,Toronto Knockout version 3 (TKOv3)
+2075,8,True,0.0675,30,11781,50,36597481,Vero-E6|VERO C1008,response to virus,Toronto Knockout version 3 (TKOv3)
+2076,6,True,0.303,212,19106,50,36753415,HCT 116,Viral programmed ribosomal frameshifting (PRF),Brunello (human)
+2077,8,True,0.1287,185,19106,50,36753415,HCT 116,Viral programmed ribosomal frameshifting (PRF),Brunello (human)
+2078,8,True,0.1041,128,19106,50,32668236,HCT 116,regulation of Nonsense-mediated decay (NMD),Brunello (human)
+2079,8,True,0.1122,73,18972,50,37639469,NALM-6,response to chemicals,Extended Knockout Library (EKO)
+208,9,False,0.2304,1950,17665,50,29083409,42-MG-BA,cell proliferation,Avana
+2080,8,True,0.0543,23,18972,50,37639469,NALM-6,response to chemicals,Extended Knockout Library (EKO)
+2081,8,True,0.0543,23,18972,50,37639469,NALM-6,response to chemicals,Extended Knockout Library (EKO)
+2082,4,True,0.6158,1243,17920,50,37047518,HEK293-A,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2083,6,False,0.6868,1875,17921,50,37047518,HEK293-A,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2084,10,True,0.0526,47,19014,50,37616343,HEK293T,protein/peptide accumulation,"Root library (Gu, 2023)"
+2085,6,True,0.0868,44,19014,50,37616343,HEK293T,protein/peptide accumulation,"Root library (Gu, 2023)"
+2086,7,True,0.2503,462,17987,50,37866880,MCF-10A,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+2087,9,True,0.2703,371,17988,50,37866880,MCF-10A,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+2088,8,True,0.0298,121,17815,50,34108663,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2089,6,True,0.0331,40,18050,50,34108663,HUES 62,cell proliferation,Toronto Knockout version 3 (TKOv3)
+209,9,False,0.2159,1895,17665,50,29083409,59M,cell proliferation,Avana
+2090,10,False,0.0389,138,17813,50,34108663,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2091,8,True,0.0083,45,17816,50,34108663,hTERT-RPE1,response to chemicals,Toronto Knockout version 3 (TKOv3)
+210,9,False,0.2244,1964,17665,50,29083409,639V,cell proliferation,Avana
+2104,6,False,0.473,909,18822,50,34215620,U2OS,protein/peptide accumulation,GECKO v2
+211,9,False,0.2948,1965,17665,50,29083409,647V,cell proliferation,Avana
+2113,8,False,0.1627,912,18878,50,30111820,BC-1,cell proliferation,Brunello (human)
+2114,9,False,0.1723,743,18878,50,30111820,BC-2,cell proliferation,Brunello (human)
+2115,9,False,0.2194,645,21806,50,30111820,BC-3,cell proliferation,GECKO v2
+2116,8,True,0.166,400,18878,50,30111820,BC-5,cell proliferation,Brunello (human)
+2117,8,False,0.1856,1000,18878,50,30111820,JSC-1,cell proliferation,Brunello (human)
+2118,8,False,0.226,808,18878,50,30111820,APK-1,cell proliferation,Brunello (human)
+2119,8,False,0.2207,1581,18878,50,30111820,BCBL-1 (clone),cell proliferation,Brunello (human)
+212,9,False,0.2634,1947,17665,50,29083409,769-P,cell proliferation,Avana
+2120,9,False,0.1725,878,18878,50,30111820,BCBL-1,cell proliferation,Brunello (human)
+2121,9,False,0.2344,834,21733,50,30111820,BCBL-1,cell proliferation,GECKO v2
+2122,10,True,0.1134,264,18878,50,30111820,VG-1,cell proliferation,Brunello (human)
+2123,8,True,0.2073,1255,19108,50,30111820,KMS-12-BM,cell proliferation,Brunello (human)
+2124,8,False,0.1112,365,21806,50,30111820,BJAB,cell proliferation,GECKO v2
+213,9,False,0.2408,2098,17665,50,29083409,786-O,cell proliferation,Avana
+2134,6,True,0.0345,22,18059,50,37046090,HEK293T,protein/peptide accumulation,Human Activity-optimized genome-wide library
+2136,4,True,0.7901,1876,17987,50,35763353,MM1.S,response to chemicals,Avana-4
+2139,7,True,0.3655,683,20454,50,35688159,D10,cell proliferation,GECKO
+214,8,False,0.2433,2270,17665,50,29083409,ABC-1,cell proliferation,Avana
+2140,8,False,0.3802,478,20454,50,35688159,D10,cell proliferation,GECKO
+215,9,True,0.1979,1879,17665,50,29083409,AsPC-1,cell proliferation,Avana
+216,8,False,0.2673,2066,17665,50,29083409,BC-3C,cell proliferation,Avana
+217,9,False,0.205,2202,17665,50,29083409,BFTC-905,cell proliferation,Avana
+218,9,True,0.1856,1962,17665,50,29083409,BFTC-909,cell proliferation,Avana
+219,8,False,0.2876,1917,17665,50,29083409,BICR 22,cell proliferation,Avana
+220,9,False,0.2366,1985,17665,50,29083409,BT-549,cell proliferation,Avana
+2208,8,False,0.3123,228,18044,50,36820830,MV4-11,response to chemicals,Toronto Knockout version 3 (TKOv3)
+221,9,False,0.2628,2061,17665,50,29083409,CFPAC-1,cell proliferation,Avana
+2212,4,True,0.5508,1065,19109,50,36731340,HAP-1,response to chemicals,Brunello (human)
+2213,5,False,0.443,1411,19109,50,36731340,HAP-1,response to chemicals,Brunello (human)
+2214,5,False,0.557,1511,19109,50,36731340,SK-MM-1,response to chemicals,Brunello (human)
+2215,3,True,0.5564,380,19109,50,36731340,KMS-28BM,response to chemicals,Brunello (human)
+2217,4,True,0.2894,348,19109,50,36731340,KMS-28BM,response to chemicals,Brunello (human)
+2218,7,True,0.2634,230,19109,50,36731340,KMS-28BM,response to chemicals,Brunello (human)
+2219,6,True,0.1187,170,19109,50,36731340,KMS-28BM,response to chemicals,Brunello (human)
+222,9,True,0.2389,1979,17667,50,29083409,ZR-75-1,cell proliferation,Avana
+2220,3,True,0.8587,2961,19109,50,36731340,DS,response to chemicals,Brunello (human)
+2221,1,False,0.7581,2500,19109,50,36731340,DS,response to chemicals,Brunello (human)
+2222,8,True,0.1908,161,19109,50,36731340,RL,response to chemicals,Brunello (human)
+2223,8,True,0.1541,151,19109,50,36731340,RL,response to chemicals,Brunello (human)
+223,9,False,0.2455,1877,17667,50,29083409,WM983B,cell proliferation,Avana
+224,9,False,0.252,2088,17667,50,29083409,VM-CUB-1,cell proliferation,Avana
+225,9,False,0.254,2044,17667,50,29083409,UM-UC-3,cell proliferation,Avana
+226,9,True,0.2007,1977,17667,50,29083409,D283 Med,cell proliferation,Avana
+227,9,False,0.271,2069,17667,50,29083409,EFO-27,cell proliferation,Avana
+228,9,False,0.2219,2175,17667,50,29083409,ES-2,cell proliferation,Avana
+229,9,False,0.2265,2114,17667,50,29083409,F5,cell proliferation,Avana
+230,9,False,0.2481,1813,17667,50,29083409,Fu97,cell proliferation,Avana
+2309,4,False,0.6705,829,17430,50,34320214,HEK293-A,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2310,4,True,0.5556,954,17430,50,34320214,HEK293-A,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2311,8,True,0.0672,48,17921,50,34320214,HEK293-A,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2312,7,True,0.0316,60,17920,50,34320214,HEK293-A,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2313,8,True,0.0627,80,17921,50,34320214,HEK293-A,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2314,7,True,0.1061,73,17920,50,34320214,HEK293-A,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2315,7,True,0.0727,65,17920,50,34320214,HEK293-A,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2316,6,True,0.0695,30,17921,50,34320214,HEK293-A,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2317,9,False,0.2503,405,17383,50,34320214,HCT 116,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2318,7,False,0.2854,415,17384,50,34320214,HCT 116,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2319,7,True,0.0583,42,18045,50,34921014,MDA-MB-231,response to chemicals,Toronto Knockout version 3 (TKOv3)
+232,9,True,0.2097,1752,17667,50,29083409,H4,cell proliferation,Avana
+2320,7,True,0.0404,38,18046,50,34921014,MDA-MB-231,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2321,6,True,0.1217,122,20393,50,36409314,K-562,cell proliferation,Bassik Human CRISPR Knockout Library
+2322,9,True,0.0204,128,19107,50,10.1101/2024.05.08.593110,HEK-293,response to virus,Brunello (human)
+233,9,False,0.2008,1840,17667,50,29083409,HCC1395,cell proliferation,Avana
+234,9,False,0.2226,1922,17667,50,29083409,HCC1937,cell proliferation,Avana
+2345,6,False,0.3039,879,17998,50,37163373,MCF-10A,response to chemicals,Human Improved Genome-wide Knockout CRISPR Library
+2346,8,True,0.3625,902,17998,50,37163373,MCF-10A,response to chemicals,Human Improved Genome-wide Knockout CRISPR Library
+2347,6,False,0.3979,597,17804,50,37163373,MCF-10A,response to chemicals,"CRISPRi (Weissman, 2014)"
+2348,7,False,0.3959,858,17804,50,37163373,MCF-10A,response to chemicals,Weissman Human CRISPRi Titration Libraries
+235,9,False,0.1974,1802,17667,50,29083409,HCC1954,cell proliferation,Avana
+2350,8,False,0.4445,2346,18881,50,31462500,Kuramochi,response to chemicals,Avana-4
+2351,8,False,0.4713,2193,18879,50,31462500,Kuramochi,response to chemicals,Avana-4
+2352,9,True,0.3572,2491,18881,50,31462500,Kuramochi,response to chemicals,Avana-4
+2353,7,False,0.4807,2164,18881,50,31462500,Kuramochi,response to chemicals,Avana-4
+2354,4,True,0.6559,1044,18881,50,31462500,OVSAHO,response to chemicals,Avana-4
+2355,6,False,0.6211,1105,18881,50,31462500,OVSAHO,response to chemicals,Avana-4
+2356,5,False,0.612,1052,18881,50,31462500,OVSAHO,response to chemicals,Avana-4
+2357,5,True,0.6884,1098,18881,50,31462500,OVSAHO,response to chemicals,Avana-4
+2358,6,True,0.443,558,16372,50,36273494,YCC-6,response to chemicals,Human Improved Genome-wide Knockout CRISPR Library
+236,9,False,0.2131,2155,17667,50,29083409,HCC827,cell proliferation,Avana
+2360,5,True,0.5268,557,12119,50,39316623,Huh-7.5,response to virus,Edit-R Human Whole Genome crRNA Library
+2361,6,True,0.4643,528,12119,50,39316623,Huh-7.5,response to virus,Edit-R Human Whole Genome crRNA Library
+237,9,False,0.2549,1754,17667,50,29083409,HCC95,cell proliferation,Avana
+2374,8,False,0.192,376,20592,50,32028983,HAP-1,viability,GECKO v2
+238,9,False,0.2407,1591,17667,50,29083409,HEC-1-A,cell proliferation,Avana
+239,9,False,0.2229,1664,17667,50,29083409,HEC-1-B,cell proliferation,Avana
+24,7,True,0.3116,894,20398,50,28474669,K-562,response to toxin,Bassik Human CRISPR Knockout Library
+240,9,True,0.22,1946,17667,50,29083409,HOP-62,cell proliferation,Avana
+2402,2,False,0.7469,1178,19106,50,36977592,THP-1,response to toxin,GECKO v2
+2404,8,True,0.1201,89,19106,50,36417855,HeLa,protein/peptide accumulation,Brunello (human)
+2405,5,True,0.3781,368,36098,50,36744886,Jurkat,response to virus,Toronto Knockout version 3 (TKOv3)
+241,8,False,0.2074,2131,17667,50,29083409,Hs 766T,cell proliferation,Avana
+2419,5,False,0.8111,2154,15648,50,36920785,U-266 cell,response to chemicals,TKO (Toronto Knockout) v1
+242,9,False,0.2218,2102,17667,50,29083409,HT115,cell proliferation,Avana
+2420,4,True,0.7435,1836,15648,50,36920785,JJN-3,response to chemicals,TKO (Toronto Knockout) v1
+2421,8,False,0.3017,444,18924,50,35113687,Primary T-cells,protein/peptide accumulation,Human CRISPR Activation Pooled Library (Calabrese)
+2422,6,True,0.5061,572,18924,50,35113687,Primary T-cells,protein/peptide accumulation,Human CRISPR Activation Pooled Library (Calabrese)
+2423,8,True,0.1555,226,18934,50,35113687,Primary T-cells,protein/peptide accumulation,Human CRISPRi sgRNA library Dolcetto
+2424,7,True,0.2138,203,18934,50,35113687,Primary T-cells,protein/peptide accumulation,Human CRISPRi sgRNA library Dolcetto
+2425,7,False,0.2229,243,18924,50,35113687,CD4+ T-cells,protein/peptide accumulation,Human CRISPR Activation Pooled Library (Calabrese)
+2426,6,True,0.2777,171,18924,50,35113687,CD4+ T-cells,protein/peptide accumulation,Human CRISPR Activation Pooled Library (Calabrese)
+2427,7,False,0.4835,423,18924,50,35113687,CD4+ T-cells,protein/peptide accumulation,Human CRISPR Activation Pooled Library (Calabrese)
+2428,7,True,0.0387,20,20194,50,40372436,A-549,response to virus,Brunello (human)
+243,9,True,0.2328,1858,17667,50,29083409,HT-1197,cell proliferation,Avana
+2430,7,True,0.0011,34,20191,50,40372436,HeLa,response to virus,Brunello (human)
+2431,9,True,0.0823,100,20187,50,40372436,HEp-2,response to virus,Brunello (human)
+2432,8,True,0.1542,188,20193,50,40372436,HeLa,response to virus,Brunello (human)
+2433,7,True,0.0198,43,20193,50,40372436,A-549,response to virus,Brunello (human)
+2435,7,False,0.2854,452,20193,50,40372436,SK-MES-1,response to virus,Brunello (human)
+2436,8,True,0.1556,201,20196,50,40372436,HCT 8,response to virus,Brunello (human)
+2437,8,True,0.2751,617,20190,50,40372436,HuH-7,response to virus,Brunello (human)
+2438,7,True,0.0812,97,20196,50,40372436,NCI-H727,response to virus,Brunello (human)
+2439,9,True,0.0745,106,20195,50,40372436,NCI-H727,response to virus,Brunello (human)
+244,9,False,0.2197,1529,17667,50,29083409,HT-1376,cell proliferation,Avana
+2440,4,True,0.7797,1800,17430,50,30532030,HEK293-A,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2441,6,True,0.4086,1027,17383,50,30532030,HCT 116,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2442,7,True,0.3074,624,17721,50,30532030,MCF-10A,response to chemicals,Toronto Knockout version 3 (TKOv3)
+2445,5,True,0.0,28,20584,50,34644148,HCT 116,response to chemicals,"CRISPRn (Hao, 2021)"
+2449,5,True,0.0705,111,17408,50,40632661,HK-2,response to chemicals,GECKO v2
+245,9,False,0.2138,2151,17667,50,29083409,IPC-298,cell proliferation,Avana
+2455,8,True,0.0685,24,19078,50,36801923,BCBL-1,cell proliferation,Brunello (human)
+2456,7,True,0.3239,194,20469,50,36725843,NCI-H69AR,response to chemicals,GECKO v2
+2459,8,True,0.0676,256,19107,50,36652375,Capan-1,response to chemicals,Brunello (human)
+246,9,False,0.2302,2037,17667,50,29083409,KM12,cell proliferation,Avana
+2460,7,True,0.2136,256,19107,50,36652375,Capan-1,response to chemicals,Brunello (human)
+2462,9,True,0.334,706,19107,50,36652375,Capan-1,response to chemicals,Brunello (human)
+2465,6,True,0.0023,20,20628,50,36971544,A-549,protein/peptide accumulation,GECKO v2
+2466,6,True,0.1244,88,18817,50,36971544,K-562,protein/peptide accumulation,CRISPRi-v2 (inhibition)
+2467,7,True,0.0137,26,17222,50,36693839,hTERT-RPE1,response to chemicals,TKO (Toronto Knockout) v1
+2468,6,True,0.0047,22,17220,50,36693839,hTERT-RPE1,response to chemicals,TKO (Toronto Knockout) v1
+247,10,False,0.1789,1681,17667,50,29083409,IGR-39,cell proliferation,Avana
+2478,5,False,0.6877,807,21593,50,36920967,HEK293T,response to virus,GECKO v2
+248,9,False,0.2643,2093,17667,50,29083409,HCC-56,cell proliferation,Avana
+249,9,False,0.2459,1549,17667,50,29083409,HCC202,cell proliferation,Avana
+250,8,False,0.2535,1742,17667,50,29083409,HCC1143,cell proliferation,Avana
+251,9,False,0.2518,1755,17667,50,29083409,HCC1359,cell proliferation,Avana
+252,9,False,0.2666,1566,17667,50,29083409,HCC1419,cell proliferation,Avana
+253,8,False,0.2337,2022,17667,50,29083409,HCC1428,cell proliferation,Avana
+254,9,False,0.2642,1570,17667,50,29083409,HCC15,cell proliferation,Avana
+255,9,False,0.2599,2041,17667,50,29083409,HCC1806,cell proliferation,Avana
+256,9,False,0.2104,1745,17667,50,29083409,HGC-27,cell proliferation,Avana
+257,8,True,0.2549,1661,17667,50,29083409,HLF,cell proliferation,Avana
+258,8,True,0.2521,2039,17667,50,29083409,HMC-1-8,cell proliferation,Avana
+259,9,False,0.2434,1994,17667,50,29083409,Hs 294T,cell proliferation,Avana
+260,9,True,0.2034,2071,17667,50,29083409,Hs 578T,cell proliferation,Avana
+261,9,False,0.2276,1859,17667,50,29083409,Hs 683,cell proliferation,Avana
+262,9,False,0.2084,1461,17667,50,29083409,Hs 695T,cell proliferation,Avana
+263,9,True,0.2155,1993,17667,50,29083409,Hs 729.T,cell proliferation,Avana
+264,9,False,0.2434,2103,17667,50,29083409,Hs 944.T,cell proliferation,Avana
+265,8,False,0.2502,1479,17667,50,29083409,HSC-3,cell proliferation,Avana
+266,9,True,0.2407,1960,17667,50,29083409,HT-1080,cell proliferation,Avana
+267,9,True,0.2817,1828,17667,50,29083409,HT-144,cell proliferation,Avana
+268,9,False,0.2325,1689,17667,50,29083409,HT-55,cell proliferation,Avana
+269,9,False,0.2054,1957,17667,50,29083409,HuH-1,cell proliferation,Avana
+27,7,True,0.3187,2197,17206,50,26627737,143B,cell proliferation,TKO (Toronto Knockout) v1
+270,9,False,0.2252,1978,17667,50,29083409,HuH-6,cell proliferation,Avana
+271,9,False,0.2024,2048,17667,50,29083409,HuH-7,cell proliferation,Avana
+272,8,True,0.2427,2352,17667,50,29083409,HuP-T3,cell proliferation,Avana
+273,9,False,0.2497,2188,17667,50,29083409,IGR-1,cell proliferation,Avana
+274,9,True,0.2063,1315,17667,50,29083409,IMR-32,cell proliferation,Avana
+275,9,False,0.2511,2067,17667,50,29083409,CJM,cell proliferation,Avana
+276,9,False,0.2117,1906,17667,50,29083409,D341 Med,cell proliferation,Avana
+277,9,False,0.2433,2210,17667,50,29083409,DAN-G,cell proliferation,Avana
+278,9,True,0.2162,1977,17667,50,29083409,Daoy,cell proliferation,Avana
+279,8,False,0.2454,1329,17667,50,29083409,Detroit 562,cell proliferation,Avana
+28,9,False,0.2245,2038,17203,50,26627737,hTERT-RPE1,cell proliferation,TKO (Toronto Knockout) v1
+280,9,False,0.1641,1667,17667,50,29083409,DK-MG,cell proliferation,Avana
+281,9,False,0.24,2292,17667,50,29083409,DLD-1,cell proliferation,Avana
+282,9,False,0.2295,1252,17667,50,29083409,DU4475,cell proliferation,Avana
+283,9,False,0.2424,1832,17667,50,29083409,EFM-19,cell proliferation,Avana
+284,9,False,0.2169,1743,17667,50,29083409,EFO-21,cell proliferation,Avana
+285,8,False,0.2724,2223,17667,50,29083409,EKVX,cell proliferation,Avana
+286,8,False,0.2203,1748,17667,50,29083409,EPLC-272H,cell proliferation,Avana
+287,9,False,0.2308,2070,17667,50,29083409,ESS-1,cell proliferation,Avana
+288,9,False,0.2378,1732,17667,50,29083409,FaDu,cell proliferation,Avana
+289,9,False,0.1734,1855,17667,50,29083409,G-292 clone A141B1,cell proliferation,Avana
+29,9,False,0.2256,1893,17210,50,26627737,DLD-1,cell proliferation,TKO (Toronto Knockout) v1
+290,9,False,0.2476,1900,17667,50,29083409,GaMG,cell proliferation,Avana
+291,9,False,0.1759,2124,17667,50,29083409,GB-1,cell proliferation,Avana
+292,9,False,0.2666,2272,17667,50,29083409,GCIY,cell proliferation,Avana
+293,9,False,0.2326,1701,17667,50,29083409,GI-1,cell proliferation,Avana
+294,9,False,0.2644,1896,17667,50,29083409,GSS,cell proliferation,Avana
+295,9,False,0.2679,2004,17667,50,29083409,JHH-1,cell proliferation,Avana
+296,9,False,0.2191,1938,17667,50,29083409,JHH-4,cell proliferation,Avana
+297,9,False,0.2331,2146,17667,50,29083409,JHH-5,cell proliferation,Avana
+298,9,False,0.256,2194,17667,50,29083409,JHH-7,cell proliferation,Avana
+299,9,False,0.2517,2025,17667,50,29083409,JHOC-5,cell proliferation,Avana
+300,8,False,0.1954,1895,17667,50,29083409,JHOM-1,cell proliferation,Avana
+301,9,False,0.2405,1837,17667,50,29083409,JHOS-2,cell proliferation,Avana
+302,9,False,0.2652,2024,17667,50,29083409,JHOS-4,cell proliferation,Avana
+303,9,False,0.2327,1960,17667,50,29083409,JIMT-1,cell proliferation,Avana
+304,9,False,0.2666,2119,17667,50,29083409,JMSU-1,cell proliferation,Avana
+305,9,False,0.2912,2239,17667,50,29083409,HARA,cell proliferation,Avana
+306,9,True,0.2056,1813,17667,50,29083409,BICR 6,cell proliferation,Avana
+307,9,True,0.2595,1746,17667,50,29083409,HEC-251,cell proliferation,Avana
+308,9,False,0.2187,2056,17667,50,29083409,HEC-50B,cell proliferation,Avana
+309,8,False,0.2616,1959,17667,50,29083409,HEC-59,cell proliferation,Avana
+310,9,True,0.2327,1999,17667,50,29083409,HEY A8,cell proliferation,Avana
+311,9,True,0.2087,1834,17667,50,29083409,K029AX,cell proliferation,Avana
+312,8,False,0.2231,2012,17667,50,29083409,KALS-1,cell proliferation,Avana
+313,9,True,0.2686,2208,17667,50,29083409,Karpas-299,cell proliferation,Avana
+314,9,False,0.2426,2259,17667,50,29083409,Kelly,cell proliferation,Avana
+315,9,False,0.2446,1919,17667,50,29083409,Ki-JK,cell proliferation,Avana
+316,9,False,0.2309,1527,17667,50,29083409,KLE,cell proliferation,Avana
+317,9,False,0.2313,1945,17667,50,29083409,KMBC-2,cell proliferation,Avana
+318,8,False,0.2132,1706,17667,50,29083409,KMRC-1,cell proliferation,Avana
+319,9,False,0.2579,1901,17667,50,29083409,KMRC-20,cell proliferation,Avana
+320,9,False,0.2244,1547,17667,50,29083409,KNS-42,cell proliferation,Avana
+321,8,False,0.2479,1726,17667,50,29083409,KNS-60,cell proliferation,Avana
+322,8,False,0.2221,2143,17667,50,29083409,KNS-62,cell proliferation,Avana
+323,9,False,0.1864,1494,17667,50,29083409,KNS-81,cell proliferation,Avana
+324,9,False,0.2565,1634,17667,50,29083409,KP-2,cell proliferation,Avana
+325,9,False,0.2353,1908,17667,50,29083409,KP-3,cell proliferation,Avana
+326,9,False,0.2464,2178,17667,50,29083409,KP-4,cell proliferation,Avana
+327,9,False,0.2608,2049,17667,50,29083409,KPL-1,cell proliferation,Avana
+328,9,False,0.2197,1236,17667,50,29083409,KP-N-YN,cell proliferation,Avana
+329,9,False,0.2354,1298,17667,50,29083409,KS-1,cell proliferation,Avana
+330,9,False,0.2425,2067,17667,50,29083409,KU-19-19,cell proliferation,Avana
+331,9,False,0.1886,1879,17667,50,29083409,Kuramochi,cell proliferation,Avana
+332,9,False,0.2391,2197,17667,50,29083409,KYSE-180,cell proliferation,Avana
+333,9,False,0.2769,1875,17667,50,29083409,KYSE-270,cell proliferation,Avana
+334,9,False,0.2315,2028,17667,50,29083409,KYSE-410,cell proliferation,Avana
+335,9,False,0.1855,2032,17667,50,29083409,KYSE-450,cell proliferation,Avana
+336,9,False,0.2277,2137,17667,50,29083409,KYSE-70,cell proliferation,Avana
+337,9,False,0.2187,2003,17667,50,29083409,LCLC-103H,cell proliferation,Avana
+338,8,False,0.2162,1922,17667,50,29083409,Li-7,cell proliferation,Avana
+339,9,True,0.2141,2185,17667,50,29083409,LK-2,cell proliferation,Avana
+340,9,False,0.2002,1947,17667,50,29083409,LN-18,cell proliferation,Avana
+341,9,False,0.1867,1893,17667,50,29083409,LN-235,cell proliferation,Avana
+342,9,True,0.2312,2023,17667,50,29083409,LN-382,cell proliferation,Avana
+343,8,False,0.1981,1770,17667,50,29083409,LN-443,cell proliferation,Avana
+346,9,False,0.2175,1936,17667,50,29083409,LN-308,cell proliferation,Avana
+347,9,False,0.2222,1637,17667,50,29083409,LoVo,cell proliferation,Avana
+348,9,False,0.1965,1899,17667,50,29083409,LS180,cell proliferation,Avana
+349,9,False,0.2052,1930,17667,50,29083409,LS513,cell proliferation,Avana
+350,9,False,0.2051,1804,17667,50,29083409,LS1034,cell proliferation,Avana
+351,9,False,0.2361,1886,17667,50,29083409,LUDLU-1,cell proliferation,Avana
+352,9,False,0.2546,2293,17667,50,29083409,LXF 289,cell proliferation,Avana
+353,9,True,0.2011,1884,17667,50,29083409,M059K,cell proliferation,Avana
+354,9,True,0.2109,1792,17667,50,29083409,Malme-3M,cell proliferation,Avana
+355,9,False,0.2913,1882,17667,50,29083409,MCAS,cell proliferation,Avana
+356,8,True,0.2304,1656,17667,50,29083409,MDA-MB-157,cell proliferation,Avana
+357,9,True,0.2228,1981,17667,50,29083409,MDA-MB-231,cell proliferation,Avana
+358,9,False,0.2553,1768,17667,50,29083409,MDA-MB-415,cell proliferation,Avana
+359,9,False,0.2501,2081,17667,50,29083409,MDA-MB-435S,cell proliferation,Avana
+360,9,False,0.2276,2152,17667,50,29083409,MDA-MB-436,cell proliferation,Avana
+361,9,False,0.2476,1852,17667,50,29083409,MDA-MB-453,cell proliferation,Avana
+362,9,False,0.2489,1943,17667,50,29083409,MDA-MB-468,cell proliferation,Avana
+363,9,False,0.2166,2081,17667,50,29083409,MDST8,cell proliferation,Avana
+364,9,False,0.2145,1865,17667,50,29083409,Mel Ho,cell proliferation,Avana
+365,9,False,0.2631,2132,17667,50,29083409,Mel JuSo,cell proliferation,Avana
+366,9,True,0.2109,1776,17667,50,29083409,MFE-319,cell proliferation,Avana
+367,9,False,0.2058,1680,17667,50,29083409,MHH-NB-11,cell proliferation,Avana
+368,9,True,0.2712,2257,17667,50,29083409,MIA PaCa-2,cell proliferation,Avana
+369,9,False,0.2497,1730,17667,50,29083409,MKN45,cell proliferation,Avana
+370,9,False,0.266,2062,17667,50,29083409,MOLM-13,cell proliferation,Avana
+371,10,False,0.2313,481,18457,50,29028833,MKL-1,cell proliferation,"Liu Human CRISPR Knockout Library (CRISPRn H1 H2, H1/H2)"
+372,9,False,0.2594,2123,17667,50,29083409,MOR/CPR,cell proliferation,Avana
+373,8,False,0.3167,2127,17667,50,29083409,MV4-11,cell proliferation,Avana
+374,9,False,0.2391,1729,17667,50,29083409,NB1,cell proliferation,Avana
+375,9,False,0.2555,1622,17667,50,29083409,NB4,cell proliferation,Avana
+376,9,False,0.2237,1905,17667,50,29083409,NCI-H23,cell proliferation,Avana
+377,9,False,0.231,2188,17667,50,29083409,NCI-H322,cell proliferation,Avana
+378,9,False,0.2435,2046,17667,50,29083409,NCI-H441,cell proliferation,Avana
+379,9,False,0.2239,1821,17667,50,29083409,NCI-H460,cell proliferation,Avana
+380,9,False,0.2215,1663,17667,50,29083409,NCI-H520,cell proliferation,Avana
+381,8,False,0.2462,1600,17667,50,29083409,NCI-H716,cell proliferation,Avana
+382,9,False,0.2153,1823,17667,50,29083409,NCI-H747,cell proliferation,Avana
+383,9,False,0.2401,1977,17667,50,29083409,NCI-H838,cell proliferation,Avana
+384,9,False,0.205,1853,17667,50,29083409,NCI-H1299,cell proliferation,Avana
+385,9,True,0.225,2234,17667,50,29083409,NCI-H1437,cell proliferation,Avana
+386,9,False,0.1811,2143,17667,50,29083409,NCI-H1581,cell proliferation,Avana
+387,9,False,0.2488,1742,17667,50,29083409,NCI-H1650,cell proliferation,Avana
+388,9,False,0.1976,1749,17667,50,29083409,NCI-H1693,cell proliferation,Avana
+389,9,False,0.2776,2211,17667,50,29083409,NCI-H1703,cell proliferation,Avana
+390,8,False,0.2003,1966,17667,50,29083409,NCI-H1792,cell proliferation,Avana
+391,9,False,0.2438,2043,17667,50,29083409,NCI-H1944,cell proliferation,Avana
+392,9,False,0.2352,2108,17667,50,29083409,NCI-H2023,cell proliferation,Avana
+393,9,False,0.218,1775,17667,50,29083409,NCI-H2030,cell proliferation,Avana
+394,9,False,0.2523,1865,17667,50,29083409,NCI-H2087,cell proliferation,Avana
+395,9,True,0.2232,1724,17667,50,29083409,NCI-H2110,cell proliferation,Avana
+396,9,False,0.2171,1894,17667,50,29083409,NCI-H2122,cell proliferation,Avana
+397,9,False,0.2088,1666,17667,50,29083409,NCI-H2126,cell proliferation,Avana
+398,9,False,0.2661,1713,17667,50,29083409,NCI-H2170,cell proliferation,Avana
+399,9,True,0.2455,2199,17667,50,29083409,NCI-H2172,cell proliferation,Avana
+400,9,False,0.2373,1738,17667,50,29083409,NCI-H2291,cell proliferation,Avana
+401,9,False,0.2407,1286,17667,50,29083409,NCI-N87,cell proliferation,Avana
+402,9,False,0.2677,1638,17667,50,29083409,NOMO-1,cell proliferation,Avana
+403,8,False,0.2837,2238,17667,50,29083409,NUGC-3,cell proliferation,Avana
+404,9,False,0.2262,2104,17667,50,29083409,OAW28,cell proliferation,Avana
+405,2,True,0.7203,1174,20788,50,28775154,HeLa,protein/peptide distribution,GECKO v2
+406,9,True,0.2237,2060,17667,50,29083409,OE21,cell proliferation,Avana
+407,9,False,0.2546,1859,17667,50,29083409,OE33,cell proliferation,Avana
+408,9,False,0.2235,1839,17667,50,29083409,ONS-76,cell proliferation,Avana
+409,9,True,0.209,1879,17667,50,29083409,OS-RC-2,cell proliferation,Avana
+410,9,False,0.2025,1912,17667,50,29083409,OUMS-23,cell proliferation,Avana
+411,8,False,0.2003,1597,17667,50,29083409,OV7,cell proliferation,Avana
+412,9,False,0.227,2128,17667,50,29083409,OV-90,cell proliferation,Avana
+413,9,False,0.2301,2159,17667,50,29083409,OVCAR-8,cell proliferation,Avana
+414,9,False,0.2337,2211,17667,50,29083409,OVISE,cell proliferation,Avana
+415,9,True,0.2249,2128,17667,50,29083409,OVK-18,cell proliferation,Avana
+416,9,False,0.3166,1546,17667,50,29083409,OVMANA,cell proliferation,Avana
+418,9,True,0.2437,1664,17667,50,29083409,OVTOKO,cell proliferation,Avana
+419,9,False,0.25,2146,17667,50,29083409,P31/FUJ,cell proliferation,Avana
+420,8,False,0.2567,1760,17667,50,29083409,Panc 02.03,cell proliferation,Avana
+421,9,False,0.2316,2165,17667,50,29083409,Panc 04.03,cell proliferation,Avana
+422,9,False,0.1832,1851,17667,50,29083409,Panc 10.05,cell proliferation,Avana
+423,9,True,0.1937,2021,17667,50,29083409,PaTu 8988s,cell proliferation,Avana
+424,9,False,0.2783,2135,17667,50,29083409,PC-14,cell proliferation,Avana
+425,8,False,0.227,2076,17667,50,29083409,PE/CA-PJ34 (clone C12),cell proliferation,Avana
+426,8,False,0.2063,1706,17667,50,29083409,PF-382,cell proliferation,Avana
+427,9,False,0.2312,2075,17667,50,29083409,PK-1,cell proliferation,Avana
+428,8,False,0.2724,1724,17667,50,29083409,PK-45H,cell proliferation,Avana
+429,9,True,0.2999,1969,17667,50,29083409,PLC/PRF/5,cell proliferation,Avana
+430,9,False,0.2009,1575,17667,50,29083409,PSN1,cell proliferation,Avana
+431,8,False,0.1628,1530,17667,50,29083409,RCC10RGB,cell proliferation,Avana
+432,9,False,0.2278,2131,17667,50,29083409,RD,cell proliferation,Avana
+433,8,False,0.2348,1822,17667,50,29083409,RERF-LC-Ad1,cell proliferation,Avana
+434,9,False,0.236,1943,17667,50,29083409,RERF-LC-A1,cell proliferation,Avana
+435,9,False,0.2084,1749,17667,50,29083409,Rh30,cell proliferation,Avana
+436,9,False,0.2254,1879,17667,50,29083409,RKN,cell proliferation,Avana
+437,9,False,0.2522,2349,17667,50,29083409,RKO,cell proliferation,Avana
+438,9,False,0.2757,1680,17667,50,29083409,RMUG-S,cell proliferation,Avana
+439,9,False,0.2173,2129,17667,50,29083409,RPMI-7951,cell proliferation,Avana
+440,9,False,0.2505,1325,17667,50,29083409,RT-4,cell proliferation,Avana
+441,9,False,0.2483,1905,17667,50,29083409,RT-112,cell proliferation,Avana
+442,9,False,0.2787,1864,17667,50,29083409,RT112/84,cell proliferation,Avana
+443,9,False,0.2475,1760,17667,50,29083409,RVH-421,cell proliferation,Avana
+444,9,False,0.2358,1811,17667,50,29083409,SCaBER,cell proliferation,Avana
+445,9,False,0.2574,2220,17667,50,29083409,SF295,cell proliferation,Avana
+446,9,False,0.254,2026,17667,50,29083409,SF767,cell proliferation,Avana
+447,9,False,0.2488,1681,17667,50,29083409,SH-10-TC,cell proliferation,Avana
+448,9,False,0.2002,1927,17667,50,29083409,SiMa,cell proliferation,Avana
+449,9,False,0.1934,1848,17667,50,29083409,SJSA-1,cell proliferation,Avana
+450,9,False,0.2362,1809,17667,50,29083409,SK-BR-3,cell proliferation,Avana
+451,9,False,0.2416,1633,17667,50,29083409,SK-HEP-1,cell proliferation,Avana
+452,9,False,0.2179,1769,17667,50,29083409,SK-MEL-24,cell proliferation,Avana
+453,9,False,0.2501,1546,17667,50,29083409,SK-MEL-30,cell proliferation,Avana
+454,8,False,0.2101,1837,17667,50,29083409,SK-MES-1,cell proliferation,Avana
+455,9,False,0.2076,2185,17667,50,29083409,SK-N-AS,cell proliferation,Avana
+456,9,False,0.2334,1982,17667,50,29083409,SK-N-BE(2),cell proliferation,Avana
+457,9,False,0.1973,1828,17667,50,29083409,SK-N-DZ,cell proliferation,Avana
+458,9,True,0.1345,1402,17667,50,29083409,SK-N-FI,cell proliferation,Avana
+459,9,False,0.2245,1772,17667,50,29083409,SK-N-MC,cell proliferation,Avana
+460,8,False,0.2069,1828,17667,50,29083409,SK-OV-3,cell proliferation,Avana
+461,8,False,0.2689,2199,17667,50,29083409,SLR20,cell proliferation,Avana
+462,10,True,0.2086,2088,17667,50,29083409,SLR23,cell proliferation,Avana
+463,9,False,0.2072,1758,17667,50,29083409,SLR26,cell proliferation,Avana
+464,9,True,0.2311,1810,17667,50,29083409,SNG-M,cell proliferation,Avana
+465,9,False,0.2759,2210,17667,50,29083409,SNU-1,cell proliferation,Avana
+466,9,False,0.3064,2178,17667,50,29083409,SNU-8,cell proliferation,Avana
+467,9,False,0.2072,1784,17667,50,29083409,SNU-201,cell proliferation,Avana
+468,8,False,0.2467,1878,17667,50,29083409,SNU-213,cell proliferation,Avana
+469,8,False,0.2428,1712,17667,50,29083409,SNU-349,cell proliferation,Avana
+470,8,False,0.2312,2022,17667,50,29083409,SNU-398,cell proliferation,Avana
+471,9,False,0.2103,1809,17667,50,29083409,SNU-410,cell proliferation,Avana
+472,9,False,0.2329,1935,17667,50,29083409,SNU-449,cell proliferation,Avana
+473,9,False,0.2483,1571,17667,50,29083409,SNU-503,cell proliferation,Avana
+474,9,False,0.2213,1921,17667,50,29083409,SNU-685,cell proliferation,Avana
+475,9,False,0.3109,1623,17667,50,29083409,SNU-840,cell proliferation,Avana
+476,9,False,0.2448,1839,17667,50,29083409,SUIT-2,cell proliferation,Avana
+477,8,False,0.2718,2186,17667,50,29083409,SUP-M2,cell proliferation,Avana
+478,9,True,0.2491,1437,17667,50,29083409,SUP-T1,cell proliferation,Avana
+479,9,False,0.2406,1642,17667,50,29083409,SW48,cell proliferation,Avana
+480,9,False,0.2143,1292,17667,50,29083409,SW403,cell proliferation,Avana
+481,9,False,0.2256,1918,17667,50,29083409,SW620,cell proliferation,Avana
+482,8,True,0.2656,2024,17667,50,29083409,SW837,cell proliferation,Avana
+483,9,False,0.2099,1798,17667,50,29083409,SW1463,cell proliferation,Avana
+484,9,False,0.2567,1795,17667,50,29083409,T3M-4,cell proliferation,Avana
+485,10,False,0.2309,1892,17667,50,29083409,T24,cell proliferation,Avana
+486,9,False,0.2142,2082,17667,50,29083409,T84,cell proliferation,Avana
+487,9,False,0.249,1839,17667,50,29083409,T98G,cell proliferation,Avana
+488,9,False,0.2552,2110,17667,50,29083409,TCC-Pan2,cell proliferation,Avana
+489,9,False,0.2151,2050,17667,50,29083409,TCCSUP,cell proliferation,Avana
+490,9,False,0.2927,1886,17667,50,29083409,TE-1,cell proliferation,Avana
+491,9,False,0.1847,1748,17667,50,29083409,TE-5,cell proliferation,Avana
+492,8,False,0.2244,1872,17667,50,29083409,TEN,cell proliferation,Avana
+493,9,False,0.2663,2041,17667,50,29083409,TF-1,cell proliferation,Avana
+494,9,False,0.2817,2187,17667,50,29083409,TOV-21G,cell proliferation,Avana
+495,9,False,0.1931,1816,17667,50,29083409,U-118MG,cell proliferation,Avana
+496,9,False,0.2143,1492,17667,50,29083409,U-178MG,cell proliferation,Avana
+497,9,False,0.2423,1702,17667,50,29083409,UOK101,cell proliferation,Avana
+498,9,False,0.2203,2019,17667,50,29083409,WM1799,cell proliferation,Avana
+5,9,True,0.4128,1344,15964,50,25307932,K-562,cell proliferation,"CRISPRi (Weissman, 2014)"
+503,8,True,0.2357,1391,18784,50,28985567,BJAB,cell proliferation,GECKO v2
+504,7,False,0.5959,2741,18784,50,28985567,SU-DHL-4,cell proliferation,GECKO v2
+505,7,False,0.3378,432,18784,50,28985567,Pfeiffer,cell proliferation,GECKO v2
+506,7,False,0.4604,2259,18784,50,28985567,OCI-Ly3,cell proliferation,GECKO v2
+507,7,True,0.2123,416,18784,50,28985567,HBL-1,cell proliferation,GECKO v2
+508,7,False,0.5573,1571,18784,50,28985567,TMD8,cell proliferation,GECKO v2
+509,9,False,0.2218,1914,17667,50,29083409,C2BBe1,cell proliferation,Avana
+510,9,False,0.2319,1906,17667,50,29083409,C32,cell proliferation,Avana
+511,9,False,0.1963,1624,17667,50,29083409,Caki-1,cell proliferation,Avana
+512,8,False,0.2421,1530,17667,50,29083409,Caki-2,cell proliferation,Avana
+513,9,False,0.2631,2267,17667,50,29083409,CAL-51,cell proliferation,Avana
+514,9,False,0.2338,1986,17667,50,29083409,KYSE-30,cell proliferation,Avana
+515,9,False,0.217,1578,17667,50,29083409,HEC-6,cell proliferation,Avana
+516,9,False,0.1935,1737,17667,50,29083409,CAL-78,cell proliferation,Avana
+517,9,False,0.2264,1867,17667,50,29083409,Calu-6,cell proliferation,Avana
+518,9,True,0.2299,1566,17667,50,29083409,CAMA-1,cell proliferation,Avana
+519,9,False,0.223,1730,17667,50,29083409,CAS-1,cell proliferation,Avana
+520,9,False,0.2461,1876,17667,50,29083409,CCF-STTG1,cell proliferation,Avana
+521,9,False,0.1905,1135,17667,50,29083409,CCK-81,cell proliferation,Avana
+522,9,False,0.2476,1760,17667,50,29083409,ChaGo-K-1,cell proliferation,Avana
+523,9,False,0.2511,2083,17667,50,29083409,CHP-212,cell proliferation,Avana
+524,9,False,0.2304,1848,17667,50,29083409,CL-40,cell proliferation,Avana
+525,9,False,0.1926,1540,17667,50,29083409,COLO 678,cell proliferation,Avana
+526,9,False,0.2269,1929,17667,50,29083409,COLO 679,cell proliferation,Avana
+527,9,False,0.2319,2146,17667,50,29083409,COLO 792,cell proliferation,Avana
+528,9,False,0.2658,1959,17667,50,29083409,COLO 800,cell proliferation,Avana
+529,9,False,0.2469,1416,17667,50,29083409,COR-L47,cell proliferation,Avana
+530,9,False,0.2145,1581,17667,50,29083409,COR-L279,cell proliferation,Avana
+531,9,False,0.2459,1791,17667,50,29083409,COV318,cell proliferation,Avana
+532,9,False,0.2238,1815,17667,50,29083409,COV362,cell proliferation,Avana
+533,9,True,0.2746,2224,17667,50,29083409,COV434,cell proliferation,Avana
+534,9,True,0.2516,2075,17667,50,29083409,COV504,cell proliferation,Avana
+535,8,False,0.1561,1544,17667,50,29083409,COV644,cell proliferation,Avana
+536,9,False,0.2829,1854,17667,50,29083409,CAL-29,cell proliferation,Avana
+537,9,False,0.2721,2100,17624,50,27260156,A-375,cell proliferation,GECKO v2
+538,8,False,0.3129,1923,17624,50,27260156,A-673,cell proliferation,GECKO v2
+539,9,False,0.24,1876,17624,50,27260156,BxPC-3,cell proliferation,GECKO v2
+540,8,False,0.3074,1722,17624,50,27260156,CADO-ES1,cell proliferation,GECKO v2
+541,8,True,0.251,1491,17624,50,27260156,CAL-120,cell proliferation,GECKO v2
+542,9,True,0.2345,2130,17624,50,27260156,COR-L105,cell proliferation,GECKO v2
+543,9,False,0.3101,1875,17624,50,27260156,EW-8,cell proliferation,GECKO v2
+544,8,False,0.2727,2010,17624,50,27260156,EWS-502,cell proliferation,GECKO v2
+545,9,False,0.2621,1880,17624,50,27260156,G-402,cell proliferation,GECKO v2
+546,9,True,0.2499,1777,17624,50,27260156,HCC44,cell proliferation,GECKO v2
+547,8,False,0.2952,1876,17624,50,27260156,Hs 294T,cell proliferation,GECKO v2
+548,8,False,0.2636,2137,17624,50,27260156,HT-29,cell proliferation,GECKO v2
+549,9,False,0.2897,1745,17624,50,27260156,K-562,cell proliferation,GECKO v2
+550,9,False,0.3013,1200,17624,50,27260156,L3.3,cell proliferation,GECKO v2
+551,8,False,0.3044,1911,17624,50,27260156,LNCaP,cell proliferation,GECKO v2
+552,8,False,0.2479,1751,17624,50,27260156,MeWo,cell proliferation,GECKO v2
+553,9,False,0.2711,1870,17624,50,27260156,MHH-ES-1,cell proliferation,GECKO v2
+554,8,True,0.2757,1595,17624,50,27260156,NCI-H1373,cell proliferation,GECKO v2
+555,8,False,0.2573,2108,17624,50,27260156,NCI-H2009,cell proliferation,GECKO v2
+556,8,False,0.2704,1766,17624,50,27260156,PANC-1,cell proliferation,GECKO v2
+557,8,True,0.3332,1759,17624,50,27260156,Panc 03.27,cell proliferation,GECKO v2
+558,8,False,0.3041,2145,17624,50,27260156,Panc 08.13,cell proliferation,GECKO v2
+559,9,False,0.2476,1757,17624,50,27260156,PaTu 8902,cell proliferation,GECKO v2
+560,9,False,0.2452,1997,17624,50,27260156,PaTu 8988s,cell proliferation,GECKO v2
+561,9,False,0.2807,1213,17624,50,27260156,PC-3,cell proliferation,GECKO v2
+562,9,False,0.2565,1520,17624,50,27260156,RD-ES,cell proliferation,GECKO v2
+563,8,False,0.2902,1584,17624,50,27260156,SK-ES-1,cell proliferation,GECKO v2
+564,9,False,0.2267,1834,17624,50,27260156,SU.86.86,cell proliferation,GECKO v2
+565,8,True,0.3058,1765,17624,50,27260156,T-47D,cell proliferation,GECKO v2
+566,8,False,0.2943,1671,17624,50,27260156,TC-32,cell proliferation,GECKO v2
+567,8,False,0.2788,1542,17624,50,27260156,TC-71,cell proliferation,GECKO v2
+568,8,False,0.2683,1724,17624,50,27260156,TOV-112D,cell proliferation,GECKO v2
+569,9,False,0.308,1732,17624,50,27260156,COLO 741,cell proliferation,GECKO v2
+570,8,False,0.219,1820,18066,50,26673326,GSC-0131,cell proliferation,GECKO
+571,9,False,0.2306,1243,18066,50,26673326,GSC-0827,cell proliferation,GECKO
+572,10,False,0.1919,1673,18066,50,26673326,NSC-CB660,cell proliferation,GECKO
+573,9,False,0.2629,1933,18066,50,26673326,NSC-U5,cell proliferation,GECKO
+574,9,False,0.2542,1359,17998,50,27760321,MOLM-13,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+575,9,False,0.2796,941,17998,50,27760321,MV4-11,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+576,8,False,0.2806,1666,17998,50,27760321,OCI-AML-2,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+577,8,True,0.3079,1475,17998,50,27760321,OCI-AML-3,cell proliferation,Human Improved Genome-wide Knockout CRISPR Library
+583,7,True,0.5296,1718,17974,50,28877469,H4,protein/peptide accumulation,"CRISPRn (Hoffman and Nyfeler, 2016)"
+597,9,False,0.4852,2552,18142,50,29662178,h-pES10,cell proliferation,Human Activity-optimized genome-wide library
+6,6,True,0.4129,142,15965,50,25307932,K-562,cell proliferation,"CRISPRa (Weissman, 2014)"
+613,8,True,0.1294,143,18138,50,29576454,HMEC,cell proliferation,Human Activity-optimized genome-wide library
+614,7,False,0.2136,823,18138,50,29576454,HMEC,cell proliferation,Human Activity-optimized genome-wide library
+629,10,False,0.1645,234,18126,50,28700943,DLD-1,cell proliferation,"CRISPRn (Martin, 2017)"
+66,9,True,0.3229,2428,18619,50,28162770,EoL-1,cell proliferation,Focused Ras Synthetic Lethal Human CRISPR Knockout Library
+67,8,True,0.3035,2714,18619,50,28162770,HEL,cell proliferation,Focused Ras Synthetic Lethal Human CRISPR Knockout Library
+68,7,True,0.4178,3476,18619,50,28162770,MOLM-13,cell proliferation,Focused Ras Synthetic Lethal Human CRISPR Knockout Library
+689,5,True,0.4508,1073,19106,50,30898113,PANC-1,response to chemicals,Brunello (human)
+69,9,False,0.271,1923,18619,50,28162770,Mono-Mac-1,cell proliferation,Focused Ras Synthetic Lethal Human CRISPR Knockout Library
+691,9,True,0.2472,922,17986,50,30971826,22Rv1,cell proliferation,Human CRISPR Library v.1.1
+692,9,False,0.2148,1475,17986,50,30971826,23132/87,cell proliferation,Human CRISPR Library v.1.1
+693,9,False,0.1929,1169,17986,50,30971826,42-MG-BA,cell proliferation,Human CRISPR Library v.1.1
+694,9,False,0.1985,1613,17986,50,30971826,769-P,cell proliferation,Human CRISPR Library v.1.1
+695,9,False,0.197,1944,17986,50,30971826,8-MG-BA,cell proliferation,Human CRISPR Library v.1.1
+696,9,False,0.1922,1336,17986,50,30971826,A172,cell proliferation,Human CRISPR Library v.1.1
+697,9,False,0.2106,1837,17986,50,30971826,A2058,cell proliferation,Human CRISPR Library v.1.1
+698,10,False,0.1794,1237,17986,50,30971826,A253,cell proliferation,Human CRISPR Library v.1.1
+699,9,False,0.2404,1572,17986,50,30971826,A2780,cell proliferation,Human CRISPR Library v.1.1
+70,8,True,0.2978,2505,18619,50,28162770,MV4-11,cell proliferation,Focused Ras Synthetic Lethal Human CRISPR Knockout Library
+700,9,False,0.2182,1908,17986,50,30971826,A2780ADR,cell proliferation,Human CRISPR Library v.1.1
+701,9,False,0.2128,1358,17986,50,30971826,A2780cis,cell proliferation,Human CRISPR Library v.1.1
+702,9,False,0.2314,1368,17986,50,30971826,A-375,cell proliferation,Human CRISPR Library v.1.1
+703,9,False,0.1797,1179,17986,50,30971826,A-549,cell proliferation,Human CRISPR Library v.1.1
+704,9,False,0.1871,1787,17986,50,30971826,AGS,cell proliferation,Human CRISPR Library v.1.1
+705,9,True,0.2599,1551,17986,50,30971826,AM-38,cell proliferation,Human CRISPR Library v.1.1
+706,10,False,0.2227,1630,17986,50,30971826,ARH-77,cell proliferation,Human CRISPR Library v.1.1
+707,9,False,0.2832,1248,17986,50,30971826,AsPC-1,cell proliferation,Human CRISPR Library v.1.1
+708,10,False,0.2836,1164,17986,50,30971826,AU565,cell proliferation,Human CRISPR Library v.1.1
+709,9,False,0.1832,1481,17986,50,30971826,BB30-HNC,cell proliferation,Human CRISPR Library v.1.1
+71,9,False,0.3364,1931,18619,50,28162770,NB4,cell proliferation,Focused Ras Synthetic Lethal Human CRISPR Knockout Library
+710,9,False,0.206,1550,17986,50,30971826,SK-N-BE(2)-M17,cell proliferation,Human CRISPR Library v.1.1
+711,9,False,0.2428,1614,17986,50,30971826,Becker,cell proliferation,Human CRISPR Library v.1.1
+712,10,True,0.2077,1474,17986,50,30971826,BHY,cell proliferation,Human CRISPR Library v.1.1
+713,9,False,0.1702,1654,17986,50,30971826,BICR 10,cell proliferation,Human CRISPR Library v.1.1
+714,9,True,0.1426,1204,17986,50,30971826,BICR 22,cell proliferation,Human CRISPR Library v.1.1
+715,9,False,0.139,986,17986,50,30971826,BICR 78,cell proliferation,Human CRISPR Library v.1.1
+716,9,True,0.1668,1112,17986,50,30971826,BxPC-3,cell proliferation,Human CRISPR Library v.1.1
+717,9,False,0.239,1323,17986,50,30971826,C2BBe1,cell proliferation,Human CRISPR Library v.1.1
+718,9,False,0.1591,1778,17986,50,30971826,Ca9-22,cell proliferation,Human CRISPR Library v.1.1
+719,9,False,0.2485,1874,17986,50,30971826,CAL-27,cell proliferation,Human CRISPR Library v.1.1
+72,9,True,0.3274,2454,18619,50,28162770,NB4,cell proliferation,Focused Ras Synthetic Lethal Human CRISPR Knockout Library
+720,9,False,0.2138,1350,17986,50,30971826,CAL-33,cell proliferation,Human CRISPR Library v.1.1
+721,9,False,0.2028,1697,17986,50,30971826,CAL-51,cell proliferation,Human CRISPR Library v.1.1
+722,8,True,0.2086,877,17986,50,30971826,CAL-72,cell proliferation,Human CRISPR Library v.1.1
+723,9,False,0.2089,1213,17986,50,30971826,Caov-4,cell proliferation,Human CRISPR Library v.1.1
+724,8,True,0.2234,1564,17986,50,30971826,Capan-1,cell proliferation,Human CRISPR Library v.1.1
+725,9,False,0.1386,1116,17986,50,30971826,CAS-1,cell proliferation,Human CRISPR Library v.1.1
+726,8,False,0.1811,1285,17986,50,30971826,CHP-212,cell proliferation,Human CRISPR Library v.1.1
+727,9,True,0.2053,1395,17986,50,30971826,CL-11,cell proliferation,Human CRISPR Library v.1.1
+728,9,False,0.2835,1277,17986,50,30971826,COLO 205,cell proliferation,Human CRISPR Library v.1.1
+729,9,False,0.2548,1686,17986,50,30971826,COLO 320HSR,cell proliferation,Human CRISPR Library v.1.1
+73,8,True,0.2939,2382,18619,50,28162770,OCI-AML-2,cell proliferation,Focused Ras Synthetic Lethal Human CRISPR Knockout Library
+730,8,False,0.128,401,17986,50,30971826,COLO 678,cell proliferation,Human CRISPR Library v.1.1
+731,9,False,0.2082,1471,17986,50,30971826,COLO 680N,cell proliferation,Human CRISPR Library v.1.1
+732,9,False,0.246,1599,17986,50,30971826,COLO 684,cell proliferation,Human CRISPR Library v.1.1
+733,9,False,0.2151,1003,17986,50,30971826,COLO 824,cell proliferation,Human CRISPR Library v.1.1
+734,8,False,0.2328,1521,17986,50,30971826,COR-L23,cell proliferation,Human CRISPR Library v.1.1
+735,9,False,0.2341,1940,17986,50,30971826,D-423MG,cell proliferation,Human CRISPR Library v.1.1
+736,9,False,0.1562,933,17986,50,30971826,D-502MG,cell proliferation,Human CRISPR Library v.1.1
+737,9,False,0.2193,1404,17986,50,30971826,D-542MG,cell proliferation,Human CRISPR Library v.1.1
+738,9,True,0.2375,1529,17986,50,30971826,DAN-G,cell proliferation,Human CRISPR Library v.1.1
+739,9,False,0.1543,1258,17986,50,30971826,DBTRG-05MG,cell proliferation,Human CRISPR Library v.1.1
+74,9,False,0.3123,2145,18619,50,28162770,OCI-AML-3,cell proliferation,Focused Ras Synthetic Lethal Human CRISPR Knockout Library
+740,9,False,0.2308,1607,17986,50,30971826,Detroit 562,cell proliferation,Human CRISPR Library v.1.1
+741,10,False,0.2175,1333,17986,50,30971826,DiFi,cell proliferation,Human CRISPR Library v.1.1
+742,10,False,0.1359,1438,17986,50,30971826,DK-MG,cell proliferation,Human CRISPR Library v.1.1
+743,10,False,0.2177,1197,17986,50,30971826,DOK,cell proliferation,Human CRISPR Library v.1.1
+744,9,False,0.2231,1668,17986,50,30971826,DOV13,cell proliferation,Human CRISPR Library v.1.1
+745,9,False,0.1876,1631,17986,50,30971826,DU145,cell proliferation,Human CRISPR Library v.1.1
+746,8,False,0.1723,1131,17986,50,30971826,EBC-1,cell proliferation,Human CRISPR Library v.1.1
+747,10,False,0.2216,1594,17986,50,30971826,EC-GI-10,cell proliferation,Human CRISPR Library v.1.1
+748,8,False,0.2768,1189,17986,50,30971826,EFO-21,cell proliferation,Human CRISPR Library v.1.1
+749,8,False,0.2264,1436,17986,50,30971826,EFO-27,cell proliferation,Human CRISPR Library v.1.1
+75,9,True,0.4171,2942,18619,50,28162770,OCI-AML-5,cell proliferation,Focused Ras Synthetic Lethal Human CRISPR Knockout Library
+750,9,False,0.1819,1152,17986,50,30971826,EGI-1,cell proliferation,Human CRISPR Library v.1.1
+751,8,True,0.1581,1306,17986,50,30971826,EPLC-272H,cell proliferation,Human CRISPR Library v.1.1
+752,9,False,0.2215,1979,17986,50,30971826,ES-2,cell proliferation,Human CRISPR Library v.1.1
+753,9,False,0.1634,973,17986,50,30971826,ES4,cell proliferation,Human CRISPR Library v.1.1
+754,9,False,0.2561,1697,17986,50,30971826,ES5,cell proliferation,Human CRISPR Library v.1.1
+755,9,False,0.2199,1307,17986,50,30971826,ES8,cell proliferation,Human CRISPR Library v.1.1
+756,10,False,0.2314,1819,17986,50,30971826,ESO-26,cell proliferation,Human CRISPR Library v.1.1
+757,8,False,0.2094,1255,17986,50,30971826,ESO-51,cell proliferation,Human CRISPR Library v.1.1
+758,9,False,0.1967,1775,17986,50,30971826,ESS-1,cell proliferation,Human CRISPR Library v.1.1
+759,9,True,0.2158,1525,17986,50,30971826,Evsa-T,cell proliferation,Human CRISPR Library v.1.1
+76,9,False,0.2623,2308,18619,50,28162770,P31/FUJ,cell proliferation,Focused Ras Synthetic Lethal Human CRISPR Knockout Library
+760,9,False,0.2473,1671,17986,50,30971826,EW-1,cell proliferation,Human CRISPR Library v.1.1
+761,8,True,0.2206,1688,17986,50,30971826,EW-16,cell proliferation,Human CRISPR Library v.1.1
+762,9,False,0.2095,1467,17986,50,30971826,EW-22,cell proliferation,Human CRISPR Library v.1.1
+763,9,False,0.2088,1820,17986,50,30971826,EW-7,cell proliferation,Human CRISPR Library v.1.1
+764,9,False,0.1836,1661,17986,50,30971826,FaDu,cell proliferation,Human CRISPR Library v.1.1
+765,9,False,0.1826,1561,17986,50,30971826,FLO-1,cell proliferation,Human CRISPR Library v.1.1
+766,9,True,0.212,1907,17986,50,30971826,GaMG,cell proliferation,Human CRISPR Library v.1.1
+767,9,False,0.118,1353,17986,50,30971826,GB-1,cell proliferation,Human CRISPR Library v.1.1
+768,9,False,0.1972,1935,17986,50,30971826,GI-1,cell proliferation,Human CRISPR Library v.1.1
+769,9,False,0.197,1160,17986,50,30971826,GP5d,cell proliferation,Human CRISPR Library v.1.1
+77,9,False,0.3241,2036,18619,50,28162770,PL-21,cell proliferation,Focused Ras Synthetic Lethal Human CRISPR Knockout Library
+770,9,False,0.2568,1707,17986,50,30971826,HARA,cell proliferation,Human CRISPR Library v.1.1
+771,8,False,0.1412,365,17986,50,30971826,HCC15,cell proliferation,Human CRISPR Library v.1.1
+772,9,False,0.24,1044,17986,50,30971826,HCC78,cell proliferation,Human CRISPR Library v.1.1
+773,8,False,0.2357,1313,17986,50,30971826,HCC1143,cell proliferation,Human CRISPR Library v.1.1
+774,10,True,0.1814,1308,17986,50,30971826,HCC1187,cell proliferation,Human CRISPR Library v.1.1
+775,9,False,0.2587,1039,17986,50,30971826,HCC1395,cell proliferation,Human CRISPR Library v.1.1
+776,10,False,0.2537,1550,17986,50,30971826,HCC1806,cell proliferation,Human CRISPR Library v.1.1
+777,9,False,0.2144,1183,17986,50,30971826,HCC1937,cell proliferation,Human CRISPR Library v.1.1
+778,9,False,0.2224,1075,17986,50,30971826,HCC1954,cell proliferation,Human CRISPR Library v.1.1
+779,10,True,0.2106,1249,17986,50,30971826,HCC2998,cell proliferation,Human CRISPR Library v.1.1
+78,9,False,0.2794,2105,18619,50,28162770,SKM-1,cell proliferation,Focused Ras Synthetic Lethal Human CRISPR Knockout Library
+780,9,False,0.1523,1501,17986,50,30971826,HCC38,cell proliferation,Human CRISPR Library v.1.1
+781,9,False,0.1827,905,17986,50,30971826,HCC70,cell proliferation,Human CRISPR Library v.1.1
+782,9,False,0.1964,1207,17986,50,30971826,HCE-4,cell proliferation,Human CRISPR Library v.1.1
+783,9,False,0.2008,1379,17986,50,30971826,HCT 116,cell proliferation,Human CRISPR Library v.1.1
+784,8,True,0.2701,1750,17986,50,30971826,HCT 15,cell proliferation,Human CRISPR Library v.1.1
+785,9,False,0.1836,1504,17986,50,30971826,HEC-1,cell proliferation,Human CRISPR Library v.1.1
+786,9,False,0.1519,1559,17986,50,30971826,HEY,cell proliferation,Human CRISPR Library v.1.1
+787,8,False,0.1905,1992,17986,50,30971826,HGC-27,cell proliferation,Human CRISPR Library v.1.1
+788,9,True,0.1487,1571,17986,50,30971826,HO-1-u-1,cell proliferation,Human CRISPR Library v.1.1
+789,10,False,0.139,976,17986,50,30971826,HOP-62,cell proliferation,Human CRISPR Library v.1.1
+79,7,False,0.4226,3481,18619,50,28162770,TF-1,cell proliferation,Focused Ras Synthetic Lethal Human CRISPR Knockout Library
+790,10,False,0.2126,1291,17986,50,30971826,HPAF-II,cell proliferation,Human CRISPR Library v.1.1
+791,10,False,0.2186,1130,17986,50,30971826,Hs 578T,cell proliferation,Human CRISPR Library v.1.1
+792,9,False,0.1645,1526,17986,50,30971826,Hs 683,cell proliferation,Human CRISPR Library v.1.1
+793,9,False,0.2004,1618,17986,50,30971826,HSC-3,cell proliferation,Human CRISPR Library v.1.1
+794,9,False,0.2317,1692,17986,50,30971826,HSC-39,cell proliferation,Human CRISPR Library v.1.1
+795,9,False,0.1677,1373,17986,50,30971826,HSC-4,cell proliferation,Human CRISPR Library v.1.1
+796,8,False,0.2148,1828,17986,50,30971826,HT-29,cell proliferation,Human CRISPR Library v.1.1
+797,9,False,0.2331,1937,17986,50,30971826,HT-29,cell proliferation,Human CRISPR Library v.1.1
+798,10,True,0.1789,1003,17986,50,30971826,HT-55,cell proliferation,Human CRISPR Library v.1.1
+799,9,False,0.1801,1252,17986,50,30971826,hTERT-RPE1,cell proliferation,Human CRISPR Library v.1.1
+80,8,False,0.3388,2816,18619,50,28162770,THP-1,cell proliferation,Focused Ras Synthetic Lethal Human CRISPR Knockout Library
+800,9,False,0.196,1238,17986,50,30971826,HuP-T3,cell proliferation,Human CRISPR Library v.1.1
+801,9,True,0.2046,1134,17986,50,30971826,HuP-T4,cell proliferation,Human CRISPR Library v.1.1
+802,9,False,0.202,1289,17986,50,30971826,IGROV-1,cell proliferation,Human CRISPR Library v.1.1
+803,9,False,0.2367,1287,17986,50,30971826,IM-9,cell proliferation,Human CRISPR Library v.1.1
+804,10,False,0.1667,926,17986,50,30971826,IM95,cell proliferation,Human CRISPR Library v.1.1
+805,9,False,0.2046,1242,17986,50,30971826,IST-MEL1,cell proliferation,Human CRISPR Library v.1.1
+806,9,True,0.2344,1564,17986,50,30971826,JHOS-2,cell proliferation,Human CRISPR Library v.1.1
+807,9,False,0.2127,1406,17986,50,30971826,JHOS-4,cell proliferation,Human CRISPR Library v.1.1
+808,8,False,0.1669,1435,17986,50,30971826,JHU-011,cell proliferation,Human CRISPR Library v.1.1
+809,9,False,0.192,1369,17986,50,30971826,JHU-022,cell proliferation,Human CRISPR Library v.1.1
+810,9,False,0.1826,1783,17986,50,30971826,JHU-029,cell proliferation,Human CRISPR Library v.1.1
+811,9,False,0.2583,1194,17986,50,30971826,JIMT-1,cell proliferation,Human CRISPR Library v.1.1
+812,10,False,0.2224,978,17986,50,30971826,KATO III,cell proliferation,Human CRISPR Library v.1.1
+813,9,False,0.1942,1547,17986,50,30971826,KINGS-1,cell proliferation,Human CRISPR Library v.1.1
+814,8,False,0.1644,975,17986,50,30971826,KLE,cell proliferation,Human CRISPR Library v.1.1
+815,10,False,0.2053,1227,17986,50,30971826,KM12,cell proliferation,Human CRISPR Library v.1.1
+816,9,False,0.2191,1577,17986,50,30971826,KMS-11,cell proliferation,Human CRISPR Library v.1.1
+817,9,False,0.2022,1416,17986,50,30971826,KNS-42,cell proliferation,Human CRISPR Library v.1.1
+818,9,False,0.2354,1550,17986,50,30971826,KNS-62,cell proliferation,Human CRISPR Library v.1.1
+819,9,False,0.187,1761,17986,50,30971826,KON,cell proliferation,Human CRISPR Library v.1.1
+820,9,False,0.2177,1707,17986,50,30971826,KP-1N,cell proliferation,Human CRISPR Library v.1.1
+821,8,False,0.2224,1286,17986,50,30971826,KP-3,cell proliferation,Human CRISPR Library v.1.1
+822,9,False,0.1979,1695,17986,50,30971826,KP-4,cell proliferation,Human CRISPR Library v.1.1
+823,9,False,0.1814,1535,17986,50,30971826,KP-N-YN,cell proliferation,Human CRISPR Library v.1.1
+824,9,False,0.1612,1581,17986,50,30971826,KP-N-YS,cell proliferation,Human CRISPR Library v.1.1
+825,9,False,0.1978,1444,17986,50,30971826,Kuramochi,cell proliferation,Human CRISPR Library v.1.1
+826,8,False,0.2061,949,17986,50,30971826,KYAE-1,cell proliferation,Human CRISPR Library v.1.1
+827,9,False,0.2024,1515,17986,50,30971826,KYSE-140,cell proliferation,Human CRISPR Library v.1.1
+828,9,False,0.1802,1502,17986,50,30971826,KYSE-150,cell proliferation,Human CRISPR Library v.1.1
+829,9,False,0.1947,1874,17986,50,30971826,KYSE-220,cell proliferation,Human CRISPR Library v.1.1
+830,9,False,0.198,989,17986,50,30971826,KYSE-270,cell proliferation,Human CRISPR Library v.1.1
+831,9,False,0.2049,1770,17986,50,30971826,KYSE-410,cell proliferation,Human CRISPR Library v.1.1
+832,10,False,0.1549,1478,17986,50,30971826,KYSE-450,cell proliferation,Human CRISPR Library v.1.1
+833,9,False,0.2039,1801,17986,50,30971826,KYSE-510,cell proliferation,Human CRISPR Library v.1.1
+834,9,False,0.2358,1327,17986,50,30971826,KYSE-520,cell proliferation,Human CRISPR Library v.1.1
+835,9,False,0.2325,1496,17986,50,30971826,KYSE-70,cell proliferation,Human CRISPR Library v.1.1
+836,9,False,0.2164,1361,17986,50,30971826,L-363,cell proliferation,Human CRISPR Library v.1.1
+837,9,False,0.1522,1557,17986,50,30971826,LB1047-RCC,cell proliferation,Human CRISPR Library v.1.1
+838,9,False,0.2104,1623,17986,50,30971826,LB771-HNC,cell proliferation,Human CRISPR Library v.1.1
+839,9,False,0.1941,1176,17986,50,30971826,LC-1/sq,cell proliferation,Human CRISPR Library v.1.1
+840,9,False,0.198,824,17986,50,30971826,LCLC-97TM1,cell proliferation,Human CRISPR Library v.1.1
+841,9,False,0.1799,1559,17986,50,30971826,LK-2,cell proliferation,Human CRISPR Library v.1.1
+842,9,False,0.2203,1590,17986,50,30971826,LN-229,cell proliferation,Human CRISPR Library v.1.1
+843,10,False,0.1959,1101,17986,50,30971826,LNCaP clone FGC,cell proliferation,Human CRISPR Library v.1.1
+844,9,False,0.2379,1711,17986,50,30971826,LNZTA3WT4,cell proliferation,Human CRISPR Library v.1.1
+845,8,False,0.2615,1453,17986,50,30971826,LOU-NH91,cell proliferation,Human CRISPR Library v.1.1
+846,9,False,0.2042,1503,17986,50,30971826,LoVo,cell proliferation,Human CRISPR Library v.1.1
+847,8,True,0.2386,1448,17986,50,30971826,LP-1,cell proliferation,Human CRISPR Library v.1.1
+848,10,False,0.2212,1008,17986,50,30971826,LS1034,cell proliferation,Human CRISPR Library v.1.1
+849,8,True,0.124,481,17986,50,30971826,LS123,cell proliferation,Human CRISPR Library v.1.1
+85,7,True,0.1431,40,20440,50,28145866,HCC364,response to chemicals,GECKO v2
+850,9,False,0.1796,1217,17986,50,30971826,LS180,cell proliferation,Human CRISPR Library v.1.1
+851,10,True,0.2432,1235,17986,50,30971826,LS411N,cell proliferation,Human CRISPR Library v.1.1
+852,10,True,0.2289,1192,17986,50,30971826,LS513,cell proliferation,Human CRISPR Library v.1.1
+853,9,False,0.171,1177,17986,50,30971826,Lu-65,cell proliferation,Human CRISPR Library v.1.1
+854,9,False,0.2265,1749,17986,50,30971826,Lu-99A,cell proliferation,Human CRISPR Library v.1.1
+855,9,False,0.2035,1724,17986,50,30971826,LXF 289,cell proliferation,Human CRISPR Library v.1.1
+856,8,False,0.3248,2077,17986,50,30971826,SK-N-MC-IXC,cell proliferation,Human CRISPR Library v.1.1
+857,9,False,0.1792,536,17986,50,30971826,MCAS,cell proliferation,Human CRISPR Library v.1.1
+858,9,True,0.1652,761,17986,50,30971826,MCF-7,cell proliferation,Human CRISPR Library v.1.1
+859,9,False,0.224,1459,17986,50,30971826,MDA-MB-231,cell proliferation,Human CRISPR Library v.1.1
+860,9,False,0.2729,1493,17986,50,30971826,MDA-MB-361,cell proliferation,Human CRISPR Library v.1.1
+861,10,False,0.2442,1157,17986,50,30971826,MDA-MB-415,cell proliferation,Human CRISPR Library v.1.1
+862,8,False,0.2161,1419,17986,50,30971826,MDA-MB-436,cell proliferation,Human CRISPR Library v.1.1
+863,9,False,0.2639,931,17986,50,30971826,MDA-MB-453,cell proliferation,Human CRISPR Library v.1.1
+864,9,False,0.2377,1447,17986,50,30971826,MDA-MB-468,cell proliferation,Human CRISPR Library v.1.1
+865,8,False,0.1932,917,17986,50,30971826,MDST8,cell proliferation,Human CRISPR Library v.1.1
+866,9,False,0.1836,903,17986,50,30971826,MFE-280,cell proliferation,Human CRISPR Library v.1.1
+867,10,False,0.2108,1426,17986,50,30971826,MFE-296,cell proliferation,Human CRISPR Library v.1.1
+868,9,False,0.2806,1774,17986,50,30971826,MFM-223,cell proliferation,Human CRISPR Library v.1.1
+869,9,False,0.2264,1699,17986,50,30971826,MHH-ES-1,cell proliferation,Human CRISPR Library v.1.1
+870,9,False,0.1941,1586,17986,50,30971826,MIA PaCa-2,cell proliferation,Human CRISPR Library v.1.1
+871,8,False,0.2222,1711,17986,50,30971826,MKN28,cell proliferation,Human CRISPR Library v.1.1
+872,9,False,0.1641,1612,17986,50,30971826,MOG-G-UVW,cell proliferation,Human CRISPR Library v.1.1
+873,9,False,0.1331,864,17986,50,30971826,SJNB-10,cell proliferation,Human CRISPR Library v.1.1
+874,9,False,0.194,1577,17986,50,30971826,SJNB-13,cell proliferation,Human CRISPR Library v.1.1
+875,10,False,0.1743,1398,17986,50,30971826,SJNB-17,cell proliferation,Human CRISPR Library v.1.1
+876,9,True,0.1611,1577,17986,50,30971826,SJNB-5,cell proliferation,Human CRISPR Library v.1.1
+877,9,False,0.1674,1536,17986,50,30971826,SJNB-6,cell proliferation,Human CRISPR Library v.1.1
+878,9,False,0.195,1580,17986,50,30971826,NB69,cell proliferation,Human CRISPR Library v.1.1
+879,9,False,0.2077,2210,17986,50,30971826,SJNB-7,cell proliferation,Human CRISPR Library v.1.1
+880,9,False,0.2061,1545,17986,50,30971826,NCI-H1155,cell proliferation,Human CRISPR Library v.1.1
+881,9,False,0.2072,1423,17986,50,30971826,NCI-H1299,cell proliferation,Human CRISPR Library v.1.1
+882,9,False,0.1908,1326,17986,50,30971826,NCI-H1355,cell proliferation,Human CRISPR Library v.1.1
+883,9,False,0.2122,1345,17986,50,30971826,NCI-H1581,cell proliferation,Human CRISPR Library v.1.1
+884,9,False,0.2186,1313,17986,50,30971826,NCI-H1650,cell proliferation,Human CRISPR Library v.1.1
+885,9,False,0.249,1735,17986,50,30971826,NCI-H1755,cell proliferation,Human CRISPR Library v.1.1
+886,10,False,0.1834,1568,17986,50,30971826,NCI-H1869,cell proliferation,Human CRISPR Library v.1.1
+887,8,False,0.1939,1179,17986,50,30971826,NCI-H1915,cell proliferation,Human CRISPR Library v.1.1
+888,9,False,0.2177,1471,17986,50,30971826,NCI-H1944,cell proliferation,Human CRISPR Library v.1.1
+889,9,True,0.2134,1858,17986,50,30971826,NCI-H1975,cell proliferation,Human CRISPR Library v.1.1
+89,6,False,0.7475,1990,21709,50,28611215,LNCaP,cell proliferation,GECKO v2
+890,8,False,0.3052,1466,17986,50,30971826,NCI-H1993,cell proliferation,Human CRISPR Library v.1.1
+891,9,False,0.1906,1636,17986,50,30971826,NCI-H2023,cell proliferation,Human CRISPR Library v.1.1
+892,9,False,0.2174,1590,17986,50,30971826,NCI-H2087,cell proliferation,Human CRISPR Library v.1.1
+893,9,True,0.213,1577,17986,50,30971826,NCI-H2170,cell proliferation,Human CRISPR Library v.1.1
+894,9,False,0.163,927,17986,50,30971826,NCI-H226,cell proliferation,Human CRISPR Library v.1.1
+895,8,False,0.2225,1828,17986,50,30971826,NCI-H23,cell proliferation,Human CRISPR Library v.1.1
+896,8,False,0.1551,1619,17986,50,30971826,NCI-H3118,cell proliferation,Human CRISPR Library v.1.1
+897,8,False,0.1812,1251,17986,50,30971826,NCI-H3122,cell proliferation,Human CRISPR Library v.1.1
+898,8,True,0.2219,1011,17986,50,30971826,NCI-H322M,cell proliferation,Human CRISPR Library v.1.1
+899,9,False,0.151,900,17986,50,30971826,NCI-H358,cell proliferation,Human CRISPR Library v.1.1
+900,9,False,0.1908,1946,17986,50,30971826,NCI-H520,cell proliferation,Human CRISPR Library v.1.1
+901,9,False,0.1812,934,17986,50,30971826,NCI-H650,cell proliferation,Human CRISPR Library v.1.1
+902,9,False,0.2261,1491,17986,50,30971826,NCI-N87,cell proliferation,Human CRISPR Library v.1.1
+903,9,False,0.2284,1405,17986,50,30971826,NH-12,cell proliferation,Human CRISPR Library v.1.1
+904,10,False,0.1219,703,17986,50,30971826,NMC-G1,cell proliferation,Human CRISPR Library v.1.1
+905,9,False,0.1475,1497,17986,50,30971826,Onda 10,cell proliferation,Human CRISPR Library v.1.1
+906,9,False,0.212,1302,17986,50,30971826,Onda 11,cell proliferation,Human CRISPR Library v.1.1
+907,8,False,0.2773,1724,17986,50,30971826,NUGC-3,cell proliferation,Human CRISPR Library v.1.1
+908,9,False,0.1763,1387,17986,50,30971826,OACM5.1 C,cell proliferation,Human CRISPR Library v.1.1
+909,8,False,0.2719,1073,17986,50,30971826,OAW42,cell proliferation,Human CRISPR Library v.1.1
+910,9,False,0.1912,1570,17986,50,30971826,OC 314,cell proliferation,Human CRISPR Library v.1.1
+911,9,False,0.2057,1559,17986,50,30971826,OCI-AML-2,cell proliferation,Human CRISPR Library v.1.1
+912,9,False,0.1961,1601,17986,50,30971826,OCI-AML-3,cell proliferation,Human CRISPR Library v.1.1
+913,9,True,0.2684,895,17986,50,30971826,OCI-Ly19,cell proliferation,Human CRISPR Library v.1.1
+914,9,False,0.2099,1284,17986,50,30971826,OCUB-M,cell proliferation,Human CRISPR Library v.1.1
+915,9,True,0.2518,1860,17986,50,30971826,OE21,cell proliferation,Human CRISPR Library v.1.1
+916,10,True,0.1923,1266,17986,50,30971826,OE33,cell proliferation,Human CRISPR Library v.1.1
+917,8,False,0.2191,1492,17986,50,30971826,OPM-2,cell proliferation,Human CRISPR Library v.1.1
+918,8,False,0.1586,1181,17986,50,30971826,OSC-19,cell proliferation,Human CRISPR Library v.1.1
+919,9,False,0.2413,1481,17986,50,30971826,OSC-20,cell proliferation,Human CRISPR Library v.1.1
+920,9,False,0.2052,1587,17986,50,30971826,OV-90,cell proliferation,Human CRISPR Library v.1.1
+921,9,False,0.1511,1340,17986,50,30971826,OVCA420,cell proliferation,Human CRISPR Library v.1.1
+922,9,True,0.2135,1387,17986,50,30971826,OVCAR-3,cell proliferation,Human CRISPR Library v.1.1
+923,8,False,0.2435,1834,17986,50,30971826,OVCAR-5,cell proliferation,Human CRISPR Library v.1.1
+924,9,True,0.1736,2030,17986,50,30971826,NCI-ADR-RES,cell proliferation,Human CRISPR Library v.1.1
+925,9,False,0.2398,1699,17986,50,30971826,OVISE,cell proliferation,Human CRISPR Library v.1.1
+926,9,False,0.2109,1491,17986,50,30971826,OVK-18,cell proliferation,Human CRISPR Library v.1.1
+927,10,False,0.2918,1258,17986,50,30971826,OVMIU,cell proliferation,Human CRISPR Library v.1.1
+928,9,True,0.2263,1124,17986,50,30971826,PaTu 8902,cell proliferation,Human CRISPR Library v.1.1
+929,9,False,0.2144,1637,17986,50,30971826,PaTu 8988t,cell proliferation,Human CRISPR Library v.1.1
+930,8,False,0.2574,1394,17986,50,30971826,Panc 02.03,cell proliferation,Human CRISPR Library v.1.1
+931,9,False,0.2606,1470,17986,50,30971826,Panc 03.27,cell proliferation,Human CRISPR Library v.1.1
+932,8,False,0.23,1671,17986,50,30971826,Panc 04.03,cell proliferation,Human CRISPR Library v.1.1
+933,8,True,0.253,1193,17986,50,30971826,Panc 08.13,cell proliferation,Human CRISPR Library v.1.1
+934,10,False,0.1512,1109,17986,50,30971826,Panc 10.05,cell proliferation,Human CRISPR Library v.1.1
+935,8,False,0.2177,1623,17986,50,30971826,PC-14,cell proliferation,Human CRISPR Library v.1.1
+936,8,False,0.2058,1579,17986,50,30971826,PCI-15A,cell proliferation,Human CRISPR Library v.1.1
+937,10,False,0.2108,1716,17986,50,30971826,PCI-30,cell proliferation,Human CRISPR Library v.1.1
+938,9,False,0.192,1875,17986,50,30971826,PCI-38,cell proliferation,Human CRISPR Library v.1.1
+939,9,False,0.1779,1491,17986,50,30971826,PCI-04B,cell proliferation,Human CRISPR Library v.1.1
+940,8,False,0.2206,1185,17986,50,30971826,PCI-06A,cell proliferation,Human CRISPR Library v.1.1
+941,9,False,0.2045,1809,17986,50,30971826,PE/CA-PJ15,cell proliferation,Human CRISPR Library v.1.1
+942,9,False,0.268,1721,17986,50,30971826,PEO1,cell proliferation,Human CRISPR Library v.1.1
+943,9,False,0.1526,1218,17986,50,30971826,PEO4,cell proliferation,Human CRISPR Library v.1.1
+944,9,False,0.2846,1427,17986,50,30971826,PL4,cell proliferation,Human CRISPR Library v.1.1
+945,9,False,0.2258,1656,17986,50,30971826,PSN1,cell proliferation,Human CRISPR Library v.1.1
+946,9,True,0.1895,1456,17986,50,30971826,KTCTL-26A,cell proliferation,Human CRISPR Library v.1.1
+947,9,False,0.2619,1275,17986,50,30971826,RCM-1,cell proliferation,Human CRISPR Library v.1.1
+948,9,False,0.2628,1222,17986,50,30971826,RERF-GC-1B,cell proliferation,Human CRISPR Library v.1.1
+949,9,False,0.2022,1583,17986,50,30971826,RERF-LC-Sq1,cell proliferation,Human CRISPR Library v.1.1
+950,9,True,0.2284,1411,17986,50,30971826,RKN,cell proliferation,Human CRISPR Library v.1.1
+951,9,False,0.2332,2009,17986,50,30971826,RKO,cell proliferation,Human CRISPR Library v.1.1
+952,9,False,0.2164,1561,17986,50,30971826,RL95-2,cell proliferation,Human CRISPR Library v.1.1
+953,9,False,0.2421,1509,17986,50,30971826,RMG-I,cell proliferation,Human CRISPR Library v.1.1
+954,9,True,0.2098,892,17986,50,30971826,ROS-50,cell proliferation,Human CRISPR Library v.1.1
+955,8,False,0.2074,1193,17986,50,30971826,RPMI-8226,cell proliferation,Human CRISPR Library v.1.1
+956,9,False,0.1854,1568,17986,50,30971826,SAS,cell proliferation,Human CRISPR Library v.1.1
+957,9,True,0.1678,1481,17986,50,30971826,SCC-4,cell proliferation,Human CRISPR Library v.1.1
+958,9,False,0.185,1480,17986,50,30971826,SCC-9,cell proliferation,Human CRISPR Library v.1.1
+959,9,True,0.1894,1095,17986,50,30971826,UPCI-SCC-090,cell proliferation,Human CRISPR Library v.1.1
+960,8,False,0.2504,791,17986,50,30971826,SCH,cell proliferation,Human CRISPR Library v.1.1
+961,9,False,0.156,1693,17986,50,30971826,SF126,cell proliferation,Human CRISPR Library v.1.1
+962,9,False,0.2016,1996,17986,50,30971826,SF295,cell proliferation,Human CRISPR Library v.1.1
+963,9,False,0.1867,1558,17986,50,30971826,SF539,cell proliferation,Human CRISPR Library v.1.1
+964,9,False,0.206,1915,17986,50,30971826,SJSA-1,cell proliferation,Human CRISPR Library v.1.1
+965,9,False,0.203,1473,17986,50,30971826,SK-GT-4,cell proliferation,Human CRISPR Library v.1.1
+966,9,False,0.2273,1557,17986,50,30971826,SK-MEL-2,cell proliferation,Human CRISPR Library v.1.1
+967,9,False,0.2373,1486,17986,50,30971826,SK-MES-1,cell proliferation,Human CRISPR Library v.1.1
+968,9,False,0.1958,1699,17986,50,30971826,SK-MG-1,cell proliferation,Human CRISPR Library v.1.1
+969,9,False,0.1455,1900,17986,50,30971826,SK-N-AS,cell proliferation,Human CRISPR Library v.1.1
+970,9,True,0.1472,1105,17986,50,30971826,SK-N-DZ,cell proliferation,Human CRISPR Library v.1.1
+971,9,False,0.2076,1792,17986,50,30971826,SK-N-FI,cell proliferation,Human CRISPR Library v.1.1
+972,9,False,0.1701,967,17986,50,30971826,SK-N-SH,cell proliferation,Human CRISPR Library v.1.1
+973,9,False,0.1363,1289,17986,50,30971826,SK-PN-DW,cell proliferation,Human CRISPR Library v.1.1
+974,10,False,0.157,970,17986,50,30971826,SKN-3,cell proliferation,Human CRISPR Library v.1.1
+975,9,False,0.145,1065,17986,50,30971826,SNB-75,cell proliferation,Human CRISPR Library v.1.1
+976,9,False,0.2327,1667,17986,50,30971826,SNG-M,cell proliferation,Human CRISPR Library v.1.1
+977,9,False,0.1961,1371,17986,50,30971826,SNU-1,cell proliferation,Human CRISPR Library v.1.1
+978,9,False,0.2286,1515,17986,50,30971826,SNU-16,cell proliferation,Human CRISPR Library v.1.1
+979,8,True,0.2125,1400,17986,50,30971826,SNU-61,cell proliferation,Human CRISPR Library v.1.1
+980,9,False,0.2346,1446,17986,50,30971826,SNU-81,cell proliferation,Human CRISPR Library v.1.1
+981,9,True,0.222,1183,17986,50,30971826,SNU-C1,cell proliferation,Human CRISPR Library v.1.1
+982,9,False,0.2273,1456,17986,50,30971826,SNU-C5,cell proliferation,Human CRISPR Library v.1.1
+983,8,False,0.2606,1430,17986,50,30971826,SU-DHL-10,cell proliferation,Human CRISPR Library v.1.1
+984,8,False,0.2741,1950,17986,50,30971826,SU-DHL-5,cell proliferation,Human CRISPR Library v.1.1
+985,9,False,0.2215,1732,17986,50,30971826,SU-DHL-8,cell proliferation,Human CRISPR Library v.1.1
+986,8,False,0.157,1186,17986,50,30971826,SU.86.86,cell proliferation,Human CRISPR Library v.1.1
+987,9,False,0.2014,1539,17986,50,30971826,SUIT-2,cell proliferation,Human CRISPR Library v.1.1
+988,9,False,0.2207,1918,17986,50,30971826,SW1088,cell proliferation,Human CRISPR Library v.1.1
+989,9,True,0.1497,1419,17986,50,30971826,SW1573,cell proliferation,Human CRISPR Library v.1.1
+990,9,False,0.1844,1493,17986,50,30971826,SW1990,cell proliferation,Human CRISPR Library v.1.1
+991,9,False,0.2122,1507,17986,50,30971826,SW48,cell proliferation,Human CRISPR Library v.1.1
+992,9,False,0.1608,1301,17986,50,30971826,SW620,cell proliferation,Human CRISPR Library v.1.1
+993,9,False,0.1964,1677,17986,50,30971826,SW626,cell proliferation,Human CRISPR Library v.1.1
+994,10,False,0.1997,1332,17986,50,30971826,SW837,cell proliferation,Human CRISPR Library v.1.1
+995,9,False,0.1517,725,17986,50,30971826,T.T,cell proliferation,Human CRISPR Library v.1.1
+996,9,False,0.2618,1191,17986,50,30971826,T-47D,cell proliferation,Human CRISPR Library v.1.1
+997,8,True,0.1896,641,17986,50,30971826,T84,cell proliferation,Human CRISPR Library v.1.1
+998,9,True,0.1564,1417,17986,50,30971826,T98G,cell proliferation,Human CRISPR Library v.1.1
+999,9,False,0.1823,1931,17986,50,30971826,TC-71,cell proliferation,Human CRISPR Library v.1.1

@@ -625,8 +625,12 @@ a.btn{display:inline-block;text-decoration:none}
 .drop .d3{display:block;margin-top:10px;font:400 .75rem/1.7 "JetBrains Mono",
   ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--soft)}
 .audout{margin:24px 0 0}
+/* --soft on --fill measures 4.502:1 — over the 4.5 line by two thousandths,
+   which is not a margin, it is a rounding artefact. This is the first
+   paragraph a visitor with no data reads, so it is set in --ink (16.21 on
+   fill). The italic and the size still mark it as a waiting state. */
 .aud-empty{padding:20px 24px;background:var(--fill);border:1px solid var(--rule);
-  border-radius:var(--radius);font-size:.875rem;color:var(--soft);
+  border-radius:var(--radius);font-size:.875rem;color:var(--ink);
   font-style:italic;line-height:1.6}
 .aud-src{font:400 .75rem/1.7 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,
   monospace;color:var(--soft);margin:0 0 16px;overflow-wrap:anywhere}

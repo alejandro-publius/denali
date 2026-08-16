@@ -1167,6 +1167,12 @@ def main() -> int:
         # cards that section actually renders, the second is the true total.
         ("index.html", r"<h2>(\w+) of the (\w+) negative findings</h2>",
          (n_neg_cards, n_neg), "the negatives heading"),
+        # The objection-handling line in the demo. It sat at "Three of four" for
+        # three arms -- through 8, 9 and 10 -- because it phrases the tally as
+        # advice to the speaker rather than as a claim, so no pattern here
+        # matched it. A count is a count wherever it is said out loud.
+        ("docs/DEMO.md", r'"(\w+) of (\w+) came back negative" defuses it',
+         (n_neg, n_eval), "the demo objection-handling line"),
         ("README.md", r"(\d+) values pass through a `V\(\)` helper",
          (n_traced,), "the traced-value feature bullet"),
         ("README.md", r"\*\*(\d+)\*\* values are traced",

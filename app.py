@@ -31,64 +31,64 @@ st.set_page_config(page_title="denali", layout="wide",
                    initial_sidebar_state="collapsed")
 
 st.markdown("""<style>
-html, body, .stApp {background:#ffffff !important; color:#111827 !important;}
+html, body, .stApp {background:#fff !important; color:#1c1c1a !important;}
 #MainMenu, footer, header {visibility:hidden;}
 .block-container {padding-top:1.8rem; padding-bottom:2rem; max-width:1180px;}
-.huge {font-size:4.6rem; color:#111827; line-height:.98; font-weight:800;
+.huge {font-size:4.6rem; color:#1c1c1a; line-height:.98; font-weight:800;
        letter-spacing:-.03em; margin:0;}
-.sub {font-size:1.34rem; line-height:1.4; color:#374151; margin:.5rem 0 0 0;}
-.circ {font-size:1.06rem; line-height:1.45; color:#4b5563; margin:.5rem 0 0 0;}
-.size {font-size:1.06rem; color:#111827; margin:.3rem 0 0 0;}
-.count {font-size:1.3rem; line-height:1.45; color:#111827; font-weight:600;
+.sub {font-size:1.34rem; line-height:1.4; color:#1c1c1a; margin:.5rem 0 0 0;}
+.circ {font-size:1.06rem; line-height:1.45; color:#8c8c89; margin:.5rem 0 0 0;}
+.size {font-size:1.06rem; color:#1c1c1a; margin:.3rem 0 0 0;}
+.count {font-size:1.3rem; line-height:1.45; color:#1c1c1a; font-weight:600;
         margin:.55rem 0 0 0; max-width:46em;}
-.card {border:1px solid #d1d5db; border-radius:10px; padding:1.05rem 1.2rem;
+.card {border:1px solid #a3a39b; border-radius:10px; padding:1.05rem 1.2rem;
        background:#fff; height:100%;}
-.card h4 {margin:0 0 .55rem 0; font-size:1.02rem; color:#111827;}
-.cardn {font-size:2.1rem; font-weight:800; line-height:1; margin:0 0 .3rem 0; color:#111827;}
-.card p {margin:0; font-size:.95rem; color:#374151; line-height:1.5;}
+.card h4 {margin:0 0 .55rem 0; font-size:1.02rem; color:#1c1c1a;}
+.cardn {font-size:2.1rem; font-weight:800; line-height:1; margin:0 0 .3rem 0; color:#1c1c1a;}
+.card p {margin:0; font-size:.95rem; color:#1c1c1a; line-height:1.5;}
 /* The one positive: deliberately smaller than the three negatives, and framed
    as a control. */
-.ctrl {border:1px solid #d1d5db; border-radius:10px; padding:.85rem 1rem;
-       background:#fafafa;}
-.ctrl h4 {margin:0 0 .35rem 0; font-size:.9rem; color:#6b7280; font-weight:600;
+.ctrl {border:1px solid #a3a39b; border-radius:10px; padding:.85rem 1rem;
+       background:#f2f2f0;}
+.ctrl h4 {margin:0 0 .35rem 0; font-size:.9rem; color:#8c8c89; font-weight:600;
           text-transform:uppercase; letter-spacing:.05em;}
-.ctrl .cn {font-size:1.35rem; font-weight:700; color:#111827; margin:0 0 .25rem 0;}
-.ctrl p {margin:0; font-size:.86rem; color:#4b5563; line-height:1.45;}
-.cap {font-size:.9rem; color:#4b5563; line-height:1.5; border-left:3px solid #e5e7eb;
+.ctrl .cn {font-size:1.35rem; font-weight:700; color:#1c1c1a; margin:0 0 .25rem 0;}
+.ctrl p {margin:0; font-size:.86rem; color:#8c8c89; line-height:1.45;}
+.cap {font-size:.9rem; color:#8c8c89; line-height:1.5; border-left:3px solid #a3a39b;
       padding-left:.85rem; margin-top:.5rem;}
-.captitle {font-size:1.0rem; font-weight:700; color:#111827; margin-top:.4rem;}
+.captitle {font-size:1.0rem; font-weight:700; color:#1c1c1a; margin-top:.4rem;}
 .prov {font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.78rem;
-       color:#6b7280; line-height:1.9;}
-.qual {font-size:1.02rem; color:#6b7280; margin:.5rem 0 0 0;}
+       color:#8c8c89; line-height:1.9;}
+.qual {font-size:1.02rem; color:#8c8c89; margin:.5rem 0 0 0;}
 /* --- the loop: agent reasoning, one column per branch ------------------- */
-.loop {border:1px solid #d1d5db; border-top-width:4px; border-radius:10px;
+.loop {border:1px solid #a3a39b; border-top-width:4px; border-radius:10px;
        padding:1rem 1.1rem; background:#fff; height:100%;}
-.loop-null {border-top-color:#6b7280;}
+.loop-null {border-top-color:#8c8c89;}
 .loop-hit  {border-top-color:#2166ac;}
 .loop-miss {border-top-color:#b2182b;}
 .badge {font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.7rem;
         letter-spacing:.08em; text-transform:uppercase; font-weight:700;
-        color:#6b7280;}
+        color:#8c8c89;}
 .pname {font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.73rem;
-        color:#111827; margin:.3rem 0 .7rem 0; word-break:break-all; line-height:1.4;}
+        color:#1c1c1a; margin:.3rem 0 .7rem 0; word-break:break-all; line-height:1.4;}
 .ev {font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.76rem;
-     color:#374151; line-height:1.7; background:#f7f7f8; border-radius:6px;
+     color:#1c1c1a; line-height:1.7; background:#f2f2f0; border-radius:6px;
      padding:.5rem .6rem; margin-bottom:.7rem;}
 .lbl {font-size:.7rem; text-transform:uppercase; letter-spacing:.05em;
-      color:#6b7280; font-weight:700; margin:.6rem 0 .2rem 0;}
-.txt {font-size:.87rem; color:#374151; line-height:1.5; margin:0;}
-.fals {font-size:.83rem; color:#4b5563; line-height:1.45; margin:0;
-       border-left:3px solid #e5e7eb; padding-left:.7rem;}
+      color:#8c8c89; font-weight:700; margin:.6rem 0 .2rem 0;}
+.txt {font-size:.87rem; color:#1c1c1a; line-height:1.5; margin:0;}
+.fals {font-size:.83rem; color:#8c8c89; line-height:1.45; margin:0;
+       border-left:3px solid #a3a39b; padding-left:.7rem;}
 .collapse {font-size:1.5rem; font-weight:800; color:#b2182b; line-height:1.1;
            margin:.2rem 0 .1rem 0;}
 /* Sponsor tool-chain strip. Status colour keys off the ✅/⚠/❌ in docs/TOOLS.md,
    so unavailable/blocked tools are shown honestly, not hidden. */
 .tools {display:flex; flex-wrap:wrap; gap:.55rem; margin-top:.3rem;}
-.tchip {flex:1 1 250px; border:1px solid #d1d5db; border-left-width:5px;
+.tchip {flex:1 1 250px; border:1px solid #a3a39b; border-left-width:5px;
         border-radius:9px; padding:.7rem .85rem; background:#fff;}
-.tchip .tn {font-size:1.0rem; font-weight:700; color:#111827; margin:0;}
-.tchip .tv {font-size:.8rem; color:#6b7280; font-weight:500;}
-.tchip .td {font-size:.82rem; color:#4b5563; line-height:1.4; margin:.3rem 0 0 0;}
+.tchip .tn {font-size:1.0rem; font-weight:700; color:#1c1c1a; margin:0;}
+.tchip .tv {font-size:.8rem; color:#8c8c89; font-weight:500;}
+.tchip .td {font-size:.82rem; color:#8c8c89; line-height:1.4; margin:.3rem 0 0 0;}
 .ok {border-left-color:#1a7f37;}
 .warn {border-left-color:#9a6700;}
 .fail {border-left-color:#b2182b;}

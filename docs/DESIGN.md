@@ -119,7 +119,11 @@ Not aspiration — the build fails on these:
 
 ## Known drift
 
-`app.py` uses `#111827 / #6b7280 / #d1d5db` — cool Tailwind greys — where this
-document specifies warm neutrals. The two pages therefore do not look like
-siblings. Recorded rather than silently fixed, because `app.py` has an owner and a
-palette swap is their call, not a drive-by edit.
+**app.py palette — RESOLVED 2026-08-15.** `app.py` used cool Tailwind greys
+(`#111827 / #6b7280 / #d1d5db / #4b5563 / #374151`) where this document specifies
+warm neutrals, so the two surfaces did not read as siblings. Every grey now maps
+to a declared token: `#111827`/`#374151` → `--ink`, `#6b7280`/`#4b5563` → `--soft`,
+`#d1d5db`/`#e5e7eb` → `--faint`, `#fafafa`/`#f7f7f8` → `--fill`, and `#ffffff` →
+`--paper`. The figure colours `#b2182b`/`#2166ac` were left untouched, being
+semantic. (Phase 3 extends the design invariants to read `app.py` too, so this
+cannot silently return.)

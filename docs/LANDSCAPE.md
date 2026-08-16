@@ -125,6 +125,31 @@ cross-dataset agreement, is removable by *set size alone* — and the portable
 one-CSV audit that needs no domain-specific null ensemble. denali's two
 headline numbers (46.5%, 26%) remain unpublished. denali's framing is not.
 
+**Both projects live inside the same formula, and each measured a different
+term of it.** CAMERA gives the variance inflation of a competitive set-level
+test as `VIF = 1 + (m−1)ρ̄`, with `m` the set size and `ρ̄` the mean inter-gene
+correlation. **Fulcher measures ρ̄ and names it** — `WithinCategoryCoexp` is a
+published column in their Supplementary Data 6. **denali measures m.** That is
+the cleanest statement of the difference, and it also explains the audit result
+below: pointed at their data, our own tool prefers their term to ours.
+
+Three further differences, none of them flattering by construction:
+
+1. **Substrate.** They audit *spatial correlation* against a brain atlas. We
+   audit a *perturbation* screen, where every row is an intervention. Different
+   confound geometry: spatial autocorrelation has no analogue in our data, and
+   their `SBP-spatial` ensemble does not transfer to us.
+2. **They restricted to categories with 10–200 annotations.** That is a 20×
+   size range, deliberately truncated — and truncating the size range is exactly
+   what hides a size effect. It is a reasonable choice for their question, and it
+   is also why the `m` decomposition was not available to them. Hallmark's 6×
+   range is **narrower still**, which makes our own size effect a lower bound
+   rather than a worst case.
+3. **They built a correction; we did not.** Their contribution is a null-model
+   toolbox a user can run. Ours is measurement and disclosure applied to a
+   finished hit list. **That is a smaller contribution and it should be described
+   as one.**
+
 **Running `src/audit_screen.py` on their data** (post-hoc, exploratory, names
 no category). Mapping: hits per category = CFPR × 10,000, the count of null
 phenotypes on which the category fired. Category sizes are not in their
@@ -160,6 +185,13 @@ rather than discovered later.
   the shared size column. That is a defect in our paired mode on zero-inflated
   inputs, found by pointing it at someone else's data, and it needs a guard
   before anyone else runs it.
+
+**What this obliges us to say.** "Nobody has looked at this" is not available
+and we do not claim it. The honest claim is narrower: *the size term
+specifically, decomposed and quantified on perturbation screens, and the share
+of cross-screen replication it accounts for.* Everything else in the framing has
+precedent, the precedent is better established than our version of it, and on
+their own data our tool sides with their mechanism over ours.
 
 ## 3. What we are not, stated plainly
 

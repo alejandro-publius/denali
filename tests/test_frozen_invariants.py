@@ -679,6 +679,32 @@ def main() -> int:
         check("annotation: the descriptive finding is labelled not pre-registered",
               "no threshold was set for it" in
               an["descriptive_not_preregistered"]["finding"])
+        # the Hallmark bar reconciliation: our own baseline appears to fail its
+        # own bar, and the artifact must keep explaining why. Recompute BOTH.
+        rec = an["hallmark_bar_reconciliation"]
+        _sc = pd.read_csv(ROOT / "results" / "annotation" / "sets_scored.csv")
+        _hk = _sc[(_sc.collection == "hallmark") & _sc.scoreable]
+        import statsmodels.api as _sm2
+        _r50 = float(_sm2.OLS(summary.R_p,
+                              _sm2.add_constant(summary.n_present)).fit().rsquared)
+        _r49 = float(_sm2.OLS(_hk.R_p, _sm2.add_constant(_hk.n_present)).fit().rsquared)
+        check("hallmark reconciliation: the all-50 value recomputes",
+              near(rec["r2_frozen_all_50"], _r50), f"{rec['r2_frozen_all_50']} vs {_r50:.4f}")
+        check("hallmark reconciliation: the 49-set value recomputes",
+              near(rec["r2_arm_49_scoreable"], _r49), f"{rec['r2_arm_49_scoreable']} vs {_r49:.4f}")
+        check("hallmark reconciliation: the delta is the difference of the two",
+              near(rec["delta"], _r50 - _r49), f"{rec['delta']} vs {_r50 - _r49:.4f}")
+        check("hallmark reconciliation: attributed to sample size, not drift",
+              "not drift" in rec["cause"])
+        check("hallmark is labelled the baseline, not a failing candidate",
+              an["per_collection"]["hallmark"].get("is_the_baseline_not_a_candidate")
+              is True
+              and "exceeds_hallmark_bar" not in an["per_collection"]["hallmark"])
+        check("the direction claim is asserted under BOTH bars",
+              "0.4464 and at 0.4649" in rec["does_the_direction_claim_survive"])
+        check("the bar's post-freeze provenance is disclosed",
+              "NOT PRE-REGISTERED" in rec["provenance_of_the_0_4649_bar"])
+
         # recompute the headline descriptive number from the raw scored table
         sc = pd.read_csv(ROOT / "results" / "annotation" / "sets_scored.csv")
         g = sc[sc.collection == "go_bp"]

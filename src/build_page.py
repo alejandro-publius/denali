@@ -268,6 +268,11 @@ def font_faces() -> str:
 FONTS = font_faces()
 
 
+def asset_b64(name: str) -> str:
+    """Brand assets, inlined for the same reason the figures are: no network."""
+    return base64.b64encode((ASSETS / name).read_bytes()).decode()
+
+
 def figure(name: str) -> str:
     c = CAP[name]
     b64 = base64.b64encode((FIGS / name).read_bytes()).decode()
@@ -308,6 +313,11 @@ body{background:var(--paper);color:var(--ink);
   font:400 16px/1.62 "Source Serif 4",Georgia,"Times New Roman",serif;
   padding:0 40px;-webkit-font-smoothing:antialiased}
 main{max-width:1100px;margin:0 auto;padding:48px 0 96px}
+
+/* masthead — the emblem only. The full lockup is in assets/denali-logo.png,
+   but at 40px tall its wordmark renders about 5px and stops being readable. */
+.masthead{padding:0 0 32px}
+.masthead img{height:40px;width:auto;display:block}
 
 /* four sizes: hero / heading / body / small. headings in Poppins, navy */
 .hero{font-family:var(--sans);font-size:clamp(2.5rem,5.1vw,4.25rem);
@@ -485,9 +495,12 @@ HTML = f"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>denali</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,{asset_b64("denali-favicon.png")}">
 <style>{FONTS}
 {CSS}</style>
 <main>
+
+<header class="masthead"><img src="data:image/png;base64,{asset_b64("denali-mark.png")}" alt="denali"></header>
 
 <!-- 1. hero -->
 <section class="hero-sec">

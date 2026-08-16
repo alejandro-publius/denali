@@ -16,7 +16,9 @@ to check.
 | | |
 |---|---|
 | [`MATRIX_PREREG.md`](MATRIX_PREREG.md) | The pre-registration. Hashed `d3e24b77…` and committed at `19684f2`, before the analysis it judges. Recover that exact version with `git show 19684f2:docs/MATRIX_PREREG.md` and diff it against what we reported. |
-| [`../results/sensitivity/README.md`](../results/sensitivity/README.md) | Three post-freeze checks, none pre-registered and all labelled so: the measurement/construction split, the VIF identity, and the unstressed-cell-line bound. |
+| [`../results/sensitivity/README.md`](../results/sensitivity/README.md) | Three post-freeze checks, none pre-registered and all labelled so: the measurement/construction split, the VIF identity recovering CAMERA's 2012 result from data, and the unstressed-cell-line bound. |
+| [`RPE1_PREREG.md`](RPE1_PREREG.md) | The second-cell-line arm, pre-registered and hashed (`ae62feda…`) before it ran. It cleared its bar by 0.026 and the doc says why that is thin. |
+| [`ANNOTATION_PREREG.md`](ANNOTATION_PREREG.md) | The annotation-scaling arm (`ec5edb90…`). Our prediction was wrong in direction **and** the power rule fired — both failures are in the result, not softened here. |
 | [`SCOPE_STATEMENT.md`](SCOPE_STATEMENT.md) | What is and is not claimed. |
 | [`DATA_DICTIONARY.md`](DATA_DICTIONARY.md) | Every column in every frozen file. |
 

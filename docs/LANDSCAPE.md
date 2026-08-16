@@ -114,10 +114,23 @@ anything here.
 **3. Not GWAS.** MAGMA solved it. Building there would be re-solving a solved
 problem, and someone would say so.
 
-**4. Cross-screen concordance.** The question nobody in our search had answered
-cleanly: how well do hit lists from independent screens of the same phenotype
-agree? If that number is low and public, it is a stronger argument for this tool
-than anything we currently cite. **We did not measure it and should not claim it.**
+**4. Cross-screen concordance — since answered, by us.** This section previously
+said *"we did not measure it and should not claim it."* We then measured it on our
+own two screens: raw agreement ρ +0.663, ρ +0.493 after removing set size, so 26%
+of the apparent replication is carried by set size, and **6 of the top 10 programs
+in an independent cell line are predictable from set size alone**. Post-freeze,
+not pre-registered, and a measurement on two screens rather than a general
+estimate. See `results/concordance/`.
+
+**5. Annotation coverage — a question we did not know to ask.** Also since
+measured, and it is the one finding here we have not seen stated anywhere: **98%
+of Hallmark sets can be scored against a genome-scale screen; 46% of GO Biological
+Process sets can.** The median GO-BP set declares 20 genes and has 8 measured in
+this screen. If more than half of the most-used gene-set collection in biology
+cannot be evaluated against a screen at all, that is a coverage problem sitting
+underneath every enrichment result computed on it — and it is upstream of the
+size confound rather than a version of it. Descriptive, not pre-registered; the
+arm it came from failed its own power rule. See `results/annotation/`.
 
 ## 5. What this changes about the current project
 

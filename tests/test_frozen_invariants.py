@@ -1107,12 +1107,14 @@ def main() -> int:
         # findings" for three arms after the count reached 7 and 4. The tally and
         # the heading are hand-typed, so they are checked against the same source
         # every other surface is checked against.
-        ("index.html",
-         r'class="n">(\d+)</div><div class="l">evaluations run',
-         (n_eval,), "the headline tally, evaluations"),
-        ("index.html",
-         r'class="n">(\d+)</div><div class="l">came back negative',
-         (n_neg,), "the headline tally, negatives"),
+        # The tally became one sentence in 60fd349, so these now read the lede
+        # rather than the stat tiles -- same intent, current markup. Keeping the
+        # old selectors would have failed loudly, which is right, but pointing
+        # them at markup that no longer exists teaches nothing.
+        ("index.html", r'class="lede">(\w+) evaluations\.',
+         (n_eval,), "the page lede, evaluation count"),
+        ("index.html", r'class="lede">\w+ evaluations\. (\w+) came back negative',
+         (n_neg,), "the page lede, negative count"),
         # "Three of the four negative findings" — the first number is how many
         # cards that section actually renders, the second is the true total.
         ("index.html", r"<h2>(\w+) of the (\w+) negative findings</h2>",

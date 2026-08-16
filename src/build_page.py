@@ -97,7 +97,8 @@ _FINDINGS = re.findall(r"^\|\s*(\d+)\s*\|.*\|\s*\*\*([A-Z][A-Z ]+)\*\*",
 N_EVALS = V(len(_FINDINGS), "README.md findings table (row count)")
 N_NEG = V([v.strip() for _, v in _FINDINGS].count("NEGATIVE"),
           "README.md findings table (NEGATIVE verdicts)")
-_WORDS = {3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine"}
+_WORDS = {3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight",
+          9: "Nine", 10: "Ten", 11: "Eleven", 12: "Twelve"}
 N_EVALS_W, N_NEG_W = _WORDS.get(N_EVALS, N_EVALS), _WORDS.get(N_NEG, N_NEG)
 _lc = lambda w: w.lower() if isinstance(w, str) else w
 N_EVALS_L, N_NEG_L = _lc(N_EVALS_W), _lc(N_NEG_W)

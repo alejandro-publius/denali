@@ -188,6 +188,13 @@ def main() -> int:
         r2s.append(a["r2_size_alone"])
         verdicts.append(a["verdict"])
     r2s = np.array(r2s, float)
+    # Know what the test can and cannot return. A model with the SAME accuracy
+    # on every subject has no capability variation at all, so whatever R^2 it
+    # produces is pure arithmetic -- the floor this statistic cannot go below
+    # for structural reasons. Computing it turns "expected and largely
+    # mechanical" from an assertion into a measurement.
+    null_r2 = np.array([audit(n_items, np.round(A.iloc[i].values.mean() * n_items))
+                        ["r2_size_alone"] for i in range(len(A))], float)
     a2 = {
         "what": "denali's packaged audit applied verbatim to (subject, n_items, "
                 "n_correct), n_correct = round(accuracy x n_items)",
@@ -198,10 +205,25 @@ def main() -> int:
         "verdict": ("ARITHMETIC CONFOUND PRESENT IN COUNT LAYER"
                     if np.median(r2s) >= 0.40 else
                     "NOT PRESENT — the analogy fails even at the count layer"),
-        "reading": "This firing is expected and largely mechanical. It locates "
-                   "the mechanism: normalisation by item count is the whole of "
+        "arithmetic_null": {
+            "what": "each model replaced by a hypothetical model with ITS OWN "
+                    "mean accuracy on every subject — no capability variation, "
+                    "so any size dependence left is arithmetic and nothing else",
+            "median_null_r2": round(float(np.median(null_r2)), 4),
+            "median_observed_minus_null": round(
+                float(np.median(r2s - null_r2)), 4),
+            "pct_models_above_their_own_null": round(
+                100 * float((r2s > null_r2).mean()), 1),
+        },
+        "reading": "The count layer's confound is not merely mechanical, it is "
+                   "MORE than mechanical: a model with no subject-to-subject "
+                   "variation at all scores HIGHER than real models do. Genuine "
+                   "differences in subject difficulty add variance that size "
+                   "cannot explain, which is why observed sits below the null. "
+                   "So this number says nothing bad about benchmarks; it locates "
+                   "the protection. Normalisation by item count is the whole of "
                    "what stands between a leaderboard and the genomics failure "
-                   "mode, not anything about how benchmarks pick their items.",
+                   "mode.",
     }
 
     # ---- A3: THE REAL ONE — does weighting move the leaderboard? ---------

@@ -35,7 +35,13 @@
     ],
     "pct_CONFOUNDED": 100.0,
     "verdict": "ARITHMETIC CONFOUND PRESENT IN COUNT LAYER",
-    "reading": "This firing is expected and largely mechanical. It locates the mechanism: normalisation by item count is the whole of what stands between a leaderboard and the genomics failure mode, not anything about how benchmarks pick their items."
+    "arithmetic_null": {
+      "what": "each model replaced by a hypothetical model with ITS OWN mean accuracy on every subject \u2014 no capability variation, so any size dependence left is arithmetic and nothing else",
+      "median_null_r2": 0.807,
+      "median_observed_minus_null": -0.2091,
+      "pct_models_above_their_own_null": 0.1
+    },
+    "reading": "The count layer's confound is not merely mechanical, it is MORE than mechanical: a model with no subject-to-subject variation at all scores HIGHER than real models do. Genuine differences in subject difficulty add variance that size cannot explain, which is why observed sits below the null. So this number says nothing bad about benchmarks; it locates the protection. Normalisation by item count is the whole of what stands between a leaderboard and the genomics failure mode."
   },
   "A3_does_weighting_move_the_leaderboard": {
     "what": "micro (item-weighted) vs macro (equal-subject) aggregation of the same per-subject accuracies. Nothing about any model changes.",

@@ -54,11 +54,22 @@ that could have gone the other way and did not.
 **A2 — the count layer is confounded, exactly as hard as genomics.** Run
 denali's packaged audit verbatim on `(subject, n_items, n_correct)` and the
 median size-alone R² is **0.598** — higher than denali's own headline 0.465,
-with **100%** of the 5,452 models returning CONFOUNDED. This is expected and
-largely mechanical, and it is the useful half of the finding: it locates the
-protection precisely. The arithmetic is present in AI benchmarks in full
-force. Dividing by item count is the only thing standing between a
-leaderboard and the failure mode that dominates set-level genomics.
+with **100%** of the 5,452 models returning CONFOUNDED. The arithmetic is
+present in AI benchmarks in full force. Dividing by item count is the only
+thing standing between a leaderboard and the failure mode that dominates
+set-level genomics.
+
+**And that number is entirely mechanical — we measured the floor rather than
+asserting it.** Replace each model with a hypothetical one scoring *its own
+mean accuracy on every subject*: no capability variation whatsoever, so any
+size dependence left is arithmetic and nothing else. That null scores
+**0.807**. Real models score **0.598** — **below** the arithmetic floor, for
+**99.9%** of the panel. Genuine variation in subject difficulty *adds*
+variance that size cannot explain, which pushes the observed value down.
+
+So A2 says nothing bad about any benchmark. It measures how strong the
+arithmetic is when nothing is normalising it, which is the number that makes
+the genomics comparison legible.
 
 **A4 — two benchmarks agree because models differ in capability.** Across the
 324 models scored on both MMLU and BIG-Bench Hard, agreement is ρ = 0.841

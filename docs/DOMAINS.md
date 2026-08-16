@@ -66,6 +66,15 @@ inference — is decisively rejected. Decades of expert curation do not remove
 the confound. Five of the top ten GO Slim terms leave the top ten once size is
 accounted for.
 
+**All four registered sensitivities agree**, and none was chosen after seeing
+a number: hit thresholds at 5% and 20% give raw R² 0.290 and 0.426, and the
+GO component and function namespaces give 0.436 and 0.379, against the primary
+0.357. A post-hoc variant that normalises each gene's interaction count by how
+many pairs it was actually tested in — removing the study's own unequal
+query/array depth, the obvious alternative explanation — returns **0.422**,
+i.e. CONFOUNDED, slightly *stronger* than the registered primary rather than
+weaker.
+
 ## Domain 2 is the cleanest demonstration in the project
 
 Region sets share **nothing** with gene-set machinery: no gene symbols, no

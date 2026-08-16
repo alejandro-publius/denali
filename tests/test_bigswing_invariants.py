@@ -92,6 +92,20 @@ def main() -> int:
               (a2 >= 0.40) == b["A2_count_layer"]["verdict"].startswith("ARITHMETIC"))
         check("the count layer is more size-predicted than the rate layer",
               a2 > a1, f"count {a2} vs rate {a1}")
+        # The count-layer number must never be quotable as "benchmarks are 60%
+        # confounded". It is bounded by an arithmetic floor computed from the
+        # size distribution alone, and the observed value sits BELOW it.
+        nul = b["A2_count_layer"]["arithmetic_null"]
+        check("the count layer is compared against an arithmetic null",
+              nul["median_null_r2"] > 0)
+        check("observed count-layer R^2 sits below the no-capability null",
+              a2 < nul["median_null_r2"],
+              f"observed {a2} vs null {nul['median_null_r2']}")
+        check("the write-up states the count layer is not a finding about "
+              "benchmarks",
+              "nothing bad about any benchmark" in
+              (DOCS / "BENCHMARKS.md").read_text().lower()
+              if (DOCS / "BENCHMARKS.md").exists() else True)
         # A3 fired on a tie; the disclosure must survive any future edit.
         ph = b["post_hoc_how_A3_fired"]
         check("A3's top-5 change is disclosed as a near-tie, in items",

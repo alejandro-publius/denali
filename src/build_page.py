@@ -9,8 +9,9 @@ Design contract, enforced below:
   * caption text is read verbatim from results/figures/CAPTIONS.md.
   * figures are inlined as base64 so index.html is genuinely standalone.
   * white ground, ONE accent used twice, FOUR type sizes, no gradients, no dark
-    hero, no dashboard chrome. The explorer is the only interactive element and
-    it makes no network call — everything it needs is embedded.
+    hero, no dashboard chrome. Two interactive elements — the explorer and the
+    audit runner — and neither makes a network call: everything they need is
+    embedded, and user files are read with FileReader and never leave the tab.
 """
 from __future__ import annotations
 
@@ -605,9 +606,486 @@ table.ex tr{cursor:pointer}
   table.tools .tool,.touch{white-space:normal}
   blockquote p,.detail h3,pre.wire,table.ex td:first-child{overflow-wrap:anywhere}
   .agwrap,.detail dl{grid-template-columns:1fr}}
+
+/* the audit runner — vocabulary from docs/DESIGN.md "Interaction". One
+   accent-filled primary on the whole page; everything else ink or ghost. */
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+a.btn{display:inline-block;text-decoration:none}
+.runrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:26px 0 0}
+.drop{display:block;position:relative;margin:22px 0 0;padding:24px 26px;
+  border:1px dashed var(--rule);background:var(--paper);cursor:pointer;
+  border-radius:var(--radius)}
+.drop.over{background:var(--fill);border-color:var(--ink);border-style:solid}
+.drop:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.drop input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;
+  clip:rect(0 0 0 0)}
+.drop .d1{display:block;font:600 1rem/1.4 "Poppins",-apple-system,
+  BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--navy)}
+.drop .d2{display:block;margin-top:5px;font-size:.875rem;line-height:1.55}
+.drop .d3{display:block;margin-top:10px;font:400 .75rem/1.7 "JetBrains Mono",
+  ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--soft)}
+.audout{margin:24px 0 0}
+.aud-empty{padding:20px 24px;background:var(--fill);border:1px solid var(--rule);
+  border-radius:var(--radius);font-size:.875rem;color:var(--soft);
+  font-style:italic;line-height:1.6}
+.aud-src{font:400 .75rem/1.7 "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,
+  monospace;color:var(--soft);margin:0 0 16px;overflow-wrap:anywhere}
+.aud-warn{font:400 .8125rem/1.7 "JetBrains Mono",ui-monospace,SFMono-Regular,
+  Menlo,monospace;background:var(--fill);border:1px solid var(--rule);
+  border-radius:var(--radius);padding:12px 16px;margin:0 0 16px;white-space:pre-wrap}
+.aud-verdict .v{font:600 1.6rem/1.1 "Poppins",-apple-system,BlinkMacSystemFont,
+  "Segoe UI",sans-serif;color:var(--navy);letter-spacing:.01em}
+.aud-verdict .r{font-size:1.1875rem;line-height:1.5;max-width:46em;margin:10px 0 0}
+.aud-todo{font-size:1rem;line-height:1.62;max-width:60em;margin:14px 0 0}
+.aud-stats{font:400 .8125rem/1.7 "JetBrains Mono",ui-monospace,SFMono-Regular,
+  Menlo,monospace;color:var(--soft);margin:16px 0 0;font-variant-numeric:tabular-nums}
+.aud-block{margin:26px 0 0;border-top:1px solid var(--rule);padding-top:22px}
+.aud-lbl{font:600 .75rem/1.5 "Poppins",-apple-system,BlinkMacSystemFont,
+  "Segoe UI",sans-serif;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--soft);margin:0 0 10px}
+.aud-body{font-size:1rem;line-height:1.62;max-width:60em}
+.aud-cv{font-size:.8125rem;color:var(--soft);margin:12px 0 0;line-height:1.6;
+  max-width:60em}
+.rrwrap{overflow-x:auto}
+table.rr{width:100%;border-collapse:collapse;font-size:.9375rem;margin:14px 0 0}
+table.rr th{text-align:left;font-size:.75rem;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--soft);font-weight:600;
+  padding:0 14px 8px 0;border-bottom:1px solid var(--rule)}
+table.rr td{padding:10px 14px 10px 0;border-bottom:1px solid var(--rule);
+  font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+table.rr td.num,table.rr th.num{text-align:right;white-space:nowrap}
+table.rr td.mv{font:600 .875rem/1.5 "JetBrains Mono",ui-monospace,SFMono-Regular,
+  Menlo,monospace}
+.aud-not{font-size:.8125rem;font-style:italic;color:var(--soft);margin:20px 0 0;
+  line-height:1.6;max-width:60em}
+.aud-err{padding:18px 22px;background:var(--fill);border:1px solid var(--rule);
+  border-radius:var(--radius);font:400 .8125rem/1.75 "JetBrains Mono",
+  ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre-wrap;
+  overflow-wrap:anywhere}
+.aud-map{margin:16px 0 0;display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end}
+.aud-map-lede{font-size:.875rem;color:var(--ink);flex-basis:100%;line-height:1.55}
+.aud-map label{font:400 .75rem/1.6 "JetBrains Mono",ui-monospace,SFMono-Regular,
+  Menlo,monospace;color:var(--soft)}
+.aud-map select{font:400 .8125rem/1 "JetBrains Mono",ui-monospace,monospace;
+  padding:6px 8px;border:1px solid var(--rule);background:var(--paper);
+  color:var(--ink);cursor:pointer;max-width:220px}
+@media(max-width:700px){
+  .runrow .btn{width:100%;text-align:center}
+  .aud-map select{max-width:100%}}
 """
 
 EXPLORER_JSON = json.dumps(EXPLORER, separators=(",", ":"), default=str)
+
+# ---------------------------------------------------------------- audit runner
+# The in-page audit path: docs/PYODIDE_COSTING.md records why this is a ~200
+# line JS port of denali_audit.core rather than Pyodide (49.5 MB, and its
+# loader contains the literal network call the invariants forbid), and
+# tests/test_page_audit_parity.py runs this exact JS under node against the
+# packaged tool on real fixtures — a drifted number fails the build, the same
+# discipline core.py applies to its own research source.
+#
+# The corpus is not retyped: it is parsed out of reference.py at build time so
+# the reference distribution has one source file in this repository.
+_REF_SRC = (ROOT / "packages" / "denali-audit" / "denali_audit" /
+            "reference.py").read_text()
+_CORPUS = [float(v) for v in
+           re.findall(r"\b(\d\.\d{4})\b", _REF_SRC.split("CORPUS", 1)[1].split(")", 1)[0])]
+_N_SCREENS = int(re.search(r"N_SCREENS = (\d+)", _REF_SRC).group(1))
+assert len(_CORPUS) == _N_SCREENS, (
+    f"corpus parse drifted from reference.py: {len(_CORPUS)} != {_N_SCREENS}")
+EXAMPLE_CSV = (ROOT / "examples" / "example_gprofiler.csv").read_text()
+
+# Pure functions only between the CORE markers — the parity test extracts and
+# runs exactly that span under node, so DOM code must stay below the end mark.
+_AUDIT_CORE_JS = r"""
+// Ported from denali_audit/core.py + adapters.py + reference.py. Strings are
+// verbatim; math is the same OLS/Spearman/rank arithmetic. Divergences that
+// cannot matter after the finite-pair mask are commented where they occur.
+function audLow(c){return String(c).toLowerCase().trim()}
+function audHasCols(cols){for(var i=1;i<arguments.length;i++){var want=arguments[i].toLowerCase(),ok=false;
+  for(var j=0;j<cols.length;j++)if(audLow(cols[j])===want){ok=true;break}
+  if(!ok)return false}return true}
+function audColIdx(cols,name){for(var i=0;i<cols.length;i++)if(audLow(cols[i])===name.toLowerCase())return i;return -1}
+function audColVals(t,name){var i=audColIdx(t.cols,name);return t.rows.map(function(r){return r[i]})}
+function audToNum(v){if(v===null||v===undefined)return NaN;var s=String(v).trim();
+  if(s==="")return NaN;var n=Number(s);return isFinite(n)?n:NaN}
+function audRatioNum(v){var m=/^\s*(\d+)\s*\//.exec(String(v));return m?+m[1]:NaN}
+function audRatioDen(v){var m=/\/\s*(\d+)\s*$/.exec(String(v));return m?+m[1]:NaN}
+function audParseTable(text,sep){
+  // char-level CSV/TSV parser: quoted fields, "" escapes, delimiter sniffing
+  // over the first line (tab beats comma beats semicolon by count).
+  text=String(text).replace(/\r\n?/g,"\n");
+  if(!sep){var first=text.slice(0,text.indexOf("\n")<0?text.length:text.indexOf("\n"));
+    var nt=(first.match(/\t/g)||[]).length,nc=(first.match(/,/g)||[]).length,
+        ns=(first.match(/;/g)||[]).length;
+    sep=nt>=nc&&nt>=ns?"\t":(ns>nc?";":",");}
+  var rows=[],row=[],cell="",q=false;
+  for(var i=0;i<text.length;i++){var ch=text[i];
+    if(q){if(ch==='"'){if(text[i+1]==='"'){cell+='"';i++}else q=false}else cell+=ch}
+    else if(ch==='"')q=true;
+    else if(ch===sep){row.push(cell);cell=""}
+    else if(ch==="\n"){row.push(cell);cell="";
+      if(row.length>1||row[0].trim()!=="")rows.push(row);row=[]}
+    else cell+=ch}
+  if(cell!==""||row.length){row.push(cell);
+    if(row.length>1||row[0].trim()!=="")rows.push(row)}
+  if(!rows.length)return{cols:[],rows:[]};
+  return{cols:rows[0],rows:rows.slice(1)}}
+var AUD_SUPPORTED=["denali","g:Profiler","DAVID","clusterProfiler",
+  "Enrichr / GSEApy","MAGeCK (gene_summary)","fgsea","GSEA desktop",
+  "drugZ (approximate — flagged)","BAGEL2 bf with NumObs (approximate — flagged)"];
+function audDetect(t){
+  var c=t.cols;
+  if(audHasCols(c,"set","size","hits"))
+    return audMap(t,"denali","set","size","hits",false,"");
+  if(audHasCols(c,"term_size","intersection_size")){
+    var nm=audHasCols(c,"term_name")?"term_name":"term_id";
+    return audMap(t,"g:Profiler",nm,"term_size","intersection_size",false,
+      "term_size and intersection_size map exactly onto size and hits");}
+  if(audHasCols(c,"term","count","pop hits"))
+    return audMap(t,"DAVID","term","pop hits","count",false,
+      "'Pop Hits' is the set size in the background; 'Count' is the overlap");
+  if(audHasCols(c,"bgratio","count")){
+    var nm2=audHasCols(c,"description")?"description":"id";
+    return{fmt:"clusterProfiler",names:audColVals(t,nm2),
+      sizes:audColVals(t,"bgratio").map(audRatioNum),
+      hits:audColVals(t,"count").map(audToNum),approximate:false,
+      note:"size parsed from the numerator of BgRatio; hits is Count"};}
+  if(audHasCols(c,"term","overlap")){
+    var ov=audColVals(t,"overlap");
+    return{fmt:"Enrichr / GSEApy",names:audColVals(t,"term"),
+      sizes:ov.map(audRatioDen),hits:ov.map(audRatioNum),approximate:false,
+      note:"size and hits parsed from the Overlap column ('5/200')"};}
+  if(audHasCols(c,"id","num","neg|goodsgrna")){
+    var sz=audColVals(t,"num").map(audToNum);
+    var note="each gene is read as a set of its sgRNAs: 'num' is guides per gene, "+
+      "'neg|goodsgrna' the count passing MAGeCK's cutoff. This audits the "+
+      "depletion (neg) direction; for enrichment rerun with "+
+      "--set id --size num --hits 'pos|goodsgrna'";
+    var uniq={},n=0;sz.forEach(function(v){if(isFinite(v)&&!uniq[v]){uniq[v]=1;n++}});
+    if(n===1)note+=". Guides-per-gene is constant in this library, so guide count "+
+      "cannot explain this ranking — the audit will say so";
+    return{fmt:"MAGeCK (gene_summary)",names:audColVals(t,"id"),sizes:sz,
+      hits:audColVals(t,"neg|goodsgrna").map(audToNum),approximate:false,note:note};}
+  if(audHasCols(c,"pathway","size")&&audHasCols(c,"leadingedge")){
+    // adapters.py maps a MISSING leadingEdge cell to "nan" and so counts 1;
+    // an empty string here counts 0. Only an empty cell can tell them apart.
+    var le=audColVals(t,"leadingedge");
+    var hits=le.map(function(v){var s=String(v===undefined?"":v);
+      if(s.trim()==="")return 0;
+      return(s.match(/[,\s]+/g)||[]).length+1});
+    return{fmt:"fgsea",names:audColVals(t,"pathway"),
+      sizes:audColVals(t,"size").map(audToNum),hits:hits,approximate:true,
+      note:"fgsea reports no count of significant members; the "+
+        "leading-edge subset size is used as the closest honest "+
+        "stand-in. Treat the number as indicative, not exact."};}
+  if(audHasCols(c,"name","size")){
+    var cands=["fdr q-val","nom p-val"];
+    for(var k=0;k<cands.length;k++)if(audHasCols(c,cands[k])){
+      var q=audColVals(t,cands[k]).map(audToNum),
+          sz2=audColVals(t,"size").map(audToNum);
+      return{fmt:"GSEA desktop",names:audColVals(t,"name"),sizes:sz2,
+        hits:q.map(function(v,i){return v<0.05?sz2[i]:0}),approximate:true,
+        note:"GSEA desktop reports no per-set hit count; sets below "+
+          cands[k]+" 0.05 are credited their full size, which is a "+
+          "coarse stand-in. Prefer a tool that reports an overlap."};}}
+  if(audHasCols(c,"gene","numobs","normz","fdr_synth")){
+    var sz3=audColVals(t,"numobs").map(audToNum),
+        q3=audColVals(t,"fdr_synth").map(audToNum);
+    return{fmt:"drugZ",names:audColVals(t,"gene"),sizes:sz3,
+      hits:q3.map(function(v,i){return v<0.05?sz3[i]:0}),approximate:true,
+      note:"each gene is read as a set of its guide observations; numObs "+
+        "counts guide x replicate observations, not distinct guides. "+
+        "drugZ reports no per-gene count of significant guides, so "+
+        "genes below fdr_synth 0.05 are credited their full numObs — "+
+        "the same coarse stand-in as GSEA desktop. This audits the "+
+        "synthetic-lethal (synth) direction only; the suppressor "+
+        "(supp) columns are present in your file but not audited."};}
+  if(audHasCols(c,"gene","bf","numobs")&&!audHasCols(c,"rna")){
+    var sz4=audColVals(t,"numobs").map(audToNum),
+        bf=audColVals(t,"bf").map(audToNum);
+    return{fmt:"BAGEL2",names:audColVals(t,"gene"),sizes:sz4,
+      hits:bf.map(function(v,i){return v>0?sz4[i]:0}),approximate:true,
+      note:"each gene is read as a set of its guide observations; NumObs "+
+        "counts guide x replicate observations, not distinct guides. "+
+        "BAGEL reports no per-gene count of significant guides and no "+
+        "FDR at this step, so genes with BF > 0 (evidence favours the "+
+        "essential model) are credited their full NumObs — a coarse "+
+        "stand-in. For a calibrated cutoff, take an FDR threshold from "+
+        "`BAGEL.py pr`, join it to this file, and name the columns "+
+        "yourself."};}
+  return null}
+function audMap(t,fmt,nameCol,sizeCol,hitsCol,approx,note){
+  return{fmt:fmt,names:audColVals(t,nameCol),
+    sizes:audColVals(t,sizeCol).map(audToNum),
+    hits:audColVals(t,hitsCol).map(audToNum),approximate:approx,note:note}}
+function audNearMiss(cols){
+  if(audHasCols(cols,"sgrna","gene")&&!audHasCols(cols,"num"))
+    return "This looks like MAGeCK's per-guide file (sgrna_summary.txt). The "+
+      "audit reads the per-gene file: point it at gene_summary.txt from "+
+      "the same `mageck test` run.";
+  if(audHasCols(cols,"gene","bf")&&!audHasCols(cols,"numobs"))
+    return "This looks like BAGEL output, but without a NumObs column there is "+
+      "no set size to audit. `BAGEL.py bf` with the default bootstrap "+
+      "training writes GENE, BF, STD, NumObs — use that file. (The `pr` "+
+      "output reports FDR but no size, so it cannot be audited either.) "+
+      "Alternatively, join guides-per-gene from your library file and name "+
+      "the columns yourself.";
+  if(audHasCols(cols,"rna","gene","bf"))
+    return "This looks like BAGEL's per-guide (RNA-level) output. The audit "+
+      "reads the per-gene file: rerun `BAGEL.py bf` without the RNA-level "+
+      "flag.";
+  return null}
+function audDescribeFailure(cols){
+  var miss=audNearMiss(cols);if(miss)return miss;
+  var lst="["+cols.map(function(x){return "'"+String(x)+"'"}).join(", ")+"]";
+  return "Could not recognise this table.\n\n"+
+    "  columns found: "+lst+"\n\n"+
+    "  formats understood: "+AUD_SUPPORTED.join(", ")+"\n\n"+
+    "  Name the columns yourself instead:\n"+
+    "      denali audit FILE --set <col> --size <col> --hits <col>\n\n"+
+    "  size = how many members that set had.  hits = how many were significant."}
+// ---- the math, from core.py ----
+function audPyRound(x,nd){if(!isFinite(x))return x;var m=Math.pow(10,nd),y=x*m;
+  var f=Math.floor(y),d=y-f;
+  if(Math.abs(d-0.5)<1e-9){return(f%2===0?f:f+1)/m}
+  return Math.round(y)/m}
+function audMean(v){var s=0;for(var i=0;i<v.length;i++)s+=v[i];return s/v.length}
+function audStd(v){var m=audMean(v),s=0;for(var i=0;i<v.length;i++)s+=(v[i]-m)*(v[i]-m);
+  return Math.sqrt(s/v.length)}
+function audFit1(x,y){var mx=audMean(x),my=audMean(y),num=0,den=0;
+  for(var i=0;i<x.length;i++){num+=(x[i]-mx)*(y[i]-my);den+=(x[i]-mx)*(x[i]-mx)}
+  var b=num/den;return[b,my-b*mx]}
+function audR2(x,y){if(audStd(x)===0)return NaN;var f=audFit1(x,y),sr=0,st=0,my=audMean(y);
+  for(var i=0;i<x.length;i++){var p=f[0]*x[i]+f[1];sr+=(y[i]-p)*(y[i]-p);st+=(y[i]-my)*(y[i]-my)}
+  return st===0?NaN:1-sr/st}
+function audRanks(v){var idx=v.map(function(_,i){return i});
+  idx.sort(function(a,b){return v[a]-v[b]||a-b});
+  var r=new Array(v.length),i=0;
+  while(i<idx.length){var j=i;while(j+1<idx.length&&v[idx[j+1]]===v[idx[i]])j++;
+    var avg=(i+j+2)/2;for(var k=i;k<=j;k++)r[idx[k]]=avg;i=j+1}
+  return r}
+function audSpearman(x,y){var rx=audRanks(x),ry=audRanks(y),
+  mx=audMean(rx),my=audMean(ry),num=0,dx=0,dy=0;
+  for(var i=0;i<x.length;i++){num+=(rx[i]-mx)*(ry[i]-my);
+    dx+=(rx[i]-mx)*(rx[i]-mx);dy+=(ry[i]-my)*(ry[i]-my)}
+  return num/Math.sqrt(dx*dy)}
+function audRankDesc(v){var idx=v.map(function(_,i){return i});
+  idx.sort(function(a,b){return v[b]-v[a]||a-b});
+  var r=new Array(v.length);idx.forEach(function(o,p){r[o]=p+1});return r}
+function audPct0(x){return String(audPyRound(x,0))}
+function audit(sizes,hits){
+  var s=[],h=[];
+  for(var i=0;i<sizes.length;i++)if(isFinite(sizes[i])&&isFinite(hits[i])){s.push(+sizes[i]);h.push(+hits[i])}
+  var n=s.length;
+  if(n<8)throw new Error("need at least 8 sets to say anything; got "+n);
+  var y=h.map(function(v){return Math.log10(1+v)});
+  var mn=s[0],mx=s[0];
+  for(var q=1;q<n;q++){if(s[q]<mn)mn=s[q];if(s[q]>mx)mx=s[q]}
+  var out={n_sets:n,size_range:[Math.trunc(mn),Math.trunc(mx)],
+    r2_size_alone:audPyRound(audR2(s,y),4),
+    spearman_size_vs_hits:audStd(s)===0?NaN:audPyRound(audSpearman(s,y),4),
+    sets_with_zero_hits:h.filter(function(v){return v===0}).length};
+  var share=out.r2_size_alone;
+  out.share_explained_without_biology=share;
+  if(!isFinite(share)){
+    out.verdict="UNDETERMINED";
+    out.reading="This ranking cannot be audited for size: every set is the same size, "+
+      "so set size has no variation with which to explain anything.";
+    out.what_to_do="This is not an all-clear. Size is ruled out here by construction, but "+
+      "the other ways a ranking can be carried by how it was measured -- "+
+      "read depth, guide efficacy, replicate count -- are untested and this "+
+      "tool does not test them. If your sets do vary in size, check you "+
+      "passed the right column.";
+    out.what_this_is_not="Not a candidate list and not a recommendation. This measures a property "+
+      "of the ranking, not of any gene or pathway in it.";
+    out.method="VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, "+
+      "Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461";
+    return out}
+  out.reading=audPct0(share*100)+"% of the variance in this ranking is predicted by how the "+
+    "sets were built, with no reference to what any gene does.";
+  if(share>=0.40){out.verdict="CONFOUNDED";
+    out.what_to_do="Do not read the top of this ranking as biology. Before committing to "+
+      "any candidate, re-rank with a size-aware statistic -- a competitive "+
+      "test that accounts for inter-gene correlation (CAMERA and its "+
+      "relatives), or a permutation null that preserves set size -- and see "+
+      "which entries survive. The ones that move most are the ones your "+
+      "current ranking is least able to justify."}
+  else if(share>=0.20){out.verdict="PARTIALLY CONFOUNDED";
+    out.what_to_do="Size is a visible but not dominant driver here. Report it alongside "+
+      "the ranking, and check that your leading entries are not simply your "+
+      "largest sets."}
+  else{out.verdict="NOT SIZE-DOMINATED";
+    out.what_to_do="Set size does not explain much of this ranking. That is the good "+
+      "case, and it is worth stating explicitly -- most published set-level "+
+      "rankings never check."}
+  out.what_this_is_not="Not a candidate list and not a recommendation. This measures a property "+
+    "of the ranking, not of any gene or pathway in it.";
+  out.method="VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, "+
+    "Nucleic Acids Research 40(17):e133, doi:10.1093/nar/gks461";
+  // reference.py context()
+  var lo=0,hi=AUD_CORPUS.length;
+  while(lo<hi){var mid=(lo+hi)>>1;if(AUD_CORPUS[mid]<out.r2_size_alone)lo=mid+1;else hi=mid}
+  var p=audPyRound(100*lo/AUD_CORPUS.length,1);
+  var band=p>=90?"unusually confounded -- worse than nine in ten published screens":
+    p>=75?"more confounded than most published screens":
+    p>=40?"typical of published screens":
+    "less confounded than most published screens";
+  out.corpus_percentile=p;
+  out.corpus_n_screens=AUD_CORPUS.length;
+  out.corpus_collection="MSigDB Hallmark";
+  out.corpus_reading="This ranking is "+band+": "+audPct0(p)+"% of "+AUD_CORPUS.length+
+    " published CRISPR screens are less explained by set size than yours.";
+  out.corpus_caveat="The reference was built against MSigDB Hallmark. If your sets came "+
+    "from a different collection the percentile is indicative, not exact.";
+  out.corpus_source="BioGRID ORCS 2.0.18, human, 1272 screens meeting the inclusion rule";
+  return out}
+function audRerank(sizes,hits,names,top){
+  var s=[],h=[],nm=[];
+  for(var i=0;i<sizes.length;i++)if(isFinite(sizes[i])&&isFinite(hits[i])){
+    s.push(+sizes[i]);h.push(+hits[i]);
+    nm.push(names?String(names[i]):"set "+i)}
+  var n=s.length;
+  if(n<8)throw new Error("need at least 8 sets to say anything; got "+n);
+  var y=h.map(function(v){return Math.log10(1+v)});
+  var constant=audStd(s)===0,resid;
+  if(constant){var my=audMean(y);resid=y.map(function(v){return v-my})}
+  else{var f=audFit1(s,y);resid=y.map(function(v,j){return v-(f[0]*s[j]+f[1])})}
+  var orig=audRankDesc(h),corr=audRankDesc(resid);
+  var k=Math.min(Math.trunc(top),n),survived=0,dropped=[];
+  for(var j=0;j<n;j++){if(orig[j]<=k&&corr[j]<=k)survived++;
+    if(orig[j]<=k&&corr[j]>k)dropped.push(j)}
+  dropped.sort(function(a,b){return corr[a]-corr[b]});
+  var rows=dropped.map(function(j){return{name:nm[j],size:Math.trunc(s[j]),
+    hits:Math.trunc(h[j]),rank_original:orig[j],rank_size_aware:corr[j],
+    moved:orig[j]-corr[j]}});
+  var reading="Of your top "+k+", "+survived+" hold their place once set size is accounted "+
+    "for and "+(k-survived)+" do not. The ones that move are the entries your "+
+    "current ranking is least able to justify.";
+  if(constant)reading="Every set here is the same size, so the size correction cannot move "+
+    "anything and nothing below is evidence either way. This is not a "+
+    "ranking that survived the correction; it is one the correction could "+
+    "not be applied to.";
+  var bf=0;dropped.forEach(function(j){var fall=corr[j]-orig[j];if(fall>bf)bf=fall});
+  return{n_sets:n,top_n:k,survived_top_n:survived,left_top_n:k-survived,
+    size_is_constant:constant,biggest_fall:bf,left_the_top:rows,
+    correction:"log10(1+hits) regressed on set size; ranked by residual",
+    reading:reading,
+    what_this_is_not:"Not a candidate list. This says which entries were carried by size, not "+
+      "which to chase. Nothing here is a recommendation to validate anything."}}
+"""
+
+_AUDIT_DOM_JS = r"""
+// ---- page wiring: states from docs/DESIGN.md "Interaction". No network,
+// no spinner; every state names its exit.
+var AUD_LAST=null;
+function audEsc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function audErr(html){$("audOut").innerHTML='<div class="aud-err">'+html+'</div>'}
+function audRunText(text,label,sep){
+  var t;
+  try{t=audParseTable(text,sep)}catch(e){
+    audErr(audEsc("Could not read this file as a table: "+e.message));return}
+  if(!t.cols.length||!t.rows.length){
+    audErr(audEsc("This file has no table rows in it. The audit reads the "+
+      "results table your enrichment tool exported — one row per gene set."));return}
+  AUD_LAST={table:t,label:label};
+  var m=audDetect(t);
+  if(!m){audUnrecognised(t);return}
+  audRender(m,label)}
+function audUnrecognised(t){
+  var miss=audNearMiss(t.cols);
+  if(miss){audErr(audEsc(miss));return}
+  var lst="["+t.cols.map(function(x){return "'"+String(x)+"'"}).join(", ")+"]";
+  var opts=t.cols.map(function(c,i){return '<option value="'+i+'">'+audEsc(c)+'</option>'}).join("");
+  $("audOut").innerHTML=
+    '<div class="aud-err">'+audEsc("Could not recognise this table.\n\n  columns found: "+lst+
+      "\n\n  formats understood: "+AUD_SUPPORTED.join(", "))+'</div>'+
+    '<div class="aud-map"><span class="aud-map-lede">Name the three columns yourself — '+
+      'size is how many members that set had, hits how many were significant:</span>'+
+    '<label>set name<br><select id="mapSet" class="mapsel">'+opts+'</select></label>'+
+    '<label>size<br><select id="mapSize" class="mapsel">'+opts+'</select></label>'+
+    '<label>hits<br><select id="mapHits" class="mapsel">'+opts+'</select></label>'+
+    '<button id="mapRun" class="btn ghost">Audit with these columns</button></div>';
+  $("mapRun").onclick=function(){
+    var t2=AUD_LAST.table,si=+$("mapSet").value,zi=+$("mapSize").value,hi=+$("mapHits").value;
+    audRender({fmt:"manual",names:t2.rows.map(function(r){return r[si]}),
+      sizes:t2.rows.map(function(r){return audToNum(r[zi])}),
+      hits:t2.rows.map(function(r){return audToNum(r[hi])}),
+      approximate:false,note:"columns named by hand: set="+t2.cols[si]+
+        ", size="+t2.cols[zi]+", hits="+t2.cols[hi]},AUD_LAST.label)}}
+function audRender(m,label){
+  var res,rr;
+  try{res=audit(m.sizes,m.hits);rr=audRerank(m.sizes,m.hits,m.names,10)}
+  catch(e){audErr(audEsc(e.message+"  The audit needs one row per gene set; "+
+    "a file with fewer than 8 usable rows cannot say anything either way."));return}
+  var h='<p class="aud-src">read as '+audEsc(m.fmt)+(m.note?" — "+audEsc(m.note):"")+
+    ' &middot; '+audEsc(label)+'</p>';
+  if(m.approximate)h+='<div class="aud-warn">⚠ APPROXIMATE INPUT — see the note '+
+    'above; the verdict inherits it.</div>';
+  h+='<div class="aud-verdict"><div class="v">'+audEsc(res.verdict)+'</div>'+
+    '<p class="r">'+audEsc(res.reading)+'</p></div>'+
+    '<p class="aud-todo">'+audEsc(res.what_to_do)+'</p>'+
+    '<p class="aud-stats">sets '+res.n_sets+' &middot; size range '+res.size_range[0]+
+    "–"+res.size_range[1]+' &middot; R² size-alone '+
+    (isFinite(res.r2_size_alone)?res.r2_size_alone.toFixed(4):"undefined")+
+    (res.sets_with_zero_hits?' &middot; '+res.sets_with_zero_hits+' sets returned nothing':'')+'</p>';
+  if(res.corpus_reading!==undefined)
+    h+='<div class="aud-block"><div class="aud-lbl">Against the field</div>'+
+      '<p class="aud-body">'+audEsc(res.corpus_reading)+'</p>'+
+      '<p class="aud-cv">'+audEsc(res.corpus_caveat)+' Source: '+audEsc(res.corpus_source)+'.</p></div>';
+  h+='<div class="aud-block"><div class="aud-lbl">What leaves your top '+rr.top_n+'</div>'+
+    '<p class="aud-body">'+audEsc(rr.reading)+'</p>';
+  if(!rr.size_is_constant){
+    if(rr.left_the_top.length){
+      h+='<div class="rrwrap"><table class="rr"><thead><tr><th>entry</th>'+
+        '<th class="num">size</th><th class="num">hits</th>'+
+        '<th class="num">rank → size-aware</th></tr></thead><tbody>'+
+        rr.left_the_top.map(function(r){return '<tr><td>'+audEsc(r.name)+'</td>'+
+          '<td class="num">'+r.size+'</td><td class="num">'+r.hits+'</td>'+
+          '<td class="num mv">'+r.rank_original+' → '+r.rank_size_aware+
+          ' ('+(r.moved>0?"+":"")+r.moved+')</td></tr>'}).join("")+
+        '</tbody></table></div>'+
+        '<p class="aud-cv">biggest fall: '+rr.biggest_fall+' places &middot; correction: '+
+        audEsc(rr.correction)+'</p>';}
+    else h+='<p class="aud-body">Nothing left the top. This ranking survives its own size correction.</p>';}
+  h+='</div><p class="aud-not">'+audEsc(rr.what_this_is_not)+'</p>';
+  $("audOut").innerHTML=h;
+  $("audOut").scrollIntoView({behavior:"smooth",block:"nearest"})}
+function audRunFile(f){
+  if(!f)return;
+  $("audOut").innerHTML='<p class="aud-src">reading '+audEsc(f.name)+"…</p>";
+  var sep=/\.(tsv|tab|txt)$/i.test(f.name)?"\t":null;
+  var r=new FileReader();
+  r.onload=function(){audRunText(r.result,f.name,sep)};
+  r.onerror=function(){audErr(audEsc("Could not read "+f.name+
+    " — the browser refused the file. Try again, or use the packaged tool below."))};
+  r.readAsText(f)}
+$("runExample").onclick=function(){
+  audRunText(AUD_EXAMPLE,"example_gprofiler.csv — our own screen, re-exported "+
+    "in g:Profiler's shape",null);
+  $("audOut").scrollIntoView({behavior:"smooth",block:"start"})};
+$("fileIn").onchange=function(){audRunFile(this.files[0]);this.value=""};
+(function(){var d=$("drop");
+  ["dragover","dragenter"].forEach(function(ev){d.addEventListener(ev,function(e){
+    e.preventDefault();d.classList.add("over")})});
+  ["dragleave","dragend"].forEach(function(ev){d.addEventListener(ev,function(){
+    d.classList.remove("over")})});
+  d.addEventListener("drop",function(e){e.preventDefault();d.classList.remove("over");
+    if(e.dataTransfer.files&&e.dataTransfer.files.length)audRunFile(e.dataTransfer.files[0]);
+    else{var txt=e.dataTransfer.getData("text");if(txt)audRunText(txt,"dropped text",null)}});
+  document.addEventListener("paste",function(e){
+    var tag=(e.target.tagName||"").toLowerCase();
+    if(tag==="input"||tag==="select"||tag==="textarea")return;
+    var txt=(e.clipboardData||window.clipboardData).getData("text");
+    if(txt&&txt.indexOf("\n")>-1&&/[\t,;]/.test(txt))audRunText(txt,"pasted table",null)});
+})();
+"""
+
+AUDIT_SCRIPT = ("/*AUDIT-CORE-START*/\n"
+                f"const AUD_CORPUS=[{','.join(f'{v:.4f}' for v in _CORPUS)}];\n"
+                f"const AUD_EXAMPLE={json.dumps(EXAMPLE_CSV)};\n"
+                + _AUDIT_CORE_JS + "\n/*AUDIT-CORE-END*/\n" + _AUDIT_DOM_JS)
 
 
 def _tool_rows() -> str:
@@ -665,6 +1143,47 @@ to what any program does.</p>
 <p class="circ">The range is a range because one of our six features is computed
 from the same matrix as the outcome, so part of {R_HI:.3f} is arithmetic. {R_LO:.3f} is the
 figure that survives that objection, and we never quote the top alone.</p>
+<!-- The primary action. The page used to argue and then stop: the first
+     interactive element was the explorer, several screens down, exploring OUR
+     data. docs/USER_JOURNEY.md names that as dead end A; this row is the fix.
+     One accent-filled button on the whole page — the budget decision is
+     recorded in docs/DESIGN.md "Interaction". -->
+<div class="runrow">
+  <button id="runExample" class="btn primary">Run the audit on our screen</button>
+  <a class="btn ghost" href="#cost">or drop your own results</a>
+</div>
+</section>
+
+<!-- 1b. the runner — the path from "convinced" to "ran it on my data".
+     Same math as packages/denali-audit, ported to the page and held equal by
+     tests/test_page_audit_parity.py. The page still makes zero network calls;
+     the file is read with FileReader and never leaves the tab. -->
+<section>
+<div class="label">Use it on your own screen</div>
+<h2 id="cost">Two minutes, before the year.</h2>
+<p class="claim">Your enrichment tool already gave you the whole input: set name,
+how many genes each set had, how many came back significant. Drop that file
+below &mdash; it is read in your browser and goes nowhere. This page makes no
+network call of any kind, and a build-failing test enforces that, so your
+results cannot leave this tab.</p>
+
+<label class="drop" id="drop">
+  <input type="file" id="fileIn" accept=".csv,.tsv,.txt,.tab"
+    aria-label="Results table from your enrichment tool. Read locally in your browser; nothing is uploaded.">
+  <span class="d1">Drop your results file &mdash; or click to browse, or paste the table</span>
+  <span class="d2">Nothing is uploaded: the file is read on your machine and stays there.</span>
+  <span class="d3">Read as-is: g:Profiler &middot; Enrichr / GSEApy &middot; DAVID &middot;
+clusterProfiler &middot; MAGeCK gene_summary &middot; fgsea &middot; GSEA desktop &middot;
+drugZ &middot; BAGEL2. Anything else, you name the three columns yourself.</span>
+</label>
+
+<div id="audOut" class="audout" aria-live="polite">
+  <div class="aud-empty">Nothing read yet. Three things will appear here, in
+  order: the verdict on how much of the ranking set size explains, where that
+  sits against 1,272 published CRISPR screens, and which of the top-ten entries
+  survive the size correction. Get them from the button above &mdash; our own
+  screen, one click &mdash; or from a file of yours.</div>
+</div>
 </section>
 
 <!-- 2. metrics -->
@@ -698,53 +1217,43 @@ No gene-level claim is made anywhere, and the build fails if one appears.</p>
 </div>
 </section>
 
-<!-- 3b. use it -->
+<!-- 3b. take it with you — the pipeline copy of the runner above -->
 <section>
-<div class="label">Use it on your own screen</div>
-<h2 id="cost">Two minutes, before the year.</h2>
-<p class="claim">Your analysis already produced a table: set name, how many genes
-were in it, how many hits it returned. That is the whole input. Nothing is
-uploaded anywhere &mdash; it runs locally on the CSV you already have.</p>
+<div class="label">Take it with you</div>
+<h2 id="install">The same check, in your pipeline.</h2>
+<p class="claim">The runner above is this repository&rsquo;s own math ported into the
+page, and a parity test fails the build if the two ever disagree on a number.
+For repeated use &mdash; every screen, every collection, CI &mdash; install the
+packaged tool. Same input, same verdict, plus a <code>--json</code> flag and a
+replication check the page does not carry.</p>
 
 <div class="use">
   <div>
-    <h3>1 &middot; audit the ranking</h3>
-    <pre class="cmd">pip install -e packages/denali-audit
-denali audit my_results.csv</pre>
-    <pre class="out"><b>CONFOUNDED</b>: {SIZE_R2:.0%} of the variance in this
-ranking is predicted by how the sets
-were built, with no reference to what
-any gene does.
-
-<b>AGAINST THE FIELD</b>
-worse than nine in ten published
-screens: 90% of 1,272 are less
-explained by set size than yours.</pre>
+    <h3>1 &middot; install, from a clone</h3>
+    <pre class="cmd">git clone https://github.com/alejandro-publius/denali
+pip install -e denali/packages/denali-audit
+denali audit my_results.csv
+denali rerank my_results.csv --top 10</pre>
     <p class="note">No column renaming: it reads <b>g:Profiler, DAVID,
-    clusterProfiler, Enrichr/GSEApy, fgsea and GSEA desktop</b> output as-is
-    (<code>denali formats</code>). An R&sup2; is not a judgement until you know
-    what normal looks like &mdash; the field&rsquo;s median is <b>0.224</b>. That
-    output is <em>our own</em> screen, and the tool says it about us.</p>
+    clusterProfiler, Enrichr/GSEApy, MAGeCK gene_summary, fgsea, GSEA desktop,
+    drugZ and BAGEL2</b> output as-is (<code>denali formats</code>). An R&sup2;
+    is not a judgement until you know what normal looks like &mdash; the
+    field&rsquo;s median is <b>0.224</b>.</p>
   </div>
   <div>
-    <h3>2 &middot; see what leaves your top ten</h3>
-    <pre class="cmd">denali rerank my_results.csv --top 10</pre>
-    <pre class="out">Of your top 10, <b>3 hold</b> their place
-once set size is accounted for
-and <b>7 do not</b>.
-
-MYC_TARGETS_V1   194 genes   <b>1 &rarr; 24</b>
-E2F_TARGETS      190 genes   <b>2 &rarr; 21</b>
-G2M_CHECKPOINT   182 genes   <b>3 &rarr; 19</b></pre>
-    <p class="note"><b>That is our own screen, and our own number one.</b> The
-    largest set in the collection returned the most hits, and once you ask how
-    many hits a set that size returns anyway, it falls twenty-three places.</p>
-    <p class="note"><b>Then it grades its own correction.</b> Re-audit the
-    re-ranked list and the score has to drop, or the correction did not work on
+    <h3>2 &middot; what the CLI adds</h3>
+    <pre class="cmd">denali audit results.csv --json
+denali replication results.csv --hits-b screen2</pre>
+    <p class="note"><b>It grades its own correction.</b> Re-audit the re-ranked
+    list and the score has to drop, or the correction did not work on
     your data &mdash; and you know that before you publish, not after. On ours:
     <b>{SIZE_R2} CONFOUNDED &rarr; 0.0000 NOT SIZE-DOMINATED</b>. The tool still
-    refuses to say the three survivors are real; it reports what was carried by
+    refuses to say the survivors are real; it reports what was carried by
     size, not what to chase.</p>
+    <p class="note"><b>Replication has a price too.</b> When two screens agree,
+    <code>denali replication</code> measures how much of the agreement is set
+    size &mdash; both screens confounded the same way agree for the same wrong
+    reason.</p>
   </div>
 </div>
 
@@ -1129,6 +1638,10 @@ $("agSave").onclick=()=>{{
 }};
 </script>
 
+<script>
+{AUDIT_SCRIPT}
+</script>
+
 {figure("fig2_gate_failure.png")}
 
 <!-- 5b. two screens -->
@@ -1326,7 +1839,7 @@ frozen predictor &nbsp;<b>610f2a75…</b> hashed before the held-out set was ope
 held-out evaluation &nbsp;<b>FAILED</b> — {NGATE} of {NHELD} measurable, balanced accuracy {BAL}, ρ {RHO:+.3f} CI [{CI[0]:+.3f}, {CI[1]:+.3f}]<br>
 controls &nbsp;<b>{N_FAIL} of {N_CTRL} FAIL</b>, all reported<br>
 scorer unchanged &nbsp;<b>{PROV["seal"].get("scorer_unchanged", PROV["seal"].get("seal_intact"))}</b><br>
-every figure and number above is read from results/frozen/ at build time · nothing on this page is recomputed<br>
+every figure and number above is read from results/frozen/ at build time · the only thing this page computes is the audit you feed it, and a parity test holds that equal to the packaged tool<br>
 <a href="https://github.com/alejandro-publius/denali">github.com/alejandro-publius/denali</a>
 </footer>
 

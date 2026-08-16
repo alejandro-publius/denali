@@ -1,6 +1,6 @@
 # denali — most of what looks like biology in a genome-scale perturbation screen is not biology
 
-**re:AGENT 2026 · Track A · `github.com/alejandro-publius/denali`**
+**`github.com/alejandro-publius/denali`**
 
 ---
 

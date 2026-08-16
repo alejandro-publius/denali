@@ -12,7 +12,7 @@
 
 ## Why this file exists
 
-Kexin Huang is judging. Biomni's central claim is **zero-shot generalization to
+Biomni's central claim is **zero-shot generalization to
 unseen tasks with no task-specific tuning.** A result on a program the pipeline
 was built against is not evidence of that. This file is the unseen task.
 

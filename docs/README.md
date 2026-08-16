@@ -1,6 +1,6 @@
 # Documentation index
 
-Twenty-seven files is a lot to land in. Read in this order depending on what you
+33 files is a lot to land in. Read in this order depending on what you
 came to check.
 
 ## If you have five minutes

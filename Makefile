@@ -2,7 +2,7 @@
 #
 #   make setup     create the venv and install pinned deps
 #   make data      print the ONE manual step (470 MB substrate download)
-#   make all       reproduce everything deterministic   (~22 min)
+#   make all       reproduce everything deterministic   (~13 min, measured 12m05s)
 #   make page      rebuild index.html from the frozen numbers
 #   make clean     remove generated outputs (keeps data/raw)
 #

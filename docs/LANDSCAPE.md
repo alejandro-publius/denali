@@ -254,10 +254,14 @@ Nothing about the result. It changes the framing:
 
 ---
 
-## 6. Time-sensitive: Virtual Cell Challenge 2026 opens 20 August
+## 6. Virtual Cell Challenge 2026, round two
 
-Arc Institute — a co-host of this event — opens round two of the Virtual Cell
-Challenge on **Thursday 20 August 2026**, four days after this hackathon ends.
+*Written before 16 August 2026 as a time-sensitive note, and kept because the
+substance holds. The hackathon it refers to was not entered, so "four days from
+now" is no longer the point — the overlap with this project's finding is.*
+
+Arc Institute — a co-host of that event — opened round two of the Virtual Cell
+Challenge on **Thursday 20 August 2026**.
 Announced scope: *"a new problem to solve and a wider scope"*; the 2025 wrap-up
 signals expansion toward **combinatorial perturbations and cross-cell-type
 generalization**. Round one drew 5,000+ registrants across 114 countries and 300+

@@ -169,6 +169,35 @@ def main() -> int:
                   f"{m.group(0)!r} -- a commit count after a named SHA goes stale "
                   "the moment anyone pushes; name the commit and let the reader re-run")
 
+    # A markdown table with a blank line in it silently becomes literal pipe
+    # text. The findings table -- the single source of truth this whole suite
+    # parses -- shipped with five blank lines in it and a paragraph splitting
+    # rows 9 and 10, so seven of eleven rows did not render on GitHub at all.
+    # The parser that reads it does not care about blank lines; a reader does.
+    for s, txt in texts.items():
+        if not s.endswith(".md"):
+            continue
+        block, blank_in_table, para_in_table = [], 0, 0
+        prev_pipe = False
+        for i, ln in enumerate(txt.split("\n")):
+            is_pipe = ln.startswith("|")
+            if prev_pipe and not is_pipe and ln.strip():
+                # a non-blank non-pipe line directly after a row: fine only if
+                # the table has ended (no pipe row follows within 2 lines)
+                nxt = txt.split("\n")[i + 1:i + 3]
+                if any(x.startswith("|") for x in nxt):
+                    para_in_table += 1
+            if prev_pipe and not ln.strip():
+                nxt = txt.split("\n")[i + 1:i + 2]
+                if nxt and nxt[0].startswith("|"):
+                    blank_in_table += 1
+            prev_pipe = is_pipe
+        check(f"cross-surface: no markdown table in {s} is broken by a blank line "
+              "or a paragraph",
+              blank_in_table == 0 and para_in_table == 0,
+              f"{blank_in_table} blank line(s) and {para_in_table} paragraph(s) "
+              "inside a table -- those rows render as literal pipes")
+
     for p in passed:
         print(f"PASS  {p}")
     for f in failed:

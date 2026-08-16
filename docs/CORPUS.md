@@ -135,6 +135,17 @@ places.
   our own annotation arm suggests that changes the picture. Not run here.
 - **Selection into ORCS.** Curated screens are not a random sample of screens run.
 
+## What this arm measured, and what it left open
+
+An R² is a variance share. It does not say whether the top of a list would change,
+which is the only part a lab acts on. `results/corpus_rerank/` applies the packaged
+correction to these same screens and counts what leaves the top ten — post-hoc, an
+extension of this arm rather than a twelfth evaluation. The short answer is that the
+median published screen keeps nine of its top ten, so a size-alone R² near this arm's
+median usually does not reorder the head of a ranking; our own screen keeps three.
+That bounds the finding here rather than extending it, which is why it is linked from
+the arm it qualifies.
+
 ## Reproduce it
 
 ```bash

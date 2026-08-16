@@ -1,0 +1,132 @@
+"""denali — the check you run on a hit list before you spend a year on it."""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+import pandas as pd
+
+from . import __version__
+from .adapters import SUPPORTED, describe_failure, detect
+from .core import audit, audit_replication
+
+
+def _read(path: str) -> pd.DataFrame:
+    p = Path(path)
+    if not p.exists():
+        sys.exit(f"no such file: {path}")
+    sep = "\t" if p.suffix.lower() in (".tsv", ".tab", ".txt") else None
+    return pd.read_csv(p, sep=sep, engine="python")
+
+
+def _resolve(df, a):
+    """Explicit column names win; otherwise sniff the format."""
+    if a.set and a.size and a.hits:
+        from .adapters import Mapping
+        return Mapping("manual", a.set, df[a.size], df[a.hits])
+    m = detect(df)
+    if m is None:
+        sys.exit(describe_failure(df))
+    return m
+
+
+def _emit(result, as_json: bool, header: str = "") -> None:
+    if as_json:
+        print(json.dumps(result, indent=2))
+        return
+    if header:
+        print(header)
+    verdict = result.get("verdict")
+    if verdict:
+        print(f"\n  {verdict}: {result['reading']}\n")
+        print(f"  {result['what_to_do']}\n")
+        print(f"  sets {result['n_sets']}   size range "
+              f"{result['size_range'][0]}-{result['size_range'][1]}   "
+              f"R2 size-alone {result['r2_size_alone']}")
+        if "r2_vif" in result:
+            print(f"  with inter-gene correlation (full VIF): R2 {result['r2_vif']}")
+        if result.get("sets_with_zero_hits"):
+            print(f"  {result['sets_with_zero_hits']} sets returned nothing")
+    else:
+        print(f"\n  {result['reading']}\n")
+        print(f"  agreement {result['agreement_raw']} -> "
+              f"{result['agreement_after_removing_size']} after removing size "
+              f"({result['n_sets']} paired sets)")
+    print(f"\n  {result['what_this_is_not']}")
+
+
+def cmd_audit(a) -> int:
+    df = _read(a.file)
+    m = _resolve(df, a)
+    corr = df[a.corr] if a.corr else None
+    res = audit(m.size, m.hits, corr)
+    res["input_format"] = m.fmt
+    if m.approximate:
+        res["input_warning"] = m.note
+    head = f"  read as {m.fmt}" + (f" — {m.note}" if m.note else "")
+    if m.approximate:
+        head += "\n  ⚠ APPROXIMATE INPUT — see the note above; the verdict inherits it."
+    _emit(res, a.json, head)
+    return 0
+
+
+def cmd_replication(a) -> int:
+    df = _read(a.file)
+    m = _resolve(df, a)
+    if a.hits_b not in df.columns:
+        sys.exit(f"--hits-b column {a.hits_b!r} not found. columns: {list(df.columns)}")
+    res = audit_replication(m.size, m.hits, df[a.hits_b])
+    res["input_format"] = m.fmt
+    _emit(res, a.json, f"  read as {m.fmt}")
+    return 0
+
+
+def cmd_formats(a) -> int:
+    print("Formats recognised without any flags:\n")
+    for f in SUPPORTED:
+        print(f"  {f}")
+    print("\nAnything else: name the columns yourself.")
+    print("  denali audit FILE --set <col> --size <col> --hits <col>")
+    print("\n  size = how many members that set had")
+    print("  hits = how many of them came back significant")
+    return 0
+
+
+def main(argv=None) -> int:
+    p = argparse.ArgumentParser(
+        prog="denali",
+        description="How much of your gene-set ranking is explained by how the sets "
+                    "were built, rather than by biology?")
+    p.add_argument("--version", action="version", version=f"denali {__version__}")
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    def shared(sp):
+        sp.add_argument("file", help="the results table your analysis already produced")
+        sp.add_argument("--set", help="column of set names")
+        sp.add_argument("--size", help="column of members per set")
+        sp.add_argument("--hits", help="column of significant results per set")
+        sp.add_argument("--json", action="store_true", help="machine-readable output")
+
+    a1 = sub.add_parser("audit", help="audit one ranking")
+    shared(a1)
+    a1.add_argument("--corr", help="optional: mean inter-gene correlation per set")
+    a1.set_defaults(fn=cmd_audit)
+
+    a2 = sub.add_parser("replication",
+                        help="two screens agreed — how much of that is set size?")
+    shared(a2)
+    a2.add_argument("--hits-b", required=True, dest="hits_b",
+                    help="column of hits from the SECOND, independent screen")
+    a2.set_defaults(fn=cmd_replication)
+
+    a3 = sub.add_parser("formats", help="which tool outputs are recognised")
+    a3.set_defaults(fn=cmd_formats)
+
+    a = p.parse_args(argv)
+    return a.fn(a)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

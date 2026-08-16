@@ -1,0 +1,148 @@
+"""Read the table your enrichment tool already gave you.
+
+The check itself needs three columns: a set name, how many members that set had, and
+how many came back significant. No enrichment tool on earth calls them that, which is
+the single largest reason a check like this does not get run. So this module knows the
+output shapes of the tools people actually use and maps them itself.
+
+WHERE A TOOL DOES NOT REPORT A HIT COUNT, THIS SAYS SO rather than substituting
+something and hoping. fgsea and GSEA desktop report an enrichment score per set, not a
+count of significant members; the closest honest stand-in is the leading-edge subset,
+and an adapter that uses it flags `approximate=True` so the caller can decide. Silently
+inventing the input to a check about silently invented inputs would be a poor joke.
+"""
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass, field
+
+import pandas as pd
+
+
+@dataclass
+class Mapping:
+    fmt: str
+    set_col: str
+    size: pd.Series
+    hits: pd.Series
+    approximate: bool = False
+    note: str = ""
+    corr: pd.Series | None = field(default=None)
+
+
+def _has(df: pd.DataFrame, *cols: str) -> bool:
+    lower = {c.lower().strip() for c in df.columns}
+    return all(c.lower() in lower for c in cols)
+
+
+def _col(df: pd.DataFrame, name: str) -> str:
+    for c in df.columns:
+        if c.lower().strip() == name.lower():
+            return c
+    raise KeyError(name)
+
+
+def _ratio_num(series: pd.Series) -> pd.Series:
+    """'5/200' -> 5 ; also tolerates '5 / 200'."""
+    return series.astype(str).str.extract(r"^\s*(\d+)\s*/", expand=False).astype(float)
+
+
+def _ratio_den(series: pd.Series) -> pd.Series:
+    """'5/200' -> 200."""
+    return series.astype(str).str.extract(r"/\s*(\d+)\s*$", expand=False).astype(float)
+
+
+def _denali(df):
+    if not _has(df, "set", "size", "hits"):
+        return None
+    return Mapping("denali", _col(df, "set"), df[_col(df, "size")], df[_col(df, "hits")])
+
+
+def _gprofiler(df):
+    if not _has(df, "term_size", "intersection_size"):
+        return None
+    name = "term_name" if _has(df, "term_name") else "term_id"
+    return Mapping("g:Profiler", _col(df, name),
+                   df[_col(df, "term_size")], df[_col(df, "intersection_size")],
+                   note="term_size and intersection_size map exactly onto size and hits")
+
+
+def _david(df):
+    if not _has(df, "term", "count", "pop hits"):
+        return None
+    return Mapping("DAVID", _col(df, "term"),
+                   df[_col(df, "pop hits")], df[_col(df, "count")],
+                   note="'Pop Hits' is the set size in the background; 'Count' is the overlap")
+
+
+def _clusterprofiler(df):
+    if not _has(df, "bgratio", "count"):
+        return None
+    name = "description" if _has(df, "description") else "id"
+    return Mapping("clusterProfiler", _col(df, name),
+                   _ratio_num(df[_col(df, "bgratio")]), df[_col(df, "count")],
+                   note="size parsed from the numerator of BgRatio; hits is Count")
+
+
+def _enrichr(df):
+    if not _has(df, "term", "overlap"):
+        return None
+    ov = df[_col(df, "overlap")]
+    return Mapping("Enrichr / GSEApy", _col(df, "term"),
+                   _ratio_den(ov), _ratio_num(ov),
+                   note="size and hits parsed from the Overlap column ('5/200')")
+
+
+def _fgsea(df):
+    if not _has(df, "pathway", "size"):
+        return None
+    if _has(df, "leadingedge"):
+        le = df[_col(df, "leadingedge")].astype(str)
+        hits = le.str.count(r"[,\s]+").add(1).where(le.str.strip().ne(""), 0)
+        return Mapping("fgsea", _col(df, "pathway"), df[_col(df, "size")], hits,
+                       approximate=True,
+                       note="fgsea reports no count of significant members; the "
+                            "leading-edge subset size is used as the closest honest "
+                            "stand-in. Treat the number as indicative, not exact.")
+    return None
+
+
+def _gsea_desktop(df):
+    if not _has(df, "name", "size"):
+        return None
+    for cand in ("fdr q-val", "nom p-val"):
+        if _has(df, cand):
+            q = pd.to_numeric(df[_col(df, cand)], errors="coerce")
+            return Mapping("GSEA desktop", _col(df, "name"), df[_col(df, "size")],
+                           (q < 0.05).astype(int) * df[_col(df, "size")],
+                           approximate=True,
+                           note="GSEA desktop reports no per-set hit count; sets below "
+                                f"{cand} 0.05 are credited their full size, which is a "
+                                "coarse stand-in. Prefer a tool that reports an overlap.")
+    return None
+
+
+ADAPTERS = (_denali, _gprofiler, _david, _clusterprofiler, _enrichr, _fgsea, _gsea_desktop)
+
+SUPPORTED = ("denali", "g:Profiler", "DAVID", "clusterProfiler",
+             "Enrichr / GSEApy", "fgsea", "GSEA desktop")
+
+
+def detect(df: pd.DataFrame) -> Mapping | None:
+    """First adapter whose required columns are all present. Exact formats win."""
+    for fn in ADAPTERS:
+        m = fn(df)
+        if m is not None:
+            return m
+    return None
+
+
+def describe_failure(df: pd.DataFrame) -> str:
+    return (
+        "Could not recognise this table.\n\n"
+        f"  columns found: {list(df.columns)}\n\n"
+        f"  formats understood: {', '.join(SUPPORTED)}\n\n"
+        "  Name the columns yourself instead:\n"
+        "      denali audit FILE --set <col> --size <col> --hits <col>\n\n"
+        "  size = how many members that set had.  hits = how many were significant."
+    )

@@ -1,6 +1,11 @@
 # --- environments ---
 .venv
 __pycache__/
+
+# --- packaging artifacts (packages/denali-audit builds these on `pip install -e .`) ---
+*.egg-info/
+build/
+dist/
 *.pyc
 .pytest_cache/
 .ipynb_checkpoints/

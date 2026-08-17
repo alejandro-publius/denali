@@ -2237,6 +2237,50 @@ def main() -> int:
         check("hit-rule: no gene set is named in the arm's conclusions",
               not re.search(r"HALLMARK_[A-Z0-9_]+", json.dumps(hr)))
 
+    # ---------------- the external-model ledger: empty rows must stay empty ---
+    # This ledger's entire value is that it reports NO floor for any external model
+    # and says which of ACCESS, SHAPE or STRUCTURE blocks each one. The failure mode
+    # worth guarding is not drift in a number -- there are no numbers -- it is the
+    # ledger quietly acquiring an estimated row, which would be fabrication. So the
+    # check is that every row is still labelled uncomputable with a stated blocker.
+    _mf = ROOT / "results" / "model_floor" / "model_floor.json"
+    check("model-floor: the artifact the checks below it read is present",
+          _mf.exists(),
+          "" if _mf.exists() else
+          f"MISSING {_mf.relative_to(ROOT)} — run .venv/bin/python -m "
+          f"src.model_floor_audit")
+    if _mf.exists():
+        mf = json.loads(_mf.read_text())
+        _cands = mf["candidates"]
+        check("model-floor: no candidate reports a computable floor, and the count "
+              "agrees with the rows",
+              mf["n_floors_computable"] == 0
+              and all(c["floor_computable"] != "yes" for c in _cands)
+              and mf["n_candidates"] == len(_cands),
+              f"{mf['n_floors_computable']} computable of {len(_cands)}")
+        check("model-floor: every uncomputable row names its blocker as ACCESS, "
+              "SHAPE or STRUCTURE rather than leaving it unexplained",
+              all(any(b in c["why_not"] for b in ("ACCESS", "SHAPE", "STRUCTURE"))
+                  for c in _cands if c["floor_computable"] != "yes"),
+              str([c["why_not"][:18] for c in _cands]))
+        check("model-floor: the ledger states that an estimated row would be "
+              "refused, so a later session cannot read the gaps as an invitation",
+              "fabrication" in mf["empty_rows_are_deliberate"])
+        # The prior-art record is the load-bearing part of this ledger, because it is
+        # what corrects the plan. If it ever shrinks below the nine entries that were
+        # read from primary sources, the correction has been weakened.
+        check("model-floor: the prior-art record still carries every entry the "
+              "correction rests on",
+              mf["n_prior_art"] == len(mf["PRIOR_ART"]) and mf["n_prior_art"] >= 9,
+              f"{mf['n_prior_art']} entries")
+        check("model-floor: the ledger records that it corrects the plan it came "
+              "from rather than only reporting around it",
+              "THE PLAN THIS CORRECTS" in mf
+              and "the source wins" in mf["THE PLAN THIS CORRECTS"])
+        check("model-floor: the ledger declares itself not an evaluation, which is "
+              "why it carries no findings-table row",
+              "NOT an evaluation" in mf["what_this_is"])
+
     # ---------------- G. ARTIFACT -> TABLE: the converse nobody wrote --------
     # docs/NUMBERING.md says the README findings table is the single source of
     # truth for how many evaluations exist, and section F enforces exactly that
@@ -2299,6 +2343,12 @@ def main() -> int:
         # findings-table row, and this line moves to ARM_DIRS.
         "external_nulls": "external screens scored against their own binomial null; "
                           "a scope limit on the tool, in the same family as breadth",
+        # Deliberately NOT an arm: it issues no statistical verdict and computes no
+        # estimate. A reachability-and-applicability ledger plus a prior-art record,
+        # classified with atlas for the same reason. Giving it a findings-table row
+        # would inflate the evaluation count with something that measured nothing.
+        "model_floor": "reachability and prior-art ledger for external perturbation "
+                       "models; issues no verdict, like atlas",
     }
     res_dirs = {p.name for p in (ROOT / "results").iterdir() if p.is_dir()}
     unclassified = sorted(res_dirs - set(ARM_DIRS) - set(NON_ARM_DIRS))

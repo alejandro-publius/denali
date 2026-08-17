@@ -1,0 +1,615 @@
+{
+  "arm": "self-verification \u2014 denali's own claims, checked with denali's own tool",
+  "status": "POST-HOC. Not pre-registered. Reports whatever came back.",
+  "n_checked": 8,
+  "n_distinguishable_from_their_own_null": 3,
+  "n_with_counting_structure": 7,
+  "the_uncomfortable_part": "Our own screen is the only one here that clears its null, and that is NOT evidence that our screen is better science. It is a structural property of the mapping: our hits count perturbations over ~9,800 knockdowns, so set size gets no arithmetic head start and the null sits near zero. The seven external screens are classical overlap enrichment, where hits are counted over each set's own members and the no-biology value is large by construction. We are comparing our own data against an easier baseline than theirs, and a reader should discount the contrast accordingly. Reported because a verification tool that flatters its author is worth nothing.",
+  "what_this_does_not_show": "Nothing about the quality, correctness or reliability of any study whose table appears here. A ranking indistinguishable from its own null is not a wrong result; it is a ranking this particular measure cannot resolve. No study is named as a finding and none is criticised.",
+  "scope": "Collection-level only. No gene, gene set, publication or author is named as a finding. No clinical or wet-lab claim follows.",
+  "rows": [
+    {
+      "name": "denali's own screen (the published 0.4649)",
+      "status": "DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+      "r2_size_alone": 0.4649,
+      "null_expected_r2": 0.0182,
+      "null_ci95": [
+        0.0,
+        0.0981
+      ],
+      "mapping": "non-counting",
+      "verdict_is_stable": true,
+      "n_not_verifiable": 3,
+      "full": {
+        "denali_version": "0.1.0",
+        "what_was_provided": {
+          "source": "results/frozen/program_summary.csv",
+          "n_rows_usable": 50
+        },
+        "claim_as_stated": "Set size alone explains 46.5% of the variance in this screen's gene-set hit ranking.",
+        "not_verifiable": [
+          {
+            "what": "the biology of any set in the ranking",
+            "why": "this tool reads only set sizes and hit counts; it never sees a gene, an effect size, or an experiment"
+          },
+          {
+            "what": "read depth, guide efficacy, batch and replicate structure",
+            "why": "these are other ways a ranking can be carried by how it was measured, and this tool tests none of them"
+          },
+          {
+            "what": "whether the study's conclusion is correct",
+            "why": "a ranking is one line of evidence in a paper and usually not the load-bearing one"
+          }
+        ],
+        "floor": {
+          "r2_size_alone": 0.4649,
+          "mapping": {
+            "structure": "non-counting",
+            "frac_hits_le_size": 0.46,
+            "why": "hit counts here are not bounded by set size, so hits are counted over some other universe than the set's own members. Size has no arithmetic head start."
+          },
+          "no_biology_null": {
+            "kind": "permutation (hits not bounded by size)",
+            "expected_r2": 0.0182,
+            "ci95": [
+              0.0,
+              0.0981
+            ],
+            "n_iter": 300,
+            "position": "ABOVE",
+            "position_stability": 1.0,
+            "verdict_is_stable": true,
+            "distance_to_edge_in_ci_widths": 3.739
+          }
+        },
+        "ranking_verdict": "MORE SIZE-CARRIED THAN ITS OWN NULL",
+        "status": "DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+        "reading": "This ranking is predicted by set size more than a version of itself containing no biology would be: R^2 0.4649 against a null of 0.0182 (95% interval 0.0-0.0981). That means the size relationship here is not merely arithmetic. It does NOT mean the ranking is biologically right -- being distinguishable from a trivial baseline is the lowest bar there is, not a high one.",
+        "claimed_size_share": 0.4649,
+        "delta_vs_measured": 0.0,
+        "delta_reading": "The source states 0.4649; this table measures 0.4649. Difference +0.0000. A difference is not necessarily a discrepancy -- estimands differ, and the source may be computing something adjacent on different rows.",
+        "to_make_checkable": [
+          "state the set size and the count of significant members for every set, not only the significant ones",
+          "state the significance threshold that produced the hit counts",
+          "state whether hit counts are over each set's own members or over a larger universe -- the correct no-biology null differs and so does the reading",
+          "report the size share of the ranking alongside the ranking, so a reader can compare like with like without recomputing it"
+        ],
+        "reproduce": "denali verify results/frozen/program_summary.csv",
+        "symmetry": "Every number above is reproducible by the party being verified, from the same file, with the command above. Nothing was uploaded and nothing left this machine.",
+        "what_this_is_not": "Not a rating of a paper, a laboratory, a company or a person, and not an allegation of any kind. It compares one ranking against a baseline computed from that same ranking's own construction. It names no gene and no gene set, and it nominates nothing."
+      }
+    },
+    {
+      "name": "external: batf3",
+      "status": "NOT DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+      "r2_size_alone": 0.4221,
+      "null_expected_r2": 0.4271,
+      "null_ci95": [
+        0.4186,
+        0.4346
+      ],
+      "mapping": "counting",
+      "verdict_is_stable": true,
+      "n_not_verifiable": 5,
+      "full": {
+        "denali_version": "0.1.0",
+        "what_was_provided": {
+          "source": "audits/external/batf3/std.csv",
+          "n_rows_usable": 2809
+        },
+        "claim_as_stated": null,
+        "not_verifiable": [
+          {
+            "what": "how much of this R^2 is a confound rather than arithmetic",
+            "why": "hits are counted over the sets' own members here, so a count is being regressed on the number of trials that produced it. The no-biology value is large by construction, which is exactly why the raw R^2 is compared against it rather than against zero."
+          },
+          {
+            "what": "the source's own stated size share, compared like with like",
+            "why": "no claimed size share was supplied. Almost no paper reports one, which is the gap this instrument exists in rather than a criticism of any particular source."
+          },
+          {
+            "what": "the biology of any set in the ranking",
+            "why": "this tool reads only set sizes and hit counts; it never sees a gene, an effect size, or an experiment"
+          },
+          {
+            "what": "read depth, guide efficacy, batch and replicate structure",
+            "why": "these are other ways a ranking can be carried by how it was measured, and this tool tests none of them"
+          },
+          {
+            "what": "whether the study's conclusion is correct",
+            "why": "a ranking is one line of evidence in a paper and usually not the load-bearing one"
+          }
+        ],
+        "floor": {
+          "r2_size_alone": 0.4221,
+          "mapping": {
+            "structure": "counting",
+            "frac_hits_le_size": 1.0,
+            "why": "every set's hit count is at most its size, so hits and size are counted over the same members. A count regressed on the number of trials that produced it recovers the trial count, so some of this R^2 is arithmetic rather than biology."
+          },
+          "no_biology_null": {
+            "kind": "binomial constant-rate (hits drawn from the set's own members)",
+            "expected_r2": 0.4271,
+            "ci95": [
+              0.4186,
+              0.4346
+            ],
+            "n_iter": 300,
+            "position": "INSIDE",
+            "position_stability": 1.0,
+            "verdict_is_stable": true,
+            "distance_to_edge_in_ci_widths": 0.219
+          }
+        },
+        "ranking_verdict": "INDISTINGUISHABLE FROM ITS OWN NULL",
+        "status": "NOT DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+        "reading": "R^2 0.4221 against a no-biology null of 0.4271 (95% interval 0.4186-0.4346). By this measure the ranking cannot be told apart from one built the same way with no biology in it. This is a statement about what THIS measure can resolve on THIS table. It is not a finding that the study is wrong, and most published rankings have never been asked the question.",
+        "to_make_checkable": [
+          "state the set size and the count of significant members for every set, not only the significant ones",
+          "state the significance threshold that produced the hit counts",
+          "state whether hit counts are over each set's own members or over a larger universe -- the correct no-biology null differs and so does the reading",
+          "report the size share of the ranking alongside the ranking, so a reader can compare like with like without recomputing it"
+        ],
+        "reproduce": "denali verify audits/external/batf3/std.csv",
+        "symmetry": "Every number above is reproducible by the party being verified, from the same file, with the command above. Nothing was uploaded and nothing left this machine.",
+        "what_this_is_not": "Not a rating of a paper, a laboratory, a company or a person, and not an allegation of any kind. It compares one ranking against a baseline computed from that same ranking's own construction. It names no gene and no gene set, and it nominates nothing."
+      }
+    },
+    {
+      "name": "external: gastric",
+      "status": "DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+      "r2_size_alone": 0.6349,
+      "null_expected_r2": 0.4653,
+      "null_ci95": [
+        0.4439,
+        0.4864
+      ],
+      "mapping": "counting",
+      "verdict_is_stable": true,
+      "n_not_verifiable": 5,
+      "full": {
+        "denali_version": "0.1.0",
+        "what_was_provided": {
+          "source": "audits/external/gastric/std.csv",
+          "n_rows_usable": 147
+        },
+        "claim_as_stated": null,
+        "not_verifiable": [
+          {
+            "what": "how much of this R^2 is a confound rather than arithmetic",
+            "why": "hits are counted over the sets' own members here, so a count is being regressed on the number of trials that produced it. The no-biology value is large by construction, which is exactly why the raw R^2 is compared against it rather than against zero."
+          },
+          {
+            "what": "the source's own stated size share, compared like with like",
+            "why": "no claimed size share was supplied. Almost no paper reports one, which is the gap this instrument exists in rather than a criticism of any particular source."
+          },
+          {
+            "what": "the biology of any set in the ranking",
+            "why": "this tool reads only set sizes and hit counts; it never sees a gene, an effect size, or an experiment"
+          },
+          {
+            "what": "read depth, guide efficacy, batch and replicate structure",
+            "why": "these are other ways a ranking can be carried by how it was measured, and this tool tests none of them"
+          },
+          {
+            "what": "whether the study's conclusion is correct",
+            "why": "a ranking is one line of evidence in a paper and usually not the load-bearing one"
+          }
+        ],
+        "floor": {
+          "r2_size_alone": 0.6349,
+          "mapping": {
+            "structure": "counting",
+            "frac_hits_le_size": 1.0,
+            "why": "every set's hit count is at most its size, so hits and size are counted over the same members. A count regressed on the number of trials that produced it recovers the trial count, so some of this R^2 is arithmetic rather than biology."
+          },
+          "no_biology_null": {
+            "kind": "binomial constant-rate (hits drawn from the set's own members)",
+            "expected_r2": 0.4653,
+            "ci95": [
+              0.4439,
+              0.4864
+            ],
+            "n_iter": 300,
+            "position": "ABOVE",
+            "position_stability": 1.0,
+            "verdict_is_stable": true,
+            "distance_to_edge_in_ci_widths": 3.494
+          }
+        },
+        "ranking_verdict": "MORE SIZE-CARRIED THAN ITS OWN NULL",
+        "status": "DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+        "reading": "This ranking is predicted by set size more than a version of itself containing no biology would be: R^2 0.6349 against a null of 0.4653 (95% interval 0.4439-0.4864). That means the size relationship here is not merely arithmetic. It does NOT mean the ranking is biologically right -- being distinguishable from a trivial baseline is the lowest bar there is, not a high one.",
+        "to_make_checkable": [
+          "state the set size and the count of significant members for every set, not only the significant ones",
+          "state the significance threshold that produced the hit counts",
+          "state whether hit counts are over each set's own members or over a larger universe -- the correct no-biology null differs and so does the reading",
+          "report the size share of the ranking alongside the ranking, so a reader can compare like with like without recomputing it"
+        ],
+        "reproduce": "denali verify audits/external/gastric/std.csv",
+        "symmetry": "Every number above is reproducible by the party being verified, from the same file, with the command above. Nothing was uploaded and nothing left this machine.",
+        "what_this_is_not": "Not a rating of a paper, a laboratory, a company or a person, and not an allegation of any kind. It compares one ranking against a baseline computed from that same ranking's own construction. It names no gene and no gene set, and it nominates nothing."
+      }
+    },
+    {
+      "name": "external: htra3-hnscc-gokegg",
+      "status": "NOT DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+      "r2_size_alone": 0.5183,
+      "null_expected_r2": 0.714,
+      "null_ci95": [
+        0.7046,
+        0.7254
+      ],
+      "mapping": "counting",
+      "verdict_is_stable": true,
+      "n_not_verifiable": 5,
+      "full": {
+        "denali_version": "0.1.0",
+        "what_was_provided": {
+          "source": "audits/external/htra3-hnscc-gokegg/std.csv",
+          "n_rows_usable": 1985
+        },
+        "claim_as_stated": null,
+        "not_verifiable": [
+          {
+            "what": "how much of this R^2 is a confound rather than arithmetic",
+            "why": "hits are counted over the sets' own members here, so a count is being regressed on the number of trials that produced it. The no-biology value is large by construction, which is exactly why the raw R^2 is compared against it rather than against zero."
+          },
+          {
+            "what": "the source's own stated size share, compared like with like",
+            "why": "no claimed size share was supplied. Almost no paper reports one, which is the gap this instrument exists in rather than a criticism of any particular source."
+          },
+          {
+            "what": "the biology of any set in the ranking",
+            "why": "this tool reads only set sizes and hit counts; it never sees a gene, an effect size, or an experiment"
+          },
+          {
+            "what": "read depth, guide efficacy, batch and replicate structure",
+            "why": "these are other ways a ranking can be carried by how it was measured, and this tool tests none of them"
+          },
+          {
+            "what": "whether the study's conclusion is correct",
+            "why": "a ranking is one line of evidence in a paper and usually not the load-bearing one"
+          }
+        ],
+        "floor": {
+          "r2_size_alone": 0.5183,
+          "mapping": {
+            "structure": "counting",
+            "frac_hits_le_size": 1.0,
+            "why": "every set's hit count is at most its size, so hits and size are counted over the same members. A count regressed on the number of trials that produced it recovers the trial count, so some of this R^2 is arithmetic rather than biology."
+          },
+          "no_biology_null": {
+            "kind": "binomial constant-rate (hits drawn from the set's own members)",
+            "expected_r2": 0.714,
+            "ci95": [
+              0.7046,
+              0.7254
+            ],
+            "n_iter": 300,
+            "position": "BELOW",
+            "position_stability": 1.0,
+            "verdict_is_stable": true,
+            "distance_to_edge_in_ci_widths": 8.957
+          }
+        },
+        "ranking_verdict": "LESS SIZE-CARRIED THAN ITS OWN NULL",
+        "status": "NOT DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+        "reading": "R^2 0.5183 against a no-biology null of 0.714 (95% interval 0.7046-0.7254). By this measure the ranking cannot be told apart from one built the same way with no biology in it. This is a statement about what THIS measure can resolve on THIS table. It is not a finding that the study is wrong, and most published rankings have never been asked the question.",
+        "to_make_checkable": [
+          "state the set size and the count of significant members for every set, not only the significant ones",
+          "state the significance threshold that produced the hit counts",
+          "state whether hit counts are over each set's own members or over a larger universe -- the correct no-biology null differs and so does the reading",
+          "report the size share of the ranking alongside the ranking, so a reader can compare like with like without recomputing it"
+        ],
+        "reproduce": "denali verify audits/external/htra3-hnscc-gokegg/std.csv",
+        "symmetry": "Every number above is reproducible by the party being verified, from the same file, with the command above. Nothing was uploaded and nothing left this machine.",
+        "what_this_is_not": "Not a rating of a paper, a laboratory, a company or a person, and not an allegation of any kind. It compares one ranking against a baseline computed from that same ranking's own construction. It names no gene and no gene set, and it nominates nothing."
+      }
+    },
+    {
+      "name": "external: smarca4_ala",
+      "status": "NOT DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+      "r2_size_alone": 0.36,
+      "null_expected_r2": 0.7192,
+      "null_ci95": [
+        0.6872,
+        0.7485
+      ],
+      "mapping": "counting",
+      "verdict_is_stable": true,
+      "n_not_verifiable": 5,
+      "full": {
+        "denali_version": "0.1.0",
+        "what_was_provided": {
+          "source": "audits/external/smarca4_ala/std.csv",
+          "n_rows_usable": 85
+        },
+        "claim_as_stated": null,
+        "not_verifiable": [
+          {
+            "what": "how much of this R^2 is a confound rather than arithmetic",
+            "why": "hits are counted over the sets' own members here, so a count is being regressed on the number of trials that produced it. The no-biology value is large by construction, which is exactly why the raw R^2 is compared against it rather than against zero."
+          },
+          {
+            "what": "the source's own stated size share, compared like with like",
+            "why": "no claimed size share was supplied. Almost no paper reports one, which is the gap this instrument exists in rather than a criticism of any particular source."
+          },
+          {
+            "what": "the biology of any set in the ranking",
+            "why": "this tool reads only set sizes and hit counts; it never sees a gene, an effect size, or an experiment"
+          },
+          {
+            "what": "read depth, guide efficacy, batch and replicate structure",
+            "why": "these are other ways a ranking can be carried by how it was measured, and this tool tests none of them"
+          },
+          {
+            "what": "whether the study's conclusion is correct",
+            "why": "a ranking is one line of evidence in a paper and usually not the load-bearing one"
+          }
+        ],
+        "floor": {
+          "r2_size_alone": 0.36,
+          "mapping": {
+            "structure": "counting",
+            "frac_hits_le_size": 1.0,
+            "why": "every set's hit count is at most its size, so hits and size are counted over the same members. A count regressed on the number of trials that produced it recovers the trial count, so some of this R^2 is arithmetic rather than biology."
+          },
+          "no_biology_null": {
+            "kind": "binomial constant-rate (hits drawn from the set's own members)",
+            "expected_r2": 0.7192,
+            "ci95": [
+              0.6872,
+              0.7485
+            ],
+            "n_iter": 300,
+            "position": "BELOW",
+            "position_stability": 1.0,
+            "verdict_is_stable": true,
+            "distance_to_edge_in_ci_widths": 5.338
+          }
+        },
+        "ranking_verdict": "LESS SIZE-CARRIED THAN ITS OWN NULL",
+        "status": "NOT DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+        "reading": "R^2 0.36 against a no-biology null of 0.7192 (95% interval 0.6872-0.7485). By this measure the ranking cannot be told apart from one built the same way with no biology in it. This is a statement about what THIS measure can resolve on THIS table. It is not a finding that the study is wrong, and most published rankings have never been asked the question.",
+        "to_make_checkable": [
+          "state the set size and the count of significant members for every set, not only the significant ones",
+          "state the significance threshold that produced the hit counts",
+          "state whether hit counts are over each set's own members or over a larger universe -- the correct no-biology null differs and so does the reading",
+          "report the size share of the ranking alongside the ranking, so a reader can compare like with like without recomputing it"
+        ],
+        "reproduce": "denali verify audits/external/smarca4_ala/std.csv",
+        "symmetry": "Every number above is reproducible by the party being verified, from the same file, with the command above. Nothing was uploaded and nothing left this machine.",
+        "what_this_is_not": "Not a rating of a paper, a laboratory, a company or a person, and not an allegation of any kind. It compares one ranking against a baseline computed from that same ranking's own construction. It names no gene and no gene set, and it nominates nothing."
+      }
+    },
+    {
+      "name": "external: tau_lrp1",
+      "status": "DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+      "r2_size_alone": 0.6345,
+      "null_expected_r2": 0.5906,
+      "null_ci95": [
+        0.5765,
+        0.6107
+      ],
+      "mapping": "counting",
+      "verdict_is_stable": true,
+      "n_not_verifiable": 5,
+      "full": {
+        "denali_version": "0.1.0",
+        "what_was_provided": {
+          "source": "audits/external/tau_lrp1/std.csv",
+          "n_rows_usable": 67
+        },
+        "claim_as_stated": null,
+        "not_verifiable": [
+          {
+            "what": "how much of this R^2 is a confound rather than arithmetic",
+            "why": "hits are counted over the sets' own members here, so a count is being regressed on the number of trials that produced it. The no-biology value is large by construction, which is exactly why the raw R^2 is compared against it rather than against zero."
+          },
+          {
+            "what": "the source's own stated size share, compared like with like",
+            "why": "no claimed size share was supplied. Almost no paper reports one, which is the gap this instrument exists in rather than a criticism of any particular source."
+          },
+          {
+            "what": "the biology of any set in the ranking",
+            "why": "this tool reads only set sizes and hit counts; it never sees a gene, an effect size, or an experiment"
+          },
+          {
+            "what": "read depth, guide efficacy, batch and replicate structure",
+            "why": "these are other ways a ranking can be carried by how it was measured, and this tool tests none of them"
+          },
+          {
+            "what": "whether the study's conclusion is correct",
+            "why": "a ranking is one line of evidence in a paper and usually not the load-bearing one"
+          }
+        ],
+        "floor": {
+          "r2_size_alone": 0.6345,
+          "mapping": {
+            "structure": "counting",
+            "frac_hits_le_size": 1.0,
+            "why": "every set's hit count is at most its size, so hits and size are counted over the same members. A count regressed on the number of trials that produced it recovers the trial count, so some of this R^2 is arithmetic rather than biology."
+          },
+          "no_biology_null": {
+            "kind": "binomial constant-rate (hits drawn from the set's own members)",
+            "expected_r2": 0.5906,
+            "ci95": [
+              0.5765,
+              0.6107
+            ],
+            "n_iter": 300,
+            "position": "ABOVE",
+            "position_stability": 1.0,
+            "verdict_is_stable": true,
+            "distance_to_edge_in_ci_widths": 0.696
+          }
+        },
+        "ranking_verdict": "MORE SIZE-CARRIED THAN ITS OWN NULL",
+        "status": "DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+        "reading": "This ranking is predicted by set size more than a version of itself containing no biology would be: R^2 0.6345 against a null of 0.5906 (95% interval 0.5765-0.6107). That means the size relationship here is not merely arithmetic. It does NOT mean the ranking is biologically right -- being distinguishable from a trivial baseline is the lowest bar there is, not a high one.",
+        "to_make_checkable": [
+          "state the set size and the count of significant members for every set, not only the significant ones",
+          "state the significance threshold that produced the hit counts",
+          "state whether hit counts are over each set's own members or over a larger universe -- the correct no-biology null differs and so does the reading",
+          "report the size share of the ranking alongside the ranking, so a reader can compare like with like without recomputing it"
+        ],
+        "reproduce": "denali verify audits/external/tau_lrp1/std.csv",
+        "symmetry": "Every number above is reproducible by the party being verified, from the same file, with the command above. Nothing was uploaded and nothing left this machine.",
+        "what_this_is_not": "Not a rating of a paper, a laboratory, a company or a person, and not an allegation of any kind. It compares one ranking against a baseline computed from that same ranking's own construction. It names no gene and no gene set, and it nominates nothing."
+      }
+    },
+    {
+      "name": "external: yak-pasmc-s007",
+      "status": "NOT DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+      "r2_size_alone": 0.7211,
+      "null_expected_r2": 0.7675,
+      "null_ci95": [
+        0.7536,
+        0.781
+      ],
+      "mapping": "counting",
+      "verdict_is_stable": true,
+      "n_not_verifiable": 5,
+      "full": {
+        "denali_version": "0.1.0",
+        "what_was_provided": {
+          "source": "audits/external/yak-pasmc-s007/std.csv",
+          "n_rows_usable": 675
+        },
+        "claim_as_stated": null,
+        "not_verifiable": [
+          {
+            "what": "how much of this R^2 is a confound rather than arithmetic",
+            "why": "hits are counted over the sets' own members here, so a count is being regressed on the number of trials that produced it. The no-biology value is large by construction, which is exactly why the raw R^2 is compared against it rather than against zero."
+          },
+          {
+            "what": "the source's own stated size share, compared like with like",
+            "why": "no claimed size share was supplied. Almost no paper reports one, which is the gap this instrument exists in rather than a criticism of any particular source."
+          },
+          {
+            "what": "the biology of any set in the ranking",
+            "why": "this tool reads only set sizes and hit counts; it never sees a gene, an effect size, or an experiment"
+          },
+          {
+            "what": "read depth, guide efficacy, batch and replicate structure",
+            "why": "these are other ways a ranking can be carried by how it was measured, and this tool tests none of them"
+          },
+          {
+            "what": "whether the study's conclusion is correct",
+            "why": "a ranking is one line of evidence in a paper and usually not the load-bearing one"
+          }
+        ],
+        "floor": {
+          "r2_size_alone": 0.7211,
+          "mapping": {
+            "structure": "counting",
+            "frac_hits_le_size": 1.0,
+            "why": "every set's hit count is at most its size, so hits and size are counted over the same members. A count regressed on the number of trials that produced it recovers the trial count, so some of this R^2 is arithmetic rather than biology."
+          },
+          "no_biology_null": {
+            "kind": "binomial constant-rate (hits drawn from the set's own members)",
+            "expected_r2": 0.7675,
+            "ci95": [
+              0.7536,
+              0.781
+            ],
+            "n_iter": 300,
+            "position": "BELOW",
+            "position_stability": 1.0,
+            "verdict_is_stable": true,
+            "distance_to_edge_in_ci_widths": 1.186
+          }
+        },
+        "ranking_verdict": "LESS SIZE-CARRIED THAN ITS OWN NULL",
+        "status": "NOT DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+        "reading": "R^2 0.7211 against a no-biology null of 0.7675 (95% interval 0.7536-0.781). By this measure the ranking cannot be told apart from one built the same way with no biology in it. This is a statement about what THIS measure can resolve on THIS table. It is not a finding that the study is wrong, and most published rankings have never been asked the question.",
+        "to_make_checkable": [
+          "state the set size and the count of significant members for every set, not only the significant ones",
+          "state the significance threshold that produced the hit counts",
+          "state whether hit counts are over each set's own members or over a larger universe -- the correct no-biology null differs and so does the reading",
+          "report the size share of the ranking alongside the ranking, so a reader can compare like with like without recomputing it"
+        ],
+        "reproduce": "denali verify audits/external/yak-pasmc-s007/std.csv",
+        "symmetry": "Every number above is reproducible by the party being verified, from the same file, with the command above. Nothing was uploaded and nothing left this machine.",
+        "what_this_is_not": "Not a rating of a paper, a laboratory, a company or a person, and not an allegation of any kind. It compares one ranking against a baseline computed from that same ranking's own construction. It names no gene and no gene set, and it nominates nothing."
+      }
+    },
+    {
+      "name": "external: zga_crispra",
+      "status": "NOT DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+      "r2_size_alone": 0.8826,
+      "null_expected_r2": 0.7884,
+      "null_ci95": [
+        0.6773,
+        0.8965
+      ],
+      "mapping": "counting",
+      "verdict_is_stable": true,
+      "n_not_verifiable": 5,
+      "full": {
+        "denali_version": "0.1.0",
+        "what_was_provided": {
+          "source": "audits/external/zga_crispra/std.csv",
+          "n_rows_usable": 17
+        },
+        "claim_as_stated": null,
+        "not_verifiable": [
+          {
+            "what": "how much of this R^2 is a confound rather than arithmetic",
+            "why": "hits are counted over the sets' own members here, so a count is being regressed on the number of trials that produced it. The no-biology value is large by construction, which is exactly why the raw R^2 is compared against it rather than against zero."
+          },
+          {
+            "what": "the source's own stated size share, compared like with like",
+            "why": "no claimed size share was supplied. Almost no paper reports one, which is the gap this instrument exists in rather than a criticism of any particular source."
+          },
+          {
+            "what": "the biology of any set in the ranking",
+            "why": "this tool reads only set sizes and hit counts; it never sees a gene, an effect size, or an experiment"
+          },
+          {
+            "what": "read depth, guide efficacy, batch and replicate structure",
+            "why": "these are other ways a ranking can be carried by how it was measured, and this tool tests none of them"
+          },
+          {
+            "what": "whether the study's conclusion is correct",
+            "why": "a ranking is one line of evidence in a paper and usually not the load-bearing one"
+          }
+        ],
+        "floor": {
+          "r2_size_alone": 0.8826,
+          "mapping": {
+            "structure": "counting",
+            "frac_hits_le_size": 1.0,
+            "why": "every set's hit count is at most its size, so hits and size are counted over the same members. A count regressed on the number of trials that produced it recovers the trial count, so some of this R^2 is arithmetic rather than biology."
+          },
+          "no_biology_null": {
+            "kind": "binomial constant-rate (hits drawn from the set's own members)",
+            "expected_r2": 0.7884,
+            "ci95": [
+              0.6773,
+              0.8965
+            ],
+            "n_iter": 300,
+            "position": "INSIDE",
+            "position_stability": 1.0,
+            "verdict_is_stable": true,
+            "distance_to_edge_in_ci_widths": 0.063
+          }
+        },
+        "ranking_verdict": "INDISTINGUISHABLE FROM ITS OWN NULL",
+        "status": "NOT DISTINGUISHABLE FROM THE CONSTRUCTION-ONLY BASELINE",
+        "reading": "R^2 0.8826 against a no-biology null of 0.7884 (95% interval 0.6773-0.8965). By this measure the ranking cannot be told apart from one built the same way with no biology in it. This is a statement about what THIS measure can resolve on THIS table. It is not a finding that the study is wrong, and most published rankings have never been asked the question.",
+        "to_make_checkable": [
+          "state the set size and the count of significant members for every set, not only the significant ones",
+          "state the significance threshold that produced the hit counts",
+          "state whether hit counts are over each set's own members or over a larger universe -- the correct no-biology null differs and so does the reading",
+          "report the size share of the ranking alongside the ranking, so a reader can compare like with like without recomputing it"
+        ],
+        "reproduce": "denali verify audits/external/zga_crispra/std.csv",
+        "symmetry": "Every number above is reproducible by the party being verified, from the same file, with the command above. Nothing was uploaded and nothing left this machine.",
+        "what_this_is_not": "Not a rating of a paper, a laboratory, a company or a person, and not an allegation of any kind. It compares one ranking against a baseline computed from that same ranking's own construction. It names no gene and no gene set, and it nominates nothing."
+      }
+    }
+  ]
+}

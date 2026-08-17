@@ -138,6 +138,14 @@ def audit(sizes, hits, corr=None) -> dict:
     # sizes are integers, so ptp() == 0 states the intent instead of discovering it.
     # Relying on the transformed residual is what let constant-hit tables through.
     degenerate = bool(np.ptp(h) == 0 or np.ptp(s) == 0)
+
+    # SET BEFORE THE EARLY RETURN. `mapping` describes the table, not the verdict,
+    # so it must be present even when no verdict can be reached. It used to be
+    # attached after this branch, so audit() returned a dict without it on every
+    # degenerate input -- and verify() raised KeyError on exactly the inputs it
+    # exists to handle gracefully. Found by the verify suite, not by review.
+    out["mapping"] = _nulls.structure(s, h)
+
     if degenerate or not np.isfinite(share):
         # WHY the R^2 is undefined decides what to tell the user, and there are
         # two different reasons. Constant SIZE means the predictor has no
@@ -196,7 +204,6 @@ def audit(sizes, hits, corr=None) -> dict:
     # The null is a SIZE-ALONE null, so it is compared against r2_size_alone rather
     # than against the VIF share, for the same reason the corpus percentile is:
     # comparing a VIF number against a size-alone reference is a category error.
-    out["mapping"] = _nulls.structure(s, h)
     null = _nulls.no_biology_null(s, h, _r2)
     pos = _nulls.position(out["r2_size_alone"], null)
     if null is not None:

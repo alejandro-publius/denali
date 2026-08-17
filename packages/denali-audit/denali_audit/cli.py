@@ -11,6 +11,7 @@ import pandas as pd
 from . import __version__
 from .adapters import SUPPORTED, describe_failure, detect
 from .core import BASELINE_METRICS, audit, audit_replication, baseline, rerank
+from .verify import verify as _verify
 
 
 def _read(path: str) -> pd.DataFrame:
@@ -189,6 +190,62 @@ def cmd_floor(a) -> int:
     return 0
 
 
+def cmd_verify(a) -> int:
+    """Assess a claim you did not produce, against a baseline from its own data."""
+    df = _read(a.file)
+    m = _resolve(df, a)
+    cmd = f"denali verify {a.file}"
+    if a.claim:
+        cmd += ' --claim "..."'
+    r = _verify(m.size, m.hits, claim=a.claim, claimed_size_share=a.claimed_size_share,
+                source=a.file, command=cmd)
+    if a.json:
+        print(json.dumps(r, indent=2))
+        return 0
+
+    print(f"\n  denali verify   ·   v{r['denali_version']}   ·   {a.file}")
+    print(f"  read as {m.fmt}" + (f" — {m.note}" if m.note else ""))
+    if m.approximate:
+        print("  NOTE: this format reports no exact per-set hit count; the mapping "
+              "above is a stand-in and the reading is indicative.")
+    if r.get("claim_as_stated"):
+        print(f"\n  THE CLAIM, AS STATED BY THE SOURCE\n    \"{r['claim_as_stated']}\"")
+
+    print(f"\n  {r['status']}")
+    if r.get("reading"):
+        print(f"\n  {r['reading']}")
+    elif r.get("why"):
+        print(f"\n  {r['why']}")
+
+    f = r.get("floor")
+    if f and f.get("no_biology_null"):
+        n = f["no_biology_null"]
+        print(f"\n  THE BASELINE, COMPUTED FROM THIS TABLE")
+        print(f"    measured R2 size-alone   {f['r2_size_alone']}")
+        print(f"    no-biology null          {n['expected_r2']}  "
+              f"(95% {n['ci95'][0]}-{n['ci95'][1]}, {n['n_iter']} draws)")
+        print(f"    null kind                {n['kind']}")
+        print(f"    mapping                  {f['mapping']['structure']} — "
+              f"{f['mapping']['why']}")
+        if n.get("verdict_is_stable") is False:
+            print("    ⚠ BORDERLINE — this verdict changes under redrawing of the null")
+    if r.get("delta_reading"):
+        print(f"\n  AGAINST THE SOURCE'S OWN NUMBER\n    {r['delta_reading']}")
+
+    print(f"\n  WHAT COULD NOT BE VERIFIED FROM WHAT WAS PROVIDED  "
+          f"({len(r['not_verifiable'])})")
+    for item in r["not_verifiable"]:
+        print(f"    · {item['what']}")
+        print(f"      {item['why']}")
+    print(f"\n  WHAT THE SOURCE WOULD HAVE NEEDED TO REPORT")
+    for s in r["to_make_checkable"]:
+        print(f"    · {s}")
+    print(f"\n  REPRODUCE\n    {r['reproduce']}")
+    print(f"\n  {r['symmetry']}")
+    print(f"\n  {r['what_this_is_not']}\n")
+    return 0
+
+
 def cmd_formats(a) -> int:
     print("Formats recognised without any flags:\n")
     for f in SUPPORTED:
@@ -256,6 +313,21 @@ def main(argv=None) -> int:
                     help="BioGRID ORCS screen id, e.g. 100")
     a6.add_argument("--json", action="store_true", help="machine-readable output")
     a6.set_defaults(fn=cmd_floor)
+
+    a7 = sub.add_parser(
+        "verify",
+        help="assess a claim you did not produce against a baseline from its own data")
+    a7.add_argument("file", help="the supplementary table the claim rests on")
+    a7.add_argument("--claim", default=None,
+                    help="the claim, quoted verbatim from the source, for the record")
+    a7.add_argument("--claimed-size-share", type=float, default=None,
+                    dest="claimed_size_share",
+                    help="the size share the source itself states, if it states one")
+    a7.add_argument("--set", help="name the set column yourself")
+    a7.add_argument("--size", help="name the size column yourself")
+    a7.add_argument("--hits", help="name the hits column yourself")
+    a7.add_argument("--json", action="store_true", help="machine-readable output")
+    a7.set_defaults(fn=cmd_verify)
 
     a3 = sub.add_parser("formats", help="which tool outputs are recognised")
     a3.set_defaults(fn=cmd_formats)

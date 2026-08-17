@@ -2332,6 +2332,13 @@ def main() -> int:
         "atlas": "source survey for a possible corpus expansion; issues no verdict",
         "breadth": "post-hoc boundary condition on the tool, carried as scope limit 6 "
                    "rather than numbered",
+        "verify": "the shipped verify() run against this project's OWN claims and "
+                  "the external tables already committed here. Issues no verdict "
+                  "about any study and adds no evaluation; it is the tool pointed "
+                  "at its author before it is pointed at anyone else",
+        "external_nulls": "the seven committed external screens scored against "
+                          "their own no-biology nulls; evidence about a MAPPING, "
+                          "not a finding about any screen",
         "corpus_rerank": "the shipped rerank() over evaluation 10's screens; part of arm 10",
         # Classified with breadth, and for the same reason: it scores mappings
         # against their own no-biology null to decide what the shipped tool may

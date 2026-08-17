@@ -66,7 +66,15 @@ halfway costs almost none of it.
 Then there is a second table, and it inverts the first.
 
 The board's target is RPE1's **raw** hit ranking, and that ranking is itself
-size-confounded — the study measures size explaining R² 0.214 in RPE1. So a
+size-confounded: over these 50 programs, RPE1's own set sizes explain **R² 0.3090**
+of it. That figure is computed by `scorer/score.py::target_size_confound` and
+restated into `board.md` on every run rather than quoted, because this repository
+holds three different R² values for "size explains RPE1" and they answer three
+different questions — 0.2758 is the RPE1 arm over 49 scoreable programs of the full
+arm, and 0.214 is the concordance arm regressing RPE1 hits on **K562's** sizes
+(`src/concordance.py:65-67`), which is a cross-screen quantity rather than a
+property of RPE1 at all. The one this argument needs is the contamination in the
+target as actually scored, and it was the one no file already contained. So a
 predictor with size stripped out is scored against a target that still contains
 size. Two explanations produce the first table and nothing in it separates them:
 either size predicts RPE1 because the confound replicates and the metric is

@@ -29,7 +29,7 @@ CHALLENGE = HERE.parent
 ROOT = CHALLENGE.parent.parent
 
 sys.path.insert(0, str(ROOT / "packages" / "denali-audit"))
-from denali_audit.core import rerank, _spearman  # noqa: E402
+from denali_audit.core import rerank, _spearman, _r2  # noqa: E402
 from denali_audit import adapters  # noqa: E402
 
 PAIRED = ROOT / "results" / "concordance" / "paired_programs.csv"
@@ -151,11 +151,38 @@ def null_and_bootstrap(size: np.ndarray, truth: np.ndarray) -> dict:
     }
 
 
+def target_size_confound(inp: pd.DataFrame) -> float:
+    """How much of the TARGET is set size? Derived here, never quoted.
+
+    A hand-typed R^2 got into this file and survived review because nothing in the
+    suite pinned it. There are three defensible values in this repository for
+    "size explains RPE1" and they are not interchangeable:
+
+      0.2758  results/rpe1/rpe1_evaluation.json -- the RPE1 arm, 49 scoreable
+              programs of the full arm, RPE1 hits on RPE1's own sizes
+      0.214   results/concordance/cross_screen.json -- the concordance arm, which
+              regresses RPE1 hits on **K562's** n_present (src/concordance.py:65-67),
+              so it is a cross-screen quantity, not a property of RPE1
+      this    RPE1 hits on RPE1's own sizes over the 50 paired programs this
+              challenge actually scores
+
+    The last is the one the argument needs -- it is the contamination in the target
+    as scored -- and it is the one no file in the repository already contained.
+    Computed with the packaged `_r2` so it cannot drift from the tool.
+    """
+    p = pd.read_csv(PAIRED).set_index("program")
+    s = p.loc[list(inp["set"]), "n_present_rpe1"].to_numpy(dtype=float)
+    h = p.loc[list(inp["set"]), "n_hits_q05_rpe1"].to_numpy(dtype=float)
+    return float(_r2(s, np.log10(1.0 + h)))
+
+
 def residual_target_diagnostic(inp: pd.DataFrame) -> list[tuple[str, float, float]]:
     """Rescore every reference entrant against a target with size removed from it too.
 
     The board's target is RPE1's RAW hit ranking, and that ranking is itself
-    size-confounded -- the study measures size explaining R^2 0.214 in RPE1. So a
+    size-confounded -- by how much is computed by `target_size_confound()` below
+    rather than quoted, because three different R^2 values for "size explains RPE1"
+    exist in this repository and they answer three different questions. So a
     predictor with size stripped out is being scored against a target that still
     contains size. Two different things produce that table and the board alone
     cannot tell them apart:
@@ -268,12 +295,12 @@ def main() -> int:
         print(f"{name:38s} {rho:9.4f} {pv:9.4f}{'' if pv < 0.05 else '   n.s.'}")
 
     if a.board:
-        write_board(rows, base, stats, len(inp), diag)
+        write_board(rows, base, stats, len(inp), diag, target_size_confound(inp))
         print(f"\nwrote {BOARD.relative_to(ROOT)}")
     return 0
 
 
-def write_board(rows, base, stats, n_sets, diag) -> None:
+def write_board(rows, base, stats, n_sets, diag, confound) -> None:
     lines = [
         "# Leaderboard — does your method beat set size?",
         "",
@@ -312,9 +339,10 @@ def write_board(rows, base, stats, n_sets, diag) -> None:
         "## The same predictors, scored against a target with size removed from it too",
         "",
         "The table above scores against RPE1's **raw** hit ranking, and that ranking is "
-        "itself size-confounded — the study measures size explaining R² 0.214 in RPE1. So a "
-        "predictor with size stripped out is scored against a target that still contains "
-        "size. Removing size from both sides inverts the order:",
+        f"itself size-confounded: over these 50 programs, RPE1's own set sizes explain "
+        f"**R² {confound:.4f}** of it. So a predictor with size stripped out is scored "
+        "against a target that still contains size. Removing size from both sides inverts "
+        "the order:",
         "",
         "| method | Spearman vs RPE1 residual | permutation p |",
         "|---|--:|--:|",

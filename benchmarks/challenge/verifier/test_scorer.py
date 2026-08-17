@@ -62,6 +62,33 @@ def main() -> int:
     check("raw-hits entry reproduces the study's published cross-screen rho 0.6633",
           abs(naive - 0.6633) < 5e-5, f"got {naive:.6f}")
 
+    print("\nthe target's size confound, which was hand-typed once and must not be again")
+    conf = S.target_size_confound(inp)
+    board = (CHALLENGE / "board.md").read_text() if (CHALLENGE / "board.md").exists() else ""
+    check("board.md states the derived confound, not a quoted one",
+          f"R² {conf:.4f}" in board, f"derived {conf:.4f} absent from board.md")
+    check("README states the derived confound too",
+          f"R² {conf:.4f}" in (CHALLENGE / "README.md").read_text())
+    # The first version of this check was `"0.214" in text and "concordance" not in
+    # text`, which passed while testing nothing: nearly every file here names
+    # results/concordance/, so the second clause was always false. Found by mutating
+    # a bare "R² 0.214" back in and watching the suite stay green. It now pins the
+    # CLAIM form, which is what a reintroduced quote would actually look like.
+    claims = [p.name for p in CHALLENGE.rglob("*.md")
+              if "R² 0.214" in p.read_text() or "R^2 0.214" in p.read_text()]
+    check("no file states the cross-screen 0.214 as if it were the target's confound",
+          not claims, f"stated in {claims}")
+    # Pins the provenance claim the docstring makes: 0.214 is RPE1 hits on K562's
+    # sizes, not on RPE1's. If someone "corrects" it to the RPE1 arm's 0.2758 this
+    # goes red and says why.
+    paired = pd.read_csv(S.PAIRED).set_index("program").loc[sets]
+    cross = S._r2(paired["n_present_k562"].to_numpy(float),
+                  np.log10(1 + paired["n_hits_q05_rpe1"].to_numpy(float)))
+    check("the concordance arm's 0.214 is reproduced as RPE1 hits on K562 sizes",
+          abs(cross - 0.214) < 5e-4, f"got {cross:.4f}")
+    check("that is a different number from the target's own confound",
+          abs(cross - conf) > 0.05, f"{cross:.4f} vs {conf:.4f}")
+
     print("\nthe scope-limit-6 guard, mutated on purpose")
     ok_shape = True
     try:

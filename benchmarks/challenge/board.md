@@ -22,7 +22,7 @@ Two of these rows are also produced by `src/concordance.py`, written months earl
 
 ## The same predictors, scored against a target with size removed from it too
 
-The table above scores against RPE1's **raw** hit ranking, and that ranking is itself size-confounded — the study measures size explaining R² 0.214 in RPE1. So a predictor with size stripped out is scored against a target that still contains size. Removing size from both sides inverts the order:
+The table above scores against RPE1's **raw** hit ranking, and that ranking is itself size-confounded: over these 50 programs, RPE1's own set sizes explain **R² 0.3090** of it. So a predictor with size stripped out is scored against a target that still contains size. Removing size from both sides inverts the order:
 
 | method | Spearman vs RPE1 residual | permutation p |
 |---|--:|--:|

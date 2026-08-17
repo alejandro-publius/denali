@@ -37,8 +37,9 @@ A half-strength correction scores 0.6466 and 0.80, so the cost is not in correct
 but in correcting all the way.
 
 **Then the ordering inverts.** That board scores against RPE1's *raw* hit ranking,
-which is itself size-confounded (size explains R² 0.214 in RPE1), so a
-size-corrected predictor is being scored against a size-contaminated target.
+which is itself size-confounded (over these 50 programs RPE1's own sizes explain
+R² 0.3090 of it), so a size-corrected predictor is being scored against a
+size-contaminated target.
 Removing size from both sides reverses the result: the naive hit count falls to
 +0.2193 and is no longer distinguishable from chance (permutation p = 0.12), the
 size-only baseline goes negative, and the correction is the only entrant clearing

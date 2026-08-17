@@ -464,6 +464,104 @@ and is measured, not waved at: the raw-size predictor moves the median to
 
 Full record: `results/corpus/corpus_audit.json`, `docs/CORPUS.md`.
 
+## Does the verdict depend on who called the hits?
+
+**Evaluation 14. Pre-registered** (`docs/HIT_RULE_PREREG.md`, sha256 `8e39c426…`,
+committed before any value it decides). **Pre-registered claim (b) fired.**
+
+The audit reads a size column and a hit column and had never asked where the hit
+column came from. Every hit count in this project came from one convention, fixed
+in `src/sweep.py` before the sweep and never varied. Holding the screen completely
+fixed and changing **only** the rule that turns the reversal statistic into a hit
+count:
+
+| rule family | rules | R² size alone | verdict |
+|---|---|--:|---|
+| **threshold** | BH q<0.05 (published), uncorrected p<0.05, Bonferroni, \|u_z\|≥2.0 | **0.4530 – 0.5631** | **MORE SIZE-CARRIED THAN ITS OWN NULL** |
+| **fixes the count** | top 2%, top 10%, top 200 per program | undefined | **UNDETERMINED** |
+
+Same screen, same 49 scoreable programs, same size column. The tool moves from
+naming the confound the ranking's dominant feature to **refusing to answer** — and
+says nothing on its output about the convention that decided it. Within the
+threshold family the estimate is stable (spread 0.1101), so the choice of
+*threshold* matters far less than the choice of *family*.
+
+**The reading this forbids, fixed before the numbers were visible.** A quantile rule
+fixes the hit count by construction, so size cannot predict a count that never
+varies. That is **not** evidence such rankings are unconfounded — it is the
+diagnostic going blind. The power asymmetry is untouched; the quantile rule only
+moves it out of the hit count and into the within-program ordering, which `audit()`
+never reads. **This is a new scope limit:** where a hit list was produced by taking a
+top N or a top percentile, denali's audit does not apply, and a clean-looking
+verdict on one is a false reassurance. "Our top 200 hits" is an ordinary way to
+publish a screen.
+
+**It also found a live defect in the shipped package.** The count-fixing rules were
+expected to return `UNDETERMINED` and instead returned an all-clear with a negative
+R². `core.py`'s refusal was guarded by an exact `ss_tot == 0` test on a quantity
+that is only *mathematically* zero, so a constant hit column divided by a denormal
+and the garbage was reported as a real share. Eight of seventeen constant values
+leaked. Fixed at **`5f10e28`**; the published headline is unmoved at 0.4649.
+
+**Why it survived is the transferable part.** The refusal had been added after
+dropping an all-zero-hits table into the page runner — and `k = 0` is one of the few
+values where the exact test accidentally works. It was verified against the single
+input that cannot expose it, then generalised to a class it did not cover.
+
+**Not a correction to the headline, and it cannot be.** `matrix.csv` is not the
+vector the published counts were computed on: hits are counted over 11,258
+perturbation rows and only then collapsed to 9,837 genes by each gene's maximum
+`u_z`. That gap was pre-registered with a kill criterion of 0.10; the published
+convention recomputed here returns **0.4530** against **0.4649**, a gap of
+**0.0119**. Every absolute R² in this arm is substrate-specific.
+
+Full record: `results/hit_rule/`, `docs/HIT_RULE.md`.
+
+## Can denali audit a virtual cell model? No — and the position was occupied
+
+**Not an evaluation**: no statistical verdict, no estimate, no number computed from
+data. A reachability-and-applicability ledger with a prior-art record, in the same
+family as `results/atlas/source_survey.json`. It carries **no findings-table row on
+purpose**, because it measured nothing.
+
+It was built to test a market premise — that the naive baseline in perturbation
+prediction is an unoccupied position. **It is not.** Arc's own Virtual Cell
+Challenge wrap-up does report that models are *"not yet consistently outperforming
+naive baselines across all metrics"* and that *"Almost all models performed worse
+than baseline on MAE"* — but the critique itself is an active published literature
+of **nine** entries, including a Nature Methods paper whose title is the claim
+(Ahlmann-Eltze, Huber & Anders, 22:1657–1661) and an explicit published
+**counter-position** (Miller et al. 2025). The question is contested in print, not
+unexamined.
+
+**Zero floors are computable, for three different reasons** — none of them "we did
+not try":
+
+- **ACCESS** — the VCC leaderboard publishes no per-perturbation predictions and no
+  per-team metric values, so nobody outside can recompute any team's baseline.
+- **SHAPE** — STATE, the Virtual Cell Atlas and Tahoe-100M ship expression
+  matrices, not set-level hit rankings, so denali's quantity does not exist for
+  them.
+- **STRUCTURE** — PerturbHD (Bereket & Leskovec, bioRxiv 2026) is the only public
+  model evaluation operating on **MSigDB Hallmark**, the same collection this
+  project uses, and its hit rule is a top-2% quantile — precisely the input on which
+  evaluation 14 says `audit()` must refuse.
+
+**A result that flatters the field, led with rather than buried:** PerturbHD reports
+that current models **consistently beat the mean baseline** for both experiment
+prioritisation and simulation, while remaining substantially less accurate than
+experimental replicates.
+
+What survives is what `README.md` already claimed — *"The method is not novel. The
+atlas, the scale and the product are."* Every one of the nine scores a model's
+predicted expression against a simple predictor; denali scores a published
+gene-set ranking against its own construction quantity, none of them
+characterises the **distribution** of that floor across 1,272 published screens,
+and none ships it as a callable artifact. **The repository was more honest than the
+plan.**
+
+Full record: `results/model_floor/`, `docs/MODEL_FLOOR.md`.
+
 ## Limitations
 
 Full document: **`docs/LIMITATIONS.md`**. In brief:
@@ -479,6 +577,11 @@ Full document: **`docs/LIMITATIONS.md`**. In brief:
    paper about integrating single-cell data across species. 19 of 20 blind-probe
    genes returned the same zebrafish methods paper; one returned a different gene.
 6. **Held-out is underpowered** and one axis failed outright.
+7. **The audit does not apply to a top-N or top-percentile hit list.** Evaluation 14:
+   a rule that fixes the hit count leaves size nothing to predict, so the tool
+   returns `UNDETERMINED` — and a clean-looking verdict on such a list would be a
+   false reassurance rather than a finding, because the power asymmetry moves into
+   the within-program ordering, which the audit never reads.
 
 ---
 

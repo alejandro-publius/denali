@@ -105,6 +105,20 @@ def reference_scores(inp: pd.DataFrame) -> dict[str, np.ndarray]:
     `denali rerank` is entered here as a contestant like any other. Its score is
     the size-aware residual -- the correction this project ships -- computed by the
     packaged function, on exactly the input an entrant gets.
+
+    TWO THINGS HERE LOOK LIKE OVERSIGHTS AND ARE NOT.
+
+    The baseline is the RAW size vector, not a fitted model of size. Under a rank
+    metric any strictly increasing function of size gives the same ordering, so
+    fitting one would be ceremony -- and worse than ceremony if the fit is ever made
+    leave-one-out, because LOO perturbs the ordering enough to cost real rank
+    accuracy and would quietly weaken the baseline this challenge exists to make
+    hard to beat. The permanent row stays the unfitted vector.
+
+    The residual's fit IS in-sample, over all 50 sets, because that is exactly what
+    `denali_audit.core.rerank` does. This entry has to be the shipped correction,
+    not an improved version of it, or the board stops reporting where our own tool
+    actually lands.
     """
     size = inp["size"].to_numpy(dtype=float)
     hits = inp["hits"].to_numpy(dtype=float)
@@ -135,6 +149,40 @@ def null_and_bootstrap(size: np.ndarray, truth: np.ndarray) -> dict:
         "baseline_beats_null": bool((np.abs(perm) >= abs(real)).mean() < 0.05),
         "split25_sd": float(boot.std()),
     }
+
+
+def residual_target_diagnostic(inp: pd.DataFrame) -> list[tuple[str, float, float]]:
+    """Rescore every reference entrant against a target with size removed from it too.
+
+    The board's target is RPE1's RAW hit ranking, and that ranking is itself
+    size-confounded -- the study measures size explaining R^2 0.214 in RPE1. So a
+    predictor with size stripped out is being scored against a target that still
+    contains size. Two different things produce that table and the board alone
+    cannot tell them apart:
+
+      (a) size predicts RPE1 because the confound replicates across screens, so the
+          metric is contaminated and the correction is being punished for working
+      (b) the residual threw away real biology along with size, so the correction
+          is simply too aggressive
+
+    Removing size from BOTH sides separates them. This is the row that decides it,
+    and it is reported next to the board rather than folded into it, because it
+    scores against a different target and its numbers are not commensurable with
+    the board's.
+    """
+    p = pd.read_csv(PAIRED).set_index("program")
+    sR = p.loc[list(inp["set"]), "n_present_rpe1"].to_numpy(dtype=float)
+    hR = p.loc[list(inp["set"]), "n_hits_q05_rpe1"].to_numpy(dtype=float)
+    yR = np.log10(1.0 + hR)
+    target = yR - np.polyval(np.polyfit(sR, yR, 1), sR)
+
+    rng = np.random.default_rng(SEED)
+    out = []
+    for name, pred in reference_scores(inp).items():
+        rho = spearman_vs(pred, target)
+        null = np.array([spearman_vs(pred, rng.permutation(target)) for _ in range(N_PERM)])
+        out.append((name, rho, float((np.abs(null) >= abs(rho)).mean())))
+    return sorted(out, key=lambda t: -t[1])
 
 
 def score_submission(path: Path, inp: pd.DataFrame, truth: np.ndarray) -> dict:
@@ -212,13 +260,20 @@ def main() -> int:
     print(f"\nA 25-of-50 set-level split would carry SD {stats['split25_sd']:.4f} on the "
           f"baseline rho alone, which is why PREREG.md splits by screen instead.")
 
+    diag = residual_target_diagnostic(inp)
+    print(f"\nsame predictors, target with size removed from it too:")
+    print(f"{'method':38s} {'spearman':>9s} {'perm p':>9s}")
+    print("-" * 58)
+    for name, rho, pv in diag:
+        print(f"{name:38s} {rho:9.4f} {pv:9.4f}{'' if pv < 0.05 else '   n.s.'}")
+
     if a.board:
-        write_board(rows, base, stats, len(inp))
+        write_board(rows, base, stats, len(inp), diag)
         print(f"\nwrote {BOARD.relative_to(ROOT)}")
     return 0
 
 
-def write_board(rows, base, stats, n_sets) -> None:
+def write_board(rows, base, stats, n_sets, diag) -> None:
     lines = [
         "# Leaderboard — does your method beat set size?",
         "",
@@ -246,6 +301,45 @@ def write_board(rows, base, stats, n_sets) -> None:
         f"95th percentile of |rho| is {stats['null_p95']:.4f} (p = {stats['null_p']:.4f}), so it "
         "is a baseline worth beating rather than a straw man.",
         "",
+        "Two of these rows are also produced by `src/concordance.py`, written months earlier "
+        "on a different codepath: the study publishes the raw cross-screen agreement as "
+        "**0.663** and reports size alone predicting **6 of the top 10**. The scorer's "
+        "independent implementation returns 0.6633 and 0.60. Same frozen inputs, so this "
+        "checks the scoring code rather than the data — but it is the check that would have "
+        "caught this challenge quietly drifting away from the study, and "
+        "`verifier/test_scorer.py` asserts both.",
+        "",
+        "## The same predictors, scored against a target with size removed from it too",
+        "",
+        "The table above scores against RPE1's **raw** hit ranking, and that ranking is "
+        "itself size-confounded — the study measures size explaining R² 0.214 in RPE1. So a "
+        "predictor with size stripped out is scored against a target that still contains "
+        "size. Removing size from both sides inverts the order:",
+        "",
+        "| method | Spearman vs RPE1 residual | permutation p |",
+        "|---|--:|--:|",
+    ]
+    for name, rho, pv in diag:
+        mark = "**" if pv < 0.05 else ""
+        lines.append(f"| {name} | {mark}{rho:+.4f}{mark} | {pv:.4f}"
+                     f"{'' if pv < 0.05 else ' — not significant'} |")
+    lines += [
+        "",
+        "**Which method wins is decided by whether the target is size-corrected, and that is "
+        "the result on this page.** Against the raw target the naive hit count wins outright; "
+        "against the size-removed target it is no longer distinguishable from chance, while "
+        "the correction this project ships is the only entrant that clears its permutation "
+        "null. The board is not measuring one thing well — it is measuring two different "
+        "things, and the confound decides which.",
+        "",
+        "Read the limits of that honestly. It rules out the possibility that the correction "
+        "destroys everything: there is reproducible non-size agreement between two "
+        "independently screened cell lines, at p = "
+        f"{min(p for _, _, p in diag):.4f}. It does **not** establish that the residual is "
+        "biology. Both sides of that comparison are corrected the same way, so they can "
+        "still agree for the same wrong reason — which is this project's own evaluation 6, "
+        "pointed back at this project's own challenge.",
+        "",
         "## How to enter",
         "",
         "Open a pull request adding one CSV to [`entries/`](entries/). No server, no "
@@ -256,17 +350,19 @@ def write_board(rows, base, stats, n_sets) -> None:
         "## The row that matters",
         "",
         "**`denali rerank residual` is this project's own method, entered as a contestant.**",
-        "Where it lands is where it lands. A benchmark authored by the party it flatters is "
-        "marketing, so it is scored by the same code as everyone else and its result is "
-        "printed in the same type size.",
+        "On the first table it places fourth of four on top-10 overlap, below the baseline "
+        "it is supposed to improve on. That result is not softened anywhere on this page. A "
+        "benchmark authored by the party it flatters is marketing, so it is scored by the "
+        "same code as everyone else and both of its results are printed at the same size.",
         "",
         "## What a high row is not",
         "",
-        "Ranking well here means predicting the second screen, and predicting the second "
-        "screen is not the same as being right. Both screens can be confounded the same "
-        "way and agree for the same wrong reason — that is this project's own evaluation 6, "
-        "which found 26% of the cross-screen agreement is set size rather than biology. "
-        "No row on this board is an endorsement of any gene set, and no gene is named.",
+        "Ranking well on the first table means predicting the second screen, and predicting "
+        "the second screen is not the same as being right. Both screens can be confounded "
+        "the same way and agree for the same wrong reason — that is this project's own "
+        "evaluation 6, which found 26% of the cross-screen agreement is set size rather than "
+        "biology. No row on this board is an endorsement of any gene set, and no gene is "
+        "named.",
     ]
     BOARD.write_text("\n".join(lines) + "\n")
 

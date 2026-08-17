@@ -36,12 +36,19 @@ loss. The naive "reuse the hit count you already have" entry scores 0.6633 and 0
 A half-strength correction scores 0.6466 and 0.80, so the cost is not in correcting
 but in correcting all the way.
 
-This does not contradict what `rerank` claims. It answers which entries a screen's
-own data least justifies, and [evaluation 6](results/concordance/) already found
-that 26% of cross-screen agreement is set size rather than biology — so removing
-size necessarily predicts a replicate worse. Predicting a replicate and being right
-are different targets. What is new is the size of the gap, and that the full
-correction sits well off the efficient frontier for prediction.
+**Then the ordering inverts.** That board scores against RPE1's *raw* hit ranking,
+which is itself size-confounded (size explains R² 0.214 in RPE1), so a
+size-corrected predictor is being scored against a size-contaminated target.
+Removing size from both sides reverses the result: the naive hit count falls to
++0.2193 and is no longer distinguishable from chance (permutation p = 0.12), the
+size-only baseline goes negative, and the correction is the only entrant clearing
+its permutation null at +0.4972, p = 0.0002.
+
+Which method wins is decided by whether the target is size-corrected. That is this
+project's thesis occurring inside this project's own challenge. It rules out the
+correction destroying all signal; it does **not** establish that the residual is
+biology, since both sides are corrected the same way and can agree for the same
+wrong reason — [evaluation 6](results/concordance/) pointed back at us.
 ```
 
 ## 3. For `docs/DATA_DICTIONARY.md` — a trap that is currently undocumented

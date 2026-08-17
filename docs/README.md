@@ -1,6 +1,6 @@
 # Documentation index
 
-33 files is a lot to land in. Read in this order depending on what you
+43 files is a lot to land in. Read in this order depending on what you
 came to check.
 
 ## If you have five minutes
@@ -21,6 +21,9 @@ came to check.
 | [`ANNOTATION_PREREG.md`](ANNOTATION_PREREG.md) | The annotation-scaling arm (`ec5edb90…`). Our prediction was wrong in direction **and** the power rule fired — both failures are in the result, not softened here. |
 | [`OFFTARGET.md`](OFFTARGET.md) | The confound taken outside our own data, into two published clinical-adjacent off-target datasets. Post-hoc and thresholds swept, labelled so. Includes the tautology the arm refused to report and the threefold overstatement we caught ourselves making. |
 | [`ADAMSON_PREREG.md`](ADAMSON_PREREG.md) · [`ADAMSON_RESULTS.md`](ADAMSON_RESULTS.md) | The engagement arm, pre-registered before the substrate was opened, plus the amendment that defines its control by construct identity and the result that followed. |
+| [`ATLAS_PREREG.md`](ATLAS_PREREG.md) | The membership rule for the no-biology floor atlas, sealed before any second source could set its own bar — plus the six-source survey, each licence read from a primary source and each claim adversarially re-checked. Leads with the fact that the atlas did **not** grow and why. |
+| [`FLOOR_LAW_PREREG.md`](FLOOR_LAW_PREREG.md) | Evaluation 13, sealed before the model existed: can a screen's floor be predicted from how it was built? It cannot — cross-validated R² 0.0935 against a pre-registered 0.20 floor. The eighth negative. |
+| [`LITERATURE_INFER_PREREG.md`](LITERATURE_INFER_PREREG.md) | Evaluation 12, sealed before a paper was classified: the literature arm read by two models rather than grepped, with disagreement reported as a band and never averaged. Correction 1 discloses that the classifier reads recall-pattern context windows rather than whole documents, and what that costs. |
 | [`CORPUS.md`](CORPUS.md) | The headline tested against 1,272 published screens from 187 publications. Post-hoc. Reports both the screen-level and publication-level shares, and discloses an independent run of the same idea that landed near 0.10 and could not be reconciled. |
 | [`NUMBERING.md`](NUMBERING.md) | Why the evaluations are numbered the way they are, written when two arms both claimed 8. Number by arrival, not by importance. |
 | [`SCOPE_STATEMENT.md`](SCOPE_STATEMENT.md) | What is and is not claimed. |

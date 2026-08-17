@@ -627,7 +627,7 @@ The suite has caught, in order: a stat bug reporting 5 evidence sources instead 
 
 ## Repo map
 
-**[`docs/README.md`](docs/README.md) is the documentation index** — twenty-seven files, ordered by what you came to check.
+**[`docs/README.md`](docs/README.md) is the documentation index** — 43 files, ordered by what you came to check.
 
 
 | Path | Contents |

@@ -2124,6 +2124,197 @@ def main() -> int:
               f"deck links to {len(wanted)}: {', '.join(wanted)}"
               + (f" — MISSING {missing}" if missing else ""))
 
+    # ---------------- evaluation 14: the hit-calling rule decides the verdict --
+    # This arm exists because audit() reads a hit column and never asked where it
+    # came from. These checks pin the two things the writeup rests on: that the
+    # verdict really does differ ACROSS rule families, and that it does NOT differ
+    # within the threshold family by more than the pre-registered range. Both are
+    # read back from the artifact rather than trusted to the prose.
+    #
+    # The precondition is ASSERTED, not gated. Everything below sits inside
+    # `if _hr.exists()`, which is the fourth shape in METHOD_RULES' table -- a
+    # branch that is never entered, so deleting the input would make eleven checks
+    # VANISH and the suite would print a smaller green number indistinguishable
+    # from the larger one. This check is what makes a missing artifact loud.
+    _hr = ROOT / "results" / "hit_rule" / "hit_rule.json"
+    check("hit-rule: the artifact the next eleven checks read is present",
+          _hr.exists(),
+          "" if _hr.exists() else
+          f"MISSING {_hr.relative_to(ROOT)} — the eleven checks that read it "
+          f"would silently disappear rather than fail; run "
+          f".venv/bin/python -m src.hit_rule_audit")
+    if _hr.exists():
+        hr = json.loads(_hr.read_text())
+        _rules = hr["rules"]
+        _thr = {k: v for k, v in _rules.items() if v["family"] == "threshold"}
+        _fix = {k: v for k, v in _rules.items() if v["family"] != "threshold"}
+
+        check("hit-rule: the arm declares itself evaluation 14",
+              re.search(r"evaluation\s+14", hr["arm"], re.I) is not None, hr["arm"])
+        check("hit-rule: seven rules were run, four thresholding and three fixing "
+              "the count",
+              len(_rules) == 7 and len(_thr) == 4 and len(_fix) == 3,
+              f"{len(_rules)} rules, {len(_thr)} threshold, {len(_fix)} fixed")
+
+        # The finding itself: every threshold rule calls it confounded, and not one
+        # of the count-fixing rules does. If that ever stops being true the writeup
+        # is wrong, whichever way it moved.
+        check("hit-rule: every threshold rule returns CONFOUNDED",
+              all(v["verdict"] == "CONFOUNDED" for v in _thr.values()),
+              str({k: v["verdict"] for k, v in _thr.items()}))
+        check("hit-rule: no count-fixing rule returns CONFOUNDED",
+              all(v["verdict"] != "CONFOUNDED" for v in _fix.values()),
+              str({k: v["verdict"] for k, v in _fix.items()}))
+        check("hit-rule: the verdict is not constant across rules, which is the "
+              "pre-registered claim (b)",
+              len(hr["distinct_verdicts"]) > 1 and "(b)" in hr["verdict"],
+              f"{hr['distinct_verdicts']} / {hr['verdict'][:40]}")
+
+        # Every count-fixing rule must in fact have produced a constant hit column.
+        # If one of them did not, its near-zero R^2 would mean something else and
+        # the arm's argument would not apply to it.
+        check("hit-rule: each count-fixing rule really did produce a constant hit "
+              "column, which is why its R2 collapses",
+              all(v["hits_constant"] for v in _fix.values()),
+              str({k: (v["hits_min"], v["hits_max"]) for k, v in _fix.items()}))
+
+        # The threshold family's spread is the "estimate is stable" claim.
+        check("hit-rule: the threshold family's R2 spread is inside the "
+              "pre-registered 0.20",
+              hr["r2_spread_within_threshold_family"] <= 0.20,
+              f"spread {hr['r2_spread_within_threshold_family']}")
+
+        # The disclosed substrate gap, asserted against its own kill criterion so
+        # the arm cannot quietly start claiming comparability with the headline.
+        _g = hr["r1_vs_published"]
+        check("hit-rule: the published convention recomputed on the collapsed "
+              "matrix stays inside its pre-registered gap limit",
+              _g["absolute_gap"] <= _g["gap_limit"] and _g["exceeds_limit"] is False,
+              f"gap {_g['absolute_gap']} vs limit {_g['gap_limit']}")
+        check("hit-rule: the arm states the substrate gap rather than implying "
+              "comparability with the frozen headline",
+              "DISCLOSED SUBSTRATE GAP" in hr
+              and "NOT comparable" in hr["DISCLOSED SUBSTRATE GAP"])
+
+        # The forbidden reading is carried IN the artifact, not only in the doc, so
+        # a reader who opens the JSON alone still meets it.
+        check("hit-rule: the artifact carries the reading it forbids, so the JSON "
+              "cannot be quoted as an all-clear",
+              "blind" in hr["THE READING THIS ARM FORBIDS"]
+              and "never" in hr["THE READING THIS ARM FORBIDS"])
+        check("hit-rule: the arm writes only its own directory",
+              "results/hit_rule/" in (ROOT / "src" / "hit_rule_audit.py").read_text()
+              and "NEVER writes results/frozen/"
+              in (ROOT / "src" / "hit_rule_audit.py").read_text())
+
+        # Scope: this arm names no gene set as a finding. Its per-program CSV does
+        # carry program names -- as program_summary.csv already does -- but the
+        # JSON that states conclusions must not.
+        check("hit-rule: no gene set is named in the arm's conclusions",
+              not re.search(r"HALLMARK_[A-Z0-9_]+", json.dumps(hr)))
+
+    # ---------------- G. ARTIFACT -> TABLE: the converse nobody wrote --------
+    # docs/NUMBERING.md says the README findings table is the single source of
+    # truth for how many evaluations exist, and section F enforces exactly that
+    # -- in ONE direction. F checks table -> prose: every sentence restating the
+    # count is compared against the table, so rewording one copy and not its
+    # siblings fails the build. Nothing checked artifact -> table. An arm could
+    # therefore ship a results/ directory, a pre-registration, a module and a
+    # verdict while never receiving a row, and this suite stayed green at 522.
+    #
+    # Two arms were in precisely that state when this block was written:
+    #   evaluation 12 (results/literature_infer/) had a whole README section and
+    #     no row, so the file stated "eleven evaluations" in five places and
+    #     named an "Evaluation 12" in a sixth -- a contradiction that was live on
+    #     the hosted page;
+    #   evaluation 13 (results/floor_law/) had docs/FLOOR_LAW_PREREG.md,
+    #     src/floor_law.py, a grouped-CV verdict of its own, and appeared on NO
+    #     reader-facing surface anywhere -- a pre-registered NEGATIVE result that
+    #     the project's own "publish what fails" rule requires be shown.
+    #
+    # This is a fifth shape for the table in docs/METHOD_RULES.md, and it is not
+    # one of the four already there. Those four are all ways a check can be green
+    # while testing nothing -- a clause never false, a path never read, a string
+    # found elsewhere, a branch never entered. This one is different in kind: the
+    # check was real, it fired for the right reason, and its CONVERSE was simply
+    # never written. A one-directional guard reports a consistency it only half
+    # measures, which is why the count could be provably self-consistent across
+    # seven files while two arms were missing from the thing all seven describe.
+    #
+    # The classification below is total by construction. Every directory under
+    # results/ must be declared either an arm (and then it needs a table row) or
+    # not an arm (and then it needs a stated reason). A NEW directory matches
+    # neither and fails, so the next arm cannot be added silently -- which is the
+    # property the guard exists for, and the one a mapping alone would not have.
+    ARM_DIRS = {
+        "rpe1": 5, "concordance": 6, "annotation": 7, "offtarget": 8,
+        "adamson": 9, "corpus": 10, "literature": 11, "literature_infer": 12,
+        "floor_law": 13, "hit_rule": 14,
+    }
+    NON_ARM_DIRS = {
+        "frozen": "the frozen interface itself; evaluations 1-4 are computed from it",
+        "sensitivity": "post-freeze checks on the primary, not a separate arm",
+        "figures": "the four figures and CAPTIONS.md",
+        "discovery": "intermediate scoring outputs",
+        "qc": "gate C1 criterion tables, which predate the evaluation numbering",
+        "modal": "portability reproduction of the primary sweep; verifies, never authors",
+        "independent": "the second implementation of the headline -- a check ON arm 1",
+        "prior_work": "pre-event ILD evidence, explicitly not reproducible here",
+        "tools": "tool-status records",
+        "atlas": "source survey for a possible corpus expansion; issues no verdict",
+        "breadth": "post-hoc boundary condition on the tool, carried as scope limit 6 "
+                   "rather than numbered",
+        "corpus_rerank": "the shipped rerank() over evaluation 10's screens; part of arm 10",
+    }
+    res_dirs = {p.name for p in (ROOT / "results").iterdir() if p.is_dir()}
+    unclassified = sorted(res_dirs - set(ARM_DIRS) - set(NON_ARM_DIRS))
+    check("every results/ directory is declared either an arm or explicitly not one",
+          not unclassified,
+          f"unclassified: {unclassified} — an arm cannot be added silently; give it "
+          f"a number in ARM_DIRS and a findings-table row, or a reason in NON_ARM_DIRS"
+          if unclassified else f"{len(res_dirs)} directories, all classified")
+
+    # The mapping above is prose until something ties it to the artifacts. Where
+    # an arm's own JSON declares itself -- "arm": "evaluation N -- ..." -- that
+    # declaration is authoritative and the mapping must agree with it. This is
+    # what stops ARM_DIRS drifting into a second, quietly wrong source of truth.
+    declared: dict[str, int] = {}
+    for d in sorted(ARM_DIRS):
+        for j in sorted((ROOT / "results" / d).glob("*.json")):
+            try:
+                obj = json.loads(j.read_text())
+            except (json.JSONDecodeError, UnicodeDecodeError):
+                continue
+            if isinstance(obj, dict) and isinstance(obj.get("arm"), str):
+                m = re.search(r"evaluation\s+(\d+)", obj["arm"], re.I)
+                if m:
+                    declared[d] = int(m.group(1))
+                    break
+    disagree = {d: (declared[d], ARM_DIRS[d]) for d in declared
+                if declared[d] != ARM_DIRS[d]}
+    check("each arm's self-declared evaluation number matches this mapping",
+          not disagree,
+          f"artifact says vs mapping says: {disagree}" if disagree
+          else f"{len(declared)} of {len(ARM_DIRS)} arms self-declare: "
+               f"{sorted(declared.items())}")
+
+    # The check itself. `rows` is section F's parse of the findings table.
+    table_nums = {int(i) for i, _ in rows}
+    missing_rows = sorted(n for n in ARM_DIRS.values() if n not in table_nums)
+    check("every arm with artifacts on disk has a row in the README findings table",
+          not missing_rows,
+          f"arms with no row: {missing_rows} — "
+          + ", ".join(f"{n}=results/{d}/" for d, n in sorted(ARM_DIRS.items(),
+                                                             key=lambda kv: kv[1])
+                      if n in missing_rows)
+          if missing_rows else f"rows 1..{len(rows)} cover all {len(ARM_DIRS)} arm dirs")
+
+    # And the ceiling, which is the cheap way an arm goes missing: the table
+    # stops one short of the highest-numbered arm on disk.
+    check("the findings table extends to the highest-numbered arm on disk",
+          max(ARM_DIRS.values()) <= len(rows),
+          f"highest arm is {max(ARM_DIRS.values())}, table has {len(rows)} rows")
+
     # ---------------- the suite counts itself: KEEP THIS LAST ----------------
     # These are hand-typed and therefore drift: the badge said 84, the Tests
     # section said 84, and the plain-language section said 86, while the suite

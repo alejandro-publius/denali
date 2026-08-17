@@ -1,0 +1,126 @@
+{
+  "arm": "evaluation 14 \u2014 does the verdict depend on who called the hits?",
+  "prereg": "docs/HIT_RULE_PREREG.md, sha256 8e39c4261ec5d2e68b27d1484a9db32eb34b4ba39b2fae9138de68bd4df50170, sealed at f4b3f8d before any value here was computed.",
+  "substrate": {
+    "file": "results/frozen/matrix.csv",
+    "n_programs": 49,
+    "n_programs_excluded_all_non_finite": 1,
+    "why_excluded": "a column with no finite u_z cannot be thresholded or ranked under any rule; excluded, not imputed, and counted here rather than silently dropped",
+    "n_genes": 9837,
+    "sizes_from": "results/frozen/program_summary.csv n_present, identical across all rules \u2014 only the hit column moves",
+    "non_finite": "masked, never imputed"
+  },
+  "DISCLOSED SUBSTRATE GAP": "matrix.csv is NOT the vector the published hit counts were computed on. src/sweep.py counts hits over all 11,258 perturbation rows and only then collapses to 9,837 unique target genes by each gene's MAXIMUM u_z. So no threshold rule recomputed here can reproduce n_hits_q05: fewer rows, an upward-shifted distribution, and a different BH denominator. The 470 MB substrate that would allow the uncollapsed comparison is gitignored and absent. EVERY absolute R2 in this file is substrate-specific and is NOT comparable to the published 0.4649. This arm is entitled only to the comparison ACROSS rules on one substrate, which is the comparison the question needs. Written into the pre-registration before it could be discovered.",
+  "r1_vs_published": {
+    "r1_here": 0.453,
+    "published_headline": 0.4649,
+    "absolute_gap": 0.0119,
+    "gap_limit": 0.1,
+    "exceeds_limit": false,
+    "why": "expected and pre-registered; see DISCLOSED SUBSTRATE GAP"
+  },
+  "rules": {
+    "R1": {
+      "rule": "BH q < 0.05 within program (the published convention)",
+      "family": "threshold",
+      "r2_size_alone": 0.453,
+      "verdict": "CONFOUNDED",
+      "constant_hits_but_finite_r2": false,
+      "hits_min": 0,
+      "hits_max": 5194,
+      "hits_median": 84.0,
+      "hits_constant": false,
+      "hits_cv": 1.9173
+    },
+    "R2": {
+      "rule": "uncorrected two-sided p < 0.05",
+      "family": "threshold",
+      "r2_size_alone": 0.561,
+      "verdict": "CONFOUNDED",
+      "constant_hits_but_finite_r2": false,
+      "hits_min": 445,
+      "hits_max": 5642,
+      "hits_median": 1218.0,
+      "hits_constant": false,
+      "hits_cv": 0.7531
+    },
+    "R3": {
+      "rule": "Bonferroni p < 0.05/n within program",
+      "family": "threshold",
+      "r2_size_alone": 0.5012,
+      "verdict": "CONFOUNDED",
+      "constant_hits_but_finite_r2": false,
+      "hits_min": 0,
+      "hits_max": 2376,
+      "hits_median": 8.0,
+      "hits_constant": false,
+      "hits_cv": 2.4842
+    },
+    "R4": {
+      "rule": "fixed effect size |u_z| >= 2.0, no correction",
+      "family": "threshold",
+      "r2_size_alone": 0.5631,
+      "verdict": "CONFOUNDED",
+      "constant_hits_but_finite_r2": false,
+      "hits_min": 402,
+      "hits_max": 5576,
+      "hits_median": 1144.0,
+      "hits_constant": false,
+      "hits_cv": 0.7816
+    },
+    "R5": {
+      "rule": "top 2% of genes per program",
+      "family": "quantile",
+      "r2_size_alone": -6.1224,
+      "verdict": "NOT SIZE-DOMINATED",
+      "constant_hits_but_finite_r2": true,
+      "hits_min": 197,
+      "hits_max": 197,
+      "hits_median": 197.0,
+      "hits_constant": true,
+      "hits_cv": 0.0
+    },
+    "R6": {
+      "rule": "top 10% of genes per program",
+      "family": "quantile",
+      "r2_size_alone": -3.6531,
+      "verdict": "NOT SIZE-DOMINATED",
+      "constant_hits_but_finite_r2": true,
+      "hits_min": 984,
+      "hits_max": 984,
+      "hits_median": 984.0,
+      "hits_constant": true,
+      "hits_cv": 0.0
+    },
+    "R7": {
+      "rule": "top 200 genes per program",
+      "family": "fixed count",
+      "r2_size_alone": -3.6531,
+      "verdict": "NOT SIZE-DOMINATED",
+      "constant_hits_but_finite_r2": true,
+      "hits_min": 200,
+      "hits_max": 200,
+      "hits_median": 200.0,
+      "hits_constant": true,
+      "hits_cv": 0.0
+    }
+  },
+  "verdict": "CLAIM (b) \u2014 the verdict is in part a function of the caller's hit-calling convention. This is a scope limit and the tool must say so on its own output.",
+  "distinct_verdicts": [
+    "CONFOUNDED",
+    "NOT SIZE-DOMINATED"
+  ],
+  "r2_spread_within_threshold_family": 0.1101,
+  "DEFECT THIS ARM SURFACED IN THE SHIPPED TOOL": {
+    "what": "audit() returns a false all-clear -- verdict NOT SIZE-DOMINATED plus a large negative R2 -- when the hit column is constant at most values.",
+    "why": "core.py _r2() guards the degenerate case with `ss_tot == 0`, an exact float test on a quantity that is only MATHEMATICALLY zero. Elementwise log10 of the same integer is not always bit-identical, so ss_tot lands at ~9.7e-30, the guard does not fire, and audit()'s `if not np.isfinite(share)` refusal is bypassed.",
+    "measured": "constant hits of 0, 1, 2, 10, 50, 100, 500 and 1000 refuse correctly (ss_tot exactly 0.0); 5, 197, 200 and 984 return a finite negative R2 and an all-clear. Whether the tool refuses depends on the representability of log10(1+k) for the caller's own hit count.",
+    "why_it_survived": "the refusal branch was added 2026-08-16 after dropping an all-zero-hits table into the page runner. k=0 is one of the values where the exact test accidentally works, so the fix was verified on the single input that cannot expose it and generalised to 'constant hits'.",
+    "who_hits_it": "any top-N hit list -- 'our top 200 hits' is an ordinary way to publish a screen -- any quantile hit definition, and screen-level inputs where every set returns the same count.",
+    "reported_to": "the session holding packages/denali-audit/ at the time; not fixed here, because that file was dirty in a shared checkout and a dirty file is not mine to edit.",
+    "arm_verdict_is_unaffected": "with the defect the quantile rules read NOT SIZE-DOMINATED; once fixed they read UNDETERMINED. Both differ from the threshold family's CONFOUNDED, so claim (b) fires either way and this arm's conclusion does not depend on the bug."
+  },
+  "THE READING THIS ARM FORBIDS": "R5, R6 and R7 fix the hit count per program by construction, so their hit column is constant and their R2 is near zero or undetermined. That is NOT evidence that such rankings are unconfounded. It is evidence that this diagnostic CANNOT SEE the power difference under a rule that fixes the count. The underlying asymmetry -- larger programs yield more precise statistics -- is untouched by the choice of hit rule; a quantile rule only moves it out of the hit count and into the within-program ordering, which audit() never reads. A near-zero R2 under R5-R7 is the diagnostic going blind, never the ranking coming back clean. Fixed in the pre-registration so the framing could not be chosen afterwards.",
+  "what_this_is_not": "Not a claim that any hit-calling convention is wrong -- thresholding and quantile-cutting are both standard and both defensible. Not a revision of the published headline, which this arm cannot reach. Not a claim about any gene, gene set or publication, none of which is named.",
+  "scope": "One screen, 50 sets. Establishes that the rules differ or do not on a real screen; not how they compare in general."
+}

@@ -58,14 +58,33 @@ def _spearman(x, y) -> float:
 
 
 def _r2(x, y) -> float:
+    """R^2 of a straight-line fit, or NaN when the question cannot be asked.
+
+    THE `ss_tot == 0` TEST USED TO BE EXACT AND THAT SHIPPED A FALSE ALL-CLEAR.
+    When every set has the same hit count, ss_tot is only MATHEMATICALLY zero:
+    elementwise log10 of the same integer does not always give bit-identical
+    doubles, so ss_tot came out at 9.86e-30 rather than 0.0 for some values, the
+    equality did not fire, and `1 - ss_res/ss_tot` divided by a denormal and
+    returned a large negative number that was then reported as a real share.
+    Measured on 49 real programs: constant hits of 0, 1, 2, 3, 10, 50, 127, 500 and
+    1000 refused correctly, while 5, 7, 42, 63, 100, 197, 200 and 984 issued a
+    verdict. Whether the tool refused depended on the floating-point
+    representability of log10(1+k) for the caller's particular hit count.
+
+    The tolerance is scale-relative because an absolute one is a different magic
+    number on every input. It only fires where the outcome has no variance to
+    explain, which is exactly the case that must return NaN.
+    """
     x = np.asarray(x, dtype=float)
-    if np.std(x) == 0:
+    y = np.asarray(y, dtype=float)
+    if np.ptp(x) == 0:
         return float("nan")
     b = np.polyfit(x, y, 1)
     pred = np.polyval(b, x)
     ss_res = float(((y - pred) ** 2).sum())
     ss_tot = float(((y - y.mean()) ** 2).sum())
-    return float("nan") if ss_tot == 0 else 1 - ss_res / ss_tot
+    scale = max(1.0, float((y ** 2).sum()))
+    return float("nan") if ss_tot <= 1e-12 * scale else 1 - ss_res / ss_tot
 
 
 def audit(sizes, hits, corr=None) -> dict:
@@ -114,7 +133,12 @@ def audit(sizes, hits, corr=None) -> dict:
     # (MAGeCK, BAGEL, drugZ) hit it routinely, because most libraries build every
     # gene with the same number of guides. The study gets this branch too now,
     # since src/audit_screen.py imports this function rather than copying it.
-    if not np.isfinite(share):
+    # Degeneracy is decided on the RAW vectors, where it is exact, rather than
+    # inferred from a float residual after the log transform. Hit counts and set
+    # sizes are integers, so ptp() == 0 states the intent instead of discovering it.
+    # Relying on the transformed residual is what let constant-hit tables through.
+    degenerate = bool(np.ptp(h) == 0 or np.ptp(s) == 0)
+    if degenerate or not np.isfinite(share):
         # WHY the R^2 is undefined decides what to tell the user, and there are
         # two different reasons. Constant SIZE means the predictor has no
         # variance; constant HITS (every set returned the same count -- most
@@ -124,7 +148,7 @@ def audit(sizes, hits, corr=None) -> dict:
         # about the user's data whenever it was the hits that were constant.
         # Found by dropping an all-zero-hits table into the page runner.
         out["verdict"] = "UNDETERMINED"
-        constant_size = bool(np.std(s) == 0)
+        constant_size = bool(np.ptp(s) == 0)
         if constant_size:
             out["reading"] = (
                 "This ranking cannot be audited for size: every set is the same size, "

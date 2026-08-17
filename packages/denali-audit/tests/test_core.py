@@ -13,7 +13,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from denali_audit.core import audit, audit_replication
+from denali_audit.core import audit, audit_replication, _r2
 from denali_audit.reference import N_SCREENS, percentile
 
 PUBLISHED_HEADLINE = 0.4649
@@ -367,3 +367,46 @@ def test_the_atlas_names_no_gene_and_no_gene_set():
     src = pathlib.Path(atlas.__file__).read_text()
     # Hallmark set names are the thing most likely to leak in with screen rows.
     assert "HALLMARK_" not in src
+
+
+# --- degenerate outcomes: the false all-clear, and why one fixture cannot test it ---
+
+# The values that DID issue a verdict before the fix, on 49 real program sizes.
+# They are listed rather than sampled because the bug was value-dependent: whether
+# the tool refused depended on whether log10(1+k) happened to be representable such
+# that ss_tot came out exactly 0.0. k=0, 1, 2, 3, 10, 50, 127, 500 and 1000 refused
+# correctly WITHOUT the fix, so a test using any of those would have passed against
+# the bug. That is the whole lesson: the original fix was verified on an all-zero
+# table, generalised to "constant hits", and was false for most values.
+_LEAKED_BEFORE_FIX = (5, 7, 42, 63, 100, 197, 200, 984)
+
+
+@pytest.mark.parametrize("k", _LEAKED_BEFORE_FIX)
+def test_constant_hits_never_yields_a_verdict(k):
+    """A ranking where every set returned the same count is not a ranking."""
+    rng = np.random.default_rng(5)
+    size = rng.integers(10, 600, 49).astype(float)
+    r = audit(size, np.full(49, float(k)))
+    assert r["verdict"] == "UNDETERMINED", (k, r["verdict"], r.get("r2_size_alone"))
+    assert "not an all-clear" in r["what_to_do"]
+
+
+def test_constant_hits_refuses_across_a_wide_sweep_not_one_lucky_value():
+    """The guard must hold for the CLASS, not for the input it was found on."""
+    rng = np.random.default_rng(6)
+    size = rng.integers(10, 600, 49).astype(float)
+    leaked = [k for k in range(0, 301)
+              if audit(size, np.full(49, float(k)))["verdict"] != "UNDETERMINED"]
+    assert not leaked, f"{len(leaked)} constant hit counts still issue a verdict: {leaked[:10]}"
+
+
+def test_a_near_degenerate_outcome_cannot_divide_by_a_denormal():
+    """_r2 must return NaN, not a large negative number, when y has no variance."""
+    y = np.log10(1.0 + np.full(40, 197.0))
+    assert not np.isfinite(_r2(np.arange(40, dtype=float), y))
+
+
+def test_the_fix_did_not_move_a_real_r2():
+    """The tolerance is scale-relative so it can only fire on degenerate outcomes."""
+    size, hits = _above_null()
+    assert audit(size, hits)["r2_size_alone"] > 0.4

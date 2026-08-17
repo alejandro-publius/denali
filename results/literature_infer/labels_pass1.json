@@ -1,0 +1,668 @@
+[
+ {
+  "id": "PMC10016662",
+  "label": "NONE",
+  "reasoning": "This is a genome-wide CRISPR/Cas9 knockout screen paper (glucosylceramide/HRTV-DBV entry) with a standard gene-summary/MAGeCK-style output. Scanning all target terms (set size, pathway size, permutation, null model, hypergeometric, over-representation, CAMERA, size-matched, etc.) returned zero matches anywhere in the full text.",
+  "quote": null
+ },
+ {
+  "id": "PMC10053445",
+  "label": "NONE",
+  "reasoning": "No matches for any of the size-bias, competitive-test, permutation/null-model, or over-representation/hypergeometric terms anywhere in the paper's full text.",
+  "quote": null
+ },
+ {
+  "id": "PMC10095316",
+  "label": "NONE",
+  "reasoning": "No matches for any of the size-bias, competitive-test, permutation/null-model, or over-representation/hypergeometric terms anywhere in the paper's full text.",
+  "quote": null
+ },
+ {
+  "id": "PMC10188588",
+  "label": "NONE",
+  "reasoning": "A genome-wide CRISPR screen for mushroom amatoxin toxicity. The only hit for any scanned term was 'competitive' referring to 'competitive binding with OATP1B3 and NTCP' (a transporter-competition experiment), unrelated to gene-set competitive testing. No engagement with set-size, permutation, null-model, or enrichment-normalization concepts anywhere in the text.",
+  "quote": "Our results exclude the possibility that ICG mainly acts by competitive binding with OATP1B3 and NTCP to block AMA\u2019s toxicity."
+ },
+ {
+  "id": "PMC10362273",
+  "label": "NONE",
+  "reasoning": "A genome-wide CRISPR/Cas9 screen for bortezomib resistance in multiple myeloma. The only 'competitive' hit is the phrase 'Two-color CRISPR competitive growth assay,' a cell-competition validation assay, not a competitive gene-set enrichment test. No matches for any size-bias, permutation, null-model, or enrichment-statistics terms.",
+  "quote": "Two-color CRISPR competitive growth assay"
+ },
+ {
+  "id": "PMC10405063",
+  "label": "NONE",
+  "reasoning": "No matches for any of the size-bias, competitive-test, permutation/null-model, or over-representation/hypergeometric terms anywhere in the paper's full text.",
+  "quote": null
+ },
+ {
+  "id": "PMC10491399",
+  "label": "NONE",
+  "reasoning": "A PLK1/KIF18A/SKA1 CRISPR-screen paper. The only 'competitive' hit refers to 'the competitive MPS1 inhibitor reversine,' a pharmacological competitive inhibitor, not a gene-set enrichment method. No matches for any size-bias, permutation, null-model, or enrichment-statistics terms.",
+  "quote": "we inhibited the MPS1 kinase, which is required for the SAC, using the competitive MPS1 inhibitor reversine"
+ },
+ {
+  "id": "PMC10617673",
+  "label": "ADJUSTS",
+  "reasoning": "GSEAPreranked was run on GPS ORFeome hits against MSigDB C5 collections, and the paper states gene sets with <10 or >1000 entries (after intersecting with the tested ORF list) were excluded \u2014 a stated size-range restriction used as a control before enrichment testing.",
+  "quote": "The classic Kolmorogorov-Smirnov scoring scheme was used with 10,000 permutations and excluded gene sets with <10 or >1000 entries when intersected with the list of GPS ORFs."
+ },
+ {
+  "id": "PMC10850818",
+  "label": "NONE",
+  "reasoning": "No scan hits for any of the 25 patterns; nothing in the retrievable text engages with gene-set size, its statistical consequences, or any size-aware enrichment method.",
+  "quote": null
+ },
+ {
+  "id": "PMC11206534",
+  "label": "NONE",
+  "reasoning": "No scan hits for any of the 25 patterns; no discussion of set size or size-related enrichment methodology found.",
+  "quote": null
+ },
+ {
+  "id": "PMC11486371",
+  "label": "NONE",
+  "reasoning": "No scan hits for any of the 25 patterns; no discussion of set size or size-related enrichment methodology found.",
+  "quote": null
+ },
+ {
+  "id": "PMC11627114",
+  "label": "NONE",
+  "reasoning": "No scan hits for any of the 25 patterns; no discussion of set size or size-related enrichment methodology found.",
+  "quote": null
+ },
+ {
+  "id": "PMC12107129",
+  "label": "ADJUSTS",
+  "reasoning": "The paper ran fgsea-based GSEA (CORUM complexes and KEGG pathways) on its CRISPR screen hits and reports the normalized enrichment score (NES) as its enrichment statistic alongside pathway size and padj \u2014 NES is GSEA's built-in size-normalization of the enrichment score, and the paper says it used fgsea to produce it, not merely that the tool offers it.",
+  "quote": "Summary includes pathway annotation (name, genes included), pathway size, normalized enrichment score (NES), and statistical significance (padj)."
+ },
+ {
+  "id": "PMC4836973",
+  "label": "NONE",
+  "reasoning": "All 'competitive' matches refer to 'competitive growth assays' (a cell-mixing proliferation assay used to validate individual shRNA/sgRNA hits), not to competitive gene-set enrichment testing; no other pattern matched, and no engagement with gene-set size or its statistical consequences appears anywhere in the text.",
+  "quote": null
+ },
+ {
+  "id": "PMC4900911",
+  "label": "NONE",
+  "reasoning": "This casTLE paper (Cas9 vs shRNA essentiality screens) uses a per-reagent/per-gene likelihood-ratio null model (Pr(gamma|0,0)) for hit calling and standard GOrilla GO-term analysis and Fisher's exact tests on yeast-homolog overlap counts. None of this touches gene-set/pathway SIZE as a statistical confound; the 'null model' and 'permuted' hits found are about reagent-level effect-size testing, not gene-set enrichment size bias.",
+  "quote": null
+ },
+ {
+  "id": "PMC4924995",
+  "label": "NONE",
+  "reasoning": "Pathway/process enrichment on screen hits was done with a vanilla hypergeometric test (multiple gene-set sources: Reactome, KEGG, GO, etc.) with BH correction, and node size in the resulting network graph simply encodes number of hit genes per pathway. There is no discussion of set-size bias, no competitive/correlation-adjusted test, no size-preserving permutation, and no size-matching -- just a standard off-the-shelf over-representation test with no engagement with the size confound.",
+  "quote": null
+ },
+ {
+  "id": "PMC4964798",
+  "label": "ADJUSTS",
+  "reasoning": "Gene-level significance in the CRISPR screens was computed using RIGER, which applies the GSEA algorithm to the ranked list of individual guide RNAs per gene and reports a normalized enrichment score (NES) specifically to make scores comparable across genes with different numbers of targeting guides (the supplementary tables pair 'number of guideRNAs in the library' with 'normalized enrichment score (RIGER score)', and flag redundant-guide gene families as a caveat). This is a direct, stated use of the GSEA-style set-size-normalized enrichment statistic, matching the canonical ADJUSTS example.",
+  "quote": "RIGER analysis was performed on guide RNAs (with at least 10 reads) ranked by enrichment using the weighted sum statistical method 32 . Each CRISPR screen was performed in 3 replicates and the mean of the 3 RIGER scores was calculated."
+ },
+ {
+  "id": "PMC5081405",
+  "label": "ADJUSTS",
+  "reasoning": "For their GSEA-based pathway/signature enrichment on ranked dropout/enrichment scores, significance was assessed via permutation tests that explicitly generated randomly-drawn signatures of the same sizes as the real gene sets being tested -- an explicit size-preserving permutation null, directly matching the ADJUSTS criterion.",
+  "quote": "The significance of the obtained enrichment scores were computed as nominal _P_ values from permutation tests (1,000 trials with randomly generated signatures of the same sizes of the real ones)."
+ },
+ {
+  "id": "PMC5305212",
+  "label": "NONE",
+  "reasoning": "Exhaustive scan across all 25 patterns returned zero matches anywhere in the paper's text, indicating no discussion of gene-set/pathway size, set construction, competitive/self-contained testing, permutation nulls, or related statistical machinery.",
+  "quote": null
+ },
+ {
+  "id": "PMC5424143",
+  "label": "NONE",
+  "reasoning": "The only match ('permuted') refers to permuting the nucleotide sequence of individual guide RNAs to design non-targeting control guides (a sgRNA-design procedure), which has nothing to do with gene-set size or enrichment-test null distributions.",
+  "quote": null
+ },
+ {
+  "id": "PMC5640240",
+  "label": "NONE",
+  "reasoning": "GO enrichment on gene expression clusters was done with GOstats' conditional hypergeometric test, with the background set defined simply as all genes detected in the RNA-seq alignment. The 'conditional' aspect corrects for parent-child GO term relationships, not gene-set size, and the background set is the standard expressed-gene universe rather than something matched/adjusted for gene-set size; no size bias, competitive testing, or size-preserving null is discussed.",
+  "quote": null
+ },
+ {
+  "id": "PMC5640507",
+  "label": "NONE",
+  "reasoning": "This is a CRISPRi/CRISPRa screen paper (rigosertib/microtubule study). The only scan hits for 'competitive' are inside bibliography entries (e.g., 'a non-ATP-competitive small molecule inhibitor of Plk1'), which is reference-list text, not the paper's own methods. No gene-set/pathway enrichment analysis, size discussion, or related statistical machinery appears anywhere in the content.",
+  "quote": null
+ },
+ {
+  "id": "PMC5709193",
+  "label": "NONE",
+  "reasoning": "This is the CERES scoring-method paper. The single 'set size' hit refers to varying the number of cell lines in a subsampling/downsampling analysis of algorithm performance, an unrelated sense of 'set'. The Fisher's exact test hit is for enrichment of amplified chromosome arms per lineage, not gene-set/pathway enrichment. No gene-set-size content anywhere.",
+  "quote": null
+ },
+ {
+  "id": "PMC5774979",
+  "label": "NONE",
+  "reasoning": "L1 retrotransposon CRISPR screen paper. The only relevant hit is 'null model' describing casTLE's use of negative-control sgRNAs as a null model for gene-level effect-size estimation \u2014 a gene-level test, not a gene-set/pathway enrichment procedure. No discussion of gene-set size anywhere in the paper.",
+  "quote": null
+ },
+ {
+  "id": "PMC5777035",
+  "label": "MEASURES",
+  "reasoning": "In their hypergeometric gene-set enrichment analysis of CRISPR screen hits, the authors explicitly report and discuss the sizes of their top enriched sets: noting predominantly large gene sets (>1,000 genes) among the most significant hits, contrasted against one of the smallest enriched sets, and their supplementary figure explicitly lists 'gene-set sizes' alongside significance for each of the top 10 hits per condition/time point. This is a size-stratified reporting of their own enrichment results, not merely a passing mention, though they take no corrective action (not ADJUSTS).",
+  "quote": "A hypergeometric enrichment analysis of genes in GFP-low and -high cells revealed predominantly large gene sets in the 10 most significant sets on both time points, with the top-scoring sets comprising >1,000 genes ( Fig. S2D )."
+ },
+ {
+  "id": "PMC5893388",
+  "label": "NONE",
+  "reasoning": "C9orf72 DPR toxicity CRISPR screen paper. All 'competitive' hits refer to cell-competition validation assays (competitive growth assays), unrelated to competitive gene-set testing. The 'permutating' hit is casTLE's guide-level permutation for gene-level p-values, not gene-set/pathway enrichment. No gene-set enrichment analysis or size discussion appears in the paper.",
+  "quote": null
+ },
+ {
+  "id": "PMC6071917",
+  "label": "NONE",
+  "reasoning": "PARPi/RNASEH2 CRISPR screen paper (Nature). The one relevant hit describes using PANTHER's 'statistical overrepresentation test' comparing screen hits to genome-wide representation, with Bonferroni correction for multiple testing. This describes a standard enrichment test and background comparison but contains no statement about gene-set size, size-matching, or any size-related consequence \u2014 it is simply a routine GO enrichment method description.",
+  "quote": "PANTHER ( http://pantherdb.org ) 44 was used to identify gene ontology (GO) biological processes enriched in datasets of screen hits as compared to genome-wide representation... analyzed with the \"statistical overrepresentation test\"... with Bonferonni correction for multiple testing."
+ },
+ {
+  "id": "PMC6077722",
+  "label": "NONE",
+  "reasoning": "MAGeCK-VISPR breast cancer CRISPR screen paper (PNAS). The 'permutation' hit describes MAGeCK's alpha-RRA algorithm using permutation to assess significance of gRNA rank-aggregation scores at the gene level, and a filter excluding genes with too few gRNAs \u2014 none of this concerns gene-set/pathway enrichment size. No gene-set enrichment analysis or size discussion appears anywhere in the paper.",
+  "quote": null
+ },
+ {
+  "id": "PMC6093911",
+  "label": "ADJUSTS",
+  "reasoning": "The paper's Methods state GSEA was actually performed on MAGeCK-derived ranked depletion scores, and the Results/figures report the resulting normalized enrichment scores (NES) for pathways (Fig. 1d representative GSEA plot; Fig. 1e heatmap of GSEA NESs across cell lines). GSEA's NES statistic is a size-normalization of the raw enrichment score, and this is real, described usage rather than a bare citation. (They also use DAVID over-representation analysis for PSOD pathways, but that is a separate, non-size-adjusting step.)",
+  "quote": "GSEA 44 was performed using the ranked depletion scores calculated by MAGeCK."
+ },
+ {
+  "id": "PMC6138439",
+  "label": "NONE",
+  "reasoning": "Full scan across all 25 patterns (set size, pathway size, permutation, CAMERA, hypergeometric, gene universe, NES, etc.) returned zero matches anywhere in the paper's content.lines.",
+  "quote": null
+ },
+ {
+  "id": "PMC6312402",
+  "label": "NONE",
+  "reasoning": "Full scan across all 25 patterns returned zero matches anywhere in the paper's content.lines; no discussion of gene-set/pathway size, competitive testing, permutation nulls, or enrichment methodology at all.",
+  "quote": null
+ },
+ {
+  "id": "PMC6336797",
+  "label": "NONE",
+  "reasoning": "Full scan across all 25 patterns returned zero matches anywhere in the paper's content.lines; no engagement with gene-set size or enrichment-test statistics found.",
+  "quote": null
+ },
+ {
+  "id": "PMC6429770",
+  "label": "NONE",
+  "reasoning": "Full scan across all 25 patterns returned zero matches anywhere in the paper's content.lines; this appears to be a CRISPR screen paper with no gene-set enrichment or size-related statistical discussion.",
+  "quote": null
+ },
+ {
+  "id": "PMC6450769",
+  "label": "NONE",
+  "reasoning": "Full scan across all 25 patterns returned zero matches anywhere in the paper's content.lines; no gene-set/pathway-size or enrichment-test terminology present.",
+  "quote": null
+ },
+ {
+  "id": "PMC6453886",
+  "label": "NONE",
+  "reasoning": "Full scan across all 25 patterns returned zero matches anywhere in the paper's content.lines; no gene-set/pathway-size or enrichment-test terminology present.",
+  "quote": null
+ },
+ {
+  "id": "PMC6469816",
+  "label": "NONE",
+  "reasoning": "Scan returned zero matches across all 25 search patterns anywhere in the paper. No content about gene/pathway set size, set construction, or enrichment-test methodology of any kind.",
+  "quote": null
+ },
+ {
+  "id": "PMC6491561",
+  "label": "NONE",
+  "reasoning": "Scan returned zero matches across all 25 search patterns anywhere in the paper. No content about gene/pathway set size, set construction, or enrichment-test methodology of any kind.",
+  "quote": null
+ },
+ {
+  "id": "PMC6546744",
+  "label": "NONE",
+  "reasoning": "The only hit is 'null model' referring to a Loewe-additivity null model used for drug-combination synergy testing (BIGL package), unrelated to gene set/pathway size or gene-set enrichment testing.",
+  "quote": "For calculation of drug combination effects: Curves were fit and deviation from the null model (Loewe additivity) assessed using the BIGL package in R"
+ },
+ {
+  "id": "PMC6637147",
+  "label": "NONE",
+  "reasoning": "'Permutation'/'null distribution' hits describe the BAGEL/Low-Fat-BAGEL bootstrapping procedure for classifying essential vs non-essential genes and an AUC calculation for benchmark screen precision-recall, not gene set/pathway size or enrichment-test size bias.",
+  "quote": "The BAGEL computational framework estimates the distributions for the core-essential and non-essential genes by bootstrapping the reference genes across 1000 permutations"
+ },
+ {
+  "id": "PMC6701926",
+  "label": "NONE",
+  "reasoning": "The only hit is an exact hypergeometric test used to assess whether overlap between two fixed CRISPR-screen hit lists exceeds chance; this is a two-list overlap significance test, not a gene-set/pathway enrichment method addressing variable set-size bias, and no other set-size language appears.",
+  "quote": "significantly more of the top resensitization hits were shared between CDK9i and MCL1i than are expected by chance (exact hypergeometric test p<6.4\u00d710 \u22129 )"
+ },
+ {
+  "id": "PMC6713475",
+  "label": "NONE",
+  "reasoning": "All 7 'competitive' hits refer to 'competitive co-culture' cell-competition assays between NK cells and target cells, an unrelated experimental meaning of the word, not a competitive gene-set statistical test; no other pattern matched with relevant content.",
+  "quote": "Fluorescently-labeled control or test KO target cell lines were subjected to competitive co-culture assays in the presence of either NK-92 or primary NK effector cells"
+ },
+ {
+  "id": "PMC6733792",
+  "label": "NONE",
+  "reasoning": "The single 'permutation' hit is a boilerplate methods-checklist line about multiple-comparisons correction for fMRI cluster statistics (FWE/FDR/permutation/Monte Carlo), unrelated to gene or pathway set size.",
+  "quote": "Correction _Describe the type of correction and how it is obtained for multiple comparisons (e.g. FWE, FDR, permutation or Monte_"
+ },
+ {
+  "id": "PMC6744515",
+  "label": "NONE",
+  "reasoning": "Only match for any pattern is the word 'competitive' inside a reference-list citation title (Hu M et al., 'competitive recognition of p53 and MDM2'). No discussion anywhere of gene/pathway set size, size bias, permutation nulls, or competitive gene-set testing methods.",
+  "quote": "59. Hu M Structural basis of competitive recognition of p53 and MDM2 by HAUSP/USP7..."
+ },
+ {
+  "id": "PMC6781443",
+  "label": "NONE",
+  "reasoning": "Zero matches for any of the 25 patterns anywhere in the paper. No engagement with set size, set construction, or related statistical machinery.",
+  "quote": null
+ },
+ {
+  "id": "PMC6863627",
+  "label": "NONE",
+  "reasoning": "Only match is 'competitive' inside a reference-list citation title (Thoreen et al., 'ATP-competitive mammalian target of rapamycin inhibitor'), describing a drug mechanism, not a gene-set statistical method. No other relevant content.",
+  "quote": "Thoreen CC ... An ATP-competitive mammalian target of rapamycin inhibitor reveals rapamycin-resistant functions of mTORC1..."
+ },
+ {
+  "id": "PMC6879830",
+  "label": "NONE",
+  "reasoning": "Zero matches for any of the 25 patterns anywhere in the paper.",
+  "quote": null
+ },
+ {
+  "id": "PMC6911175",
+  "label": "NONE",
+  "reasoning": "Both matches for 'competitive' refer to a CRISPR 'competitive growth assay' used to validate individual binding-site knockouts by cell proliferation competition, an unrelated experimental technique, not a competitive gene-set enrichment test or any treatment of gene-set size.",
+  "quote": "the CRISPR/Cas9\u2013mediated mutagenesis of the FOXA1_P146 binding site decreased cell proliferation in a competitive growth assay"
+ },
+ {
+  "id": "PMC6917608",
+  "label": "NONE",
+  "reasoning": "Zero matches for any of the 25 patterns anywhere in the paper.",
+  "quote": null
+ },
+ {
+  "id": "PMC6968917",
+  "label": "NONE",
+  "reasoning": "Zero matches for any of the 25 patterns anywhere in the paper.",
+  "quote": null
+ },
+ {
+  "id": "PMC7006212",
+  "label": "NONE",
+  "reasoning": "Zero matches across all 25 patterns. This paper (isogenic CRISPR screen work on TP53/neddylation) contains no discussion of gene/pathway set size, set construction, or its statistical consequences anywhere in the text.",
+  "quote": null
+ },
+ {
+  "id": "PMC7153937",
+  "label": "NONE",
+  "reasoning": "Zero matches across all 25 patterns. No content in this paper touches set size, set construction, or related statistical methodology.",
+  "quote": null
+ },
+ {
+  "id": "PMC7166082",
+  "label": "ADJUSTS",
+  "reasoning": "In the Quantification and Statistical Analysis section (body text, not a caption), the paper states it performed gene set enrichment analysis using the GSEA tool. GSEA's core algorithm computes a normalized enrichment score (NES) that corrects for gene set size, and the paper states this method was actually run (not merely cited as available), which is the explicit ADJUSTS example given in the instructions. The other keyword hits in this paper ('competitive', 'null model') are false positives referring to a 'competitive growth assay' (cell-mixing GFP/mCherry experiment) and to the M0/M1 null model used in the MEMcrispR mixed-effects model for sgRNA-level significance \u2014 neither is about gene-set size.",
+  "quote": "Gene set enrichment analysis was performed using the GSEA tool from the Broad institute."
+ },
+ {
+  "id": "PMC7367200",
+  "label": "NONE",
+  "reasoning": "Zero matches across all 25 patterns. No engagement with set size or its statistical consequences.",
+  "quote": null
+ },
+ {
+  "id": "PMC7368463",
+  "label": "NONE",
+  "reasoning": "All 'competitive' hits refer to 'competitive growth assays' (an in vitro/in vivo cell-competition technique with mCherry/GFP-labeled cells), not a competitive gene-set statistical test. The single 'number of genes in' hit is about genes mutated in patient cancers, unrelated to set size. No content addresses gene/pathway set size or its statistical consequences.",
+  "quote": null
+ },
+ {
+  "id": "PMC7376217",
+  "label": "NONE",
+  "reasoning": "The two 'number of genes in' hits and the adjacent COMPLEAT 'factors in complex size' statement occur only inside figure captions (Figure 7 and Figure 8 captions), which per the task rules are not evidence of anything. The corresponding body-text descriptions of the GO (Metascape) and protein-complex (COMPLEAT) enrichment analyses do not themselves mention size or any size-based adjustment; they just state the tools were used for enrichment scoring.",
+  "quote": "Nodes represent subclusters, with node size corresponding to the number of genes in that node."
+ },
+ {
+  "id": "PMC7414171",
+  "label": "NONE",
+  "reasoning": "Zero matches across all 25 patterns. No discussion of set size, set construction, or its statistical consequences.",
+  "quote": null
+ },
+ {
+  "id": "PMC7433747",
+  "label": "NONE",
+  "reasoning": "Zero matches across all 25 search patterns in the full text. Nothing in the paper touches set size, set construction, or the statistical consequences of either.",
+  "quote": null
+ },
+ {
+  "id": "PMC7463323",
+  "label": "NONE",
+  "reasoning": "Zero matches across all 25 search patterns in the full text. Nothing in the paper touches set size, set construction, or the statistical consequences of either.",
+  "quote": null
+ },
+ {
+  "id": "PMC7584921",
+  "label": "ADJUSTS",
+  "reasoning": "The paper ran GSEA (Subramanian et al., 2005) on its ranked CRISPR-screen gene list and reports results as normalized enrichment scores (NES), the GSEA statistic that explicitly normalizes for differences in gene-set size before assessing significance (FDR q<0.1). This is a used, not merely cited, size-normalizing method. The other hit (a resampling null for a BioID interactome analysis) is unrelated to gene-set size and doesn't add to the label.",
+  "quote": "(B) Gene set enrichment analysis normalized enrichment scores for all significant (FDR  q  < 0.1) Gene Ontology (GO) biological processes."
+ },
+ {
+  "id": "PMC7591259",
+  "label": "ADJUSTS",
+  "reasoning": "The paper used GSEA to test hallmark pathways for enrichment in OSCC dependency groups and explicitly filtered/reported results by normalized enrichment score (NES), the size-normalized GSEA statistic. This is a stated use of a size-accounting method, not just a citation. A separate over-representation (hypergeometric-style) analysis via ConsensusPathDB is also present but doesn't itself adjust for size; the GSEA/NES usage is what grounds the label.",
+  "quote": "Only common hallmarks (between cell lines and tumors) with positive normalized enrichment score (NES) of >0.5 were shown."
+ },
+ {
+  "id": "PMC7642327",
+  "label": "NONE",
+  "reasoning": "The sole match ('number of genes in') is a reviewer-response passage about the screen hitting a large number of genes in the secretory/endocytic pathway, unrelated to gene-set size or its statistical consequences.",
+  "quote": null
+ },
+ {
+  "id": "PMC7660927",
+  "label": "ADJUSTS",
+  "reasoning": "To test whether the overlap of top hits between two independent ATRi screens exceeded chance, the authors computed a null/expected-overlap probability that explicitly incorporates each hit list's size relative to the total library size \u2014 a size-aware null model used to judge significance of their own overlap result, not merely cited from elsewhere.",
+  "quote": "The random probabilities of identical genes within the top hits with logP values lower than -2.0 were calculated by multiplying the individual probabilities of each set: [(number of genes in set 1/total number of genes in the library) * (number of genes in set 2/total number of genes in the library)]."
+ },
+ {
+  "id": "PMC7686728",
+  "label": "NONE",
+  "reasoning": "The sole match ('permutation') refers to gscreend's use of permutations to calculate an internal null parameter (rho_0) for per-gene FDR in essential-gene calling from CRISPR screens \u2014 an unrelated statistical procedure with no connection to gene/pathway set size or its consequences.",
+  "quote": "For gscreend analysis, the number of permutations used to calculate the \u23740 parameter for gene ranking was set to 10,000."
+ },
+ {
+  "id": "PMC7704667",
+  "label": "NONE",
+  "reasoning": "Zero matches on any pattern in the scanned full text. No engagement with gene set size, set construction, or its statistical consequences was found anywhere in the paper.",
+  "quote": null
+ },
+ {
+  "id": "PMC7723770",
+  "label": "NONE",
+  "reasoning": "The paper runs standard GO enrichment via hypergeometric test (ClusterProfiler enricher, FDR-corrected) on CRISPR screen hits and network-propagation clusters \u2014 a self-contained test that does not account for set size, and the paper never frames it that way. The 'permutation' hits are a separate permutation test used to correct for node-degree bias in network propagation, unrelated to gene set size. No mention of set size, pathway size, or size-related statistical consequences anywhere.",
+  "quote": "For the GO analysis, p values of hypergeometric tests were determined using the Cluster Profiler enricher function in R and adjusted with \u201cfdr\u201d correction method."
+ },
+ {
+  "id": "PMC7737610",
+  "label": "NONE",
+  "reasoning": "Zero matches on any pattern. No discussion of gene set size, enrichment method choice, or related statistical issues found in the scanned text.",
+  "quote": null
+ },
+ {
+  "id": "PMC7790754",
+  "label": "NONE",
+  "reasoning": "The single hit is casTLE's use of negative-control sgRNAs as a 'null model' to score individual gene effects in a CRISPR screen \u2014 a gene-level null unrelated to gene-set/pathway size. The paper does not perform gene-set enrichment analysis or discuss set-size bias at all.",
+  "quote": "Bioinformatical analysis of genome-wide screen was performed using casTLE according to the previous studies, which is a maximum likelihood estimator that uses a background of negative control gRNAs as a null model to estimate gene effect and score."
+ },
+ {
+  "id": "PMC7796900",
+  "label": "ADJUSTS",
+  "reasoning": "For pathway enrichment on CRISPR screen z-scores, the paper explicitly states it used competitive gene set testing in pre-ranked mode (citing Wu and Smyth 2012, the CAMERA method paper, which is a competitive test that accounts for inter-gene correlation and set size in its null). This is a stated USE of a competitive gene-set test, not a bare citation of a tool.",
+  "quote": "enriched pathways were identified from the NIH NCATS BioPlanet database ( Huang et al., 2019 ), which aggregates currates pathways from multiple sources, using competitive gene set testing of z-scores in pre-ranked mode ( Wu and Smyth, 2012 )."
+ },
+ {
+  "id": "PMC7875399",
+  "label": "NONE",
+  "reasoning": "The paper runs a PANTHER 'statistical overrepresentation test' (a standard hypergeometric-type test) against the whole human reference genome as background for GO enrichment of a fixed hit list. This is a routine unadjusted over-representation test with no discussion of set size, size bias, or size-matching as a methodological concern.",
+  "quote": "This gene list was queried for enrichment of Gene Ontology classifications relative to all genes in the reference human genome using the PANTHER statistical overrepresentation test (PANTHER version 15.0, release February 14, 2020)"
+ },
+ {
+  "id": "PMC7878750",
+  "label": "NONE",
+  "reasoning": "Zero matches on any pattern in the scanned full text. No engagement with gene set size or its statistical consequences found.",
+  "quote": null
+ },
+ {
+  "id": "PMC8021101",
+  "label": "NONE",
+  "reasoning": "This is a CRISPR-based mechanistic paper on BEND3/TAK-243/BCRP resistance in AML. The only pattern hit ('competitive') refers to TAK-243 binding UBA1 in an 'ATP-competitive manner,' a biochemistry term unrelated to gene-set/pathway statistics. No discussion of gene set size, background sets, or enrichment methodology anywhere in the paper.",
+  "quote": "TAK-243 is an AMP mimetic that binds to the nucleotide-binding site of the UBA1 enzyme in an ATP-competitive manner and then forms a covalent adduct with ubiquitin in a reaction requiring UBA1 activity."
+ },
+ {
+  "id": "PMC8022920",
+  "label": "NONE",
+  "reasoning": "Zero matches across all 25 search patterns. This paper (mechanism unclear from title alone, but scan returned nothing) contains no discernible language about gene set/pathway size, enrichment testing, permutation nulls, or related concepts.",
+  "quote": null
+ },
+ {
+  "id": "PMC8045932",
+  "label": "NONE",
+  "reasoning": "This TAPR1/telomerase CRISPR screen paper uses a hypergeometric test to assess the significance of overlap between two experimentally-derived DEG lists (TERT-KO vs TAPR1-KO upregulated genes), and uses gprofiler2 for GO term enrichment with only a filter for '<1000 terms' (a redundancy/visualization filter, not a set-size bias control). Neither instance discusses or corrects for gene-set size as a statistical confound; the hypergeometric test here is the standard/default method for list-overlap significance, not a stated size adjustment.",
+  "quote": "Statistical significance of the overlap between gene lists was calculated using the hypergeometric test in R."
+ },
+ {
+  "id": "PMC8164247",
+  "label": "NONE",
+  "reasoning": "This pancreatic cancer CRISPR activation/knockout screen paper performs standard pathway over-representation analysis using Fisher's exact test comparing observed vs. expected gene counts per pathway. This is the plain/default over-representation test with no stated background-matching, size-range restriction, or other size-bias control described.",
+  "quote": "P-values reported are derived from Fisher's exact test comparing observed versus expected number of genes in each pathway."
+ },
+ {
+  "id": "PMC8210162",
+  "label": "NONE",
+  "reasoning": "This GPS167/CLK-inhibitor CRISPR screen paper mentions using 'GSEA software' to identify an enriched p53 pathway and separately uses Fisher's exact test to assess overlap significance between two DEG lists. Neither passage describes any size-normalization detail (e.g., NES) or size-matching control; GSEA is merely named as a tool used, not described as applied with any size-bias-aware setting.",
+  "quote": "A functional analysis with the GSEA software identified 10 genes in the p53 functional cluster as the most statistically significant pathway being affected."
+ },
+ {
+  "id": "PMC8260754",
+  "label": "NONE",
+  "reasoning": "Zero matches across all 25 search patterns; no language anywhere in the paper touches on gene set/pathway size, enrichment testing, permutation nulls, or background/universe construction.",
+  "quote": null
+ },
+ {
+  "id": "PMC8352964",
+  "label": "ADJUSTS",
+  "reasoning": "This RIT1/KRAS isogenic CRISPR screen paper explicitly truncates both gene lists to an equal top-N (152 genes) specifically to control for differing hit-list sizes before running gene-set overlap analysis, and separately restricts GSEA to gene sets of size 15-500 as a stated inclusion criterion, plus reports use of GSEA's standard permutation-based null (1000 permutations). The size-matching of the two positively-selected gene lists is a direct, stated action taken to account for set-size differences, not just a citation of a tool that could do so.",
+  "quote": "To account for differences in the number of cooperating factors between RIT1 M90I and KRAS G12V, overlap analysis was carried out on the top 152 positively selected genes from each screen."
+ },
+ {
+  "id": "PMC8352983",
+  "label": "NONE",
+  "reasoning": "Scan across all 25 patterns returned zero matches; the paper (AHR/aflatoxin B1/hepatocellular carcinoma) contains no discussion of gene set size, set construction, or its statistical consequences.",
+  "quote": null
+ },
+ {
+  "id": "PMC8373146",
+  "label": "NONE",
+  "reasoning": "Only hit was 'permutation', but in context it refers to a permutation-based FDR method (Perseus) applied to TMT proteomics differential expression, entirely unrelated to gene set/pathway size or set-based testing.",
+  "quote": "The different expression analysis was performed with Perseus (version 1.6.7.0) with criteria, a permutation-based False Discovery Rate (FDR) <0.001 and S0 = 0.1"
+ },
+ {
+  "id": "PMC8384091",
+  "label": "NONE",
+  "reasoning": "Scan across all 25 patterns returned zero matches; no engagement with gene set size or its statistical consequences found anywhere in the retrieved text.",
+  "quote": null
+ },
+ {
+  "id": "PMC8494907",
+  "label": "NONE",
+  "reasoning": "Scan across all 25 patterns returned zero matches; paper on an NQO1-activatable UPS inhibitor contains no discussion of gene set size or set-based enrichment statistics.",
+  "quote": null
+ },
+ {
+  "id": "PMC8532573",
+  "label": "NONE",
+  "reasoning": "Scan across all 25 patterns returned zero matches; no discussion of set size, set construction, or related statistical issues found.",
+  "quote": null
+ },
+ {
+  "id": "PMC8741300",
+  "label": "NONE",
+  "reasoning": "Scan across all 25 patterns returned zero matches for this CRISPR screen paper (autophagy/coronavirus interactors); no gene-set-size-related content found.",
+  "quote": null
+ },
+ {
+  "id": "PMC8791584",
+  "label": "ADJUSTS",
+  "reasoning": "The 'competitive' and 'overrepresentation' hits are unrelated (statin biochemistry; plain descriptive word). But follow-up scan on GSEA/NES/enrichment shows the paper explicitly performed GSEA (GSEA 4.1.0, Broad Institute) and reported/filtered its own gene-set results using the Normalized Enrichment Score (NES), which corrects GSEA's raw enrichment score for gene set size \u2014 e.g. thresholding sets at 'NES >2.0' in a supplemental figure, and tabulating NES values for individual gene sets. This is documented use of a size-correcting statistic on the paper's own results, not a bare citation of the GSEA tool.",
+  "quote": "Shown are gene sets related to vesicular transport and cholesterol homeostasis with NES >2.0 and FDR < 0.05."
+ },
+ {
+  "id": "PMC8792531",
+  "label": "NONE",
+  "reasoning": "This is a CRISPR sgRNA screen paper (MAGeCK-based hit calling). The only keyword hit is 'overrepresentation' referring to ~500-fold overrepresentation of each sgRNA during lentiviral transduction (a library-coverage QC concept), not gene/pathway set size or its statistical consequences. No gene-set enrichment methodology is discussed anywhere in the paper.",
+  "quote": "to achieve ~ 500-fold overrepresentation of each sgRNA."
+ },
+ {
+  "id": "PMC8893346",
+  "label": "NONE",
+  "reasoning": "Zero matches across all 25 patterns in the full text. No mention of set size, gene-set enrichment methodology, permutation nulls, or any related concept was found.",
+  "quote": null
+ },
+ {
+  "id": "PMC8929698",
+  "label": "NONE",
+  "reasoning": "Zero matches across all 25 patterns in the full text. No mention of set size, gene-set enrichment methodology, permutation nulls, or any related concept was found.",
+  "quote": null
+ },
+ {
+  "id": "PMC9039069",
+  "label": "ADJUSTS",
+  "reasoning": "The paper performs preranked Gene Set Enrichment Analysis (GSEA) on CRISPR screen gene scores and explicitly reports results using the Normalized Enrichment Score (NES), GSEA's statistic that normalizes the raw enrichment score by permutations restricted to gene sets of the same size, which corrects for the tendency of larger sets to score more extreme. This is used substantively in the main text (not just a figure caption) to report and interpret specific pathway results.",
+  "quote": "The only pathway that was confirmed as specific antiviral was the phosphatidylglycerol biosynthetic process (normalized enrichment score (NES) = \u22121.94, FDR = 0.007 in the infection screen, NES = \u22121.35, FDR = 0.526 in the cell viability screen)"
+ },
+ {
+  "id": "PMC9043932",
+  "label": "ADJUSTS",
+  "reasoning": "The paper performs GSEA on RNA-seq data (using an OXPHOS gene signature) to interpret CRISPR screen findings, explicitly using and reporting the GSEA Normalized Enrichment Score (NES) output, which by construction normalizes for gene-set size via same-size permutations. This is described in the main body as an analysis actually carried out, not merely a cited tool.",
+  "quote": "GSEA using the RNA-seq data from Nalm6 showed that genes associated with mitochondrial activity including OXPHOS, pyruvate metabolism, and tricarboxylic acid (TCA) cycle were significantly decreased under panobinostat treatment (Figure 3B-D)."
+ },
+ {
+  "id": "PMC9106303",
+  "label": "NONE",
+  "reasoning": "The only relevant hit is a single passing sentence naming the analysis method used (WebGestalt overrepresentation analysis) for a small gene list. The paper does not discuss gene set size, set/background construction, or any statistical consequence of set size; hypergeometric/ORA is also not itself a size-correcting method in the sense the audit targets (that role belongs to competitive tests/size-preserving permutation, not basic ORA).",
+  "quote": "Gene set enrichment analysis was performed on WebGestalt ( 71 ) (WEB-based gene set analysis toolkit) using the overrepresentation analysis method, and the graph was generated on GraphPad."
+ },
+ {
+  "id": "PMC9108107",
+  "label": "NONE",
+  "reasoning": "Zero matches across all 25 patterns in the full text. No mention of set size, gene-set enrichment methodology, permutation nulls, or any related concept was found.",
+  "quote": null
+ },
+ {
+  "id": "PMC9164056",
+  "label": "NONE",
+  "reasoning": "This CRISPR screen paper (LUBAC/RNF31 in CD8 T and NK cell killing) contains zero matches for any of the 25 search patterns across the entire full text. It reports MAGeCK RRA-based hit calling and individual gene validation but never performs or discusses gene-set/pathway enrichment testing, permutation nulls, or any construct related to gene-set size.",
+  "quote": null
+ },
+ {
+  "id": "PMC9245005",
+  "label": "ADJUSTS",
+  "reasoning": "In addition to a Figure 1C caption noting NES/hypergeometric p-values for a MAGeCKFlute-based GSEA on the CRISPR screen hits, the Methods section independently states GSEA was actually run on the TNF RNA-seq DEGs using the clusterProfiler package with a pre-ranked metric against MSigDB C2-CP gene sets. GSEA's normalized enrichment score (NES) is exactly the size-normalizing statistic named as an ADJUSTS example, and this is a genuine reported use, not a bare citation.",
+  "quote": "Gene set enrichment analysis (GSEA) was performed in R using clusterProfiler package (version 4.1.4) with pre-ranked log2 fold change of gene expression as a metric, and using the C2-CP sub-collection from MSigDB."
+ },
+ {
+  "id": "PMC9355872",
+  "label": "NONE",
+  "reasoning": "Zero matches for all 25 patterns anywhere in the full text. No gene-set enrichment, permutation testing, or set-size-related methodology is present in this paper.",
+  "quote": null
+ },
+ {
+  "id": "PMC9374383",
+  "label": "NONE",
+  "reasoning": "Zero matches for all 25 patterns anywhere in the full text. No gene-set enrichment, permutation testing, or set-size-related methodology is present in this paper.",
+  "quote": null
+ },
+ {
+  "id": "PMC9433322",
+  "label": "ADJUSTS",
+  "reasoning": "Beyond figure-legend mentions of NES/permutation-test for GSEA panels, the Methods section explicitly states the fgsea R package was used to run GSEA on DESeq2-ranked genes against MSigDB hallmark gene sets. fgsea computes a permutation-based, size-normalized enrichment score (NES), which the task's own ADJUSTS example (GSEA's NES) covers; this is a genuine reported use in Methods, not merely a citation.",
+  "quote": "The R package fgsea 58 v1.18.0 was used to perform GSEA, with gene ranking based on DESeq2 test statistic and MSigDB v7.2 hallmark gene sets 59 as the reference gene lists."
+ },
+ {
+  "id": "PMC9481918",
+  "label": "NONE",
+  "reasoning": "Zero matches for all 25 patterns anywhere in the full text. No gene-set enrichment, permutation testing, or set-size-related methodology is present in this paper.",
+  "quote": null
+ },
+ {
+  "id": "PMC9621571",
+  "label": "NONE",
+  "reasoning": "Zero matches for all 25 patterns anywhere in the full text. No gene-set enrichment, permutation testing, or set-size-related methodology is present in this paper.",
+  "quote": null
+ },
+ {
+  "id": "PMC9623979",
+  "label": "NONE",
+  "reasoning": "Chemogenomic screen for GBF1 synthetic lethal partners; scan across all 25 size/permutation/enrichment-method patterns returned zero matches anywhere in the retrieved full text.",
+  "quote": null
+ },
+ {
+  "id": "PMC9627126",
+  "label": "NONE",
+  "reasoning": "Gastric cancer CRISPR screen for ATR inhibitor resistance genes; zero matches for any set-size, permutation, or gene-set-test terminology in the full text.",
+  "quote": null
+ },
+ {
+  "id": "PMC9627672",
+  "label": "NONE",
+  "reasoning": "Genome-wide CRISPR screen for SARS-CoV-2 entry host factors; zero matches for any of the 25 patterns related to gene-set size or competitive/self-contained test methodology.",
+  "quote": null
+ },
+ {
+  "id": "PMC9793866",
+  "label": "NONE",
+  "reasoning": "Genome-wide CRISPR-Cas9 screen for ceramide toxicity modifiers. The only hits were for 'competitive', but every instance refers to a fluorescent 'competitive growth assay' used to validate individual gene knockouts (a cell-biology co-culture competition assay), not a competitive gene-set enrichment test or any size-related statistical method.",
+  "quote": "We validated our screen results for 10 candidate regulatory genes using competitive growth assays."
+ },
+ {
+  "id": "PMC9800021",
+  "label": "NONE",
+  "reasoning": "SARS-CoV-2 entry factor screen across cell lines; zero matches for any set-size, permutation, or enrichment-test terminology in the full text.",
+  "quote": null
+ },
+ {
+  "id": "PMC9827541",
+  "label": "NONE",
+  "reasoning": "Genome-wide screen for genes required for INM protein turnover; zero matches for any of the 25 patterns concerning gene-set size or statistical enrichment methodology.",
+  "quote": null
+ },
+ {
+  "id": "PMC9873647",
+  "label": "NONE",
+  "reasoning": "CRISPR-Cas9 and secondary knockdown screens for formaldehyde resistance genes (identifying EXO1); zero matches for any set-size, permutation, or gene-set-test terminology in the full text.",
+  "quote": null
+ },
+ {
+  "id": "PMC9884621",
+  "label": "NONE",
+  "reasoning": "This is a CRISPR screen paper with zero matches across all 25 search patterns related to gene set size, set-size-aware statistical methods, or enrichment testing. No engagement with the topic at all.",
+  "quote": null
+ },
+ {
+  "id": "PMC9892530",
+  "label": "NONE",
+  "reasoning": "This is a CRISPR screen paper with zero matches across all 25 search patterns related to gene set size, set-size-aware statistical methods, or enrichment testing. No engagement with the topic at all.",
+  "quote": null
+ },
+ {
+  "id": "PMC9929516",
+  "label": "NONE",
+  "reasoning": "The only matches were for 'hypergeometric,' but in context this refers to using a hypergeometric distribution to combine multiple sgRNA-level z-scores into a single gene-level score within their CRISPR screen ('inputs for hypergeometric analyses to calculate final ranked scores for each gene'). This is guide-to-gene score aggregation, not a gene-set/pathway enrichment test against a background, and has nothing to do with gene set size or its statistical consequences.",
+  "quote": null
+ },
+ {
+  "id": "PMC9973025",
+  "label": "ADJUSTS",
+  "reasoning": "The paper explicitly states it used Gene Set Enrichment Analysis (GSEA, via the MAGeCK-Flute pipeline) to identify enriched Gene Ontology pathways from their CRISPR screen hits, and reports ranking pathways by the Normalized Enrichment Score (NES) -- GSEA's standard size-normalization statistic, which corrects the raw enrichment score for gene set size. This is a stated USE of a size-normalizing method, not just a citation of a tool.",
+  "quote": "The top 20 most enriched Negative Gene Ontologies (most enriched pathways of the depleted/dependency factor candidate genes) are shown here in ranked order by inverse Normalized Enrichment Score (NES)."
+ },
+ {
+  "id": "PMC9994488",
+  "label": "NONE",
+  "reasoning": "This is a CRISPR screen paper with zero matches across all 25 search patterns related to gene set size, set-size-aware statistical methods, or enrichment testing. No engagement with the topic at all.",
+  "quote": null
+ },
+ {
+  "id": "PMC9998968",
+  "label": "NONE",
+  "reasoning": "This is a CRISPR screen paper with zero matches across all 25 search patterns related to gene set size, set-size-aware statistical methods, or enrichment testing. No engagement with the topic at all.",
+  "quote": null
+ }
+]

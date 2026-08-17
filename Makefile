@@ -88,6 +88,7 @@ test:
 	@$(PY) tests/test_frozen_invariants.py
 	@$(PY) tests/test_cross_surface.py
 	@$(PY) tests/test_page_audit_parity.py
+	@$(PY) tests/test_r_integration.py
 
 # A PIPELINE'S EXIT STATUS IS ITS LAST COMMAND'S. Every suite below used to be
 # piped into `tail -1`, so the status make saw was tail's and was always 0:

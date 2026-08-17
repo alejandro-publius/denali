@@ -1,0 +1,110 @@
+[
+ {
+  "id": "PMC10617673",
+  "label": "ADJUSTS",
+  "reasoning": "Ran GSEAPreranked on GPS ORFeome delta-PSI ranks against MSigDB C5, stating 10,000 permutations and an explicit gene-set size window (excluding sets with <10 or >1000 members after intersection with the ORF list). That is a stated size restriction plus GSEA's size-normalised statistic, though the paper never names size as a confound.",
+  "quote": "The classic Kolmorogorov-Smirnov scoring scheme was used with 10,000 permutations and excluded gene sets with <10 or >1000 entries when intersected with the list of GPS ORFs."
+ },
+ {
+  "id": "PMC12107129",
+  "label": "ADJUSTS",
+  "reasoning": "Genome-wide CRISPR screens analysed with MAGeCK RRA, then functional annotation by fgsea against KEGG and CORUM; the released result tables report normalized enrichment score (NES) and pathway size per pathway, i.e. the size-normalised GSEA statistic was actually used and reported. No discussion of size as a confound anywhere.",
+  "quote": "Summary includes pathway annotation (name, genes included), pathway size, normalized enrichment score (NES), and statistical significance (padj)."
+ },
+ {
+  "id": "PMC4964798",
+  "label": "NONE",
+  "reasoning": "Haploid gene-trap and GeCKO CRISPR screens scored per gene with RIGER (its \"normalized enrichment score\" is a gene-level guide statistic, not a gene-set one) and a one-sided Fisher exact test on insertion counts. The only gene-set analysis is a GOrilla run named solely in a supplementary data-table legend and an Extended Data figure legend, with no method detail; the \"competitive\" hits are competitive FLAG elution and competitive inhibition of riboflavin uptake. Nothing addresses gene-set size or set construction.",
+  "quote": null
+ },
+ {
+  "id": "PMC5081405",
+  "label": "ADJUSTS",
+  "reasoning": "Genome-wide dropout screens in AML lines; gene sets (proteasome, spliceosome, ribosome, etc.) were tested against a Depletion/Enrichment ranking with GSEA, and significance was computed against a null built from randomly generated signatures matched to the real signatures' sizes. That is an explicit size-preserving permutation null, used to generate the reported p-values, not merely a cited option.",
+  "quote": "The significance of the obtained enrichment scores were computed as nominal P values from permutation tests (1,000 trials with randomly generated signatures of the same sizes of the real ones)."
+ },
+ {
+  "id": "PMC5777035",
+  "label": "MENTIONS",
+  "reasoning": "Gene-set enrichment for the GFP-PARKIN screen used a plain hypergeometric overrepresentation test on the top 500 genes, with BH correction over gene sets and input list size only. The authors observe in Results that the most significant sets are predominantly very large (>1,000 genes) and label gene-set sizes in Fig. S2D, but they neither correct for it, size-match a background, nor quantify a size-versus-significance relationship.",
+  "quote": "A hypergeometric enrichment analysis of genes in GFP-low and -high cells revealed predominantly large gene sets in the 10 most significant sets on both time points, with the top-scoring sets comprising >1,000 genes"
+ },
+ {
+  "id": "PMC6093911",
+  "label": "ADJUSTS",
+  "reasoning": "PEL CRISPR dropout screens scored with MAGeCK RRA, then GSEA run on the ranked depletion scores; the paper reports and plots GSEA normalized enrichment scores (Fig. 1d legend defines NES, Fig. 1e is a heatmap of GSEA NESs across cell lines), so the size-normalised statistic was used and reported. Separately DAVID was used for the PSOD pathway analysis with per-pathway gene counts shown, but size is never discussed as a confound.",
+  "quote": "GSEA 44  was performed using the ranked depletion scores calculated by MAGeCK."
+ },
+ {
+  "id": "PMC7166082",
+  "label": "ADJUSTS",
+  "reasoning": "Screens were analysed with the authors' MEMcrispR mixed-effects models (the \"null model\" hits are M0 vs M1 likelihood-ratio comparisons at the gene level, unrelated to set size) and GO terms via ToppGene, but the statistics section states GSEA was performed, and GSEA plots are shown for GO proliferation/NF-kB/EMT sets on the mRNA-seq data. This is a bare one-line statement of GSEA use with no parameters, no NES reported, and no mention of set size anywhere; it qualifies only because GSEA's statistic is size-normalised.",
+  "quote": "Gene set enrichment analysis was performed using the GSEA tool from the Broad institute."
+ },
+ {
+  "id": "PMC7584921",
+  "label": "ADJUSTS",
+  "reasoning": "Genome-wide SARS-CoV-2 CRISPR screen. The Methods state the pathway analysis was run with the fgsea package on the full ranked gene list against GO biological-process sets, and Figure 3B/Table S2 report the results as normalized enrichment scores (NES) at FDR q < 0.1 \u2014 i.e. the paper used a pre-ranked GSEA whose statistic is normalised for gene-set size. It never names size as a confound and does no size-stratified or size-sensitivity analysis of its own results, so it stops short of MEASURES.",
+  "quote": "Gene Set Enrichment Analyses were performed using the fgsea package with Gene Ontology for biological processes (c5.bp.v7.1.symbols) ( Korotkevich et al., 2019 )."
+ },
+ {
+  "id": "PMC7591259",
+  "label": "ADJUSTS",
+  "reasoning": "OSCC CRISPR fitness screen. Two enrichment analyses are run: a plain ConsensusPathDB over-representation analysis for KEGG (which does nothing for size), and GSEA against MSigDB hallmark sets for the dependency-signature groups. The GSEA results are reported and filtered on normalized enrichment score (NES > 0.5), so a set-size-normalised statistic was actually used on its own data. No quantification of a size effect anywhere.",
+  "quote": "Only common hallmarks (between cell lines and tumors) with positive normalized enrichment score (NES) of >0.5 were shown."
+ },
+ {
+  "id": "PMC7660927",
+  "label": "MENTIONS",
+  "reasoning": "Dual CRISPR KO/activation ATR-inhibitor screen. Its GO 'biological pathway analysis' of top hits is described in one sentence with no background, universe, or size handling at all. The only place set size figures into a statistic is a chance-overlap calculation between the two screens' hit lists, which divides each list's gene count by the library size; this touches the arithmetic consequence of list size but is a plain over-representation-style baseline, not a size adjustment applied to any gene-set test, so I keep it at the weaker label.",
+  "quote": "The random probabilities of identical genes within the top hits with logP values lower than -2.0 were calculated by multiplying the individual probabilities of each set: [(number of genes in set 1/total number of genes in the library) * (number of genes in set 2/total number of genes in the library)]."
+ },
+ {
+  "id": "PMC7796900",
+  "label": "ADJUSTS",
+  "reasoning": "Coronavirus CRISPR screens in Huh-7.5 cells. The Methods explicitly state that enriched BioPlanet pathways were identified by competitive gene-set testing of z-scores in pre-ranked mode, citing Wu & Smyth 2012 (CAMERA). This is a stated use of a competitive gene-set test, not merely a citation. It does not report any measurement of how set size affected its own enrichment results.",
+  "quote": "Briefly, enriched pathways were identified from the NIH NCATS BioPlanet database ( Huang et al., 2019 ), which aggregates currates pathways from multiple sources, using competitive gene set testing of z-scores in pre-ranked mode ( Wu and Smyth, 2012 )."
+ },
+ {
+  "id": "PMC8352964",
+  "label": "ADJUSTS",
+  "reasoning": "Isogenic PC9 oncogene-dependency CRISPR screens. Two stated size controls: the MSigDB/StringDB overlap analysis was deliberately run on equal-sized top-152 gene lists from each screen to remove the difference in list length, and the pre-ranked GSEA was run with explicit minimum (15) and maximum (500) gene-set size cutoffs for set inclusion. Both are uses of size controls; neither quantifies the size effect on its results.",
+  "quote": "To account for differences in the number of cooperating factors between RIT1 M90I  and KRAS G12V , overlap analysis was carried out on the top 152 positively selected genes from each screen."
+ },
+ {
+  "id": "PMC8791584",
+  "label": "ADJUSTS",
+  "reasoning": "Short-format statin/AML paper with a genome-wide CRISPR screen. It states it ran GSEA 4.1.0 twice \u2014 on the screen's RANKS-ordered gene list (supplemental Fig. 3) and on the differential-expression ranked list (Fig. 2B) \u2014 and the figure reports normalized enrichment score (NES), the set-size-normalised statistic. Its only other language ('overrepresentation of gene sets') is informal prose, not a described test, and there is no discussion or measurement of set-size effects.",
+  "quote": "Gene set enrichment analysis (GSEA) was performed with GSEA 4.1.0 software from the Broad Institute using a list of differentially expressed genes between sensitive and resistant specimens ordered based on fold change of expression."
+ },
+ {
+  "id": "PMC9039069",
+  "label": "ADJUSTS",
+  "reasoning": "SARS-CoV-2 variant CRISPR screens. GSEA was run on the directed gene scores from the infection screens and, separately, on the uninfected viability screen, with results reported as NES plus FDR \u2014 a set-size-normalised enrichment statistic applied to its own data. The infection-vs-viability comparison is a specificity control, not a size analysis, and set size is never named or quantified.",
+  "quote": "The only pathway that was confirmed as specific antiviral was the phosphatidylglycerol biosynthetic process (normalized enrichment score (NES) = \u22121.94, FDR = 0.007 in the infection screen, NES = \u22121.35, FDR = 0.526 in the cell viability screen) (Fig.  2a )."
+ },
+ {
+  "id": "PMC9043932",
+  "label": "ADJUSTS",
+  "reasoning": "Screen-hit enrichment was plain ORA via Enrichr and STRING with no size handling, but the Methods state that Broad-Institute GSEA with MSigDB gene sets was run on the RNA-seq data, and the GSEA results are reported as normalized enrichment scores (NES defined in the Fig. 3 legend, NES panels in Figs. 3B-D and 5C-D). GSEA's NES is normalised by gene-set size, so the paper used a size-accounting statistic, though it never names set size as a concern and never quantifies its effect.",
+  "quote": "Gene set enrichment analysis (GSEA; Broad Institute) was done using gene sets from MSigDB (v.5.0)."
+ },
+ {
+  "id": "PMC9245005",
+  "label": "ADJUSTS",
+  "reasoning": "The CRISPR-screen enrichment panel (Fig. 1C) is described only in a figure caption and relies on hypergeometric p-values, which is not evidence on its own; however the Methods independently state that pre-ranked GSEA was run in clusterProfiler on the RNA-seq data with MSigDB C2-CP sets, and NES-based GSEA plots are shown. That is a stated use of a set-size-normalised enrichment statistic. The paper never discusses set size itself.",
+  "quote": "Gene set enrichment analysis (GSEA) was performed in R using clusterProfiler package (version 4.1.4) 79 , 80  with pre-ranked log2 fold change of gene expression as a metric, and using the C2-CP sub-collection from MSigDB."
+ },
+ {
+  "id": "PMC9433322",
+  "label": "ADJUSTS",
+  "reasoning": "Methods state fgsea v1.18.0 was used for pre-ranked GSEA against MSigDB hallmark sets, and the results are reported throughout as NES with permutation-based adjusted p-values (Fig. 2j, Fig. 3d, Extended Data Fig. 1a, where GSEA is applied to the CRISPR screen ranking itself). fgsea's NES normalises the enrichment score by gene-set size and its null is built over sets of the same size, so a size-accounting method was used, but the paper never names or quantifies the size effect.",
+  "quote": "The R package fgsea 58  v1.18.0 was used to perform GSEA, with gene ranking based on DESeq2 test statistic and MSigDB v7.2 hallmark gene sets 59  as the reference gene lists."
+ },
+ {
+  "id": "PMC9973025",
+  "label": "ADJUSTS",
+  "reasoning": "The Methods construct an explicitly size-matched null: non-targeting-control sgRNAs are iteratively binned into synthetic \"genes\" matching both the library's gene count and its sgRNAs-per-gene, and these synthetic NTC genes are the baseline the real gene scores are compared against (Fig. 2A). GSEA within MAGeCK-Flute is also used for the pathway calls. The reported NTC-versus-gene comparison is a signal-to-noise check, not a quantification of how set size drives its own significance, so it stops short of MEASURES.",
+  "quote": "An artificial or \u201cSynthetic\u201d NTC sgRNA set the same size of TKOv3, PIKA, HuEpi, or HIVDEP was created by iteratively binning NTC sgRNA sequences (4 NTC sgRNAs/gene, 8 NTC sgRNAs/gene, 6 NTC sgRNAs/gene, or 8 NTC sgRNAs/gene for each library, respectively)."
+ }
+]

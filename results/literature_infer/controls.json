@@ -1,0 +1,20 @@
+[
+ {
+  "id": "PMC2661051",
+  "label": "MEASURES",
+  "reasoning": "A methodological review/simulation study of gene-set enrichment testing (self-contained vs. competitive null hypotheses, globaltest, Hotelling's T2, etc.). Using their own simulation, they explicitly analyze and report how gene-set size (and its interaction with inter-gene correlation, i.e. 'effective' set size) governs detection difficulty/power across the simulated test sets, a direct quantification of the size effect on their own results.",
+  "quote": "Since the effective gene set size is smaller in a correlated set compared to a set where the genes are independent, it is more difficult to detect enrichment in these situations."
+ },
+ {
+  "id": "PMC5336655",
+  "label": "MEASURES",
+  "reasoning": "This is the SetRank gene-set-enrichment methods paper. Beyond building a p-value formula that incorporates gene-set size and restricting/controlling a maximum gene-set-size parameter, the Discussion explicitly quantifies, on their own benchmark results, that larger gene sets are more readily detected due to increased statistical power, and reports size-stratified counts of significant hits (e.g., sets with <=10 genes vs <=3 genes) to show their method still detects small sets -- a direct size-stratified measurement of their own results.",
+  "quote": "we detected on average 131 significant gene sets with 10 or less genes (standard deviation 10.5) and 76 gene sets with 3 or less genes (standard deviation 7.7)"
+ },
+ {
+  "id": "PMC7373179",
+  "label": "MEASURES",
+  "reasoning": "This is a gene-set/pathway testing methods paper (SEA/ARI) that explicitly checks whether its own enrichment results depend on pathway size: it states 'A proper enrichment method should not depend on the size of the pathway. We checked this property by plotting the adj. P-values against pathway sizes for all pathways from the three databases... the P-values are not associated with the pathway size' (Figure 2). It also runs simulations at small (50), moderate (100), and large (200) gene pathway sizes to compare power across size strata (Figures 3 and Supplementary Fig. 4), a size-stratified sensitivity analysis of its own method's performance.",
+  "quote": "A proper enrichment method should not depend on the size of the pathway. We checked this property by plotting the adj. P-values against pathway sizes for all pathways from the three databases... the P-values are not associated with the pathway size."
+ }
+]

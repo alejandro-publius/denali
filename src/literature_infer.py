@@ -74,13 +74,48 @@ def main() -> int:
     lower, upper = len(both) / n, len(either) / n
     width = upper - lower
 
-    ctrl = {c: (p1.get(c) or {}).get("label", "NOT_CLASSIFIED")
+    # The three positive controls are gene-set-enrichment METHODS papers and
+    # are deliberately NOT in the 111 -- that population is screen papers. They
+    # were classified separately under the identical prompt, rubric and model,
+    # and their labels live in controls.json.
+    _c = _load("controls.json")
+    ctrl = {c: (_c.get(c) or {}).get("label", "NOT_CLASSIFIED")
             for c in POSITIVE_CONTROLS}
     ctrl_ok = sum(1 for v in ctrl.values() if v in ACTED_LABELS)
 
     regex = json.loads(REGEX_ARM.read_text()) if REGEX_ARM.exists() else {}
     regex_union = regex.get("union_either_tier", {}).get("of_resolved")
     regex_tier_a = regex.get("tier_a_explicit_size", {}).get("of_resolved")
+
+    # THE COMPARISON THAT MATTERS is not the two percentages, which happen to
+    # land close together. It is the OVERLAP: which papers each method found.
+    # Two methods can agree on a headline share while disagreeing about almost
+    # every paper behind it, and that is what happened here.
+    import pandas as pd
+    _pp = ROOT / "results" / "literature" / "literature_per_publication.csv"
+    overlap = None
+    if _pp.exists():
+        _d = pd.read_csv(_pp)
+        _d = _d[_d.resolved].set_index("doc")
+        regex_pos = {i for i in _d.index
+                     if _d.loc[i, "tier_a_n"] > 0 or _d.loc[i, "tier_b_n"] > 0}
+        overlap = {
+            "regex_positive": len(regex_pos),
+            "model_acted_confirmed": len(both),
+            "agreed_on": len(both & regex_pos),
+            "acted_but_regex_missed": len(both - regex_pos),
+            "regex_positive_but_did_nothing": len(regex_pos - acted_p1),
+            "reading": (
+                f"Of the {len(both)} publications that actually did something "
+                f"about set size, {len(both - regex_pos)} matched none of the "
+                f"thirteen regex patterns. Of the {len(regex_pos)} the regex "
+                f"called positive, {len(regex_pos - acted_p1)} did nothing. The "
+                f"two methods agree on {len(both & regex_pos)} papers out of a "
+                f"union of {len(both | regex_pos)}. The regex erred in BOTH "
+                f"directions at once, and the closeness of the two headline "
+                f"shares is two errors very nearly cancelling rather than two "
+                f"methods agreeing."),
+        }
 
     # The pre-registered branches, evaluated on the LOWER bound -- the only one
     # the design earns, because papers pass 1 called NONE were never re-read.
@@ -144,6 +179,7 @@ def main() -> int:
                      "recall set read in context. A paper can mention and not act, "
                      "or act and never use a matched word."),
         },
+        "regex_vs_model_overlap": overlap,
         "positive_control": {
             "docs": ctrl, "n_acted": ctrl_ok, "required": len(POSITIVE_CONTROLS)},
         "what_this_does_not_show": (

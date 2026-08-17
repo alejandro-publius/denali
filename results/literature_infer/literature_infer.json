@@ -1,0 +1,57 @@
+{
+  "arm": "evaluation 12 \u2014 the literature arm, read rather than grepped",
+  "prereg": "docs/LITERATURE_INFER_PREREG.md, sha256 cd8252ff..., commit ae63e18, sealed before any paper was classified. Correction 1 appended before the first label existed.",
+  "question": "Of the publications behind the corpus arm's screens, what fraction DID anything about gene-set size \u2014 adjusted for it or measured it \u2014 rather than merely mentioning it?",
+  "n_in_population": 111,
+  "n_unretrieved": 0,
+  "n_scored": 111,
+  "label_counts_pass1": {
+    "NONE": 93,
+    "ADJUSTS": 17,
+    "MEASURES": 1
+  },
+  "acted_band": {
+    "lower": 0.1351,
+    "upper": 0.1622,
+    "width": 0.027,
+    "n_lower": 15,
+    "n_upper": 18,
+    "rule": "lower = both models called it ACTED; upper = either did. Never averaged, never broken by a third vote.",
+    "point_estimate_withheld": false
+  },
+  "verdict": "CLAIM (b) \u2014 the regex undercounted but the picture holds",
+  "second_pass": {
+    "n_re_read": 18,
+    "n_confirmed": 15,
+    "n_overturned": 3,
+    "asymmetry": "Only pass-1 positives were re-read. A paper pass 1 wrongly called NONE is never rescued, so the LOWER bound is a genuine lower bound and the UPPER bound is not a genuine upper bound."
+  },
+  "against_the_regex_arm": {
+    "regex_tier_a_of_resolved": 0.036,
+    "regex_union_either_tier_of_resolved": 0.1802,
+    "model_acted_lower": 0.1351,
+    "model_acted_upper": 0.1622,
+    "note": "The two arms measure DIFFERENT things and the gap is not a correction of one by the other. The regex counted MENTION over thirteen patterns; this counts ACTION over a wider recall set read in context. A paper can mention and not act, or act and never use a matched word."
+  },
+  "regex_vs_model_overlap": {
+    "regex_positive": 20,
+    "model_acted_confirmed": 15,
+    "agreed_on": 5,
+    "acted_but_regex_missed": 10,
+    "regex_positive_but_did_nothing": 13,
+    "reading": "Of the 15 publications that actually did something about set size, 10 matched none of the thirteen regex patterns. Of the 20 the regex called positive, 13 did nothing. The two methods agree on 5 papers out of a union of 30. The regex erred in BOTH directions at once, and the closeness of the two headline shares is two errors very nearly cancelling rather than two methods agreeing."
+  },
+  "positive_control": {
+    "docs": {
+      "PMC7373179": "MEASURES",
+      "PMC5336655": "MEASURES",
+      "PMC2661051": "MEASURES"
+    },
+    "n_acted": 3,
+    "required": 3
+  },
+  "what_this_does_not_show": "That any adjustment was CORRECT. This arm establishes that a method accounting for set size was used or that its effect was quantified, not that either was done well. That is evaluation 11's limitation moved one step out, and this arm does not fix it.",
+  "recall_bound": "The classifier read context windows returned by a 25-term recall pattern set, not whole documents \u2014 paperclip's parallel LLM reader is gated on this account and its `cat` truncates near 1000 characters. A paper that adjusts in language none of the 25 terms touches is still invisible. The window is much wider than evaluation 11's thirteen patterns and it is still a window.",
+  "denominator_warning": "Every fraction is a fraction of the publications evaluation 11 resolved in PubMed Central, not of the literature. Open access is not a random sample of publishing.",
+  "scope": "Aggregate counts only. No publication is named on any rendered surface. Writes results/literature_infer/ only and never results/frozen/: no headline changes because a model said so."
+}

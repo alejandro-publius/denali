@@ -3,7 +3,7 @@
 **A genome-scale CRISPRi screen, read back to ask what it can and cannot discover — and the answer is mostly an artifact of how the programs are defined, not their biology.**
 
 [![CI](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml/badge.svg)](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-521-brightgreen.svg)](tests/test_frozen_invariants.py)
+[![tests](https://img.shields.io/badge/tests-522-brightgreen.svg)](tests/test_frozen_invariants.py)
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](.python-version)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -166,6 +166,65 @@ Crow et al. PNAS 2019 did the cross-dataset version, and GREAT
 region-size bias. What is new here is that the null is packaged, versioned and
 callable from a CLI, an MCP tool and a browser — not that anyone thought of it
 first.
+
+## Run it at the enrichment step, from R
+
+The audit is useful in the ten seconds after an enrichment finishes and nearly
+useless a week later, once the top of the list is already in a slide. Every
+other surface here asks the analyst to stop, export, and go somewhere else — so
+for an R user running clusterProfiler, the check effectively does not exist.
+
+```r
+source("integrations/denali.R")
+ego <- clusterProfiler::enrichGO(genes, OrgDb = org.Hs.eg.db, ont = "BP")
+
+denali_audit(ego)      # verdict, R², percentile against 1,272 screens
+denali_rerank(ego)     # which of your top entries size was carrying
+denali_report(ego)     # both, printed verdict-first
+```
+
+It takes an `enrichResult` directly — `BgRatio` and `Count` are what the audit
+reads, so nothing is renamed. **It is a thin shell over the CLI and deliberately
+not a reimplementation**: an R port would be exactly the drift `core.py` warns
+about. `tests/test_r_integration.py` runs the R file and the Python package over
+the same bytes and fails the build if any value differs, the same discipline the
+browser port is held to. Mutation-tested — drop one row inside the R function
+and four checks go red.
+
+## Reading the literature, rather than grepping it
+
+Evaluation 11 asked whether 111 publications *mention* set size, using `grep`
+over thirteen patterns, and its own output says a match is evidence of mention
+and not of handling. **Evaluation 12 asked whether they did anything about it**,
+with two different models reading each paper and disagreement reported as a
+band. Pre-registered at
+[`docs/LITERATURE_INFER_PREREG.md`](docs/LITERATURE_INFER_PREREG.md) before a
+single paper was classified.
+
+**13.5–16.2% of publications adjusted for set size or measured it.** The band is
+papers both models agreed on, to papers either model called; it is never
+averaged and never broken by a third vote.
+
+The headline share sits close to the regex's 18.0%, and **that closeness is two
+errors nearly cancelling rather than two methods agreeing**:
+
+- Of the 15 publications that actually did something, **10 matched none of the
+  thirteen patterns** — mostly because they used GSEA, whose normalised
+  enrichment score divides out set size without anyone saying the word "size".
+- Of the 20 the regex called positive, **13 did nothing** — matches inside a
+  LaTeX preamble, a competitive *binding* assay, a competitive *growth* assay.
+
+The two methods agree on 5 papers out of a union of 25. **Most adjustment in
+this literature is incidental**: it arrives bundled inside GSEA rather than as a
+decision anyone made, which is a weaker thing than the field handling the
+problem, and a different thing from the field ignoring it.
+
+This is an estimate produced by a language model reading context windows, not
+whole papers — `paperclip`'s parallel reader is gated and its `cat` truncates at
+1,000 characters. That bounds recall and is disclosed as Correction 1 in the
+pre-registration, appended before the first label existed. It writes
+`results/literature_infer/` and never touches `results/frozen/`: no headline
+here changes because a model said so.
 
 ## What we chose, and why
 
@@ -619,7 +678,7 @@ Each was found only by running from a clean clone, and the third only after the 
 
 ## Tests
 
-`tests/test_frozen_invariants.py` — **521 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
+`tests/test_frozen_invariants.py` — **522 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
 
 Two guards exist because each caught a real defect. The **compile guard** parses every file under `src/` and `tests/` before anything else — added after a shipped module was found not to compile. The **scope guard** builds a gene-symbol universe from the Hallmark GMT and fails the build if any symbol appears within 260 characters of verdict language in the rendered page or the captions, with an allowance for "recovered known answer" and "positive control"; it enforces the −0.019 scope limit mechanically. A third set of checks asserts the page makes **no network calls** — no `fetch`, no `XMLHttpRequest`, no external script or stylesheet — so the interactive explorer cannot break unattended.
 
@@ -761,7 +820,7 @@ This is the part we care most about, so it is built into the code rather than pr
 - **We held ten pathways back** and only opened them after the model was frozen and hashed. The model **failed** on them — worse than a coin flip, zero true positives. We published that instead of quietly refitting.
 - **Seven of our eleven evaluations came back negative.** All eleven are reported, including the one that clears its bar by only 0.026.
 - **The one positive is a control, not a discovery.** Run unchanged on a pathway it was never tuned for, the ranking puts that pathway's known master switch at **rank 2 of 11,258**. So the machinery works — it just is not finding what people assume it is finding.
-- **521 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
+- **522 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
 
 ---
 

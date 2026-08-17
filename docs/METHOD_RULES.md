@@ -98,11 +98,38 @@ on the same repository, and not one of the three was caught by reading the code:
   in the file. It tested the presence of strings, not the claim they were
   written to protect.
 
-All three were found by mutation and none by review. The cost of the discipline
-is one minute per guard; the cost of skipping it is a guard that reports safety
-it does not provide, which is strictly worse than no guard, because it stops
-anyone looking again. The same argument the rest of this file makes about
-skipped tests applies to passing ones nobody has falsified.
+All three were found by mutation and none by review.
+
+**Mutate the guard's inputs as well as its subject.** A fourth case appeared the
+same day, in the block written to codify the three above, and it is the one
+"mutate it until it goes red" does not catch. Three new checks sat inside
+`if paired_programs.csv.exists() and readme:` with no `else`. Remove the file
+and they do not fail — they **vanish**, and the suite prints a smaller green
+number indistinguishable from the larger one. Four content mutations had been
+run against those checks and not one touched it, because every one left the file
+present and exercised the true branch.
+
+So the four ways a guard can be green and empty are all different, and only the
+first three share a fix:
+
+| the guard | why it could not fail |
+|---|---|
+| `"0.214" in text and "concordance" not in text` | a clause that was never false |
+| `README.md` pin naming a file it did not open | a path that was never read |
+| three values "somewhere in the README" | a string that occurred elsewhere |
+| three checks behind `if <file>.exists()` | a branch that was never entered |
+
+Preconditions are therefore asserted rather than gated: `test_cross_surface.py`
+now fails if any input its conditional blocks read is absent, so a deleted file
+is loud. Twenty of that file's checks sit inside such a conditional, which is
+fine per block and dangerous in aggregate — the aggregate is what is now
+guarded, and it was verified by deleting an input and watching the total drop
+from 46 to 43 with one loud failure naming the cause.
+
+The cost of the discipline is one minute per guard; the cost of skipping it is a
+guard that reports safety it does not provide, which is strictly worse than no
+guard, because it stops anyone looking again. The same argument the rest of this
+file makes about skipped tests applies to passing ones nobody has falsified.
 
 **Enforce the scope rule where the caller is, not only where you are.** Our
 build-time guard stops us publishing a gene-level claim. It does nothing when an

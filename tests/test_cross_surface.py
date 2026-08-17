@@ -101,6 +101,35 @@ def main() -> int:
     def check(name, cond, detail=""):
         (passed if cond else failed).append(f"{name}{'  --  ' + detail if detail else ''}")
 
+    # ---- preconditions: a missing input must fail, not skip ----------------
+    # Twenty of the check() calls in this file sit inside `if <file>.exists()`.
+    # That is reasonable per block and disastrous in aggregate: delete an input
+    # and those checks do not fail, they VANISH, and the suite prints a smaller
+    # green number that looks exactly like the larger one. It is the same
+    # "passed while testing nothing" shape as the three guards in
+    # docs/METHOD_RULES.md, arrived at by a fourth route -- a branch that is
+    # never entered rather than a clause that is never false.
+    #
+    # Found by the session that owns benchmarks/, reading the block that had
+    # just been added to codify the rule against exactly this. Mutating the
+    # guarded CONTENT four ways never touched it, because every one of those
+    # mutations left the file present and exercised the true branch. The
+    # precondition has to be mutated too, which is now a line in METHOD_RULES.
+    REQUIRED_INPUTS = (
+        "README.md",
+        "audit.html",
+        "examples/example_gprofiler.csv",
+        "results/frozen/program_summary.csv",
+        "results/concordance/paired_programs.csv",
+        "results/corpus/corpus_per_screen.csv",
+        "packages/denali-audit/denali_audit/atlas.py",
+    )
+    absent = [p for p in REQUIRED_INPUTS if not (ROOT / p).exists()]
+    check("cross-surface: every input the gated blocks derive from is present",
+          not absent,
+          f"absent: {absent} — the checks that read these would silently "
+          f"disappear rather than fail, and this suite would still print green")
+
     for label, (pat, canon, equiv) in QUANTITIES.items():
         rx = re.compile(pat, re.I)
         seen = {}

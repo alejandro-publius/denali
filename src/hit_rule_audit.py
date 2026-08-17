@@ -207,9 +207,9 @@ def main() -> int:
         "distinct_verdicts": sorted(verdicts),
         "r2_spread_within_threshold_family": spread,
         "DEFECT THIS ARM SURFACED IN THE SHIPPED TOOL": {
-            "what": ("audit() returns a false all-clear -- verdict NOT SIZE-DOMINATED "
-                     "plus a large negative R2 -- when the hit column is constant at "
-                     "most values."),
+            "what": ("audit() returned a false all-clear -- a verdict plus a large negative "
+                     "R2 -- when the hit column is constant at most values. FIXED at "
+                     "5f10e28 after this arm reported it."),
             "why": ("core.py _r2() guards the degenerate case with `ss_tot == 0`, an "
                     "exact float test on a quantity that is only MATHEMATICALLY zero. "
                     "Elementwise log10 of the same integer is not always bit-identical, "
@@ -228,9 +228,10 @@ def main() -> int:
             "who_hits_it": ("any top-N hit list -- 'our top 200 hits' is an ordinary way "
                             "to publish a screen -- any quantile hit definition, and "
                             "screen-level inputs where every set returns the same count."),
-            "reported_to": "the session holding packages/denali-audit/ at the time; not "
-                           "fixed here, because that file was dirty in a shared checkout "
-                           "and a dirty file is not mine to edit.",
+            "status": "FIXED at 5f10e28 by the session holding the package, which "
+                      "reproduced it independently first and parametrised the regression "
+                      "test over the leaking values. Reported rather than fixed here "
+                      "because the file was dirty in a shared checkout.",
             "arm_verdict_is_unaffected": ("with the defect the quantile rules read "
                                           "NOT SIZE-DOMINATED; once fixed they read "
                                           "UNDETERMINED. Both differ from the threshold "

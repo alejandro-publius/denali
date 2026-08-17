@@ -146,3 +146,48 @@ for. Written here so the framing cannot be chosen after the numbers are visible.
   legitimate outcome and is reported as itself, not as a missing value.
 - If a rule cannot be computed at all, its row is left **empty**. An empty row is
   honest; an estimated row is not.
+
+---
+
+# Correction 1 — the tool's verdict vocabulary changed after this file was sealed
+
+**Appended 2026-08-17, before the arm was written up and before any value above was
+revised.** Nothing above this line has been edited. Recorded here because
+`docs/METHOD_RULES.md` requires a correction to be appended below the original
+rather than folded into it.
+
+Between the sealing of this pre-registration at `f4b3f8d` and the arm's first run
+against a corrected tool, `packages/denali-audit` changed its verdict vocabulary
+in two ways, neither of them requested by or known to this arm:
+
+1. **Verdicts became null-relative** (commit `627355f`). `CONFOUNDED` and
+   `NOT SIZE-DOMINATED` were replaced by `MORE SIZE-CARRIED THAN ITS OWN NULL`,
+   `INDISTINGUISHABLE FROM ITS OWN NULL` and `LESS SIZE-CARRIED THAN ITS OWN NULL`,
+   so an observed R² is now scored against the binomial null for its own mapping
+   rather than against zero.
+2. **The degenerate-input refusal was fixed** (commit `5f10e28`) — a defect this
+   arm surfaced and reported. Before the fix a constant hit column returned a
+   nonsense negative R² and a verdict; after it, it returns `UNDETERMINED`.
+
+**The decision rule in §5 is unaffected, and that is a property of how it was
+written rather than good luck.** §5 asks only whether the seven rules return *the
+same* verdict or *different* verdicts. It never names a verdict string. So it is
+vocabulary-independent and the seal is intact under both changes — the rule that
+decides this arm is the rule that was sealed, applied to whatever words the tool
+now emits.
+
+**What did change is which words appear in the result**, and both changes make the
+finding sharper rather than weaker:
+
+- The four threshold rules now read `MORE SIZE-CARRIED THAN ITS OWN NULL`. They are
+  therefore **above** their own binomial null, not merely above zero — so the
+  confound they show is not the counting arithmetic that scope limit 6 warns about.
+- The three count-fixing rules now read `UNDETERMINED` instead of an all-clear. The
+  tool now refuses where it previously reassured, which is the correct behaviour
+  and was the point of the bug report.
+
+Had §5 been written as "if any rule returns CONFOUNDED", this correction would have
+had to record a broken pre-registration instead of an intact one. That is the
+argument for writing decision rules over *relations between outputs* rather than
+over the output strings themselves, and it is the transferable lesson from this
+arm's own paperwork.

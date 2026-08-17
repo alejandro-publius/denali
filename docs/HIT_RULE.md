@@ -17,17 +17,23 @@ verdict changes:
 
 | rule | family | R² size alone | verdict |
 |---|---|--:|---|
-| BH q < 0.05 within program — **the published convention** | threshold | **0.4530** | **CONFOUNDED** |
-| uncorrected two-sided p < 0.05 | threshold | 0.5610 | CONFOUNDED |
-| Bonferroni p < 0.05/n | threshold | 0.5012 | CONFOUNDED |
-| fixed effect size \|u_z\| ≥ 2.0 | threshold | 0.5631 | CONFOUNDED |
-| top 2% of genes per program | quantile | — | **NOT SIZE-DOMINATED** |
-| top 10% of genes per program | quantile | — | **NOT SIZE-DOMINATED** |
-| top 200 genes per program | fixed count | — | **NOT SIZE-DOMINATED** |
+| BH q < 0.05 within program — **the published convention** | threshold | **0.4530** | **MORE SIZE-CARRIED THAN ITS OWN NULL** |
+| uncorrected two-sided p < 0.05 | threshold | 0.5610 | MORE SIZE-CARRIED THAN ITS OWN NULL |
+| Bonferroni p < 0.05/n | threshold | 0.5012 | MORE SIZE-CARRIED THAN ITS OWN NULL |
+| fixed effect size \|u_z\| ≥ 2.0 | threshold | 0.5631 | MORE SIZE-CARRIED THAN ITS OWN NULL |
+| top 2% of genes per program | quantile | undefined | **UNDETERMINED** |
+| top 10% of genes per program | quantile | undefined | **UNDETERMINED** |
+| top 200 genes per program | fixed count | undefined | **UNDETERMINED** |
 
-Same screen. Same 49 programs. Same size column. The confound is either the
-dominant feature of the ranking or absent from it, and **the caller's convention
-decides which** — while the tool says nothing about the convention on its output.
+The four threshold rules are scored against the **binomial null for their own
+mapping**, not against zero, so each is above the no-biology value rather than
+merely above nothing — which is what distinguishes this from the counting
+arithmetic [scope limit 6](../README.md#scope-limits) warns about.
+
+Same screen. Same 49 programs. Same size column. Only the hit-calling rule moves,
+and the tool goes from **naming the confound the dominant feature of the ranking**
+to **refusing to answer at all** — while saying nothing on its output about the
+convention that decided it.
 
 Within the threshold family the estimate is stable: the four rules span
 **0.4530 to 0.5631**, a range of 0.1101, so the *choice of threshold* matters much
@@ -56,11 +62,13 @@ Where a hit list was produced by taking a top N or a top percentile, denali's
 audit is not applicable, and a "NOT SIZE-DOMINATED" verdict on such a list is a
 false reassurance rather than a finding.
 
-## The defect this surfaced in the shipped tool
+## The defect this surfaced in the shipped tool — found here, fixed at `5f10e28`
 
 The quantile rules were *expected* to return `UNDETERMINED` — the packaged tool has
-a refusal branch for exactly this case, added on 2026-08-16. They returned an
-all-clear instead, with a **negative R²**, which is how the following came to light.
+a refusal branch for exactly this case, added on 2026-08-16. On this arm's first
+run they returned an all-clear instead, with a **negative R²**, which is how the
+following came to light. **The table above is the corrected behaviour; the table
+below is what the shipped package did until this arm ran.**
 
 `core.py`'s `_r2()` guards the degenerate case with `ss_tot == 0` — an exact
 floating-point test on a quantity that is only *mathematically* zero. Elementwise
@@ -102,12 +110,22 @@ can pass for reasons the others do not share.
 to publish a screen — any quantile hit definition, and, per the branch's own
 comment, screen-level inputs where every set returns the same count.
 
-Reported to the session holding `packages/denali-audit/` rather than fixed here:
-that file was dirty in a shared checkout, and a dirty file is not this session's
-to edit. **This arm's conclusion does not depend on the bug** — with it the
-quantile rules read `NOT SIZE-DOMINATED`, without it they read `UNDETERMINED`, and
-both differ from the threshold family's `CONFOUNDED`, so claim (b) fires either
-way.
+Reported rather than fixed here: `core.py` was dirty in a shared checkout at the
+time, and a dirty file is not this session's to edit. The session holding it
+reproduced the defect independently before changing anything, confirmed it was
+still live in a rewrite that had just landed, and fixed it at **`5f10e28`** using
+both parts of the reported fix — degeneracy detected on the raw integer vectors
+with `np.ptp`, and a scale-relative tolerance in `_r2` replacing the exact `== 0`.
+Their independent reproduction found **eight** leaking values rather than the four
+seen here, because the verdict vocabulary had changed in between; the mechanism was
+identical. The regression test is parametrised over exactly the leaking values,
+because `k = 0, 1, 2, 3, 10, 50, 127, 500, 1000` all refuse correctly *without* the
+fix — so a test built on any of those would have passed against the bug.
+
+**This arm's conclusion never depended on the defect.** With it, the count-fixing
+rules issued a false all-clear; without it they return `UNDETERMINED`. Both differ
+from the threshold family's verdict, so pre-registered claim (b) fires either way.
+The published headline is unmoved at 0.4649.
 
 ## Why this is not a correction to the headline
 

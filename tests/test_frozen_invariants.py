@@ -2137,10 +2137,10 @@ def main() -> int:
     # VANISH and the suite would print a smaller green number indistinguishable
     # from the larger one. This check is what makes a missing artifact loud.
     _hr = ROOT / "results" / "hit_rule" / "hit_rule.json"
-    check("hit-rule: the artifact the next eleven checks read is present",
+    check("hit-rule: the artifact the checks below it read is present",
           _hr.exists(),
           "" if _hr.exists() else
-          f"MISSING {_hr.relative_to(ROOT)} — the eleven checks that read it "
+          f"MISSING {_hr.relative_to(ROOT)} — the checks that read it "
           f"would silently disappear rather than fail; run "
           f".venv/bin/python -m src.hit_rule_audit")
     if _hr.exists():
@@ -2156,15 +2156,39 @@ def main() -> int:
               len(_rules) == 7 and len(_thr) == 4 and len(_fix) == 3,
               f"{len(_rules)} rules, {len(_thr)} threshold, {len(_fix)} fixed")
 
-        # The finding itself: every threshold rule calls it confounded, and not one
-        # of the count-fixing rules does. If that ever stops being true the writeup
-        # is wrong, whichever way it moved.
-        check("hit-rule: every threshold rule returns CONFOUNDED",
-              all(v["verdict"] == "CONFOUNDED" for v in _thr.values()),
-              str({k: v["verdict"] for k, v in _thr.items()}))
-        check("hit-rule: no count-fixing rule returns CONFOUNDED",
-              all(v["verdict"] != "CONFOUNDED" for v in _fix.values()),
+        # The finding itself, stated over RELATIONS between verdicts rather than over
+        # verdict strings. The tool's vocabulary changed under this arm once already
+        # -- CONFOUNDED / NOT SIZE-DOMINATED became null-relative wording mid-session
+        # (Correction 1 in the pre-registration) -- and a check pinned to the old
+        # words would have gone red for a rename while the finding was untouched.
+        # What the arm claims is that the threshold family agrees with itself and
+        # disagrees with the count-fixing family, which is true in any vocabulary.
+        _thr_v = {v["verdict"] for v in _thr.values()}
+        _fix_v = {v["verdict"] for v in _fix.values()}
+        check("hit-rule: the four threshold rules all return the SAME verdict",
+              len(_thr_v) == 1, str({k: v["verdict"] for k, v in _thr.items()}))
+        check("hit-rule: the count-fixing rules all return the same verdict as each "
+              "other", len(_fix_v) == 1,
               str({k: v["verdict"] for k, v in _fix.items()}))
+        check("hit-rule: the two families DISAGREE — the verdict flips on identical "
+              "biology, which is the whole finding",
+              _thr_v.isdisjoint(_fix_v),
+              f"threshold {sorted(_thr_v)} vs count-fixing {sorted(_fix_v)}")
+
+        # Direction, without pinning wording: the threshold family must report a
+        # real share and the count-fixing family must refuse rather than reassure.
+        # "Refuse" is the one word worth pinning, because the bug this arm found was
+        # exactly a refusal replaced by an all-clear, and a regression would show up
+        # here first.
+        check("hit-rule: the count-fixing rules REFUSE rather than issue a verdict, "
+              "which is the behaviour the defect this arm found had broken",
+              all(v["verdict"] == "UNDETERMINED" for v in _fix.values())
+              and all(v["r2_size_alone"] is None for v in _fix.values()),
+              str({k: (v["verdict"], v["r2_size_alone"]) for k, v in _fix.items()}))
+        check("hit-rule: no rule reports a finite R2 on a constant hit column — the "
+              "signature of the fixed denormal defect",
+              not any(v["constant_hits_but_finite_r2"] for v in _rules.values()),
+              str({k: v["constant_hits_but_finite_r2"] for k, v in _rules.items()}))
         check("hit-rule: the verdict is not constant across rules, which is the "
               "pre-registered claim (b)",
               len(hr["distinct_verdicts"]) > 1 and "(b)" in hr["verdict"],
@@ -2265,6 +2289,16 @@ def main() -> int:
         "breadth": "post-hoc boundary condition on the tool, carried as scope limit 6 "
                    "rather than numbered",
         "corpus_rerank": "the shipped rerank() over evaluation 10's screens; part of arm 10",
+        # Classified with breadth, and for the same reason: it scores mappings
+        # against their own no-biology null to decide what the shipped tool may
+        # say, so its output is a SCOPE LIMIT on the instrument rather than a
+        # finding about a screen. docs/EXPANSION_PREREG.md §3 has it extending
+        # results/breadth/null_baselines.py, which is already non-arm here. Its
+        # JSON declares an arm NAME and deliberately no evaluation number. If its
+        # author intends it as a numbered evaluation it needs both a number and a
+        # findings-table row, and this line moves to ARM_DIRS.
+        "external_nulls": "external screens scored against their own binomial null; "
+                          "a scope limit on the tool, in the same family as breadth",
     }
     res_dirs = {p.name for p in (ROOT / "results").iterdir() if p.is_dir()}
     unclassified = sorted(res_dirs - set(ARM_DIRS) - set(NON_ARM_DIRS))

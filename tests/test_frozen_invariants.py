@@ -2423,12 +2423,57 @@ def main() -> int:
         (report_readme, r"\*\*(\d+) automated checks\*\*", "the plain-language section"),
         (submission_md, r"\*\*(\d+) automated checks\*\*", "docs/SUBMISSION.md"),
     ]
-    total = len(PASS) + len(FAIL) + len(count_claims)
+    # The four above are ENUMERATED, and that is the same one-directional weakness
+    # section G was written about: a fifth surface can state the count and no guard
+    # reads it. One had. docs/DEMO_PATH.md told a presenter to expect "474
+    # invariants, 29 cross-surface" before recording -- two of three numbers stale,
+    # the invariants figure wrong by 78 -- because it is not in this list. So the
+    # count is also DISCOVERED: every "<number> invariants|assertions|automated
+    # checks" phrase anywhere in README.md or docs/ must equal the suite total,
+    # unless it is a historical statement declared below with a reason.
+    #
+    # Declared history, not live claims. Each is a past run being described, and
+    # freezing the number is the correct thing for it to do:
+    HISTORICAL_COUNTS = {
+        ("README.md", 350): "the clean-clone narrative -- a fresh clone counted 350 "
+                            "against a badge claiming 351, which is the defect being "
+                            "recounted and must keep its own numbers",
+        ("README.md", 351): "the badge in that same narrative",
+        ("docs/ADVERSARIAL.md", 370): "a quoted adversarial question preserved as it "
+                                      "was asked; rhetorical, not a claim about the "
+                                      "current suite",
+    }
+    _COUNT_PHRASE = re.compile(
+        r"\b(\d{3,4})\s+(?:automated\s+checks|assertions|invariants)\b")
+    discovered: list[tuple[str, int]] = []
+    for md in [ROOT / "README.md", *sorted((ROOT / "docs").glob("*.md"))]:
+        rel = str(md.relative_to(ROOT))
+        for m in _COUNT_PHRASE.finditer(md.read_text()):
+            n = int(m.group(1))
+            if (rel, n) not in HISTORICAL_COUNTS:
+                discovered.append((rel, n))
+
+    # Checks this block is ABOUT to add, and therefore has to count prospectively:
+    # one per enumerated surface, plus the discovery check below. Named rather than
+    # written as "+ 1", because a bare offset here is exactly what once let a check
+    # added below this point go uncounted while the run printed a smaller total.
+    PENDING = len(count_claims) + 1
+    total = len(PASS) + len(FAIL) + PENDING
     for src, pat, label in count_claims:
         m = re.search(pat, src)
         stated = int(m.group(1)) if m else -1
         check(f"test count in {label} matches the suite",
               stated == total, f"says {stated}, suite has {total}")
+
+    _wrong = sorted({(f, n) for f, n in discovered if n != total})
+    check("every surface stating the suite's size states the current one, including "
+          "the ones nobody listed",
+          not _wrong,
+          f"stale: {_wrong} vs suite {total} — fix the number, or declare it in "
+          f"HISTORICAL_COUNTS with the reason it is frozen"
+          if _wrong else
+          f"{len(discovered)} live statements across README and docs, all {total}; "
+          f"{len(HISTORICAL_COUNTS)} declared historical")
 
     # ---------------- report ----------------
     for p in PASS:

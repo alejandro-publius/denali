@@ -11,8 +11,12 @@ paper over a gap, that is a bug, not a script note.
 
 ## Before recording
 
-- `git pull && make test PY=.venv/bin/python` — 474 invariants, 29
-  cross-surface, 20 page-parity. All must pass.
+- `git pull && make test PY=.venv/bin/python` — **552** invariants, **47**
+  cross-surface, **20** page-parity. All must pass. Each suite counts itself and
+  prints its own total, so read the totals it prints rather than trusting these;
+  the invariants figure is checked against the suite by
+  `tests/test_frozen_invariants.py`, and it said 474 for long enough to be wrong
+  by 78.
 - Open `index.html` **from the local file** (`file:///…/denali/index.html`) or
   from the Pages URL. Both work; the local file is the safer demo because it
   proves the offline claim on camera.

@@ -118,8 +118,8 @@ runs it against the frozen research data and requires exactly **0.4649**, the pu
 headline. If the tool and the paper ever disagree, CI fails rather than the two quietly
 diverging.
 
-The study behind it ran **eleven evaluations** against its own headline. **Seven came
+The study behind it ran **thirteen evaluations** against its own headline. **Seven came
 back negative**, one returned no verdict when its own pre-registered power rule fired,
-and all eleven are reported — including the one where the same check was run on 1,272
+and all thirteen are reported — including the one where the same check was run on 1,272
 published screens and found this project's own number atypical of the field. Full
 writeup, data and provenance: [github.com/alejandro-publius/denali](https://github.com/alejandro-publius/denali).

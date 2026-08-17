@@ -140,6 +140,6 @@ perfectly, and that limit is stated wherever the result appears.
   than chance, zero true positives — and was not refit. Reported as a failure.
 - **One cell line, unstimulated.** K562 has no ER stress, which is why our own
   first program failed its known-regulator control.
-- **Eleven evaluations, seven negative**, one with no verdict because our own
-  pre-registered power rule fired. All eleven are reported, including the one
+- **Thirteen evaluations, seven negative**, one with no verdict because our own
+  pre-registered power rule fired. All thirteen are reported, including the one
   that found our headline atypical of the field and cost us the number.

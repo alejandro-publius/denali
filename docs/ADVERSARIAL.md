@@ -170,7 +170,7 @@ enough, and for two of them the answer was no.
 |---|---|---|
 | **Evaluation 5 clears its bar by 0.026** | Pre-registered at ≥0.25 and it returned 0.2758. That is a pass, and it is a thin one. If the threshold had been 0.28 it would have failed. | README findings row, `docs/RPE1_PREREG.md`, and the handoff calls it thin |
 | **RPE1 is not a replication** | It covers 24.3% of K562's targets and that quarter is disproportionately the essential-gene subset — 94.1% of essentials against 11.3% of non-essentials. Calling it independent replication would be the easiest available overstatement. | Published as a **FAIL** control |
-| **Evaluation 11 is labelled POSITIVE** | It is a positive in the narrow sense that a pre-registered branch fired as predicted, not in the sense that we found something good. Three of eleven now read POSITIVE, and a skim could take that as three wins. | This file, and the findings row states the branch |
+| **Evaluation 11 is labelled POSITIVE** | It is a positive in the narrow sense that a pre-registered branch fired as predicted, not in the sense that we found something good. Three of thirteen now read POSITIVE, and a skim could take that as three wins. | This file, and the findings row states the branch |
 
 ---
 

@@ -157,9 +157,22 @@ def main() -> int:
     rows = re.findall(r"^\|\s*(\d+)\s*\|.*\|\s*\*\*([A-Z][A-Z ]+)\*\*", readme, re.M)
     n_eval = len(rows)
     n_neg = [v.strip() for _, v in rows].count("NEGATIVE")
+    # Runs past any count this project will plausibly reach. It stopped at
+    # twelve, and the day a thirteenth evaluation landed `words.get(13, "")`
+    # returned the empty string, so the guard compared every surface against
+    # "nine of  evaluations" and reported them all wrong with a blank where the
+    # number should be. A lookup table that silently returns a falsy default is
+    # the same shape as the guards in METHOD_RULES: it did not fail, it produced
+    # a confident sentence with a hole in it.
     words = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six",
              7: "seven", 8: "eight", 9: "nine", 10: "ten", 11: "eleven",
-             12: "twelve"}
+             12: "twelve", 13: "thirteen", 14: "fourteen", 15: "fifteen",
+             16: "sixteen", 17: "seventeen", 18: "eighteen", 19: "nineteen",
+             20: "twenty"}
+    check("cross-surface: the number-word table covers the current counts",
+          n_eval in words and n_neg in words,
+          f"no word for n_eval={n_eval} or n_neg={n_neg}; the guard would "
+          f"compare surfaces against a sentence with a blank in it")
     ev_w, neg_w = words.get(n_eval, ""), words.get(n_neg, "")
     wrong = {}
     for s, t in texts.items():

@@ -102,8 +102,8 @@ real, and it hands back no shortened list to chase. **It reports which entries a
 ranking cannot justify, which is the opposite of a candidate list**, and that
 refusal is the same −0.019 scope limit applied to a stranger's data.
 
-**Eleven evaluations stand behind it. Seven came back negative**, one issued no
-verdict when its own power rule fired, and all eleven are reported below and in
+**Thirteen evaluations stand behind it. Seven came back negative**, one issued no
+verdict when its own power rule fired, and all thirteen are reported below and in
 `README.md`.
 
 ---

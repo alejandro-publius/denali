@@ -332,6 +332,13 @@ def write_board(rows, base, stats, n_sets, diag) -> None:
         "null. The board is not measuring one thing well — it is measuring two different "
         "things, and the confound decides which.",
         "",
+        "This second table was recomputed by a separate implementation that did not read "
+        "this scorer. All four rank correlations agreed to four decimal places; the "
+        "permutation p-values differed in the third decimal, which is the expected "
+        "signature of independent draws rather than a copied seed. Both implementations "
+        "read the same frozen `paired_programs.csv`, so what this establishes is that the "
+        "arithmetic is right, not that the underlying data is.",
+        "",
         "Read the limits of that honestly. It rules out the possibility that the correction "
         "destroys everything: there is reproducible non-size agreement between two "
         "independently screened cell lines, at p = "

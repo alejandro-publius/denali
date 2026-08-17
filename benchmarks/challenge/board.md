@@ -33,6 +33,8 @@ The table above scores against RPE1's **raw** hit ranking, and that ranking is i
 
 **Which method wins is decided by whether the target is size-corrected, and that is the result on this page.** Against the raw target the naive hit count wins outright; against the size-removed target it is no longer distinguishable from chance, while the correction this project ships is the only entrant that clears its permutation null. The board is not measuring one thing well — it is measuring two different things, and the confound decides which.
 
+This second table was recomputed by a separate implementation that did not read this scorer. All four rank correlations agreed to four decimal places; the permutation p-values differed in the third decimal, which is the expected signature of independent draws rather than a copied seed. Both implementations read the same frozen `paired_programs.csv`, so what this establishes is that the arithmetic is right, not that the underlying data is.
+
 Read the limits of that honestly. It rules out the possibility that the correction destroys everything: there is reproducible non-size agreement between two independently screened cell lines, at p = 0.0003. It does **not** establish that the residual is biology. Both sides of that comparison are corrected the same way, so they can still agree for the same wrong reason — which is this project's own evaluation 6, pointed back at this project's own challenge.
 
 ## How to enter

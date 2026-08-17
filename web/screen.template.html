@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>denali · plan a screen</title>
+<meta name="description" content="A companion for a pooled CRISPR screen, from the question you are asking to the candidates you validate. Nothing uploads.">
+<style>
+:root{
+  --ink:#1a1a1a; --soft:#6B7280; --rule:rgba(27,42,74,.14); --fill:#f5f7f9;
+  --accent:#1D7C65; --navy:#1B2A4A; --tint:#E6F7F2; --paper:#fff; --radius:8px;
+  --stat-bad:#9B2C2C; --stat-warn:#8A5A00; --stat-ok:#1D7C65; --stat-unk:#4B5563;
+  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);padding:0 20px;
+  font:400 16px/1.62 "Source Serif 4",Georgia,"Times New Roman",serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:860px;margin:0 auto;padding:40px 0 96px}
+h1{font:600 30px/1.2 var(--sans);color:var(--navy);margin:0 0 8px;letter-spacing:-.01em}
+h2{font:600 15px/1.3 var(--sans);color:var(--navy);text-transform:uppercase;
+  letter-spacing:.09em;margin:36px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--rule)}
+h3{font:600 19px/1.3 var(--sans);color:var(--navy);margin:0 0 8px}
+p{margin:0 0 14px}
+a{color:var(--accent)}
+.lede{color:var(--soft);margin:0 0 24px;font-size:17px}
+code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+button{font:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.btn{display:inline-block;font:600 14px/1 var(--sans);color:var(--accent);
+  background:none;border:1px solid var(--accent);border-radius:100px;
+  padding:10px 17px;cursor:pointer}
+.btn:hover{background:var(--tint)}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.primary:hover{background:var(--navy);border-color:var(--navy)}
+.btn.quiet{border-color:var(--rule);color:var(--soft)}
+.btn.quiet:hover{background:var(--fill);color:var(--ink)}
+
+/* ---- start ---- */
+#start label{display:block;font:600 11px/1.3 var(--sans);text-transform:uppercase;
+  letter-spacing:.07em;color:var(--soft);margin:14px 0 5px}
+#start input,#start textarea,textarea,input[type=text]{width:100%;font:400 15px/1.5 var(--sans);
+  color:var(--ink);background:var(--paper);border:1px solid var(--rule);
+  border-radius:var(--radius);padding:10px 12px}
+textarea{min-height:88px;resize:vertical}
+.hint{font-size:13px;color:var(--soft);margin:4px 0 0}
+
+/* ---- stage map ---- */
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(64px,1fr));gap:6px;margin:0 0 6px;padding:0;list-style:none}
+.map li{margin:0}
+.map button{width:100%;display:block;text-align:left;background:var(--fill);
+  border:1px solid var(--rule);border-left:4px solid var(--rule);
+  border-radius:6px;padding:9px 8px;cursor:pointer;min-height:66px}
+.map button:hover{background:var(--tint)}
+.map button[aria-current="true"]{border-left-color:var(--accent);background:var(--tint);
+  box-shadow:inset 0 0 0 1px var(--accent)}
+.map .num{display:block;font:700 10px/1.2 var(--sans);letter-spacing:.08em;color:var(--soft)}
+.map .nm{display:block;font:600 12px/1.25 var(--sans);color:var(--navy);margin-top:3px}
+.map .tick{display:block;font:600 11px/1.2 var(--sans);margin-top:4px;color:var(--soft)}
+.map button.done{border-left-color:var(--stat-ok)}
+.map button.done .tick{color:var(--stat-ok)}
+
+/* ---- stage panel ---- */
+.panel{border:1px solid var(--rule);border-radius:var(--radius);padding:22px 24px;
+  background:var(--paper);margin-top:14px}
+.decides{font-size:18px;line-height:1.5;color:var(--navy);margin:0 0 16px}
+.breaks{margin:16px 0;padding:14px 16px;border:1px solid #E4C07A;background:#FDF6E7;
+  border-radius:var(--radius);font-size:15px;color:#5a4100}
+.breaks b{display:block;font:600 11px/1.3 var(--sans);text-transform:uppercase;
+  letter-spacing:.07em;margin-bottom:5px;color:#6b4e00}
+ul.pts{margin:0 0 14px;padding-left:20px}
+ul.pts li{margin:0 0 6px}
+.checks{list-style:none;padding:0;margin:8px 0 0}
+.checks li{margin:0 0 7px}
+.checks label{display:flex;gap:9px;align-items:flex-start;cursor:pointer;font-size:15px}
+.checks input{margin-top:4px;width:16px;height:16px;flex:0 0 auto;accent-color:var(--accent)}
+.checks input:checked + span{color:var(--soft);text-decoration:line-through}
+.nothing{margin-top:16px;padding:14px 16px;background:var(--fill);
+  border-radius:var(--radius);font-size:15px;color:var(--ink)}
+.nothing b{color:var(--navy)}
+.claim{margin:10px 0;padding:11px 14px;border-left:3px solid var(--rule);background:var(--fill);
+  border-radius:0 6px 6px 0;font-size:14px}
+.claim .src{display:block;margin-top:6px;font:400 12px/1.45 var(--sans);color:var(--soft)}
+/* Source URLs are long and unbroken, and every claim carries one. Without this
+   they push the page 65px wider than a phone viewport -- found by driving
+   web/user_journey.py at 390px, not by looking at it. Six of the eleven stages
+   overflowed, which is every stage that cites anything. */
+.claim .src a{overflow-wrap:anywhere;word-break:break-word}
+.claim.unver{border-left-color:var(--stat-warn)}
+.claim .flag{display:inline-block;font:700 10px/1 var(--sans);letter-spacing:.08em;
+  padding:4px 7px;border-radius:100px;margin-right:7px;vertical-align:1px}
+.claim.unver .flag{color:#6b4e00;border:1px solid #E4C07A;background:#FDF6E7}
+.claim.ver .flag{color:var(--accent);border:1px solid var(--accent);background:var(--tint)}
+
+/* ---- floor ---- */
+.bins{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+.bins th{text-align:left;font:600 11px/1.3 var(--sans);text-transform:uppercase;
+  letter-spacing:.06em;color:var(--soft);border-bottom:1px solid var(--rule);padding:0 8px 6px 0}
+.bins td{padding:8px 8px 8px 0;border-bottom:1px solid var(--rule);
+  font-variant-numeric:tabular-nums}
+.bins tr[aria-current="true"] td{background:var(--tint);font-weight:600}
+.range{position:relative;height:22px;background:var(--fill);border-radius:4px;min-width:120px}
+.range i{position:absolute;top:5px;height:12px;background:var(--accent);opacity:.30;border-radius:3px}
+.range b{position:absolute;top:2px;width:2px;height:18px;background:var(--navy)}
+
+/* ---- prereg ---- */
+.sealed{border:1px solid var(--accent);background:var(--tint);border-radius:var(--radius);
+  padding:16px 18px;margin-top:12px}
+.sealed dt{font:600 10px/1.3 var(--sans);text-transform:uppercase;letter-spacing:.07em;
+  color:var(--soft);margin-top:9px}
+.sealed dd{margin:2px 0 0;font-size:15px}
+.sealed dd.mono{word-break:break-all}
+
+.notthis{margin-top:20px;padding:15px 18px;background:var(--tint);
+  border-radius:var(--radius);font-size:14px;color:var(--navy)}
+.notthis b{display:block;margin-bottom:4px}
+.privacy{font-size:13px;color:var(--soft);margin:10px 0 0}
+.privacy b{color:var(--ink)}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--rule);
+  font-size:13px;color:var(--soft)}
+.row{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-top:14px}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}
+[hidden]{display:none !important}
+
+@media (max-width:620px){
+  .wrap{padding:26px 0 64px}
+  h1{font-size:24px}
+  .panel{padding:18px 16px}
+  .map{grid-template-columns:repeat(auto-fit,minmax(84px,1fr))}
+}
+@media (prefers-reduced-motion:no-preference){
+  .panel{animation:fade .18s ease-out}
+  @keyframes fade{from{opacity:.4}to{opacity:1}}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Plan a screen</h1>
+<p class="lede">A pooled CRISPR screen is about eleven stages and six to eighteen
+months. Most tools, including our own audit, arrive at stage ten — after every
+expensive decision is already made. This one starts at the beginning and stays
+with you.</p>
+
+<!-- ============ START ============ -->
+<section id="start" aria-labelledby="starth">
+  <h2 id="starth">Start a screen</h2>
+  <p>Two sentences is enough. You can change all of it later.</p>
+  <label for="sname">What are you calling this screen?</label>
+  <input type="text" id="sname" placeholder="e.g. bortezomib resistance, MM1.S">
+  <label for="spheno">What phenotype separates the cells you want?</label>
+  <input type="text" id="spheno" placeholder="e.g. cells that survive drug at IC90">
+  <p class="hint">Written in your words, not ours. It is shown back to you at every
+  stage so the screen keeps answering the question you started with.</p>
+  <div class="row">
+    <button class="btn primary" id="create">Start</button>
+    <button class="btn quiet" id="importbtn">Load a saved screen</button>
+    <input type="file" id="importfile" accept=".json" aria-label="Choose a saved screen file to load" hidden>
+  </div>
+  <p class="privacy"><b>Nothing uploads, ever.</b> This lives in your browser only.
+  There is no account and no server. Use <em>Save to a file</em> to move it between
+  machines or to keep a copy — that file is the only copy that leaves this tab.</p>
+</section>
+
+<!-- ============ WORKSPACE ============ -->
+<section id="work" hidden>
+  <h2 id="whereh">Where you are</h2>
+  <p id="resume"></p>
+
+  <nav aria-labelledby="maph">
+    <span class="vh" id="maph">Screen stages</span>
+    <ul class="map" id="map"></ul>
+  </nav>
+  <p class="hint" id="mapcount"></p>
+
+  <div class="panel" id="panel" role="region" aria-live="polite"
+       aria-labelledby="ptitle" tabindex="-1"></div>
+
+  <div class="row">
+    <button class="btn quiet" id="prev">← Previous stage</button>
+    <button class="btn quiet" id="next">Next stage →</button>
+    <button class="btn quiet" id="export">Save to a file</button>
+    <button class="btn quiet" id="reset">Delete this screen</button>
+  </div>
+
+  <div class="notthis">
+    <b>What this is not</b>
+    Not experimental prescription, and not advice about any clinical, therapeutic
+    or diagnostic decision. It is methodological orientation drawn from published
+    screen-design literature, with each claim's source and whether we could verify
+    it shown beside it. Your core facility and your own pilots decide the numbers;
+    this page only makes sure you are asked the question before it is too late to
+    answer it.
+  </div>
+</section>
+
+<footer>
+  <p>Part of <a href="index.html">denali</a>. The audit itself lives on
+  <a href="audit.html">the audit page</a> — drop a results table and it measures how
+  much of the ranking is explained by how the sets were built. Both pages run in
+  your browser and neither uploads anything.</p>
+</footer>
+</div>
+
+<script id="stages-src" type="application/json">__STAGES__</script>
+<script id="tools-src" type="application/json">__TOOLS__</script>
+<script id="reference-src" type="application/json">__REFERENCE__</script>
+<script>
+(function(){
+"use strict";
+var J=function(id){return JSON.parse(document.getElementById(id).textContent.replace(/<\\\//g,"</"))};
+var STAGES=J("stages-src"), TOOLS=J("tools-src"), REF=J("reference-src");
+var KEY="denali.screen.v1";
+var $=function(id){return document.getElementById(id)};
+var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]})};
+
+var S=null;   /* the whole state, or null when no screen exists */
+
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"null") }catch(e){ return null } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)) }catch(e){} }
+
+function fresh(name, pheno){
+  return {v:1, name:name, phenotype:pheno, created:new Date().toISOString(),
+          stage:1, checks:{}, notes:{}, prereg:null, floor:null};
+}
+
+/* ---- how far along, and what is next ------------------------------------ */
+function doneCount(st){
+  var c=(S.checks[st.key]||[]); var n=0;
+  for(var i=0;i<st.checklist.length;i++) if(c[i]) n++;
+  return n;
+}
+function stageDone(st){ return doneCount(st)===st.checklist.length }
+
+function renderResume(){
+  var done=STAGES.filter(stageDone).length;
+  var cur=STAGES[S.stage-1];
+  var since=Math.round((Date.now()-new Date(S.created).getTime())/86400000);
+  /* Resumption is the hard part: they will be away for months. One sentence
+     that says what this is, how far in, and what they were about to do. */
+  $("resume").innerHTML =
+    "<b>"+esc(S.name||"Untitled screen")+"</b> — "+
+    (S.phenotype ? "looking for "+esc(S.phenotype)+". " : "")+
+    "Started "+(since<1?"today":since+" day"+(since===1?"":"s")+" ago")+". "+
+    "You have finished <b>"+done+" of "+STAGES.length+"</b> stages and you were on <b>stage "+
+    cur.n+", "+esc(cur.title)+"</b>.";
+  $("mapcount").textContent =
+    done+" of "+STAGES.length+" stages complete. A stage counts as complete when "+
+    "every box on it is ticked.";
+}
+
+function renderMap(){
+  $("map").innerHTML = STAGES.map(function(st){
+    var d=stageDone(st), n=doneCount(st);
+    return '<li><button type="button" data-n="'+st.n+'" class="'+(d?"done":"")+'"'+
+      (st.n===S.stage?' aria-current="true"':'')+
+      ' aria-label="Stage '+st.n+', '+esc(st.title)+', '+n+' of '+st.checklist.length+' done">'+
+      '<span class="num">'+st.n+'</span>'+
+      '<span class="nm">'+esc(st.title)+'</span>'+
+      '<span class="tick" aria-hidden="true">'+(d?"✓ done":n+"/"+st.checklist.length)+'</span>'+
+      '</button></li>'}).join("");
+}
+
+/* ---- the reference class, and what it is honestly allowed to say --------- */
+function binLabel(b){ return b.hi===null ? (b.lo+"+ hits") : (b.lo+"–"+b.hi+" hits") }
+
+function floorBlock(){
+  var enough=REF.bins.filter(function(b){return b.enough});
+  if(!enough.length){
+    return '<div class="nothing"><b>We cannot say anything useful here.</b> '+
+      'The corpus does not have enough comparable screens to describe a range.</div>';
+  }
+  var lo=Math.min.apply(null,enough.map(function(b){return b.p10}));
+  var hi=Math.max.apply(null,enough.map(function(b){return b.p90}));
+  var span=hi-lo||1;
+  var pos=function(v){return ((v-lo)/span*100)};
+  var sel=S.floor;
+  var rows=REF.bins.map(function(b){
+    if(!b.enough) return '<tr><td>'+binLabel(b)+'</td><td colspan="3">only '+b.n+
+      ' screens — too few to describe</td></tr>';
+    return '<tr'+(sel===b.lo?' aria-current="true"':'')+'><td>'+binLabel(b)+'</td>'+
+      '<td>'+b.n+'</td>'+
+      '<td>'+b.p10.toFixed(2)+' – '+b.p90.toFixed(2)+'</td>'+
+      '<td><div class="range" role="img" aria-label="middle 80% from '+
+        b.p10.toFixed(2)+' to '+b.p90.toFixed(2)+', median '+b.p50.toFixed(2)+'">'+
+        '<i style="left:'+pos(b.p10).toFixed(1)+'%;width:'+
+          ((b.p90-b.p10)/span*100).toFixed(1)+'%"></i>'+
+        '<b style="left:'+pos(b.p50).toFixed(1)+'%"></b></div></td></tr>'
+  }).join("");
+
+  var widest=enough.reduce(function(a,b){return b.spread>a.spread?b:a});
+  var gaps=[];
+  for(var i=1;i<enough.length;i++) gaps.push(enough[i].p50-enough[i-1].p50);
+  var biggestGap=gaps.length?Math.max.apply(null,gaps):0;
+
+  return ''+
+  '<p>Below is what actually happened in <b>'+REF.n_screens.toLocaleString()+
+  '</b> published screens, grouped by how many hits they returned. This is a '+
+  '<b>record of what other people got</b>, not a prediction about yours.</p>'+
+  '<table class="bins"><thead><tr><th>screens returning</th><th>n</th>'+
+  '<th>middle 80%</th><th><span class="vh">range</span></th></tr></thead>'+
+  '<tbody>'+rows+'</tbody></table>'+
+  '<p class="hint">Bar is the middle 80% of screens in that group; the line is the median. '+
+  'Scored against '+esc(REF.collection)+'.</p>'+
+  '<div class="breaks"><b>Read the spread, not the middle</b>'+
+  'Inside the widest group the middle 80% covers '+widest.spread.toFixed(2)+
+  ', while the largest step between one group’s median and the next is '+
+  biggestGap.toFixed(2)+'. The variation between screens that look alike is bigger '+
+  'than the difference between groups, so this cannot tell you where your screen '+
+  'will land. It can tell you what is ordinary and what would be unusual.</div>'+
+  '<p>We tried to do better than this and failed, which is why you are seeing a range '+
+  'instead of a number. Predicting a screen’s floor from four things about how it '+
+  'was built reached a cross-validated R² of <b>0.0935</b> against a threshold of '+
+  '0.20 fixed in advance — so a floor has to be measured, not guessed. '+
+  'That is <a href="README.md#findings">evaluation 13</a>.</p>'+
+  '<div class="breaks"><b>An open question that changes how this reads</b>'+
+  'Where a set’s hits are counted among its own members — which is what ordinary '+
+  'overlap enrichment does — a large value here is partly arithmetic before it is a '+
+  'confound, and the no-biology baseline is not zero. Whether these published floors '+
+  'sit above or below their own baseline is being tested now and is not settled. '+
+  'Treat the numbers above as what was reported, not as a bar to clear.</div>';
+}
+
+/* ---- pre-registration: a commitment device, not a certificate ------------ */
+async function sha256(s){
+  var b=new TextEncoder().encode(s);
+  var h=await crypto.subtle.digest("SHA-256", b);
+  return Array.from(new Uint8Array(h)).map(function(x){
+    return x.toString(16).padStart(2,"0")}).join("");
+}
+
+function preregBlock(){
+  if(S.prereg){
+    var p=S.prereg;
+    return '<div class="sealed"><dl>'+
+      '<dt>What would count as a hit</dt><dd>'+esc(p.hit)+'</dd>'+
+      '<dt>What would make you abandon the hypothesis</dt><dd>'+esc(p.stop)+'</dd>'+
+      '<dt>Written</dt><dd>'+esc(new Date(p.at).toLocaleString())+'</dd>'+
+      '<dt>Fingerprint</dt><dd class="mono">'+esc(p.hash)+'</dd>'+
+      '</dl></div>'+
+      '<p class="hint">This is shown back to you at stage 10, beside your results. '+
+      'Rewriting it now replaces it and stamps a new time — the old one is not kept, '+
+      'because a record you can silently edit is not a record.</p>'+
+      '<div class="row"><button class="btn quiet" id="prereset">Write it again</button></div>'+
+      '<div class="notthis"><b>What this is not</b>'+
+      'It is a commitment device, not a certificate. Nothing is registered anywhere, '+
+      'nothing is timestamped by a third party, and it carries no publication or legal '+
+      'standing whatsoever. Its only power is that you wrote it down before you saw '+
+      'the answer, and that you can be shown it afterwards.</div>';
+  }
+  return ''+
+  '<p>Write down now what would count as a hit, and what would make you give the '+
+  'hypothesis up. You will be shown both at stage 10, next to what you actually got.</p>'+
+  '<label class="vh" for="prehit">What would count as a hit</label>'+
+  '<p class="hint" id="prehit-l">What would count as a hit?</p>'+
+  '<textarea id="prehit" aria-labelledby="prehit-l" placeholder="e.g. a gene whose knockout gives at least 4-fold depletion in treated vs untreated, in both replicates"></textarea>'+
+  '<p class="hint" id="prestop-l">What result would make you abandon the hypothesis?</p>'+
+  '<label class="vh" for="prestop">What would make you abandon the hypothesis</label>'+
+  '<textarea id="prestop" aria-labelledby="prestop-l" placeholder="e.g. fewer than 3 genes clear the threshold, or the positive control does not deplete"></textarea>'+
+  '<div class="row"><button class="btn primary" id="preseal">Write it down</button></div>'+
+  '<p class="hint">Target validation is unusually exposed to confirmation bias, and '+
+  'this is the cheapest thing that helps: a sentence you wrote before the data existed. '+
+  'It stays in this browser.</p>';
+}
+
+/* ---- claims, with their verification status showing --------------------- */
+function claimsBlock(st){
+  if(!st.claims || !st.claims.length) return "";
+  return st.claims.map(function(c){
+    return '<div class="claim '+(c.verified?"ver":"unver")+'">'+
+      '<span class="flag">'+(c.verified?"CHECKED":"NOT CHECKED")+'</span>'+
+      esc(c.text)+
+      '<span class="src">'+(c.verified
+        ? "Read from the source: " : "")+
+        '<a href="'+esc(c.source)+'" rel="noreferrer noopener">'+esc(c.source)+'</a>'+
+        (c.note ? " — "+esc(c.note) : "")+'</span></div>'
+  }).join("");
+}
+
+function toolBlock(st){
+  if(!st.runs){
+    return '<div class="nothing"><b>denali has nothing for you at this stage.</b> '+
+      esc(st.runs_note||"")+'</div>';
+  }
+  var t=TOOLS[st.runs];
+  if(st.runs==="prereg") return '<h3>'+esc(t.label)+'</h3><p>'+esc(t.what)+'</p>'+preregBlock();
+  if(st.runs==="floor")  return '<h3>'+esc(t.label)+'</h3>'+floorBlock();
+  var page = st.runs==="audit" ? "audit.html" : "audit.html";
+  var extra = "";
+  if(st.runs==="audit" && S.prereg){
+    extra = '<div class="sealed"><dl>'+
+      '<dt>You wrote this before you had data</dt><dd>'+esc(S.prereg.hit)+'</dd>'+
+      '<dt>And you said you would stop if</dt><dd>'+esc(S.prereg.stop)+'</dd>'+
+      '</dl></div><p class="hint">Read it before you read your ranking.</p>';
+  }
+  return '<h3>'+esc(t.label)+'</h3><p>'+esc(t.what)+'</p>'+extra+
+    '<div class="row"><a class="btn primary" href="'+page+'">Open the audit page</a></div>';
+}
+
+function renderPanel(){
+  var st=STAGES[S.stage-1];
+  $("panel").innerHTML =
+    '<h3 id="ptitle">Stage '+st.n+' · '+esc(st.title)+'</h3>'+
+    '<p class="decides">'+esc(st.decides)+'</p>'+
+    (st.matters.length ? '<p><b>What you are actually deciding</b></p><ul class="pts">'+
+      st.matters.map(function(m){return '<li>'+esc(m)+'</li>'}).join("")+'</ul>' : '')+
+    '<div class="breaks"><b>What goes wrong here</b>'+esc(st.breaks)+'</div>'+
+    claimsBlock(st)+
+    '<p><b>Before you leave this stage</b></p>'+
+    '<ul class="checks">'+st.checklist.map(function(c,i){
+      var on=(S.checks[st.key]||[])[i];
+      return '<li><label><input type="checkbox" data-i="'+i+'"'+(on?" checked":"")+
+        '><span>'+esc(c)+'</span></label></li>'}).join("")+'</ul>'+
+    toolBlock(st);
+  renderMap(); renderResume();
+}
+
+/* ---- events ------------------------------------------------------------- */
+function go(n){ S.stage=Math.max(1,Math.min(STAGES.length,n)); save(); renderPanel();
+                $("panel").focus(); }
+
+$("map").addEventListener("click",function(e){
+  var b=e.target.closest("button[data-n]"); if(b) go(+b.dataset.n)});
+$("panel").addEventListener("change",function(e){
+  var c=e.target.closest("input[type=checkbox]"); if(!c) return;
+  var st=STAGES[S.stage-1];
+  var arr=S.checks[st.key]||(S.checks[st.key]=[]);
+  arr[+c.dataset.i]=c.checked; save(); renderMap(); renderResume();
+});
+$("panel").addEventListener("click",function(e){
+  if(e.target.id==="preseal"){
+    var hit=$("prehit").value.trim(), stop=$("prestop").value.trim();
+    if(!hit||!stop){ alertless("Write both boxes before sealing — the second one is the "+
+      "half that does the work."); return }
+    var at=new Date().toISOString();
+    sha256(hit+"\\n"+stop+"\\n"+at).then(function(h){
+      S.prereg={hit:hit,stop:stop,at:at,hash:h}; save(); renderPanel();
+    });
+  }
+  if(e.target.id==="prereset"){ S.prereg=null; save(); renderPanel() }
+});
+function alertless(msg){
+  var p=document.createElement("p"); p.className="hint"; p.style.color="var(--stat-bad)";
+  p.textContent=msg; p.setAttribute("role","alert");
+  var b=$("preseal"); if(b&&b.parentNode) b.parentNode.appendChild(p);
+}
+$("prev").addEventListener("click",function(){go(S.stage-1)});
+$("next").addEventListener("click",function(){go(S.stage+1)});
+
+$("create").addEventListener("click",function(){
+  S=fresh($("sname").value.trim(), $("spheno").value.trim());
+  save(); showWork();
+});
+$("reset").addEventListener("click",function(){
+  S=null; try{localStorage.removeItem(KEY)}catch(e){}
+  $("work").hidden=true; $("start").hidden=false; $("sname").focus();
+});
+$("export").addEventListener("click",function(){
+  var blob=new Blob([JSON.stringify(S,null,1)],{type:"application/json"});
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download=(S.name||"screen").replace(/[^\\w.-]+/g,"_")+".denali.json";
+  document.body.appendChild(a); a.click(); a.remove();
+});
+$("importbtn").addEventListener("click",function(){$("importfile").click()});
+$("importfile").addEventListener("change",function(e){
+  var f=e.target.files[0]; if(!f) return;
+  var r=new FileReader();
+  r.onload=function(){
+    try{
+      var o=JSON.parse(r.result);
+      if(!o||!o.checks) throw new Error("that file is not a saved screen");
+      S=o; save(); showWork();
+    }catch(err){
+      var p=document.createElement("p");
+      p.className="hint"; p.style.color="var(--stat-bad)"; p.setAttribute("role","alert");
+      p.textContent="Could not read that file: "+err.message+
+        ". It should be the .denali.json file this page saved.";
+      $("importbtn").parentNode.appendChild(p);
+    }
+  };
+  r.readAsText(f);
+});
+
+function showWork(){ $("start").hidden=true; $("work").hidden=false; renderPanel() }
+
+S=load();
+if(S && S.checks) showWork();
+})();
+</script>
+</body>
+</html>

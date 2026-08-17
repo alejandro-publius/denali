@@ -253,9 +253,23 @@ def main() -> int:
                         re.sub(r"<style.*?</style>|<script.*?</script>", " ",
                                audit_page.read_text(), flags=re.S)) if audit_page.exists() else ""
 
+    # screen.html is the plan-a-screen companion. Stripped the same way and for
+    # the same reason as audit.html: its <script> blocks carry the stage content
+    # and the corpus reference classes as JSON that the machine reads, and
+    # tests/test_cross_surface.py guards those against web/screen_data.py rather
+    # than leaving them to a prose scan. What is registered here is what a reader
+    # actually sees, so the gene-naming and framing guards cover the newest page
+    # from its first commit instead of after someone notices -- which is the
+    # history app.py had and the reason this registry exists.
+    screen_page = (ROOT / "screen.html")
+    screen_text = re.sub(r"<[^>]+>", " ",
+                         re.sub(r"<style.*?</style>|<script.*?</script>", " ",
+                                screen_page.read_text(), flags=re.S)) if screen_page.exists() else ""
+
     SURFACES = {
         "index.html": page_text,
         "audit.html": audit_text,
+        "screen.html": screen_text,
         "app.py": app_text,
         "results/figures/CAPTIONS.md": caps,
         "REPORT.md": report,

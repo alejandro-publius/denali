@@ -746,6 +746,7 @@ def _harvest_vocabulary() -> dict:
         "VERDICT_UNDETERMINED": _c.VERDICT_UNDETERMINED,
         "COUNTING_WHY": _nl.COUNTING_WHY, "NON_COUNTING_WHY": _nl.NON_COUNTING_WHY,
         "N_ITER": _nl.N_ITER, "MIN_SETS": _nl.MIN_SETS,
+        "N_BOOT": _nl.N_BOOT, "STABLE_AT": _nl.STABLE_AT,
         "WHAT_TO_DO": todo,
     }
 
@@ -987,7 +988,7 @@ function audNull(s,h){
   draws.sort(function(a,b){return a-b});
   var mean=0; for(var q=0;q<draws.length;q++) mean+=draws[q];
   mean/=draws.length;
-  return {kind:counting
+  return {_draws:draws, kind:counting
             ?"binomial constant-rate (hits drawn from the set's own members)"
             :"permutation (hits not bounded by size)",
           expected_r2:audPyRound(mean,4),
@@ -998,6 +999,29 @@ function audPct(sorted,q){    /* numpy's linear interpolation, on sorted input *
   var idx=(sorted.length-1)*q/100, lo=Math.floor(idx), hi=Math.ceil(idx);
   if(lo===hi) return sorted[lo];
   return sorted[lo]+(sorted[hi]-sorted[lo])*(idx-lo);
+}
+
+function audStability(obs,nul,seed){
+  /* nulls.stability(), ported. Bootstraps the draws already computed, so it costs
+     no extra regressions. A verdict whose sign flips under resampling should say
+     so rather than pick a side -- the packaged threshold is imported, not chosen
+     here, so the two surfaces cannot disagree about what "stable" means. */
+  if(!nul||!isFinite(obs)) return null;
+  var d=nul._draws; if(!d||!d.length) return null;
+  var rnd=audRng((seed||20260816)+1), here=audPosition(obs,nul), agree=0;
+  for(var b=0;b<AUD_V.N_BOOT;b++){
+    var r=new Array(d.length);
+    for(var i=0;i<d.length;i++) r[i]=d[Math.floor(rnd()*d.length)];
+    r.sort(function(a,c){return a-c});
+    var lo=audPct(r,2.5), hi=audPct(r,97.5);
+    var p=obs>hi?"ABOVE":obs<lo?"BELOW":"INSIDE";
+    if(p===here) agree++;
+  }
+  var frac=agree/AUD_V.N_BOOT, width=nul.ci95[1]-nul.ci95[0];
+  var edge=Math.min(Math.abs(obs-nul.ci95[0]),Math.abs(obs-nul.ci95[1]));
+  return {position_stability:audPyRound(frac,3),
+          verdict_is_stable:frac>=AUD_V.STABLE_AT,
+          distance_to_edge_in_ci_widths:width>0?audPyRound(edge/width,3):null};
 }
 function audPosition(obs,nul){
   if(!nul||!isFinite(obs)) return null;
@@ -1053,7 +1077,12 @@ function audit(sizes,hits){
      that its leading entries were not simply its largest sets. */
   out.mapping=audStructure(s,h);
   var nul=audNull(s,h);
-  if(nul) out.no_biology_null=Object.assign({},nul,{position:audPosition(share,nul)});
+  if(nul){
+    var st=audStability(share,nul,20260816);
+    var pub={};
+    for(var kk in nul) if(kk.charAt(0)!=="_") pub[kk]=nul[kk];
+    out.no_biology_null=Object.assign(pub,{position:audPosition(share,nul)},st||{});
+  }
   var pos=nul?audPosition(share,nul):null;
   out.verdict = pos==="ABOVE" ? AUD_V.VERDICT_ABOVE
               : pos==="BELOW" ? AUD_V.VERDICT_BELOW

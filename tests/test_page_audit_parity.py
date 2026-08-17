@@ -75,6 +75,9 @@ STOCHASTIC = {".audit.no_biology_null.expected_r2",
               # one honest borderline fixture does not mask a real divergence in
               # the other nineteen fields.
               ".audit.no_biology_null.position",
+              ".audit.no_biology_null.position_stability",
+              ".audit.no_biology_null.verdict_is_stable",
+              ".audit.no_biology_null.distance_to_edge_in_ci_widths",
               ".audit.verdict",
               ".audit.what_to_do"}
 
@@ -119,6 +122,17 @@ def _null_agrees(py: dict, js: dict) -> str | None:
     if not (pn["ci95"][0] <= jn["expected_r2"] <= pn["ci95"][1]):
         return (f"page mean {jn['expected_r2']} is outside python's interval "
                 f"{pn['ci95']}")
+    # THE SAMPLER ITSELF MUST NOT BE BIASED, which is a different question from
+    # whether two runs agree. Verified separately in `test_sampler_is_unbiased`
+    # below by running both across 40 seeds; here we only require that the two
+    # agree about how far the observation sits from the edge in units of the
+    # interval's own width -- specifically whether it is inside one width of the
+    # edge, which is the quantity the stability flag turns on.
+    pd_, jd_ = (pn.get("distance_to_edge_in_ci_widths"),
+                jn.get("distance_to_edge_in_ci_widths"))
+    if pd_ is not None and jd_ is not None and (pd_ < 1.0) != (jd_ < 1.0):
+        return (f"disagree about whether the observation is within one interval "
+                f"width of the edge: {pd_} vs {jd_}")
     return None
 
 
@@ -261,6 +275,25 @@ console.log(JSON.stringify(out));
         band_fixture(p, a, noise)
         bands.append(p)
 
+    (tmpdir / "bias.js").write_text(m.group(1) + r"""
+const fs=require("fs");
+const t=audParseTable(fs.readFileSync(process.argv[2],"utf8"),"\t");
+const mm=audDetect(t); const s=mm.sizes,h=mm.hits,n=s.length;
+let ss=0,hs=0; for(let i=0;i<n;i++){ss+=s[i];hs+=h[i]}
+const rate=hs/ss, means=[];
+for(let seed=1;seed<=40;seed++){
+  const rnd=audRng(seed); const draws=[];
+  for(let it=0;it<300;it++){
+    const sim=new Array(n);
+    for(let j=0;j<n;j++) sim[j]=audBinom(Math.trunc(s[j]),rate,rnd);
+    const v=audR2(s,sim.map(x=>Math.log10(1+x)));
+    if(isFinite(v)) draws.push(v);
+  }
+  means.push(draws.reduce((a,b)=>a+b,0)/draws.length);
+}
+console.log(JSON.stringify({js_mean_of_means:means.reduce((a,b)=>a+b,0)/means.length}));
+""")
+
     fixtures = [
         ROOT / "examples" / "example_gprofiler.csv",
         FIX / "mageck_gene_summary.txt",
@@ -275,6 +308,7 @@ console.log(JSON.stringify(out));
     ] + bands
     seen_verdicts: set[str] = set()
     borderline: list[tuple[str, str, str]] = []
+    unstable_flag: list[tuple] = []
     for fx in fixtures:
         if not fx.exists():
             check(f"parity fixture exists: {fx.name}", False)
@@ -294,8 +328,19 @@ console.log(JSON.stringify(out));
               nd or "")
         pv = (py.get("audit") or {}).get("verdict")
         jv = (js.get("audit") or {}).get("verdict")
+        pnn = (py.get("audit") or {}).get("no_biology_null") or {}
+        jnn = (js.get("audit") or {}).get("no_biology_null") or {}
         if pv != jv:
             borderline.append((fx.name, pv, jv))
+        elif pnn.get("verdict_is_stable") != jnn.get("verdict_is_stable"):
+            # The stability FLAG can itself disagree on small inputs, where the
+            # null is estimated from few sets and the bootstrap is noisy. Counted
+            # and named rather than excused: it is a weaker disagreement than the
+            # verdict differing, but it is still two surfaces telling a user
+            # different things about how much to trust the same number.
+            unstable_flag.append((fx.name, pnn.get("position_stability"),
+                                  jnn.get("position_stability"),
+                                  pnn.get("distance_to_edge_in_ci_widths")))
         else:
             check(f"page and package print the same verdict for {fx.name}", True)
         v = (py.get("audit") or {}).get("verdict")
@@ -322,6 +367,57 @@ console.log(JSON.stringify(out));
         print("NOTE  verdict is unstable near the null's edge on: "
               + ", ".join(n for n, _, _ in borderline)
               + " — see docs/LIMITATIONS.md")
+
+    # The flag may disagree ONLY where the observation sits within one interval
+    # width of the edge -- which is precisely where stability is hard to estimate
+    # and where the flag is trying to say "do not lean on this". The predicate is
+    # the derived distance, not the fixture's name: the first version of this
+    # check guessed "small inputs" and was wrong, because band_edge_0409 has 24
+    # sets and disagrees because it was BUILT to sit on a boundary.
+    far = [(n, a, b, d) for n, a, b, d in unstable_flag if d is not None and d >= 1.0]
+    check("the stability flag agrees except where the observation sits within "
+          "one interval width of the edge",
+          not far,
+          "; ".join(f"{n}: package {a}, page {b}, {d} widths from the edge"
+                    for n, a, b, d in far))
+    if unstable_flag:
+        print("NOTE  the stability flag disagrees on: "
+              + ", ".join(f"{n} ({d} widths from the edge)"
+                          for n, _, _, d in unstable_flag))
+
+    # ---- is the page's SAMPLER biased, or merely differently seeded? -------
+    # Raised as a challenge rather than found as a failure: two implementations
+    # agreeing within one interval proves little if the page's generator is
+    # systematically off, because then borderline cases would disagree
+    # DETERMINISTICALLY and no amount of stability reporting would reconcile them.
+    # That is a different defect from sampling noise and it hides behind it.
+    #
+    # So both samplers are run across 40 seeds on the same fixture and their
+    # mean-of-means compared. The tolerance is derived: the two must agree far
+    # more closely than either one varies from seed to seed.
+    bias_js = subprocess.run(
+        [node, str(tmpdir / "bias.js"), str(FIX / "mageck_gene_summary.txt")],
+        capture_output=True, text=True, timeout=600)
+    if bias_js.returncode != 0:
+        check("the page's sampler is unbiased against the package's", False,
+              bias_js.stderr[-200:])
+    else:
+        jm = json.loads(bias_js.stdout)
+        import numpy as _np
+        _d = pd.read_csv(FIX / "mageck_gene_summary.txt", sep="\t")
+        _m = adapters.detect(_d)
+        _s = _np.asarray(_m.size, float); _h = _np.asarray(_m.hits, float)
+        _ok = _np.isfinite(_s) & _np.isfinite(_h)
+        from denali_audit import nulls as _nulls
+        _pm = [_nulls.no_biology_null(_s[_ok], _h[_ok], core._r2, seed=sd)["expected_r2"]
+               for sd in range(1, 41)]
+        py_mean = float(_np.mean(_pm))
+        spread = float(_np.percentile(_pm, 95) - _np.percentile(_pm, 5))
+        gap = abs(jm["js_mean_of_means"] - py_mean)
+        check("the page's sampler is unbiased against the package's",
+              gap < spread / 4,
+              f"means differ by {gap:.4f}; each varies by {spread:.4f} across "
+              f"40 seeds, so the gap must stay under a quarter of that")
 
     # A parity suite that never executes a branch cannot defend it.
     # Imported rather than retyped: the vocabulary changed once already and a

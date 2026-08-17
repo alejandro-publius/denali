@@ -496,6 +496,41 @@ def main() -> int:
                             re.S) is not None,
               "0.214 is stated without saying it regresses on K562's sizes")
 
+    # ---- screen.html must not drift from the data it renders ---------------
+    # Same discipline as audit.html and atlas.py: the page is regenerated here
+    # and the committed one must match, so a change to the stage content or to
+    # the corpus reference classes that never reaches the page is a red build
+    # rather than a companion quietly telling planners something the repository
+    # no longer believes.
+    screen_html = ROOT / "screen.html"
+    if screen_html.exists():
+        sys.path.insert(0, str(ROOT))
+        import importlib
+        _bs = importlib.import_module("web.build_screen_page")
+        check("cross-surface: screen.html carries the CURRENT stage data",
+              _bs.build() == screen_html.read_text(),
+              "stale — run: .venv/bin/python -m web.build_screen_page")
+        # The floors it shows a planner must be the corpus's own, not a copy.
+        import json as _j
+        import pandas as _pdd
+        _ref = _j.loads(re.search(
+            r'<script id="reference-src" type="application/json">(.*?)</script>',
+            screen_html.read_text(), re.S).group(1).replace("<\\/", "</"))
+        _corpus = _pdd.read_csv(ROOT / "results" / "corpus" / "corpus_per_screen.csv")
+        check("cross-surface: the companion's screen count is the corpus's",
+              _ref["n_screens"] == len(_corpus),
+              f"page {_ref['n_screens']} vs corpus {len(_corpus)}")
+        # The design-time projection must never present itself as a prediction.
+        # This is the one claim on that page that would be actively harmful if it
+        # drifted, because a planner would act on it before spending money.
+        _txt = screen_html.read_text()
+        check("cross-surface: the design-time floor refuses to predict a "
+              "single screen",
+              "cannot tell you where your screen" in _txt
+              and "0.0935" in _txt,
+              "the projection must cite evaluation 13's negative as the reason "
+              "it shows a range rather than a number")
+
     # ---- the atlas must not drift from the corpus it summarises ------------
     # Same discipline as audit.html: the generated module is regenerated here
     # and the committed one must match, so a corpus edit that never reaches the

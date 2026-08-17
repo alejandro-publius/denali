@@ -88,3 +88,48 @@ def test_a_stated_size_share_is_compared_without_calling_it_a_discrepancy():
     r = verify(*_ABOVE, claimed_size_share=0.10)
     assert "delta_vs_measured" in r
     assert "not necessarily a discrepancy" in r["delta_reading"]
+
+
+# --- the report artifact -----------------------------------------------------
+
+def test_report_is_self_contained_and_makes_no_network_call():
+    """It is used on data-room material. Nothing may leave the machine."""
+    from denali_audit.verify import report_html
+    html = report_html(verify(*_ABOVE, claim="A claim.", source="t.csv"))
+    for bad in ("http://", "https://", "<script", "src=", "@import", "fetch(", "XMLHttpRequest"):
+        assert bad not in html, f"report references {bad!r}"
+
+
+def test_report_escapes_a_claim_that_contains_markup():
+    """The claim is quoted from a document nobody here controls."""
+    from denali_audit.verify import report_html
+    nasty = '<script>alert(1)</script> & "quoted" <b>'
+    html = report_html(verify(*_ABOVE, claim=nasty))
+    assert "<script>alert" not in html
+    assert "&lt;script&gt;alert(1)&lt;/script&gt;" in html
+    assert "&amp;" in html and "&quot;" in html
+
+
+def test_report_carries_the_reproduce_command_and_the_boundary():
+    from denali_audit.verify import report_html
+    r = verify(*_ABOVE, claim="A claim.", source="t.csv")
+    html = report_html(r)
+    assert r["reproduce"] in html
+    assert "not an allegation" in html
+    assert "Nothing was uploaded" in html
+    assert "no account, no server" in html
+
+
+def test_report_never_shows_a_bare_point_estimate_for_the_baseline():
+    """The brief's rule: the delta always carries its uncertainty."""
+    from denali_audit.verify import report_html
+    html = report_html(verify(*_ABOVE))
+    assert "95% interval" in html
+
+
+def test_report_works_when_nothing_could_be_verified():
+    """The not-verifiable path is the common one and must still produce a page."""
+    from denali_audit.verify import report_html
+    html = report_html(verify([10, 20, 30], [1, 2, 3]))
+    assert "NOT VERIFIABLE FROM WHAT WAS PROVIDED" in html
+    assert "<h1>" in html and "</main>" in html

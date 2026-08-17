@@ -232,6 +232,12 @@ and everyone else's agree.</p>
 <div id="floorout"></div>
 
 <footer>
+  <p><b>Earlier than this?</b> If you have not run the screen yet,
+  <a href="screen.html">plan a screen</a> walks the eleven stages from the
+  question you are asking to the candidates you validate — and says plainly at
+  the seven stages where this project has nothing useful to offer. This page is
+  stage ten of eleven, which is after every expensive decision is already made.</p>
+
   <p>This page runs <code>denali-audit</code> — the same code as the command line
   tool and the same code that produced the study — compiled to WebAssembly. It is a
   separate surface from the <a href="index.html">results page</a>, which makes no
@@ -412,9 +418,41 @@ function render(r){
     '<p class="todo">'+esc(a.what_to_do)+'</p>'+
     '<div class="meta">read as <b>'+esc(r.fmt)+'</b> · '+a.n_sets+' sets · '+
     'size range '+a.size_range[0]+'–'+a.size_range[1]+
-    (a.r2_size_alone==null?'':' · R² size-alone '+a.r2_size_alone)+'</div>';
+    (a.r2_size_alone==null?'':' · R² size-alone '+a.r2_size_alone)+
+    (a.mapping?' · '+esc(a.mapping.structure)+' mapping':'')+
+    '</div>'+
+    /* The null is not an optional detail: for nine of the ten formats this page
+       accepts, the no-biology value is nowhere near zero, so an R² alone cannot
+       be read. It goes beside the verdict rather than further down. */
+    (a.no_biology_null
+      ? '<div class="meta"><b>With no biology at all</b>, a ranking built this '+
+        'way returns about '+esc(a.no_biology_null.expected_r2)+
+        ' (95% between '+esc(a.no_biology_null.ci95[0])+' and '+
+        esc(a.no_biology_null.ci95[1])+'). Yours is '+esc(a.r2_size_alone)+
+        ', which is <b>'+esc(String(a.no_biology_null.position).toLowerCase())+
+        '</b> that interval.</div>'
+      : '');
 
   var warns = "";
+  /* THE VERDICT IS RELATIVE TO A NULL, AND THAT NULL IS AN ESTIMATE. Where the
+     observation sits close to the interval's edge the verdict flips under
+     resampling, and audit() says so in verdict_is_stable. Not rendering that
+     let this page print a confident word the package itself had already
+     flagged -- and two of our own surfaces once printed DIFFERENT verdicts for
+     the same file. The unstable case is stated first and loudest, because a
+     reader who stops after the chip must not stop having been misled. */
+  var nb = a.no_biology_null;
+  if(nb && nb.verdict_is_stable === false){
+    warns += '<div class="warn"><b>This verdict is not stable — do not lean on the word above.</b><br>'+
+      'Your ranking sits '+esc(nb.distance_to_edge_in_ci_widths)+
+      ' of the interval\u2019s own width from its edge, and the verdict changes in '+
+      Math.round((1-nb.position_stability)*100)+'% of redraws of the same null. '+
+      'Read the interval, not the label: with no biology at all this mapping '+
+      'returns about '+esc(nb.expected_r2)+' (95% of the time between '+
+      esc(nb.ci95[0])+' and '+esc(nb.ci95[1])+'), and yours is '+
+      esc(a.r2_size_alone)+'. Those are close enough that this measure cannot '+
+      'separate them.</div>';
+  }
   if(r.approximate)
     warns += '<div class="warn"><b>Approximate input — the verdict inherits it.</b><br>'+esc(r.note)+'</div>';
   if(a.caution)

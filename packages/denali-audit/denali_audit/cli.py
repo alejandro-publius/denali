@@ -199,6 +199,11 @@ def cmd_verify(a) -> int:
         cmd += ' --claim "..."'
     r = _verify(m.size, m.hits, claim=a.claim, claimed_size_share=a.claimed_size_share,
                 source=a.file, command=cmd)
+    if a.html:
+        from .verify import report_html
+        Path(a.html).write_text(report_html(r))
+        print(f"wrote {a.html}")
+        return 0
     if a.json:
         print(json.dumps(r, indent=2))
         return 0
@@ -327,6 +332,8 @@ def main(argv=None) -> int:
     a7.add_argument("--size", help="name the size column yourself")
     a7.add_argument("--hits", help="name the hits column yourself")
     a7.add_argument("--json", action="store_true", help="machine-readable output")
+    a7.add_argument("--html", metavar="OUT.html", default=None,
+                    help="write a one-page printable report a non-specialist can read")
     a7.set_defaults(fn=cmd_verify)
 
     a3 = sub.add_parser("formats", help="which tool outputs are recognised")

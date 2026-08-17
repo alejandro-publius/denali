@@ -141,6 +141,29 @@ The last one has two independent halves and fixing either alone leaves it
 broken — it was absent from the environments that gate a push, **and**
 structurally unable to run in them.
 
+**An isolation test must not depend on import resolution order at all.** Two
+guards written to prove `audit.html` ships a working package both passed while
+it shipped a broken one. The second wrote the page's inlined modules to a temp
+directory and imported `denali_audit` there — first with `cwd=`, then with
+`sys.path.insert(0, tmp)` — and both times imported the real installed package
+instead, silently, in the direction that says everything is fine.
+
+The fix is to import under a package name no distribution owns, so nothing can
+shadow it. **The reason is stated carefully because the first reason given was
+wrong.** It was recorded as "an editable install registers a meta-path finder and
+`meta_path` precedes `sys.path`". Another session measured it rather than
+believing it: here `_EditableFinder` sits *last* on `sys.path`, after
+`PathFinder`, and a decoy package at the front of `sys.path` wins. That mechanism
+does not hold in this environment and the entry would have taught the next person
+something false.
+
+Three independent things can defeat such a test — `sys.modules` caching, a
+meta-path finder that inserts itself early, and path ordering — and all three
+fail toward "everything is fine". So the rule is not about any one of them: **do
+not build isolation on resolution order, because you cannot see which of the
+three you got.** Import under a name nothing else can claim, and the question
+stops arising.
+
 A fifth, from the same day and the same file this rule is written in: the list of
 count-stating surfaces was **enumerated**, so a fifth surface could state the
 count and nothing read it. One had — a demo script told a presenter to expect a

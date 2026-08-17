@@ -184,3 +184,139 @@ def _finish(out: dict, command: str | None) -> dict:
         "computed from that same ranking's own construction. It names no gene and "
         "no gene set, and it nominates nothing.")
     return out
+
+
+def _commit() -> str | None:
+    """The commit that produced this report, if we are inside a checkout.
+
+    Reported so a reader can pin the report to the exact code, and returns None
+    rather than guessing when the package is installed from a wheel with no repo
+    around it. An unknown provenance is stated; it is not filled in.
+    """
+    import subprocess
+    from pathlib import Path
+    try:
+        r = subprocess.run(
+            ["git", "-C", str(Path(__file__).resolve().parent), "rev-parse", "--short", "HEAD"],
+            capture_output=True, text=True, timeout=5)
+        return r.stdout.strip() or None if r.returncode == 0 else None
+    except Exception:
+        return None
+
+
+def _esc(s) -> str:
+    return (str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+            .replace('"', "&quot;"))
+
+
+def report_html(r: dict, title: str = "Verification report") -> str:
+    """A one-page, self-contained, printable report.
+
+    For the reader who is not computational: a partner who has four minutes and
+    will forward it to someone who has forty. Everything needed to check it is on
+    the page, including the command that regenerates every number.
+
+    No external stylesheet, font, script or image -- the page must open from a
+    file:// URL on a machine with no network, because the material it is used on
+    is often confidential and must not leave it.
+    """
+    f = r.get("floor") or {}
+    n = f.get("no_biology_null") or {}
+    commit = _commit()
+
+    rows = ""
+    if f.get("r2_size_alone") is not None:
+        rows += f"<tr><th>Measured, this table</th><td>R&sup2; {f['r2_size_alone']}</td></tr>"
+    if n:
+        rows += (f"<tr><th>Baseline, no biology</th><td>R&sup2; {n['expected_r2']} "
+                 f"<span class=ci>(95% interval {n['ci95'][0]} to {n['ci95'][1]}, "
+                 f"{n['n_iter']} draws)</span></td></tr>")
+        rows += f"<tr><th>How the baseline was built</th><td>{_esc(n['kind'])}</td></tr>"
+    if f.get("mapping"):
+        rows += (f"<tr><th>Table structure</th><td>{_esc(f['mapping']['structure'])} "
+                 f"&mdash; {_esc(f['mapping']['why'])}</td></tr>")
+    if r.get("delta_reading"):
+        rows += f"<tr><th>Against the source's own figure</th><td>{_esc(r['delta_reading'])}</td></tr>"
+
+    borderline = ""
+    if n.get("verdict_is_stable") is False:
+        borderline = (
+            "<p class=warn><strong>Borderline.</strong> This result sits "
+            f"{n.get('distance_to_edge_in_ci_widths')} interval-widths from the "
+            "boundary and changes under redrawing of the baseline. Treat it as "
+            "unresolved rather than as a finding.</p>")
+
+    nv = "".join(
+        f"<li><strong>{_esc(i['what'])}</strong><br><span>{_esc(i['why'])}</span></li>"
+        for i in r.get("not_verifiable", []))
+    need = "".join(f"<li>{_esc(s)}</li>" for s in r.get("to_make_checkable", []))
+    claim = (f"<blockquote>{_esc(r['claim_as_stated'])}</blockquote>"
+             if r.get("claim_as_stated") else
+             "<p class=muted>No claim text was supplied, so none is quoted here.</p>")
+
+    return f"""<!doctype html>
+<meta charset="utf-8">
+<title>{_esc(title)}</title>
+<style>
+:root{{--ink:#15181d;--dim:#5a6572;--line:#d9dee5;--bg:#fff;--warn:#8a5a00;--warnbg:#fff8e6}}
+@media (prefers-color-scheme:dark){{:root{{--ink:#e8ecf1;--dim:#9aa5b1;--line:#2c333d;--bg:#12151a;--warn:#e5b567;--warnbg:#241f12}}}}
+*{{box-sizing:border-box}}
+body{{margin:0;padding:40px 24px;background:var(--bg);color:var(--ink);
+ font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}}
+main{{max-width:44em;margin:0 auto}}
+h1{{font-size:1.5rem;margin:0 0 4px}}
+h2{{font-size:1rem;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);
+ margin:32px 0 10px;font-weight:600}}
+.status{{font-size:1.25rem;font-weight:600;margin:18px 0;padding:14px 16px;
+ border:1px solid var(--line);border-radius:8px}}
+table{{width:100%;border-collapse:collapse;margin:6px 0}}
+th,td{{text-align:left;vertical-align:top;padding:8px 10px;border-top:1px solid var(--line);
+ font-weight:400}}
+th{{width:34%;color:var(--dim)}}
+.ci{{color:var(--dim)}}
+blockquote{{margin:0;padding:10px 16px;border-left:3px solid var(--line);color:var(--ink)}}
+ul{{padding-left:20px}} li{{margin:8px 0}} li span{{color:var(--dim)}}
+code{{background:rgba(127,127,127,.14);padding:2px 6px;border-radius:4px;
+ font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere}}
+.muted{{color:var(--dim)}}
+.warn{{background:var(--warnbg);color:var(--warn);border:1px solid currentColor;
+ padding:10px 14px;border-radius:6px}}
+footer{{margin-top:36px;padding-top:14px;border-top:1px solid var(--line);
+ color:var(--dim);font-size:.875rem}}
+@media print{{body{{padding:0;background:#fff;color:#000}} .status{{border-color:#999}}}}
+</style>
+<main>
+<h1>{_esc(title)}</h1>
+<p class=muted>denali v{_esc(r.get('denali_version'))}{f" &middot; commit {_esc(commit)}" if commit else ""}
+ &middot; source: <code>{_esc((r.get('what_was_provided') or {}).get('source') or 'not stated')}</code></p>
+
+<h2>The claim, as stated by the source</h2>
+{claim}
+
+<h2>Result</h2>
+<div class=status>{_esc(r.get('status'))}</div>
+<p>{_esc(r.get('reading') or r.get('why') or '')}</p>
+{borderline}
+
+<h2>The baseline, and how it was computed</h2>
+<table>{rows}</table>
+
+<h2>What could not be verified from what was provided</h2>
+<ul>{nv}</ul>
+
+<h2>What the source would have needed to report</h2>
+<ul>{need}</ul>
+
+<h2>Reproduce every number above</h2>
+<p><code>{_esc(r.get('reproduce'))}</code></p>
+<p>{_esc(r.get('symmetry'))}</p>
+
+<footer>
+<p><strong>Nothing was uploaded.</strong> This report was produced entirely on the
+machine that opened the file. There is no account, no server and no network call in
+the tool that made it, which is why it can be run on material that must not leave a
+data room.</p>
+<p>{_esc(r.get('what_this_is_not'))}</p>
+</footer>
+</main>
+"""

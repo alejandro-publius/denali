@@ -16,6 +16,8 @@ denali audit my_results.csv
 
 No column renaming. It reads **ten formats** as-is — g:Profiler, DAVID, clusterProfiler, Enrichr/GSEApy, MAGeCK `gene_summary`, fgsea, GSEA desktop, drugZ, BAGEL2 and this project's own output; `denali formats` lists them. Four of the ten report no per-set hit count, so the tool stands one in and **prints an APPROXIMATE flag above the verdict** rather than hiding the substitution. The reason any of this matters is that a check which asks you to reshape your data first is a check nobody runs.
 
+**Not run the screen yet?** [**Plan a screen**](https://alejandro-publius.github.io/denali/screen.html) is the same instrument arriving at stage one instead of stage ten — eleven stages, what each decides, what goes wrong at it in your words, and a plain statement at the seven stages where denali has nothing to offer. It holds a pre-registration you write before you have data and shows it back to you beside your results. Nothing uploads; it lives in your browser.
+
 **No Python at all?** [**Drop a CSV on the web version**](https://alejandro-publius.github.io/denali/audit.html). It runs this same package in your browser through WebAssembly — same code, same numbers — so there is no server and your file is never uploaded.
 
 What comes back is a verdict, a percentile against **1,272 published screens**, and a correction:

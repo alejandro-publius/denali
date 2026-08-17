@@ -23,6 +23,10 @@ import pytest
 from denali_audit import nulls
 from denali_audit.core import _r2, audit
 
+_rng = np.random.default_rng(3)
+_S = _rng.integers(10, 600, 60).astype(float)
+_ABOVE = (_S, np.clip(_S * 20 + _rng.normal(0, 400, 60), 0, None).round())
+
 RESEARCH = os.environ.get("DENALI_RESEARCH_REPO") or str(Path(__file__).resolve().parents[3])
 NULLS_JSON = Path(RESEARCH) / "results" / "breadth" / "null_baselines.json"
 FROZEN = Path(RESEARCH) / "results" / "frozen" / "program_summary.csv"
@@ -127,3 +131,40 @@ def test_the_guard_file_this_suite_depends_on_is_present():
             f"{NULLS_JSON} is absent, so the checks pinning this package's null to "
             "the published arm did not run. That is a silent loss of coverage, not "
             "a pass. Set DENALI_RESEARCH_REPO or run from the study checkout.")
+
+
+def test_a_borderline_verdict_is_marked_unstable():
+    """The case that made two of our own surfaces disagree must not read confident.
+
+    Real MAGeCK file, observed 0.6487 against an upper edge of 0.6207 on an
+    interval 0.329 wide. Sixty independent seeds return ABOVE fifty-nine times, so
+    the verdict is right but not settled, and the tool has to say the second part.
+    """
+    import pandas as pd
+    from denali_audit import adapters
+    f = Path(__file__).resolve().parent / "fixtures" / "mageck_gene_summary.txt"
+    m = adapters.detect(pd.read_csv(f, sep="\t"))
+    r = audit(pd.to_numeric(m.size, errors="coerce"),
+              pd.to_numeric(m.hits, errors="coerce"))
+    n = r["no_biology_null"]
+    assert n["verdict_is_stable"] is False, n
+    assert n["distance_to_edge_in_ci_widths"] < 0.1, n
+
+
+@needs_study
+def test_a_decisive_verdict_is_marked_stable():
+    """The guard must discriminate. Our own screen is nowhere near an edge."""
+    import pandas as pd
+    s = pd.read_csv(FROZEN)
+    n = audit(s.n_present, s.n_hits_q05)["no_biology_null"]
+    assert n["verdict_is_stable"] is True
+    assert n["position_stability"] == 1.0
+    assert n["distance_to_edge_in_ci_widths"] > 1.0
+
+
+def test_the_internal_draw_sample_never_leaves_audit():
+    """`_draws` is a 300-element array. It must not reach a caller or a JSON page."""
+    import json
+    r = audit(*_ABOVE)
+    assert not any(k.startswith("_") for k in r["no_biology_null"]), r["no_biology_null"]
+    json.dumps(r)

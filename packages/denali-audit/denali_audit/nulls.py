@@ -105,6 +105,64 @@ def no_biology_null(size, hits, r2_fn, n_iter: int = N_ITER, seed: int = SEED):
         "expected_r2": round(float(d.mean()), 4),
         "ci95": [round(lo, 4), round(hi, 4)],
         "n_iter": int(len(d)),
+        "_draws": d,
+    }
+
+
+N_BOOT = 400
+STABLE_AT = 0.99
+
+
+def stability(observed: float, null: dict | None, seed: int = SEED) -> dict | None:
+    """How often would this verdict survive drawing the null again?
+
+    THE VERDICT IS A HARD CUT ON A MONTE CARLO ESTIMATE, so near an interval edge
+    it is not a fact about the data, it is a fact about the draw. Found by the
+    session building the page, on a real MAGeCK file: the packaged tool said
+    MORE SIZE-CARRIED and the page said INDISTINGUISHABLE on identical bytes,
+    observed 0.6487 against an upper edge of 0.6207 -- clearing it by 0.028 on an
+    interval 0.329 wide.
+
+    Checking twelve seeds returned ABOVE twelve times and would have supported
+    telling them their port was at fault. Sixty seeds returned ABOVE fifty-nine
+    times and INSIDE once. The instability is real at about 2%, and a check too
+    small to see it is worse than no check.
+
+    Estimated by resampling the draws already computed, so it costs no further
+    regressions.
+
+    THE 0.99 CUT IS A STATED VALUE JUDGEMENT, not a discovered constant, and it is
+    written here rather than left implicit. 0.95 was tried first and called the
+    MAGeCK case STABLE at 0.955 -- the exact case where two of this project's own
+    surfaces printed different verdicts on identical bytes. A threshold that
+    certifies the failure that motivated it is no threshold. A tool whose whole
+    argument is against unearned confidence should decline to present a verdict
+    without qualification when it flips in more than one redraw in a hundred.
+
+    `position_stability` and `distance_to_edge_in_ci_widths` are both returned so a
+    caller can apply its own cut and ignore this one.
+    """
+    if null is None or not np.isfinite(observed):
+        return None
+    d = null.get("_draws")
+    if d is None or len(d) == 0:
+        return None
+    rng = np.random.default_rng(seed + 1)
+    here = position(observed, null)
+    agree = 0
+    for _ in range(N_BOOT):
+        r = rng.choice(d, size=len(d), replace=True)
+        lo, hi = float(np.percentile(r, 2.5)), float(np.percentile(r, 97.5))
+        p = "ABOVE" if observed > hi else "BELOW" if observed < lo else "INSIDE"
+        agree += (p == here)
+    frac = agree / N_BOOT
+    lo, hi = null["ci95"]
+    width = hi - lo
+    edge = min(abs(observed - lo), abs(observed - hi))
+    return {
+        "position_stability": round(frac, 3),
+        "verdict_is_stable": bool(frac >= STABLE_AT),
+        "distance_to_edge_in_ci_widths": (round(edge / width, 3) if width > 0 else None),
     }
 
 

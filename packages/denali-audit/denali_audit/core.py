@@ -200,7 +200,15 @@ def audit(sizes, hits, corr=None) -> dict:
     null = _nulls.no_biology_null(s, h, _r2)
     pos = _nulls.position(out["r2_size_alone"], null)
     if null is not None:
-        out["no_biology_null"] = {**null, "position": pos}
+        # A HARD CUT ON A MONTE CARLO ESTIMATE IS NOT A FACT ABOUT THE DATA NEAR AN
+        # EDGE. Two of this project's own surfaces returned different verdicts on
+        # identical bytes because of it. The tool now reports how often the verdict
+        # survives redrawing the null, so a borderline call says so instead of
+        # picking a side. `_draws` is the internal sample and never leaves here.
+        stab = _nulls.stability(out["r2_size_alone"], null) or {}
+        out["no_biology_null"] = {
+            **{k: v for k, v in null.items() if not k.startswith("_")},
+            "position": pos, **stab}
 
     if pos == "ABOVE":
         out["verdict"] = "MORE SIZE-CARRIED THAN ITS OWN NULL"

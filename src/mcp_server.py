@@ -204,7 +204,8 @@ def audit(sizes: list[float] | None = None,
     This is the check itself, run on your data. It has nothing to do with
     denali's screen: give it one row per gene set and it reports what share of
     the variance in your hit counts is predicted by how big the sets are, with a
-    verdict of CONFOUNDED, PARTIALLY CONFOUNDED, NOT SIZE-DOMINATED, or
+    verdict relative to this mapping's own no-biology null -- MORE / LESS
+    SIZE-CARRIED THAN ITS OWN NULL, INDISTINGUISHABLE FROM IT, or
     UNDETERMINED when every set is the same size and the question cannot be
     asked. Where a reference distribution applies it also says where your screen
     sits against 1,272 published ones.
@@ -293,7 +294,7 @@ def rerank(sizes: list[float] | None = None,
             return {"status": "REFUSED", "reason": str(e), "scope_limit": SCOPE}
         # The correction is only meaningful next to the verdict on the same
         # table: "three of your top ten left" reads very differently when the
-        # ranking was NOT SIZE-DOMINATED to begin with.
+        # ranking was already indistinguishable from its own null to begin with.
         try:
             a = _audit(s, h)
             res["your_ranking"] = {"verdict": a.get("verdict"),

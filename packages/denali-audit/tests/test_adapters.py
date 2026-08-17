@@ -20,7 +20,7 @@ import pandas as pd
 import pytest
 
 from denali_audit.adapters import detect, describe_failure
-from denali_audit.core import audit, rerank
+from denali_audit.core import audit, rerank, VERDICTS
 
 FIX = Path(__file__).parent / "fixtures"
 
@@ -55,7 +55,7 @@ def test_mageck_says_which_direction_it_audited():
 def test_mageck_audit_runs_end_to_end():
     m = detect(read("mageck_gene_summary.txt"))
     r = audit(m.size, m.hits)
-    assert r["verdict"] in {"CONFOUNDED", "PARTIALLY CONFOUNDED", "NOT SIZE-DOMINATED"}
+    assert r["verdict"] in VERDICTS
     assert r["n_sets"] == 60
 
 
@@ -126,8 +126,7 @@ def test_bagel_audit_runs_end_to_end():
     m = detect(read("bagel_bf.txt"))
     r = audit(m.size, m.hits)
     assert r["n_sets"] == 60
-    assert r["verdict"] in {"CONFOUNDED", "PARTIALLY CONFOUNDED",
-                            "NOT SIZE-DOMINATED", "UNDETERMINED"}
+    assert r["verdict"] in VERDICTS
 
 
 # ---------------------------------------------- files we must refuse, usefully
@@ -205,15 +204,25 @@ def test_one_control_row_can_manufacture_a_verdict_and_the_tool_says_so():
     pseudo-gene, so that row has hundreds of guides where every real gene has
     four. On the FULL published screen (19,326 genes) it is harmless: R^2 0.0067
     with it, 0.0099 without. On this 130-row slice of the same file it carries
-    the fit -- 0.4137 with, 0.0237 without -- and flips the verdict to
-    CONFOUNDED. A tool arguing that rankings get carried by arithmetic must not
-    hand out a verdict carried by one point in silence.
+    the fit -- 0.4137 with, 0.0237 without -- and moves the verdict. A tool
+    arguing that rankings get carried by arithmetic must not hand out a verdict
+    carried by one point in silence.
+
+    The verdict words changed on 2026-08-17 and the point of the test did not.
+    MAGeCK is a counting mapping (good guides <= guides), so its no-biology null
+    is large and the raw R^2 of 0.4137 is BELOW it -- which is why the old
+    CONFOUNDED band was wrong here and the caution is what actually matters.
     """
     df = read("mageck_real_slice.txt")
     m = detect(df)
     r = audit(m.size, m.hits)
-    assert r["verdict"] == "CONFOUNDED"
-    assert r["verdict_depends_on_extreme_entries"] is True
+    assert r["mapping"]["structure"] == "counting"
+    assert r["verdict"] == "LESS SIZE-CARRIED THAN ITS OWN NULL"
+    # The verdict itself is ROBUST here -- the null moves with the leverage point,
+    # 0.4897 to 0.1026, so the answer is BELOW either way. What must not be silent
+    # is that one row moved the raw R^2 from 0.4137 to 0.0237.
+    assert r["verdict_depends_on_extreme_entries"] is False
+    assert r["r2_depends_on_extreme_entries"] is True
     assert r["r2_without_extreme_entries"] < 0.20
     assert "Nothing has been dropped" in r["caution"]
     assert "1 entry at least 10x" in r["caution"], "must not read 'entry(ies)'"
@@ -248,6 +257,9 @@ def test_a_standard_library_is_not_size_confounded_at_the_gene_level():
     df = read("mageck_real_slice.txt")
     real = df[df["num"] < 100]
     r = audit(real["num"], real["neg|goodsgrna"])
-    assert r["verdict"] == "NOT SIZE-DOMINATED"
+    # Was NOT SIZE-DOMINATED. Same meaning, but the new wording refuses to read as
+    # a pass: this measure does not flag the ranking, and this measure only ever
+    # asked about set size.
+    assert r["verdict"] == "LESS SIZE-CARRIED THAN ITS OWN NULL"
     assert r["r2_size_alone"] < 0.10
-    assert "does not explain much" in r["what_to_do"]
+    assert "not a clean bill of health" in r["what_to_do"]

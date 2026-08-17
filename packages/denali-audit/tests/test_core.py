@@ -50,26 +50,69 @@ def test_reproduces_published_headline():
 
 
 def _synthetic(n=40, slope=0.08, noise=3.0, seed=7):
+    """THIS FIXTURE IS THE NULL. Kept, renamed in intent, and no longer a positive.
+
+    `hits = size * 0.08 + noise` draws a hit count at a constant per-member rate,
+    with `hits <= size` throughout. That is precisely the data-generating process of
+    the binomial no-biology null, so a ranking built this way contains no biology by
+    construction. Measured: R^2 0.7810 against a null of 0.7818.
+
+    Until 2026-08-17 `test_size_driven_ranking_is_flagged` fed this to audit() and
+    asserted CONFOUNDED. It passed -- because the old verdict was a band on the raw
+    R^2 with no null behind it, so the tool fired on pure arithmetic and the
+    positive control for the product's central claim confirmed that it did. The
+    control was inverted: it demanded exactly the behaviour that was the defect.
+
+    It now asserts the opposite, which is the honest expectation.
+    """
     rng = np.random.default_rng(seed)
     size = rng.integers(10, 600, n)
     hits = np.clip(size * slope + rng.normal(0, noise, n), 0, None).round()
     return size, hits
 
 
-def test_size_driven_ranking_is_flagged():
+def _above_null(n=60, seed=3):
+    """A ranking genuinely more size-carried than its own null.
+
+    Non-counting, like this project's own screen: hits count events over a universe
+    far larger than the set, so size has no arithmetic head start and the null sits
+    near zero. The size relationship that remains is not arithmetic.
+    """
+    rng = np.random.default_rng(seed)
+    size = rng.integers(10, 600, n)
+    hits = np.clip(size * 20 + rng.normal(0, 400, n), 0, None).round()
+    return size, hits
+
+
+def test_a_ranking_drawn_from_the_null_is_not_called_confounded():
+    """The old positive control, corrected. Pure arithmetic must not be flagged."""
     size, hits = _synthetic()
     r = audit(size, hits)
-    assert r["verdict"] == "CONFOUNDED"
-    assert r["r2_size_alone"] > 0.4
+    assert r["mapping"]["structure"] == "counting"
+    assert r["verdict"] != "MORE SIZE-CARRIED THAN ITS OWN NULL", (
+        "a ranking generated at a constant per-member rate -- the null's own "
+        "data-generating process -- was flagged as carrying more size than its null")
+    assert r["r2_size_alone"] > 0.4, (
+        "and the raw R^2 is still large, which is exactly why a band on it misleads")
 
 
-def test_size_independent_ranking_is_not_flagged():
+def test_a_genuinely_size_carried_ranking_is_flagged():
+    r = audit(*_above_null())
+    assert r["mapping"]["structure"] == "non-counting"
+    assert r["verdict"] == "MORE SIZE-CARRIED THAN ITS OWN NULL"
+    assert r["no_biology_null"]["position"] == "ABOVE"
+
+
+def test_size_independent_ranking_is_indistinguishable_from_its_null():
     rng = np.random.default_rng(11)
     size = rng.integers(10, 600, 60)
     hits = rng.integers(0, 40, 60)          # hits unrelated to size
     r = audit(size, hits)
-    assert r["verdict"] == "NOT SIZE-DOMINATED"
+    assert r["verdict"] == "INDISTINGUISHABLE FROM ITS OWN NULL"
     assert r["r2_size_alone"] < 0.2
+    assert "not a clean" in r["what_to_do"].lower() or \
+           "cannot tell" in r["what_to_do"].lower(), (
+        "a low R^2 must not be reported as a pass")
 
 
 def test_refuses_too_few_sets():

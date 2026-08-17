@@ -466,10 +466,12 @@ def main() -> int:
     sz = rng.integers(10, 300, 60)
     conf = audit(sz, (sz * rng.uniform(1.5, 3.0, 60)).astype(int))
     clean = audit(sz, rng.integers(0, 400, 60))
-    check("audit flags a size-confounded screen", conf["verdict"] == "CONFOUNDED",
+    check("audit flags a size-confounded screen",
+          conf["verdict"] == "MORE SIZE-CARRIED THAN ITS OWN NULL",
           f"r2={conf['r2_size_alone']}")
-    check("audit clears a screen that is not size-driven",
-          clean["verdict"] == "NOT SIZE-DOMINATED", f"r2={clean['r2_size_alone']}")
+    check("audit does not flag a screen that is not size-driven",
+          clean["verdict"] == "INDISTINGUISHABLE FROM ITS OWN NULL",
+          f"r2={clean['r2_size_alone']}")
     check("audit reproduces our own frozen size-alone value",
           near(audit(summary.n_present, summary.n_hits_q05)["r2_size_alone"],
                sens["set_size_alone"]["r2"], 5e-3))
@@ -1079,11 +1081,16 @@ def main() -> int:
           _after["r2_size_alone"] < _before["r2_size_alone"],
           f"{_before['r2_size_alone']} -> {_after['r2_size_alone']}")
     check("audit flags our own screen before the correction",
-          _before["verdict"] == "CONFOUNDED", _before["verdict"])
-    check("audit clears our own screen after the correction",
-          _after["verdict"] == "NOT SIZE-DOMINATED", _after["verdict"])
+          _before["verdict"] == "MORE SIZE-CARRIED THAN ITS OWN NULL", _before["verdict"])
+    # The correction does not CLEAR the screen and the wording no longer says it
+    # does. It moves it from above its own null to indistinguishable from it, which
+    # is the honest end state: the size signal is gone, and what remains cannot be
+    # told apart from a ranking with no biology in it BY THIS MEASURE.
+    check("audit cannot distinguish our own screen from its null after the correction",
+          _after["verdict"] == "INDISTINGUISHABLE FROM ITS OWN NULL", _after["verdict"])
     check("the page states the before/after the test just reproduced",
-          f"{_before['r2_size_alone']}" in page and "NOT SIZE-DOMINATED" in page)
+          f"{_before['r2_size_alone']}" in page
+          and "INDISTINGUISHABLE FROM ITS OWN NULL" in page)
     # the connect snippet must name a module that exists and is runnable
     check("the MCP snippet on the page points at a real module",
           '"-m", "src.mcp_server"' in page
@@ -1204,8 +1211,12 @@ def main() -> int:
     _sz = [10, 20, 40, 80, 160, 320, 25, 55, 90, 200]
     _ht = [1, 3, 6, 12, 25, 60, 4, 9, 15, 33]
     _a = _srv.audit(sizes=_sz, hits=_ht)
+    # This fixture is a COUNTING mapping at a near-constant per-member rate, i.e.
+    # drawn from its own null -- r2 0.8468 against a binomial null that is just as
+    # high. It used to assert CONFOUNDED, which is the defect the null-relative
+    # verdict exists to stop: a large raw R^2 that is pure arithmetic.
     check("server audits a caller's own ranking, no frozen data involved",
-          _a["verdict"] == "CONFOUNDED" and _a["n_sets"] == 10,
+          _a["verdict"] == "INDISTINGUISHABLE FROM ITS OWN NULL" and _a["n_sets"] == 10,
           f"r2={_a['r2_size_alone']}")
     _r = _srv.rerank(sizes=_sz, hits=_ht, top=5)
     check("server reranks a caller's own ranking",

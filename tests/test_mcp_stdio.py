@@ -98,7 +98,9 @@ async def run() -> None:
                   "left_the_top" in rr and "survivors" not in rr)
             check("rerank attaches the audit verdict for the caller's table",
                   rr.get("your_ranking", {}).get("verdict") in (
-                      "CONFOUNDED", "PARTIALLY CONFOUNDED", "NOT SIZE-DOMINATED"),
+                      "MORE SIZE-CARRIED THAN ITS OWN NULL",
+                      "INDISTINGUISHABLE FROM ITS OWN NULL",
+                      "LESS SIZE-CARRIED THAN ITS OWN NULL"),
                   str(rr.get("your_ranking", {}).get("verdict")))
             check("rerank refuses to be read as a candidate list",
                   "not a candidate list" in rr.get("what_this_is_not", "").lower())

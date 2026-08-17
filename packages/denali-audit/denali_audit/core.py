@@ -23,10 +23,21 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
+from . import nulls as _nulls
+
 MIN_SETS = 8
 
 CONFOUNDED = 0.40
 PARTIAL = 0.20
+
+# The verdict vocabulary, in one place. Null-relative since 2026-08-17: a band on
+# the raw R^2 is what misled, because for a counting mapping the no-biology value
+# is large. None of these three is a pass -- see each what_to_do.
+VERDICT_ABOVE = "MORE SIZE-CARRIED THAN ITS OWN NULL"
+VERDICT_INSIDE = "INDISTINGUISHABLE FROM ITS OWN NULL"
+VERDICT_BELOW = "LESS SIZE-CARRIED THAN ITS OWN NULL"
+VERDICT_UNDETERMINED = "UNDETERMINED"
+VERDICTS = (VERDICT_ABOVE, VERDICT_INSIDE, VERDICT_BELOW, VERDICT_UNDETERMINED)
 
 
 def _spearman(x, y) -> float:
@@ -147,27 +158,63 @@ def audit(sizes, hits, corr=None) -> dict:
         f"{share:.0%} of the variance in this ranking is predicted by how the "
         f"sets were built, with no reference to what any gene does."
     )
-    if share >= CONFOUNDED:
-        out["verdict"] = "CONFOUNDED"
+
+    # THE VERDICT IS RELATIVE TO THIS MAPPING'S OWN NULL, NOT TO A BAND ON THE RAW
+    # R^2. Until 2026-08-17 it was a band -- CONFOUNDED at 0.40, PARTIALLY at 0.20 --
+    # and those thresholds were calibrated on THIS project's screen, whose hits count
+    # perturbations. Nine of the ten formats adapters.detect() accepts instead count
+    # hits over the set's own members, where a large R^2 is arithmetic and the
+    # no-biology value is nowhere near zero. On seven real published screens
+    # (results/external_nulls/) only two clear their own null, and one measured at
+    # 0.36 against a null of 0.72 -- less size-carried than chance -- was being told
+    # to check whether its leading entries were simply its largest sets.
+    #
+    # The null is a SIZE-ALONE null, so it is compared against r2_size_alone rather
+    # than against the VIF share, for the same reason the corpus percentile is:
+    # comparing a VIF number against a size-alone reference is a category error.
+    out["mapping"] = _nulls.structure(s, h)
+    null = _nulls.no_biology_null(s, h, _r2)
+    pos = _nulls.position(out["r2_size_alone"], null)
+    if null is not None:
+        out["no_biology_null"] = {**null, "position": pos}
+
+    if pos == "ABOVE":
+        out["verdict"] = "MORE SIZE-CARRIED THAN ITS OWN NULL"
         out["what_to_do"] = (
-            "Do not read the top of this ranking as biology. Before committing to "
-            "any candidate, re-rank with a size-aware statistic -- a competitive "
-            "test that accounts for inter-gene correlation (CAMERA and its "
-            "relatives), or a permutation null that preserves set size -- and see "
-            "which entries survive. The ones that move most are the ones your "
-            "current ranking is least able to justify.")
-    elif share >= PARTIAL:
-        out["verdict"] = "PARTIALLY CONFOUNDED"
+            "This ranking is more predicted by set size than a version of itself "
+            "with no biology in it. Before committing to any candidate, re-rank "
+            "with a size-aware statistic -- a competitive test that accounts for "
+            "inter-gene correlation (CAMERA and its relatives), or a permutation "
+            "null that preserves set size -- and see which entries survive. The "
+            "ones that move most are the ones your current ranking is least able "
+            "to justify.")
+    elif pos == "INSIDE":
+        out["verdict"] = "INDISTINGUISHABLE FROM ITS OWN NULL"
         out["what_to_do"] = (
-            "Size is a visible but not dominant driver here. Report it alongside "
-            "the ranking, and check that your leading entries are not simply your "
-            "largest sets.")
+            "By this measure you cannot tell this ranking apart from one with no "
+            "biology in it at all. That is not a clean result and it is not a "
+            "problem you can fix by re-ranking: the size relationship here is what "
+            "the arithmetic of the mapping produces on its own. It does not mean "
+            "your screen found nothing -- it means THIS measure cannot separate "
+            "what you found from how the sets were built, and a different line of "
+            "evidence has to do that work.")
+    elif pos == "BELOW":
+        out["verdict"] = "LESS SIZE-CARRIED THAN ITS OWN NULL"
+        out["what_to_do"] = (
+            "Set size predicts this ranking LESS than it would with no biology in "
+            "it at all. This is not a clean bill of health and nothing here is a "
+            "pass: it means this particular measure does not flag this ranking, "
+            "and this measure only ever asked about set size. Read depth, guide "
+            "efficacy, replicate count and every other way a ranking can be "
+            "carried by how it was measured are untested, and this tool does not "
+            "test them.")
     else:
-        out["verdict"] = "NOT SIZE-DOMINATED"
+        out["verdict"] = "UNDETERMINED"
         out["what_to_do"] = (
-            "Set size does not explain much of this ranking. That is the good "
-            "case, and it is worth stating explicitly -- most published set-level "
-            "rankings never check.")
+            "The no-biology null for this mapping could not be computed, so the "
+            "size share above cannot be read as high or low. It is a descriptive "
+            "number with nothing to compare it against, and it is not evidence "
+            "either way.")
     # Does one enormous entry carry the whole verdict?
     #
     # Real case, found by running this on a published screen rather than on a
@@ -185,19 +232,47 @@ def audit(sizes, hits, corr=None) -> dict:
         out["n_extreme_entries"] = int(extreme.sum())
         out["r2_without_extreme_entries"] = (None if not np.isfinite(r2_without)
                                              else round(r2_without, 4))
-        def _band(v):
-            if not np.isfinite(v): return "UNDETERMINED"
-            return ("CONFOUNDED" if v >= CONFOUNDED
-                    else "PARTIALLY CONFOUNDED" if v >= PARTIAL else "NOT SIZE-DOMINATED")
-        if _band(r2_without) != out["verdict"]:
-            out["verdict_depends_on_extreme_entries"] = True
+        # The comparison has to be made in the SAME vocabulary as the verdict, and
+        # against the null of the TRIMMED data -- dropping the extreme entries
+        # changes the size distribution, so it changes the null too. Comparing the
+        # old raw-R^2 bands against the new null-relative verdict would make this
+        # caution fire on every screen that has an extreme entry, which is a
+        # different defect from the one it was written to catch.
+        def _verdict_without(v):
+            if not np.isfinite(v):
+                return "UNDETERMINED"
+            nl = _nulls.no_biology_null(s[~extreme], h[~extreme], _r2)
+            p = _nulls.position(v, nl)
+            return {"ABOVE": "MORE SIZE-CARRIED THAN ITS OWN NULL",
+                    "INSIDE": "INDISTINGUISHABLE FROM ITS OWN NULL",
+                    "BELOW": "LESS SIZE-CARRIED THAN ITS OWN NULL"}.get(p, "UNDETERMINED")
+        # Fire when the verdict moves OR when the raw R^2 moves by more than the
+        # null's own width. The second clause is not a magic number: it is the
+        # uncertainty of the null itself, so "this point moved the answer by more
+        # than the answer's own error bar" is self-calibrating.
+        #
+        # It is needed because the null-relative verdict is ROBUST to exactly the
+        # artefact the old band was fooled by. On the real MAGeCK slice, one control
+        # pseudo-gene moves the observed R^2 from 0.4137 to 0.0237 -- and moves the
+        # null from 0.4897 to 0.1026 with it, so the verdict is BELOW either way.
+        # That robustness is a genuine improvement and it must not become silence:
+        # a tool arguing that rankings get carried by arithmetic still owes the user
+        # the fact that one row carried its headline number.
+        _vw = _verdict_without(r2_without)
+        _band_w = (out["no_biology_null"]["ci95"][1] - out["no_biology_null"]["ci95"][0]
+                   if "no_biology_null" in out else 0.0)
+        _moved = (np.isfinite(r2_without)
+                  and abs(out["r2_size_alone"] - r2_without) > max(_band_w, 1e-9))
+        if _vw != out["verdict"] or _moved:
+            out["verdict_depends_on_extreme_entries"] = (_vw != out["verdict"])
+            out["r2_depends_on_extreme_entries"] = bool(_moved)
             k_x = int(extreme.sum())
             out["caution"] = (
                 f"This verdict rests on {k_x} "
                 f"{'entry' if k_x == 1 else 'entries'} at least 10x "
                 f"the median size. Without {'it' if k_x == 1 else 'them'} "
                 f"the same check returns "
-                f"{_band(r2_without)} (R^2 {out['r2_without_extreme_entries']}). In a "
+                f"{_vw} (R^2 {out['r2_without_extreme_entries']}). In a "
                 "pooled library that entry is usually the non-targeting control "
                 "pseudo-gene rather than a set of interest. Nothing has been dropped "
                 "-- decide which table you meant to audit, and rerun.")

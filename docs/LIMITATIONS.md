@@ -227,6 +227,38 @@ we didn't.
   that succeeded on the failure output. Green again one commit later at
   `9d0c2f4`. An exit code was read from the wrong end of a pipe.
 
+## 7b. The verdict is unstable when a ranking sits on its null's edge
+
+**The same file can get two different verdicts from two of our own surfaces, and
+this is shipped.** Measured on `mageck_gene_summary.txt`: the command line prints
+`MORE SIZE-CARRIED THAN ITS OWN NULL` and the in-page audit on `index.html`
+prints `INDISTINGUISHABLE FROM ITS OWN NULL`, for the same bytes.
+
+Neither is wrong. The verdict is a hard threshold on a Monte Carlo estimate, and
+that screen sits **0.028 above a 95% upper edge of 0.6207 on an interval 0.329
+wide** — it clears the boundary by under a tenth of the interval's own width. Two
+independent samples of the null land on opposite sides of it. The same
+disagreement would appear between two runs of the *same* implementation at
+different seeds; it is not an artifact of the JavaScript port, and porting more
+carefully would not remove it.
+
+**Why it is not hidden.** `tests/test_page_audit_parity.py` could have been made
+green by comparing the verdict loosely. Instead it certifies each divergence as
+sampling noise using a tolerance derived from the two implementations' own
+interval edges, asserts that no more than one fixture does this, and prints the
+name of any that does. A new borderline case cannot appear silently.
+
+**What it means for a reader.** A verdict near the edge is not a finding. If your
+ranking sits close to its null's boundary, the honest reading is that this
+measure cannot separate it from a no-biology process — not that it fell on the
+side the tool happened to print. The interval is reported alongside the verdict
+on every surface for exactly this reason, and it is the interval that should be
+read.
+
+**Not yet fixed.** The tool has no `BORDERLINE` state. It should: a verdict whose
+sign flips under resampling should say so rather than pick a side. Recorded here
+rather than in a test comment because it affects what a user sees.
+
 ## 8. Not attempted
 
 Sanger KY cross-library agreement (specified, never run) · scbench (no API key, no

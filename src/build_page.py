@@ -701,6 +701,57 @@ EXAMPLE_CSV = (ROOT / "examples" / "example_gprofiler.csv").read_text()
 
 # Pure functions only between the CORE markers — the parity test extracts and
 # runs exactly that span under node, so DOM code must stay below the end mark.
+
+# ---- the audit vocabulary, HARVESTED FROM THE PACKAGE, never retyped -------
+# index.html carries a JavaScript port of audit(). Every string it prints used to
+# be a hand-typed copy of core.py's, which is a second copy of a definition and
+# therefore drifts -- and it did: when the verdict became null-relative, the page
+# went on printing CONFOUNDED for inputs the package no longer called that.
+#
+# The four verdict words and the two mapping explanations are importable
+# constants, so they are injected. The what_to_do texts are not constants, but
+# they are static per verdict, so they are obtained by RUNNING the packaged
+# audit() on fixtures chosen to produce each verdict and reading the result. If a
+# verdict cannot be produced the build fails rather than shipping a page with a
+# hole in it.
+def _harvest_vocabulary() -> dict:
+    import numpy as _np
+    from denali_audit import core as _c
+    from denali_audit import nulls as _nl
+
+    rng = _np.random.default_rng(4)
+    _s1 = rng.integers(10, 600, 60)
+    _fx = {
+        # non-counting, strong size relation
+        _c.VERDICT_ABOVE: (_s1, (_s1 * 30 + rng.normal(0, 200, 60)).clip(0).round()),
+    }
+    _s2 = rng.integers(20, 400, 60)
+    _fx[_c.VERDICT_INSIDE] = (_s2, rng.binomial(_s2, 0.06))
+    _s3 = rng.integers(30, 500, 60)
+    _fx[_c.VERDICT_BELOW] = (_s3, rng.binomial(_s3, 0.25 * (30 / _s3)))
+    _fx[_c.VERDICT_UNDETERMINED] = (_np.array([50] * 12), _np.arange(12))
+
+    todo = {}
+    for want, (sz, ht) in _fx.items():
+        r = _c.audit(sz, ht)
+        if r["verdict"] != want:
+            raise SystemExit(
+                f"build_page could not produce the {want!r} verdict for harvesting "
+                f"(got {r['verdict']!r}). The page would ship without that branch's "
+                f"text. Fix the fixture rather than typing the string in.")
+        todo[want] = r["what_to_do"]
+    return {
+        "VERDICT_ABOVE": _c.VERDICT_ABOVE, "VERDICT_INSIDE": _c.VERDICT_INSIDE,
+        "VERDICT_BELOW": _c.VERDICT_BELOW,
+        "VERDICT_UNDETERMINED": _c.VERDICT_UNDETERMINED,
+        "COUNTING_WHY": _nl.COUNTING_WHY, "NON_COUNTING_WHY": _nl.NON_COUNTING_WHY,
+        "N_ITER": _nl.N_ITER, "MIN_SETS": _nl.MIN_SETS,
+        "WHAT_TO_DO": todo,
+    }
+
+
+_VOCAB = _harvest_vocabulary()
+
 _AUDIT_CORE_JS = r"""
 // Ported from denali_audit/core.py + adapters.py + reference.py. Strings are
 // verbatim; math is the same OLS/Spearman/rank arithmetic. Divergences that
@@ -878,6 +929,81 @@ function audRankDesc(v){var idx=v.map(function(_,i){return i});
   idx.sort(function(a,b){return v[b]-v[a]||a-b});
   var r=new Array(v.length);idx.forEach(function(o,p){r[o]=p+1});return r}
 function audPct0(x){return String(audPyRound(x,0))}
+
+/* ---- nulls.py, ported -----------------------------------------------------
+   The number audit() reports is not interpretable without this one: for nine of
+   the ten formats this page accepts, hits are counted over the set's own members
+   and the no-biology value is nowhere near zero.
+
+   THE MONTE CARLO CANNOT MATCH PYTHON DRAW FOR DRAW. Python samples with NumPy's
+   PCG64 at a fixed seed; reproducing that here would mean reimplementing PCG64,
+   and matching a 300-draw estimate to 1e-10 across two languages is not a
+   meaningful requirement anyway. What must match, and is asserted by
+   tests/test_page_audit_parity.py, is the VERDICT -- the thing a reader acts on --
+   plus every deterministic field. The two estimates are additionally required to
+   agree within their own sampling error. The generator below is a plain
+   mulberry32 at the same seed, stated rather than hidden. */
+function audRng(seed){
+  var a=seed>>>0;
+  return function(){
+    a|=0; a=a+0x6D2B79F5|0;
+    var x=Math.imul(a^a>>>15,1|a);
+    x=x+Math.imul(x^x>>>7,61|x)^x;
+    return ((x^x>>>14)>>>0)/4294967296;
+  };
+}
+function audBinom(n,p,rnd){    /* n small here; direct Bernoulli sum is exact */
+  var k=0; for(var i=0;i<n;i++) if(rnd()<p) k++;
+  return k;
+}
+function audStructure(s,h){
+  var n=s.length;
+  if(!n) return {structure:"unknown",frac_hits_le_size:null,
+                 why:"no finite rows to decide from"};
+  var ss=0,hs=0,le=0;
+  for(var i=0;i<n;i++){ss+=s[i];hs+=h[i];if(h[i]<=s[i])le++}
+  var rate=ss?hs/ss:NaN;
+  var counting=(le===n)&&rate>=0&&rate<=1;
+  return {structure:counting?"counting":"non-counting",
+          frac_hits_le_size:audPyRound(le/n,4),
+          why:counting?AUD_V.COUNTING_WHY:AUD_V.NON_COUNTING_WHY};
+}
+function audNull(s,h){
+  var n=s.length;
+  if(n<AUD_V.MIN_SETS) return null;
+  var counting=audStructure(s,h).structure==="counting";
+  var ss=0,hs=0; for(var i=0;i<n;i++){ss+=s[i];hs+=h[i]}
+  var rate=ss?hs/ss:NaN;
+  var rnd=audRng(20260816), draws=[];
+  for(var it=0;it<AUD_V.N_ITER;it++){
+    var sim=new Array(n);
+    if(counting){ for(var j=0;j<n;j++) sim[j]=audBinom(Math.trunc(s[j]),rate,rnd) }
+    else{ sim=h.slice();
+      for(var k=n-1;k>0;k--){var m=Math.floor(rnd()*(k+1));var tmp=sim[k];sim[k]=sim[m];sim[m]=tmp} }
+    var v=audR2(s,sim.map(function(x){return Math.log10(1+x)}));
+    if(isFinite(v)) draws.push(v);
+  }
+  if(!draws.length) return null;
+  draws.sort(function(a,b){return a-b});
+  var mean=0; for(var q=0;q<draws.length;q++) mean+=draws[q];
+  mean/=draws.length;
+  return {kind:counting
+            ?"binomial constant-rate (hits drawn from the set's own members)"
+            :"permutation (hits not bounded by size)",
+          expected_r2:audPyRound(mean,4),
+          ci95:[audPyRound(audPct(draws,2.5),4),audPyRound(audPct(draws,97.5),4)],
+          n_iter:draws.length};
+}
+function audPct(sorted,q){    /* numpy's linear interpolation, on sorted input */
+  var idx=(sorted.length-1)*q/100, lo=Math.floor(idx), hi=Math.ceil(idx);
+  if(lo===hi) return sorted[lo];
+  return sorted[lo]+(sorted[hi]-sorted[lo])*(idx-lo);
+}
+function audPosition(obs,nul){
+  if(!nul||!isFinite(obs)) return null;
+  return obs>nul.ci95[1]?"ABOVE":obs<nul.ci95[0]?"BELOW":"INSIDE";
+}
+
 function audit(sizes,hits){
   var s=[],h=[];
   for(var i=0;i<sizes.length;i++)if(isFinite(sizes[i])&&isFinite(hits[i])){s.push(+sizes[i]);h.push(+hits[i])}
@@ -921,21 +1047,19 @@ function audit(sizes,hits){
     return out}
   out.reading=audPct0(share*100)+"% of the variance in this ranking is predicted by how the "+
     "sets were built, with no reference to what any gene does.";
-  if(share>=0.40){out.verdict="CONFOUNDED";
-    out.what_to_do="Do not read the top of this ranking as biology. Before committing to "+
-      "any candidate, re-rank with a size-aware statistic -- a competitive "+
-      "test that accounts for inter-gene correlation (CAMERA and its "+
-      "relatives), or a permutation null that preserves set size -- and see "+
-      "which entries survive. The ones that move most are the ones your "+
-      "current ranking is least able to justify."}
-  else if(share>=0.20){out.verdict="PARTIALLY CONFOUNDED";
-    out.what_to_do="Size is a visible but not dominant driver here. Report it alongside "+
-      "the ranking, and check that your leading entries are not simply your "+
-      "largest sets."}
-  else{out.verdict="NOT SIZE-DOMINATED";
-    out.what_to_do="Set size does not explain much of this ranking. That is the good "+
-      "case, and it is worth stating explicitly -- most published set-level "+
-      "rankings never check."}
+  /* The verdict is relative to THIS mapping's own null, not a band on the raw
+     R^2. See core.py: a band calibrated on a non-counting screen told a real
+     published counting screen measured at 0.36 against a null of 0.72 to check
+     that its leading entries were not simply its largest sets. */
+  out.mapping=audStructure(s,h);
+  var nul=audNull(s,h);
+  if(nul) out.no_biology_null=Object.assign({},nul,{position:audPosition(share,nul)});
+  var pos=nul?audPosition(share,nul):null;
+  out.verdict = pos==="ABOVE" ? AUD_V.VERDICT_ABOVE
+              : pos==="BELOW" ? AUD_V.VERDICT_BELOW
+              : pos==="INSIDE" ? AUD_V.VERDICT_INSIDE
+              : AUD_V.VERDICT_UNDETERMINED;
+  out.what_to_do = AUD_V.WHAT_TO_DO[out.verdict];
   out.what_this_is_not="Not a candidate list and not a recommendation. This measures a property "+
     "of the ranking, not of any gene or pathway in it.";
   out.method="VIF = 1 + (m-1)*rho_bar, Wu & Smyth 2012, "+
@@ -1113,6 +1237,7 @@ $("fileIn").onchange=function(){audRunFile(this.files[0]);this.value=""};
 
 AUDIT_SCRIPT = ("/*AUDIT-CORE-START*/\n"
                 f"const AUD_CORPUS=[{','.join(f'{v:.4f}' for v in _CORPUS)}];\n"
+                f"const AUD_V={json.dumps(_VOCAB)};\n"
                 f"const AUD_EXAMPLE={json.dumps(EXAMPLE_CSV)};\n"
                 + _AUDIT_CORE_JS + "\n/*AUDIT-CORE-END*/\n" + _AUDIT_DOM_JS)
 

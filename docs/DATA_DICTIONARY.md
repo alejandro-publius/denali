@@ -29,6 +29,19 @@ Each cell is one number: how strongly switching off that gene moved that program
 - Roughly: above +2 is notable, above +4 is strong
 - Blank = that gene wasn't measurable for that program
 
+> **Do not recompute `n_hits_q05` from this file.** These are gene-level scores,
+> collapsed from the perturbation level by `groupby(targets).max()`. The frozen hit
+> counts were computed *before* that collapse, one test per guide, so a
+> Benjamini-Hochberg pass over this matrix corrects for fewer tests on a
+> max-selected statistic and returns different counts. Read `n_hits_q05` from
+> `program_summary.csv`.
+
+The size of the discrepancy, measured rather than asserted: +4, +2, +2 and 0 on
+the first four programs, and in both directions across all 50. The Spearman
+between the two versions is 0.9979, so the *ranking* survives and only the counts
+move — which is exactly why this is worth writing down. A trap that changes an
+ordering gets caught; one that only changes counts gets published.
+
 ---
 
 ## `program_summary.csv` — one row per program

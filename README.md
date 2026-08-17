@@ -700,6 +700,7 @@ The suite has caught, in order: a stat bug reporting 5 evidence sources instead 
 | `results/breadth/` | Post-hoc, exploratory. The unmodified `audit()` on three domains that are **not** gene sets — regions, metabolites, microbiome — plus `null_baselines.py`. Reported because it found a boundary condition on the tool, not a fourth confirmation. See scope limit 6 |
 | `audits/external/` | The audit run unchanged on seven **other people's** published screens — standardized inputs, provenance and rerun command per entry |
 | `benchmarks/tasks/` | Three BenchFlow tasks other agents are scored on. `denali-size-carried` derives its ground truth from the shipped `rerank()` rather than a hand-typed key |
+| `benchmarks/challenge/` | A public self-scoring challenge: does your method beat the size-only baseline at predicting a second cell line? Our own `rerank` is entered as a contestant and places fourth of four on top-10 overlap |
 | `packages/denali-audit/` | The packaged CLI a stranger installs. `core.py` is `src/`'s maths vendored verbatim; a test requires it to return 0.4649 on the frozen data. |
 | `src/` | Pipeline modules, run as `python -m src.<module>` |
 | `tests/` | Invariants over the frozen interface |
@@ -710,6 +711,45 @@ The suite has caught, in order: a stat bug reporting 5 evidence sources instead 
 | `audit.html` | **Run the tool on your own file, in the browser.** The package's own source, executed by CPython in WebAssembly — not a JavaScript restatement of it. Nothing is uploaded |
 | `web/` | `build_audit_page.py` inlines the package into `audit.html`; `shoot.py` re-shoots the README images from the current pages |
 | `app.py` | Streamlit view of the same frozen data |
+
+## The baseline, as a contest
+
+Arc Institute's Virtual Cell Challenge 2025 — 5,000+ registrants, 1,200+ teams —
+[reported](https://arcinstitute.org/news/virtual-cell-challenge-2025-wrap-up) that
+perturbation models are "not yet consistently outperforming naive baselines across
+all metrics." This repository measures one such naive baseline and shipped it only
+as a diagnosis. [`benchmarks/challenge/`](benchmarks/challenge/) makes it something
+a stranger can run their own method against: clone, one command, a score, no
+account and no download. A pull request is the submission mechanism.
+
+**Our own method loses on it.** `denali rerank`'s size-aware residual beats the
+size-only baseline by a Spearman delta of +0.0113 — indistinguishable from ranking
+by size — and scores 0.40 on top-10 overlap against the baseline's 0.60, which is a
+loss. The naive "reuse the hit count you already have" entry scores 0.6633 and 0.80.
+A half-strength correction scores 0.6466 and 0.80, so the cost is not in correcting
+but in correcting all the way.
+
+**Then the ordering inverts.** That board scores against RPE1's *raw* hit ranking,
+which is itself size-confounded — evaluation 5 measured size alone explaining
+**R² 0.2758** in RPE1 — so a size-corrected predictor is being scored against a
+size-contaminated target. Removing size from both sides reverses the result: the
+naive hit count falls to +0.2193 and is no longer distinguishable from chance
+(permutation p = 0.1214), the size-only baseline goes negative at −0.1755, and the
+correction is the only entrant clearing its permutation null at **+0.4972**,
+p = 0.0003.
+
+That inversion was computed twice, by two sessions, from two independent
+implementations reading the same frozen `paired_programs.csv`. All four rank
+correlations agree to four decimals and the permutation p-values differ in the
+third, which is what independent draws look like rather than a copied seed. It
+establishes that the arithmetic is right; both runs read the same data, so it does
+not independently establish the data.
+
+Which method wins is decided by whether the target is size-corrected. That is this
+project's thesis occurring inside this project's own challenge. It rules out the
+correction destroying all signal; it does **not** establish that the residual is
+biology, since both sides are corrected the same way and can agree for the same
+wrong reason — [evaluation 6](results/concordance/) pointed back at us.
 
 ## Scope limits
 

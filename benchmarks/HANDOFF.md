@@ -99,7 +99,26 @@ under-ten-minutes requirement. A 25-of-50 set-level split was rejected in the
 pre-registration for a measured reason: bootstrapped, it carries SD 0.1814 on the
 baseline Spearman alone, which is larger than three of the four gaps on the board.
 
-If the ORCS per-set tables are ever committed in a reduced form, the same scorer
-takes them unchanged — it reads through `denali_audit.adapters.detect()` — and the
-evaluation set could go from 50 sets on 2 screens to thousands on 1,272. That is
-the single highest-value extension and it is blocked only on data availability.
+**Correction, after evaluation 13 landed — do not attempt the obvious scale-up.**
+I originally wrote here that committing the ORCS per-set tables would let the
+evaluation set grow from 50 sets on 2 screens to thousands on 1,272, and that the
+extension was blocked only on data availability. That was wrong, and the thing that
+makes it wrong is now in the repository:
+`results/floor_law/floor_law.json` states that **every screen in the corpus counts
+hits over each set's own members**, which is the counting regime. That is precisely
+the mapping `scorer/score.py::guard_scope_limit_6` refuses, and it refuses it for a
+reason that does not go away with more data — where `hits ≤ size` because both count
+the same members, the size-only baseline wins by arithmetic and a delta measured
+against it means nothing. Committing the per-set tables would therefore produce an
+evaluation set the scorer declines to score, which is the correct behaviour.
+
+So the blocker is not data availability. It is that the corpus is the wrong *shape*
+for this challenge, and the 50 Hallmark programs are used precisely because `hits`
+there counts knockdowns rather than members. Scaling this challenge needs a second
+source in the non-counting regime — more paired screens, not more screens.
+
+Two adjacent ideas are also already closed, and are recorded here so nobody spends
+a week rediscovering it. A challenge to predict a screen's no-biology floor from its
+design is answered by evaluation 13 at cross-validated R² **0.0935**. And
+`denali_audit.atlas` ships per-screen floors, not per-set tables, so it does not
+unblock the scale-up either.

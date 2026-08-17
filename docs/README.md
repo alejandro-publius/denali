@@ -53,7 +53,7 @@ came to check.
 | [`DECK.md`](DECK.md) | What is on screen while `DEMO.md` is spoken. **Event not entered**, kept as a record — but the measured slow-3G and WebKit results in it are real and current. |
 | [`SUBMISSION_IMPACTFORGE.md`](SUBMISSION_IMPACTFORGE.md) | The technical writeup: the problem, the stack and what was hard. The most compact statement of what the tool does and what keeps it honest against the study. |
 | [`SUBMISSION.md`](SUBMISSION.md) | Submission copy, every figure carried from `results/`. **The submission did not happen**; kept because it is the most compact prose statement of the whole project. |
-| [`NUMBERING.md`](NUMBERING.md) | Why evaluation 8 is the off-target arm, and the disposition of all thirteen branches. |
+| [`NUMBERING.md`](NUMBERING.md) | Why evaluation 8 is the off-target arm, and the disposition of all fourteen branches. |
 
 ## Working documents, kept unedited on purpose
 

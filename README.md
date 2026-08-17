@@ -44,11 +44,11 @@ We scored all **50 MSigDB Hallmark gene programs** against **9,837 CRISPRi knock
 
 **And on seven other people's screens.** We ran the identical command on the published supplementary tables of seven external studies — CRISPR knockout, CRISPRi/a, single-cell CRISPRa, organoid, primary-T-cell, and bulk RNA-seq — and **36–88% of each ranking is explained by set construction alone.** Every input, provenance, and rerun command is in [`audits/external/`](audits/external/README.md); each number was verified against the source document and re-derived against this repo's own `src/audit_screen.py`. One study comes back only partially confounded and one candidate table was refused for having no true hit count — the auditor discriminates rather than flagging everything. The confound is not ours; it is the field's, and it is arithmetic.
 
-**And thirteen times against ourselves.** Nine of thirteen evaluations came back negative, one returned no verdict when our own power rule fired, and all thirteen are reported below. The headline was also recomputed by [a second implementation that never read the first](#the-headline-was-recomputed-by-a-second-implementation-that-never-read-the-first).
+**And fourteen times against ourselves.** Ten of fourteen evaluations came back negative, one returned no verdict when our own power rule fired, and all fourteen are reported below. The headline was also recomputed by [a second implementation that never read the first](#the-headline-was-recomputed-by-a-second-implementation-that-never-read-the-first).
 
 **New to CRISPR screens?** [Start with the plain-language section](#in-plain-language) — no jargon, and it explains why any of this matters before the method does.
 
-**Evaluating this?** Four questions are answered with file paths at [**How to check this project**](#how-to-check-this-project), at the bottom. If you have two minutes rather than ten: the [findings table](#findings) is thirteen rows and nine of them say NEGATIVE; the [loop](docs/LOOP.md) is where the agent chooses and halts; and `grep -n 'HALLMARK_\|REACTOME_' src/next_experiment.py` returns nothing, which is our central claim stated as something you can falsify in one command rather than something you have to believe.
+**Evaluating this?** Four questions are answered with file paths at [**How to check this project**](#how-to-check-this-project), at the bottom. If you have two minutes rather than ten: the [findings table](#findings) is fourteen rows and ten of them say NEGATIVE; the [loop](docs/LOOP.md) is where the agent chooses and halts; and `grep -n 'HALLMARK_\|REACTOME_' src/next_experiment.py` returns nothing, which is our central claim stated as something you can falsify in one command rather than something you have to believe.
 
 **Read it at [alejandro-publius.github.io/denali](https://alejandro-publius.github.io/denali/).** The hosted copy is byte-identical to `index.html` in this repository and, like it, makes **zero network calls** — GitHub Pages serves the file, nothing fetches anything. So if the venue wifi dies, clone the repo and double-click `index.html`: same page, no server, no network. Everything in it is injected from `results/frozen/` at build time. A Streamlit view of the same frozen data lives in `app.py` (`streamlit run app.py`); both read `results/frozen/` and neither recomputes.
 
@@ -250,9 +250,9 @@ have to infer that we picked well.
    it: K562 is an unstressed leukemia line, and our own first program failed its
    known-regulator control for exactly that reason.
 
-3. **Thirteen evaluations, nine of them negative.** Where an evaluation was
+3. **Fourteen evaluations, ten of them negative.** Where an evaluation was
    pre-registered, the alternative claim was named before any value was computed,
-   so a null was a publishable outcome rather than a failure. Nine came back
+   so a null was a publishable outcome rather than a failure. Ten came back
    negative, one returned no verdict at all because our own power rule fired, and
    two came back positive — one of which is a control, and it is labelled a
    control because that is what it is.
@@ -274,7 +274,7 @@ overstatement.
 
 ## Findings
 
-Thirteen evaluations. Nine negative, one with no verdict because our own power rule fired. All thirteen are reported. The eighth leaves our own data entirely: it asks the same question of two published clinical CRISPR off-target datasets. The eleventh leaves the data altogether and asks the literature.
+Fourteen evaluations. Ten negative, one with no verdict because our own power rule fired. All fourteen are reported. The eighth leaves our own data entirely: it asks the same question of two published clinical CRISPR off-target datasets. The eleventh leaves the data altogether and asks the literature.
 
 | # | Evaluation | Result | Verdict |
 |---|---|---|---|
@@ -291,6 +291,7 @@ Thirteen evaluations. Nine negative, one with no verdict because our own power r
 | 11 | Does the field say so? | Of the **187** publications behind those screens, **111** resolved to full text in PubMed Central and **4** — **3.6%** — mention gene-set size anywhere; 14.4% use competitive-test machinery. Positive control: all three enrichment-methods papers fire, so the low rate is a rate and not a dead query | **POSITIVE** — pre-registered branch (b) fired (`docs/LITERATURE_PREREG.md`, sha256 `165d91a2…`, sealed at `b0c5e35` before the run). Arm is post-freeze. Measures **mention, not understanding**, over a **59.4%** open-access denominator |
 | 12 | Does the field say so — when a model reads the papers instead of a regex? | Two models read all **111** publications. **13.5–16.2%** adjusted for set size or measured it, against the regex's 18.0%. Of the **15** that acted, **10** matched none of the thirteen patterns; of the **20** the regex called positive, **13** did nothing | **NEGATIVE** — for the regex, not the field: the two methods agree on 5 papers out of a union of 25, so the close headline shares are two errors nearly cancelling |
 | 13 | Can a screen's no-biology floor be predicted from how it was built? | Four design-only predictors over all **1,272** corpus screens, five folds grouped by publication: cross-validated R² **0.0935** against a permutation p95 of **0.0007** | **NEGATIVE** — pre-registered claim (c) fired at a 0.20 floor; a floor cannot be guessed from design and has to be computed per screen |
+| 14 | Does the verdict depend on who called the hits? | Same screen, same **49** programs, same size column — only the rule turning scores into hits changed. All four **threshold** rules return **MORE SIZE-CARRIED THAN ITS OWN NULL** (R² **0.4530–0.5631**); all three **quantile / top-N** rules return **UNDETERMINED**. The tool goes from naming set construction the ranking's dominant feature to refusing to answer, and said nothing about the convention that decided it | **NEGATIVE** — pre-registered claim (b) fired ([`docs/HIT_RULE_PREREG.md`](docs/HIT_RULE_PREREG.md), sealed before any value). A scope limit on the instrument, and it surfaced a live defect in the shipped package |
 
 **Evaluation 8 leaves our data and the finding survives.** The confound this project found in gene sets is not about gene sets. In a CRISPR off-target list the analogue of set size is **search yield** — how many candidate sites the mismatch budget nominated — and it carries roughly the same share of apparent cross-assay agreement as set size carries of our cross-screen agreement: **31.2% median against our 26%.** Same direction, modestly stronger, and we do not say dramatically. Two things are disclosed rather than buried. First, the *other* regression — search yield against the **biochemical** hit count — returns R² **0.83–1.00** and exactly **1.0000** at the two lowest thresholds, because a nominated site with ≥1 read is a hit by construction; that number is an identity, not a finding, and it is the one this arm would have overstated itself with. Second, on CRISPRme: that variants create off-target sites is **the CRISPRme paper's own finding**, not ours, and the 44.1% figure means a variant makes the site a *better* match — the stricter reading, sites absent from the reference entirely, is **12.4%**. We conflated those two while building this arm; quoting the first while describing the second overstates the effect roughly threefold. The denominator is the top 1,000 by CFD per guide, a ranked shortlist, not the genome. **No guide is named safe or unsafe** — the gene-level refusal, applied where the ranking has a patient at the end of it. → [`docs/OFFTARGET.md`](docs/OFFTARGET.md), `src/offtarget_audit.py`
 
@@ -673,7 +674,7 @@ run against synthetic data with a known answer: a planted signal returns hits on
 **What this does not establish.** That the method is *correct*. Two
 implementations of a wrong method agree with each other perfectly. This rules
 out implementation error in the frozen scorer; it does not rule out the question
-being the wrong one to ask, which is what the thirteen evaluations are for.
+being the wrong one to ask, which is what the fourteen evaluations are for.
 
 ## What the reproduction check found
 
@@ -877,7 +878,7 @@ This is the part we care most about, so it is built into the code rather than pr
 
 - **We wrote down what would prove us wrong, hashed it, and committed it before running anything.** The pre-registration is recoverable at a named commit.
 - **We held ten pathways back** and only opened them after the model was frozen and hashed. The model **failed** on them — worse than a coin flip, zero true positives. We published that instead of quietly refitting.
-- **Nine of our thirteen evaluations came back negative.** All thirteen are reported, including the one that clears its bar by only 0.026.
+- **Ten of our fourteen evaluations came back negative.** All fourteen are reported, including the one that clears its bar by only 0.026.
 - **The one positive is a control, not a discovery.** Run unchanged on a pathway it was never tuned for, the ranking puts that pathway's known master switch at **rank 2 of 11,258**. So the machinery works — it just is not finding what people assume it is finding.
 - **555 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
 

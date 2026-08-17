@@ -7,7 +7,7 @@
 > the current statements of what this is and what it found.
 
 **Read the bold. The rest is stage direction.** `[pause]` = stop, let the screen carry it.
-**The repeated number is NINE OF THIRTEEN.** It lands in the close.
+**The repeated number is TEN OF FOURTEEN.** It lands in the close.
 **Two beats are LIVE.** They are real commands against a real table, not a recording,
 and both are in `make judge-check` so they run with no network and no key.
 
@@ -78,7 +78,7 @@ denali rerank examples/example_gprofiler.csv --top 10
 
 ## CLOSE
 
-> **"We ran thirteen evaluations on this project. Nine of them came back negative. All thirteen are reported, and the ones that were not pre-registered say so. Scope is pathway-level only, because guide-pair concordance is −0.019, so we name no novel gene anywhere. And a test requires the installed package to reproduce the published figure exactly, so the tool and the paper cannot drift apart. Take it apart."**
+> **"We ran fourteen evaluations on this project. Ten of them came back negative. All fourteen are reported, and the ones that were not pre-registered say so. Scope is pathway-level only, because guide-pair concordance is −0.019, so we name no novel gene anywhere. And a test requires the installed package to reproduce the published figure exactly, so the tool and the paper cannot drift apart. Take it apart."**
 
 ---
 
@@ -181,7 +181,7 @@ alternative is being walked into it.
 | **6** | **"One review covers 50.4% — is the evidence layer real?"** | **Fatal to calling it an evidence chain; we don't.** *"It's a pointer layer and we labelled it one. Our top source for ATF3 was a paper on integrating single-cell data across species. Nineteen of twenty probe genes returned the same zebrafish methods paper."* Screen: **FIG 4**. |
 
 > ### Pre-empt **#1** in the close.
-> **Nine of thirteen evaluations negative.** Saying "Nine of thirteen came back negative" defuses it before it is asked. If a judge raises the held-out failure first, everything after it reads as damage control.
+> **Ten of fourteen evaluations negative.** Saying "Ten of fourteen came back negative" defuses it before it is asked. If a judge raises the held-out failure first, everything after it reads as damage control.
 
 ## Cut — answer live if asked, do not narrate
 
@@ -223,5 +223,5 @@ Recount after any edit:
 | 4 | **Beat 3's refusal paragraph** | 56w · 22s | The reason this is not a candidate-list generator. **Never cut this and the close both** — one of them has to carry the scope limit. |
 
 **Never cut:** the open, either live command, or the close. The close carries
-"nine of thirteen", the −0.019 scope limit, and the anti-drift test, and those are
+"ten of fourteen", the −0.019 scope limit, and the anti-drift test, and those are
 the three things the talk exists to leave behind.

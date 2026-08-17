@@ -73,7 +73,7 @@ parse the same identifiers into different gene counts, and an essentiality
 statistic averaged over 1,178 cell lines that disagrees with the one line we
 actually used. Each was found by checking, not by assuming.
 
-**Preserve negatives.** Nine of thirteen evaluations here are negative and all thirteen
+**Preserve negatives.** Ten of fourteen evaluations here are negative and all fourteen
 are reported. A null from working machinery is a finding; the positive control
 is what makes it one.
 
@@ -125,6 +125,27 @@ is loud. Twenty of that file's checks sit inside such a conditional, which is
 fine per block and dangerous in aggregate — the aggregate is what is now
 guarded, and it was verified by deleting an input and watching the total drop
 from 46 to 43 with one loud failure naming the cause.
+
+**Four more shapes, found the same day by three sessions checking each other.**
+They are listed separately because they share a symptom and not a fix, and
+because "mutate it until it goes red" catches none of the last three.
+
+| the guard | why it could not fail | what catches it |
+|---|---|---|
+| verified on one member of a class | `log10(1+0)` is exactly 0.0, so an `ss_tot == 0` test fires on the all-zero fixture it was built from. For most other constant hit columns the same expression lands near 9.7e-30, the test does not fire, and the tool divided by a denormal and reported the garbage beside a confident verdict. Eight of seventeen constant values leaked | mutate across **several** members of the class, never one |
+| half of a biconditional | the findings table was checked prose-against-table in one direction. Nothing checked artifact-against-table, so an arm could ship with a results directory, a pre-registration and a module and never get a row | write the converse and mutate it too |
+| a fixture drawn from the null | `hits = size * 0.08 + noise` **is** the binomial null's data-generating process. The positive control for this project's central claim was a no-biology sample asserted to be CONFOUNDED. It passed because the band had no null behind it | ask what a fixture's no-biology value is before asserting a verdict on it |
+| unreachable where it matters | `test_mcp_stdio.py` appeared in neither the Makefile nor CI, and could not have run there if added: its interpreter was hardcoded to a `.venv` neither environment creates, so it would have printed SKIP and exited 0 forever. It was the only automated evidence the server starts, guarding a bug that had already shipped once | check that the suites CI claims to run actually ran |
+
+The last one has two independent halves and fixing either alone leaves it
+broken — it was absent from the environments that gate a push, **and**
+structurally unable to run in them.
+
+A fifth, from the same day and the same file this rule is written in: the list of
+count-stating surfaces was **enumerated**, so a fifth surface could state the
+count and nothing read it. One had — a demo script told a presenter to expect a
+figure wrong by 78. Enumerating what to check is the same weakness as
+enumerating what to inline: discover the set instead. Both are now discovered.
 
 The cost of the discipline is one minute per guard; the cost of skipping it is a
 guard that reports safety it does not provide, which is strictly worse than no

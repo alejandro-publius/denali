@@ -6,7 +6,7 @@ A measurement of what a genome-scale CRISPRi screen can and cannot discover.
 All 50 MSigDB Hallmark gene programs scored against 9,837 knockdowns in K562,
 measurability-gated, pre-registered.
 
-**Thirteen evaluations. Nine negative. All thirteen reported.**
+**Fourteen evaluations. Ten negative. All fourteen reported.**
 
 **ANALYSIS IS CLOSED.** No new sweeps, no refits, no new features, no
 gene-level claims. Communication and hardening only.

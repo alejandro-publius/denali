@@ -24,12 +24,12 @@ is stale — say so rather than reconciling it live.
 ## Tagline (≤ 200 characters)
 
 > An AI scientist that audits genetic screens — including its own. It scored 50
-> biological programs against 9,837 CRISPRi knockdowns, ran thirteen evaluations,
-> and seven came back negative. All thirteen are reported.
+> biological programs against 9,837 CRISPRi knockdowns, ran fourteen evaluations,
+> and seven came back negative. All fourteen are reported.
 
 Alternate, if the field is shorter:
 
-> Thirteen evaluations. Nine negative. All thirteen reported. An agent that audits
+> Fourteen evaluations. Ten negative. All fourteen reported. An agent that audits
 > genetic screens, and halts itself when its own rules say stop.
 
 ## Elevator pitch
@@ -162,7 +162,7 @@ positives.
 
 ## Accomplishments we're proud of
 
-**Nine of thirteen evaluations came back negative, and all thirteen are reported.** One
+**Ten of fourteen evaluations came back negative, and all fourteen are reported.** One
 returned no verdict at all because our own pre-registered power rule fired
 against us, and we did not refit.
 

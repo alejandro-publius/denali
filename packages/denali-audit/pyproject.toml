@@ -4,7 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "denali-audit"
-version = "0.1.0"
+# ONE DEFINITION. The version used to be typed here AND in denali_audit/__init__.py
+# with nothing checking they agreed, so a release could ship a wheel whose metadata
+# and whose `denali --version` disagreed and no suite would notice.
+# tests/test_version.py asserts the built metadata matches the module attribute.
+dynamic = ["version"]
 description = "How much of your gene-set ranking is set size rather than biology?"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -54,3 +58,6 @@ denali = "denali_audit.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["denali_audit*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "denali_audit.__version__"}

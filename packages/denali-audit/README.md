@@ -96,6 +96,40 @@ so agreeing for the same wrong reason looks exactly like agreeing for the right 
 denali replication paired.csv --hits-b hits_screen_2
 ```
 
+## Checking somebody else's claim
+
+The commands above assume the screen is yours. `verify` is for the other case: you are
+reading a paper, a preprint or a data room, you have a supplementary table and a
+sentence, and you did not produce either.
+
+```bash
+denali verify their_table.csv --claim "Our top pathways reflect pathway biology."
+denali verify their_table.csv --html report.html      # one printable page
+```
+
+It reports the construction-only baseline for that table, whether the ranking is
+distinguishable from it, and — as a section of its own, not a footnote — **what could
+not be verified from what was provided**, which is usually four or five things and
+always includes the biology of every set in the ranking and whether the study's
+conclusion is correct.
+
+**`NOT VERIFIABLE FROM WHAT WAS PROVIDED` is a normal answer, not an error.** Most
+claims anyone wants checked are not about set size, and this tool cannot reach them.
+That is a statement about what was provided, never about the people who provided it.
+
+Three properties are load-bearing rather than nice, and each is held by a test:
+
+- **It cannot phone home.** The report contains no URL, script, stylesheet, font or
+  fetch of any kind, and nothing is uploaded. That is the reason it can be pointed at
+  material which must not leave the machine it is on.
+- **It cannot accuse.** The output is asserted never to contain thirteen words
+  including *fraud*, *fabricat*, *misconduct*, *unreliable* and *overstat*. It rates no
+  paper, laboratory, company or person, and clearing the baseline is reported as "the
+  lowest bar there is, not a high one."
+- **It is symmetric.** Every number carries the command that regenerates it, so the
+  party being verified can rerun the whole thing against you from the same file. A
+  verification nobody can rerun is not verification.
+
 ## What it will not do
 
 It does not rank your sets, name a candidate, or tell you what to chase. It measures a

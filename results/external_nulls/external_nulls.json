@@ -1,0 +1,134 @@
+{
+  "arm": "external screens vs their own no-biology null",
+  "status": "POST-HOC arm, pre-registered before running",
+  "prereg": "docs/EXPANSION_PREREG.md sha256 179167e58bb9e332, committed 1010d4d",
+  "null_function": "results/breadth/null_baselines.py::null_baseline, unmodified",
+  "n_screens_scored": 7,
+  "n_with_counting_structure": 7,
+  "n_clearing_their_null": 2,
+  "decision_rule": "clears iff observed_r2 > upper bound of the null's 95% interval",
+  "verdict": "DOES NOT CLEAR -- the instruction `denali floor` prints is a defect for counting-structure mappings and becomes a scope limit today",
+  "what_this_does_not_show": "Nothing about the 1,272-screen corpus, whose per-set tables are not committed and were not estimated. Seven screens cannot settle a claim made about 1,272. This corroborates or fails to corroborate the breadth reading on data that can actually be run.",
+  "scope": "A property of each mapping, not of any experiment, ranking, publication or author. No gene or gene set is named. No screen is called bad.",
+  "screens": {
+    "batf3": {
+      "n_sets": 2809,
+      "observed_r2": 0.4221,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.4271,
+      "null_ci95": [
+        0.4186,
+        0.4346
+      ],
+      "observed_minus_null": -0.005,
+      "position": "INSIDE null band",
+      "clears_null": false,
+      "null_ci95_upper": 0.4346,
+      "status": "SCORED"
+    },
+    "gastric": {
+      "n_sets": 147,
+      "observed_r2": 0.6349,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.4653,
+      "null_ci95": [
+        0.444,
+        0.4864
+      ],
+      "observed_minus_null": 0.1696,
+      "position": "ABOVE null",
+      "clears_null": true,
+      "null_ci95_upper": 0.4864,
+      "status": "SCORED"
+    },
+    "htra3-hnscc-gokegg": {
+      "n_sets": 1985,
+      "observed_r2": 0.5183,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.714,
+      "null_ci95": [
+        0.7046,
+        0.7254
+      ],
+      "observed_minus_null": -0.1957,
+      "position": "BELOW null",
+      "clears_null": false,
+      "null_ci95_upper": 0.7254,
+      "status": "SCORED"
+    },
+    "smarca4_ala": {
+      "n_sets": 85,
+      "observed_r2": 0.36,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.7192,
+      "null_ci95": [
+        0.6872,
+        0.7485
+      ],
+      "observed_minus_null": -0.3592,
+      "position": "BELOW null",
+      "clears_null": false,
+      "null_ci95_upper": 0.7485,
+      "status": "SCORED"
+    },
+    "tau_lrp1": {
+      "n_sets": 67,
+      "observed_r2": 0.6345,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.5906,
+      "null_ci95": [
+        0.5765,
+        0.6107
+      ],
+      "observed_minus_null": 0.0439,
+      "position": "ABOVE null",
+      "clears_null": true,
+      "null_ci95_upper": 0.6107,
+      "status": "SCORED"
+    },
+    "yak-pasmc-s007": {
+      "n_sets": 675,
+      "observed_r2": 0.7211,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.7675,
+      "null_ci95": [
+        0.7536,
+        0.781
+      ],
+      "observed_minus_null": -0.0464,
+      "position": "BELOW null",
+      "clears_null": false,
+      "null_ci95_upper": 0.781,
+      "status": "SCORED"
+    },
+    "zga_crispra": {
+      "n_sets": 17,
+      "observed_r2": 0.8826,
+      "null_kind": "binomial constant-rate (hits drawn from the set's own members)",
+      "has_counting_structure": true,
+      "frac_hits_le_size": 1.0,
+      "null_mean_r2": 0.7884,
+      "null_ci95": [
+        0.6773,
+        0.8965
+      ],
+      "observed_minus_null": 0.0942,
+      "position": "INSIDE null band",
+      "clears_null": false,
+      "null_ci95_upper": 0.8965,
+      "status": "SCORED"
+    }
+  }
+}

@@ -89,17 +89,40 @@ test:
 	@$(PY) tests/test_cross_surface.py
 	@$(PY) tests/test_page_audit_parity.py
 
+# A PIPELINE'S EXIT STATUS IS ITS LAST COMMAND'S. Every suite below used to be
+# piped into `tail -1`, so the status make saw was tail's and was always 0:
+# judge-check printed "506/511 passed" and returned success. The gate most
+# likely to be the last thing run before a push could not fail on a failing
+# invariant. Found by a second session running the suite directly while
+# judge-check was green beside it -- the exact "a skipped check and a passing
+# check look identical unless you look" shape this repo keeps rediscovering.
+#
+# The output is captured rather than piped so the summary line still prints on
+# success and the FAIL lines print on failure, which is when they are wanted.
+# `set -o pipefail` would also work but is not portable to make's default shell.
+define check_suite
+	@out=$$($(PY) $(1) 2>&1); st=$$?; \
+	echo "$$out" | tail -1; \
+	if [ $$st -ne 0 ]; then \
+		echo ""; echo "$$out" | grep '^FAIL' | head -20; \
+		echo ""; echo "FAILED: $(1)  (exit $$st)"; exit $$st; \
+	fi
+endef
+
 judge-check:
 	@echo "denali — judge check. No download, no API key, no network, no account."
 	@echo "Everything below runs against files committed in this repository."
 	@echo ""
 	@echo "[1/4] invariants over the frozen interface"
-	@$(PY) tests/test_frozen_invariants.py | tail -1
-	@$(PY) tests/test_cross_surface.py | tail -1
+	$(call check_suite,tests/test_frozen_invariants.py)
+	$(call check_suite,tests/test_cross_surface.py)
 	@echo ""
 	@echo "[2/4] the packaged tool, and whether it still computes what the paper published"
-	@$(PY) -m pytest packages/denali-audit/tests -q 2>/dev/null | tail -1 || \
-		echo "  (pip install -e packages/denali-audit to run these)"
+	@$(PY) -c "import denali_audit" 2>/dev/null \
+		|| { echo "  (pip install -e packages/denali-audit to run these)"; exit 0; }; \
+	out=$$($(PY) -m pytest packages/denali-audit/tests -q 2>&1); st=$$?; \
+	echo "$$out" | tail -1; \
+	if [ $$st -ne 0 ]; then echo ""; echo "FAILED: package tests (exit $$st)"; exit $$st; fi
 	@echo ""
 	@echo "[3/4] the tool, on a g:Profiler-shaped export of our own screen"
 	@PYTHONPATH=packages/denali-audit $(PY) -m denali_audit.cli audit \

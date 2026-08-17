@@ -1,0 +1,96 @@
+cff-version: 1.2.0
+message: >-
+  If you report a no-biology floor, a size-confound percentile, or a
+  size-corrected re-ranking produced by this software, please cite both the
+  software and the BioGRID ORCS data the reference distribution is built from.
+title: "denali: the no-biology floor for gene-set rankings"
+abstract: >-
+  denali measures how much of a gene-set ranking is explained by how the sets
+  were constructed - chiefly their size - rather than by biology. It ships an
+  audit that reports that share with a verdict and a percentile against 1,272
+  published human CRISPR screens, a size-aware re-ranking that shows which
+  entries the original ranking cannot justify, a size-only baseline scored on
+  the caller's own evaluation metric, and a per-screen atlas of published
+  floors. The method is not novel - EGAD shipped node-degree AUROC as a
+  built-in null in 2017, Crow et al. 2019 did the cross-dataset version, and
+  GREAT corrects region-size bias. What is offered here is the null computed
+  identically for everyone, versioned, and callable from a command line, an MCP
+  server and a browser. The tool reports properties of rankings and refuses to
+  nominate candidates.
+type: software
+authors:
+  - family-names: Schroeder
+    given-names: Alex
+repository-code: "https://github.com/alejandro-publius/denali"
+url: "https://alejandro-publius.github.io/denali/"
+license: MIT
+version: 0.1.0
+keywords:
+  - CRISPR
+  - gene set enrichment
+  - confounding
+  - reproducibility
+  - null model
+  - baseline
+  - pathway analysis
+references:
+  - type: article
+    title: >-
+      The BioGRID database: A comprehensive biomedical resource of curated
+      protein, genetic, and chemical interactions
+    authors:
+      - family-names: Oughtred
+        given-names: Rose
+    journal: Protein Science
+    year: 2021
+    volume: 30
+    issue: 1
+    start: 187
+    end: 200
+    doi: 10.1002/pro.3978
+    notes: >-
+      BioGRID ORCS 2.0.18 is the source of the 1,272 published human CRISPR
+      screens behind the reference distribution and the per-screen floor atlas.
+      Cite this alongside any percentile or floor reported by denali.
+  - type: article
+    title: >-
+      Camera: a competitive gene set test accounting for inter-gene correlation
+    authors:
+      - family-names: Wu
+        given-names: Di
+      - family-names: Smyth
+        given-names: Gordon K.
+    journal: Nucleic Acids Research
+    year: 2012
+    volume: 40
+    issue: 17
+    doi: 10.1093/nar/gks461
+    notes: >-
+      The variance inflation factor VIF = 1 + (m-1) * rho-bar that denali's
+      audit reports and that its correction is a cheaper relative of.
+  - type: article
+    title: >-
+      Predicting gene function in a hierarchical context with an ontology-aware
+      network (EGAD)
+    authors:
+      - family-names: Ballouz
+        given-names: Sara
+    journal: Bioinformatics
+    year: 2017
+    doi: 10.1093/bioinformatics/btw695
+    notes: >-
+      Prior art, stated rather than hidden. EGAD has shipped node-degree AUROC
+      as a built-in null since 2017. denali's method is not novel; its packaging
+      and its atlas are what is new.
+  - type: article
+    title: >-
+      GREAT improves functional interpretation of cis-regulatory regions
+    authors:
+      - family-names: McLean
+        given-names: Cory Y.
+    journal: Nature Biotechnology
+    year: 2010
+    doi: 10.1038/nbt.1630
+    notes: >-
+      Prior art. GREAT already corrects region-size bias in the genomic-region
+      setting.

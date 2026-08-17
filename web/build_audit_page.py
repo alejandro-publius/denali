@@ -22,7 +22,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PKG = ROOT / "packages" / "denali-audit" / "denali_audit"
-MODULES = ("__init__.py", "core.py", "reference.py", "adapters.py")
+MODULES = ("__init__.py", "core.py", "reference.py", "adapters.py", "atlas.py")
 
 
 def build() -> str:
@@ -33,7 +33,17 @@ def build() -> str:
     template = (ROOT / "web" / "audit.template.html").read_text()
     if "__DENALI_SOURCES__" not in template:
         raise SystemExit("template lost its __DENALI_SOURCES__ placeholder")
-    return template.replace("__DENALI_SOURCES__", blob)
+    # The atlas size is READ FROM THE PACKAGE, never typed into the page. It is
+    # the one number in this template's prose, and a page that states a screen
+    # count the shipped atlas does not have is the drift this repo exists to
+    # stop -- the same rule index.html follows for every frozen value.
+    import re as _re
+    n = int(_re.search(r"^N_SCREENS = (\d+)$",
+                       sources["atlas.py"], _re.M).group(1))
+    if "__ATLAS_N__" not in template:
+        raise SystemExit("template lost its __ATLAS_N__ placeholder")
+    return (template.replace("__DENALI_SOURCES__", blob)
+                    .replace("__ATLAS_N__", f"{n:,}"))
 
 
 def main() -> int:

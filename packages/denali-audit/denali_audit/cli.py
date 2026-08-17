@@ -164,6 +164,31 @@ def cmd_baseline(a) -> int:
     return 0
 
 
+def cmd_floor(a) -> int:
+    from .atlas import N_SCREENS, floor
+    res = floor(a.screen_id)
+    if a.json:
+        print(json.dumps(res, indent=2))
+        return 0
+    if res["status"] != "IN_ATLAS":
+        print(f"\n  NOT IN THE ATLAS\n  {res['reason']}\n")
+        if res.get("inclusion_rule"):
+            print(f"  inclusion rule: {res['inclusion_rule']}")
+        return 1
+    print(f"\n  screen {res['screen_id']}  ·  PubMed {res['pubmed_id']}\n")
+    print(f"  no-biology floor {res['no_biology_floor']}   "
+          f"(raw-size predictor {res['no_biology_floor_raw_size_predictor']})")
+    print(f"\n  {res['reading']}\n")
+    print(f"  {res['n_hits']} hits over {res['n_measured']} genes measured, "
+          f"{res['n_sets_used']} sets used")
+    print(f"  atlas v{res['atlas_version']} of {N_SCREENS} screens   "
+          f"sha256 {res['source_sha256'][:16]}")
+    print(f"  method: {res['method']}")
+    print(f"\n  CITE\n  {res['cite']}")
+    print(f"\n  {res['what_this_is_not']}")
+    return 0
+
+
 def cmd_formats(a) -> int:
     print("Formats recognised without any flags:\n")
     for f in SUPPORTED:
@@ -223,6 +248,14 @@ def main(argv=None) -> int:
     a5.add_argument("--k", type=int, default=10,
                     help="k for top_k_overlap (default 10)")
     a5.set_defaults(fn=cmd_baseline)
+
+    a6 = sub.add_parser(
+        "floor",
+        help="the no-biology floor for a published screen in the atlas")
+    a6.add_argument("screen_id",
+                    help="BioGRID ORCS screen id, e.g. 100")
+    a6.add_argument("--json", action="store_true", help="machine-readable output")
+    a6.set_defaults(fn=cmd_floor)
 
     a3 = sub.add_parser("formats", help="which tool outputs are recognised")
     a3.set_defaults(fn=cmd_formats)

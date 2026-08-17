@@ -3,7 +3,7 @@
 **A genome-scale CRISPRi screen, read back to ask what it can and cannot discover — and the answer is mostly an artifact of how the programs are defined, not their biology.**
 
 [![CI](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml/badge.svg)](https://github.com/alejandro-publius/denali/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-511-brightgreen.svg)](tests/test_frozen_invariants.py)
+[![tests](https://img.shields.io/badge/tests-519-brightgreen.svg)](tests/test_frozen_invariants.py)
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](.python-version)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -240,7 +240,7 @@ Also measured: essentiality density is flat at program level, coefficient **−0
 
 - **An agent that chooses its own next step and halts on its own** — it picks which program to read by a stated policy, updates a running estimate, emits a next experiment, and stops when the estimate stops moving. Change the policy or the halt rule and it visits different programs and stops elsewhere. On halting it reports that stopping early **overstated its own answer by 0.081**, and names the gap
 - **A next experiment that changes when the results change** — zero hits proposes raising statistical power and re-running; a strong result proposes pathway-level validation in a second cell type. No branch tests a program name
-- **A packaged CLI anyone can install** — `pip install -e packages/denali-audit` puts `denali` on PATH with five subcommands: `audit` (verdict + corpus percentile), `rerank` (apply the correction, see what leaves your top N), `baseline` (what does a size-only predictor score on your evaluation?), `replication` (two screens agreed — how much of that is set size?) and `formats` (the ten tool outputs read without renaming a column, four of them flagged approximate on the verdict itself). `core.py` is this repository's own maths vendored verbatim, and a test requires it to return exactly **0.4649** on the frozen research data, so the tool and the paper cannot drift apart
+- **A packaged CLI anyone can install** — `pip install -e packages/denali-audit` puts `denali` on PATH with six subcommands: `audit` (verdict + corpus percentile), `rerank` (apply the correction, see what leaves your top N), `baseline` (what does a size-only predictor score on your evaluation?), `floor` (the published no-biology floor for any screen in the atlas), `replication` (two screens agreed — how much of that is set size?) and `formats` (the ten tool outputs read without renaming a column, four of them flagged approximate on the verdict itself). `core.py` is this repository's own maths vendored verbatim, and a test requires it to return exactly **0.4649** on the frozen research data, so the tool and the paper cannot drift apart
 - **The check runs on other people's screens, and here it is doing so** — `src/audit_screen.py` takes any gene-set results table and reports the same estimate; validated against synthetic screens with known answers, and it reproduces our own figure exactly. [`audits/external/`](audits/external/README.md) is the same command run unchanged on the published supplementary tables of **seven studies we did not run and did not choose** — CRISPR-KO, CRISPRi/a, single-cell CRISPRa, organoid, primary T cell and bulk RNA-seq — where **36–88%** of each ranking is explained by set construction alone. One comes back only partially confounded and one candidate table was refused for having no true hit count, so the auditor discriminates rather than flagging everything
 - **Genome-scale sweep** — every one of 9,837 knockdown targets scored against all 50 Hallmark programs, 491,850 cells; the full matrix ships in the repo rather than a filtered top-N
 - **Rank-based reversal statistic** — Mann–Whitney of program-member effects against the rest of the transcriptome, per perturbation, with cosine similarity and mean effect size reported alongside so no single number carries the claim
@@ -287,7 +287,7 @@ flowchart TB
 
   FROZEN --> PAGE["src/build_page.py → index.html<br/>+ the agent loop, in-browser"]
   FROZEN --> APP["app.py → Streamlit<br/>renders proposals.json"]
-  FROZEN --> MCP["src/mcp_server.py → 5 tools<br/>2 read our result, 3 run the tool on yours"]
+  FROZEN --> MCP["src/mcp_server.py → 6 tools<br/>2 read our result, 4 run the tool on yours"]
   FROZEN --> VIF["src/vif_camera.py<br/>post-freeze: VIF = 1+(m−1)ρ̄"]
   FROZEN --> BENCH["benchmarks/denali-gate-trap<br/>our finding, as a task for other agents"]
   FROZEN --> AUD2["src/audit_screen.py<br/>the same check, on anyone's screen"]
@@ -406,7 +406,7 @@ The **measurability gate** requires ≥50% of members present, ≥25 present in 
 .venv/bin/python -m src.mcp_server
 ```
 
-Five tools in two halves. `reversibility` and `provenance` are lookups into our
+Six tools in two halves. `reversibility` and `provenance` are lookups into our
 frozen result — they read `results/frozen/` only, never recompute, never score.
 `audit` and `rerank` are the packaged tool itself, imported from
 `packages/denali-audit` and run on **the caller's own data**: an agent passes its
@@ -457,6 +457,7 @@ the one directory where the bug is invisible.
 | `audit` | `sizes` + `hits` (+ optional `corr`), or `table_path` | **Your** ranking, not ours: what share of it is predicted by set size alone, with a verdict of `CONFOUNDED`, `PARTIALLY CONFOUNDED`, `NOT SIZE-DOMINATED`, or `UNDETERMINED` when every set is the same size and the question cannot be asked. Where a reference applies, where your screen sits against 1,272 published ones. |
 | `rerank` | `sizes` + `hits` (+ optional `names`, `top`), or `table_path` | Applies the size correction to **your** ranking and returns which of your top entries left the top, and how far each fell. The inverse of a candidate list. |
 | `baseline` | `sizes` + `hits` + `predicted` + `metric`, or `table_path` + `predicted_column` | What a predictor that sees **only set size** scores on **your** evaluation, next to your model's score, and the difference. The metric is named by the caller and never inferred. A measurement, not a verdict on any model. |
+| `floor` | `screen_id` | The published no-biology floor for one of the 1,272 screens in the atlas, with the method, the content hash and the citation string. Looked up, never recomputed, so every caller gets the identical number. A screen outside the atlas returns `NOT_IN_ATLAS` with the inclusion rule, never a guess. |
 
 `table_path` accepts the file your enrichment tool already wrote — g:Profiler,
 DAVID, clusterProfiler, Enrichr, fgsea, GSEA desktop, MAGeCK, drugZ and BAGEL are
@@ -477,7 +478,7 @@ Set up is not the same as used. What actually touched the result:
 | Tool | Status | Detail |
 |---|---|---|
 | **Paperclip / GXL** | **USED AND AUDITED** | 113/113 gene queries, authenticated. We measured its retrieval quality and found it weak — that audit is FIG 4. Its hosted MCP server is registered and deliberately unqueried: the index is live, and re-running would move the numbers FIG 4 cites |
-| **Anthropic MCP** | **SHIPPED** | `src/mcp_server.py`, 5 tools — 2 over the frozen matrix, 3 running the packaged check on the caller's own data |
+| **Anthropic MCP** | **SHIPPED** | `src/mcp_server.py`, 6 tools — 2 over the frozen matrix, 4 running the packaged check on the caller's own data |
 | **Modal** | **USED** | Runs the real 50-program sweep across 10 containers in **133 s** (`src/modal_sweep.py`), reproducing `n_hits`, `R_p`, `n_present` and the gate **identical on all 50**. It verifies the frozen result rather than producing it, so reproduction no longer needs the 470 MB download — `modal run src/modal_sweep.py`. Same scorer imported verbatim, run elsewhere: this establishes portability, not independent confirmation of the maths. A **second entry point**, `src/modal_corpus_rerank.py`, is the one real distributed workload here: it fans the corpus rerank across containers, applying the size correction to each of **1,272 published screens** and counting how many of each screen's top 10 survive it. Neither entry point is a `make all` step, and a test asserts both |
 | **Biohub ESMC** | Set up, not in the pipeline | Verified twice — local MIT weights **and** the authenticated hosted Biohub Platform API, both returning `(1, 67, 960)`. Nothing frozen depends on it |
 | **Benchling** | MCP registered, nothing to register | Hosted server at `hackathon.mcp.bnchdev.org/mcp` answers 401 — up and OAuth-gated. Our pipeline has no wet-lab entity to push into a notebook |
@@ -618,7 +619,7 @@ Each was found only by running from a clean clone, and the third only after the 
 
 ## Tests
 
-`tests/test_frozen_invariants.py` — **511 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
+`tests/test_frozen_invariants.py` — **519 assertions**, run by `make test` and at the end of `make all`, so a mismatch fails the reproduction loudly rather than producing a confidently wrong page. It covers the matrix shape, both ends of the adj R² range, the post-freeze split, all four gate counts, the held-out balanced accuracy and zero true positives, the underpowered flag, the refit flag, both essentiality coefficients, guide-pair concordance, the control verdict counts, and the predictor hash. Every headline number in `REPORT.md`, `index.html` and `CAPTIONS.md` is traced back to a frozen file with a matching value, not to prose.
 
 Two guards exist because each caught a real defect. The **compile guard** parses every file under `src/` and `tests/` before anything else — added after a shipped module was found not to compile. The **scope guard** builds a gene-symbol universe from the Hallmark GMT and fails the build if any symbol appears within 260 characters of verdict language in the rendered page or the captions, with an allowance for "recovered known answer" and "positive control"; it enforces the −0.019 scope limit mechanically. A third set of checks asserts the page makes **no network calls** — no `fetch`, no `XMLHttpRequest`, no external script or stylesheet — so the interactive explorer cannot break unattended.
 
@@ -659,6 +660,33 @@ The suite has caught, in order: a stat bug reporting 5 evidence sources instead 
 4. **The attribution is to gene-set construction, not measurement.** A post-freeze check gives 0.152 for measurement-only against 0.697 for construction-only. Better instrumentation would not move the number.
 5. **Transcriptional movement is not phenotypic reversal.** Computational only — no wet-lab protocols, no dosing, no clinical or therapeutic recommendation.
 6. **A large R² is a confound only where `hits` are not counted over the set's own members.** [`results/breadth/`](results/breadth/README.md) ran the unmodified `audit()` across three domains that are not gene sets and found the boundary. Where `hits ≤ size` because both are counted over the same members — which is what classical overlap enrichment does — regressing a count on the number of trials that produced it recovers the trial count, and a large R² there is **arithmetic rather than a confound**. The no-biology value is not zero and depends entirely on the mapping, so the number is interpretable only against the right null. All three domains returned large R² values and **none survived its own null**; our primary screen is the one that does — 0.4649 against a permutation null of 0.0182. [`results/breadth/null_baselines.py`](results/breadth/null_baselines.py) computes the correct null per mapping. This applies to anyone running this check, including us.
+
+## How to cite a floor
+
+If you report a no-biology floor, a percentile, or a size-corrected re-ranking
+from this tool, cite **both the software and the data underneath it**. The
+citation string is generated rather than typed, so it always names the exact
+table the number came from:
+
+```bash
+denali floor 100          # prints the number, the method, and the CITE line
+python -c "from denali_audit.atlas import citation; print(citation())"
+```
+
+The string pins a **sha256 of the corpus table**, not a version number or a
+commit. A version can be bumped without the numbers moving and a commit moves
+when an unrelated file changes; the content hash changes when and only when the
+floors do, which is the property a citation needs.
+
+[`CITATION.cff`](CITATION.cff) and [`.zenodo.json`](.zenodo.json) carry the same
+information in the two formats other people's tooling reads. **No release has
+been cut and no tag pushed** — those files are prepared so that minting a DOI is
+a decision someone makes, not a side effect of this work.
+
+Cite BioGRID ORCS alongside anything from the atlas: Oughtred R et al., *Protein
+Science* 2021;30(1):187–200,
+[doi:10.1002/pro.3978](https://doi.org/10.1002/pro.3978). The floors are derived
+statistics we computed; the screens are theirs.
 
 ## Citations
 
@@ -733,7 +761,7 @@ This is the part we care most about, so it is built into the code rather than pr
 - **We held ten pathways back** and only opened them after the model was frozen and hashed. The model **failed** on them — worse than a coin flip, zero true positives. We published that instead of quietly refitting.
 - **Seven of our eleven evaluations came back negative.** All eleven are reported, including the one that clears its bar by only 0.026.
 - **The one positive is a control, not a discovery.** Run unchanged on a pathway it was never tuned for, the ranking puts that pathway's known master switch at **rank 2 of 11,258**. So the machinery works — it just is not finding what people assume it is finding.
-- **511 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
+- **519 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
 
 ---
 

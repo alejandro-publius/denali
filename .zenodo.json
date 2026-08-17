@@ -1,0 +1,55 @@
+{
+  "title": "denali: the no-biology floor for gene-set rankings",
+  "description": "<p><strong>denali measures how much of a gene-set ranking is explained by how the sets were constructed &mdash; chiefly their size &mdash; rather than by biology.</strong></p><p>It ships four things a stranger can run: an <em>audit</em> reporting that share with a verdict and a percentile against 1,272 published human CRISPR screens; a <em>re-ranking</em> that applies the size correction and shows which entries the original ranking cannot justify; a <em>baseline</em> that scores a size-only predictor on the caller's own evaluation metric, so that &ldquo;our model beats baseline&rdquo; becomes a number someone else can reproduce; and an <em>atlas</em> of per-screen no-biology floors, looked up rather than recomputed so that every caller gets the identical value.</p><p>The same package runs as a command line tool, an MCP server for agents, and in a browser through WebAssembly with nothing uploaded.</p><p><strong>The method is not novel and this record says so.</strong> EGAD shipped node-degree AUROC as a built-in null in 2017 (doi:10.1093/bioinformatics/btw695), Crow et al. PNAS 2019 did the cross-dataset version, and GREAT (doi:10.1038/nbt.1630) already corrects region-size bias. What is offered here is the null computed identically for everyone, versioned, hashed and callable.</p><p><strong>The tool refuses to nominate candidates.</strong> It reports properties of rankings, never of the genes or gene sets in them; guide-pair concordance in the underlying screen is -0.019, so no gene-level claim is made anywhere and the build fails if one appears.</p><p><strong>Boundary condition.</strong> Where hits are counted over the set's own members, a large R-squared is arithmetic before it is a confound, and the no-biology value is not zero. The tool states this at runtime and the documentation states it as scope limit 6.</p><p>Reference data: BioGRID ORCS 2.0.18 (Oughtred R et al., Protein Science 2021;30(1):187-200, doi:10.1002/pro.3978).</p>",
+  "upload_type": "software",
+  "license": "MIT",
+  "access_right": "open",
+  "creators": [
+    {
+      "name": "Schroeder, Alex"
+    }
+  ],
+  "keywords": [
+    "CRISPR",
+    "gene set enrichment",
+    "confounding",
+    "reproducibility",
+    "null model",
+    "baseline",
+    "pathway analysis",
+    "perturbation biology",
+    "benchmarking"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.1002/pro.3978",
+      "relation": "isDerivedFrom",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1093/nar/gks461",
+      "relation": "cites",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1093/bioinformatics/btw695",
+      "relation": "cites",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1038/nbt.1630",
+      "relation": "cites",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "https://github.com/alejandro-publius/denali",
+      "relation": "isSupplementTo",
+      "resource_type": "software",
+      "scheme": "url"
+    }
+  ]
+}

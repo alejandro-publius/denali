@@ -270,3 +270,57 @@ def test_rerank_leaves_an_unconfounded_ranking_alone():
     hits = rng.integers(0, 50, 60)          # unrelated to size
     r = rerank(size, hits, top=10)
     assert r["survived_top_n"] >= 7, "an unconfounded ranking should mostly survive"
+
+
+# ---------------------------------------------------------------------------
+# atlas(). The claim is that a citation means ONE thing: every caller who looks
+# up the same screen gets the same floor, and the string they cite pins the
+# exact table it came from. So the tests are about identity and refusal, not
+# about the numbers being any particular value.
+
+def test_every_atlas_floor_is_a_real_r2():
+    from denali_audit.atlas import FLOORS, N_SCREENS
+    assert len(FLOORS) == N_SCREENS
+    for sid, row in FLOORS.items():
+        r2_log, r2_raw, n_hits, n_measured, n_sets, pmid = row
+        assert isinstance(sid, int)
+        assert 0.0 <= r2_log <= 1.0, f"screen {sid}: floor {r2_log} is not an R^2"
+        assert 0.0 <= r2_raw <= 1.0, f"screen {sid}: raw floor {r2_raw} is not an R^2"
+        assert n_hits > 0 and n_measured > 0 and n_sets >= 8
+        assert pmid, f"screen {sid} has no PubMed id to attribute it to"
+
+
+def test_a_screen_outside_the_atlas_is_refused_not_guessed():
+    from denali_audit.atlas import floor
+    for bad in (999999999, "not-a-number", None, ""):
+        r = floor(bad)
+        assert r["status"] == "NOT_IN_ATLAS", f"{bad!r} produced {r['status']}"
+        assert "no_biology_floor" not in r, (
+            f"{bad!r} was given a floor it has no right to")
+
+
+def test_a_lookup_carries_what_it_is_not_and_how_to_cite():
+    from denali_audit.atlas import FLOORS, floor
+    r = floor(sorted(FLOORS)[0])
+    assert r["status"] == "IN_ATLAS"
+    assert "not a quality score" in r["what_this_is_not"].lower()
+    assert "doi:10.1002/pro.3978" in r["cite"], "the source data must be cited"
+    assert r["source_sha256"] in r["cite"] or r["source_sha256"][:16] in r["cite"]
+
+
+def test_the_citation_pins_the_exact_table():
+    """A citation that does not identify the data is not a citation."""
+    from denali_audit.atlas import N_SCREENS, SOURCE_SHA256, citation
+    c = citation()
+    assert SOURCE_SHA256[:16] in c
+    assert str(N_SCREENS) in c
+    assert len(SOURCE_SHA256) == 64
+
+
+def test_the_atlas_names_no_gene_and_no_gene_set():
+    """The scope limit, enforced on the one module that ships bulk data."""
+    from denali_audit import atlas
+    import pathlib
+    src = pathlib.Path(atlas.__file__).read_text()
+    # Hallmark set names are the thing most likely to leak in with screen rows.
+    assert "HALLMARK_" not in src

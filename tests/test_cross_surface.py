@@ -340,6 +340,52 @@ def main() -> int:
                       _bad.get("ok") is False
                       and "unrecognised metric" in _bad.get("message", ""),
                       str(_bad)[:120])
+                # The atlas lookup, through the page, must return the package's
+                # own number -- and must refuse rather than invent one for a
+                # screen it does not carry.
+                from denali_audit.atlas import FLOORS, N_SCREENS
+                from denali_audit.atlas import floor as _pkg_floor
+                _sid = sorted(FLOORS)[0]
+                _pf = json.loads(ns["run_floor"](str(_sid)))
+                check("cross-surface: the page's atlas lookup returns the "
+                      "package's own floor",
+                      _pf.get("no_biology_floor")
+                      == _pkg_floor(_sid)["no_biology_floor"],
+                      f"page {_pf.get('no_biology_floor')} vs package "
+                      f"{_pkg_floor(_sid)['no_biology_floor']}")
+                check("cross-surface: the page's atlas lookup refuses a screen "
+                      "it does not carry rather than inventing a floor",
+                      json.loads(ns["run_floor"]("999999")).get("status")
+                      == "NOT_IN_ATLAS"
+                      and json.loads(ns["run_floor"]("zzz")).get("status")
+                      == "NOT_IN_ATLAS")
+                # The page states the atlas size in prose. It is injected from
+                # the package at build time, so it cannot be stale -- but only
+                # if nobody types it back in, which is what this catches.
+                check("cross-surface: the atlas size stated on the page is the "
+                      "size the shipped atlas actually has",
+                      f"<b>{N_SCREENS:,}</b>" in page.read_text(),
+                      f"page does not state {N_SCREENS:,}")
+
+    # ---- the atlas must not drift from the corpus it summarises ------------
+    # Same discipline as audit.html: the generated module is regenerated here
+    # and the committed one must match, so a corpus edit that never reaches the
+    # shipped atlas is a red build rather than a citation that means two things.
+    atlas_py = ROOT / "packages" / "denali-audit" / "denali_audit" / "atlas.py"
+    if atlas_py.exists():
+        sys.path.insert(0, str(ROOT))
+        import importlib
+        _ba = importlib.import_module("src.build_atlas")
+        check("cross-surface: atlas.py carries the CURRENT corpus",
+              _ba.build() == atlas_py.read_text(),
+              "stale — run: .venv/bin/python -m src.build_atlas")
+        import hashlib as _hl
+        _csv = ROOT / "results" / "corpus" / "corpus_per_screen.csv"
+        _want = _hl.sha256(_csv.read_bytes()).hexdigest()
+        check("cross-surface: the hash the atlas tells people to cite is the "
+              "hash of the table it came from",
+              f'SOURCE_SHA256 = {_want!r}' in atlas_py.read_text(),
+              f"expected {_want[:16]}")
 
     for p in passed:
         print(f"PASS  {p}")

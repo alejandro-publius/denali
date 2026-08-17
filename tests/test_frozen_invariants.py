@@ -1181,9 +1181,10 @@ def main() -> int:
     # PACKAGED functions -- a server-side reimplementation would be item 1's
     # duplication all over again, one layer out.
     import src.mcp_server as _srv                               # noqa: E402
-    check("the server exposes all five tools",
+    check("the server exposes all six tools",
           all(hasattr(_srv, t) for t in
-              ("reversibility", "provenance", "audit", "rerank", "baseline")))
+              ("reversibility", "provenance", "audit", "rerank", "baseline",
+               "floor")))
     check("the server's audit IS the packaged audit",
           _srv._audit is _pkg_core.audit)
     check("the server's rerank IS the packaged rerank",
@@ -1277,8 +1278,35 @@ def main() -> int:
                   "boundary_condition", ""))
 
     _rdme = (ROOT / "README.md").read_text()
-    check("README states the five tools and the two halves",
-          "Five tools in two halves" in _rdme)
+    check("README states the six tools and the two halves",
+          "Six tools in two halves" in _rdme)
+    # ---- the atlas is only citable if the citation pins the data -----------
+    from denali_audit import atlas as _atlas
+    check("every screen in the shipped atlas carries a real floor and an "
+          "attribution",
+          all(0.0 <= r[0] <= 1.0 and r[5] for r in _atlas.FLOORS.values()),
+          f"{_atlas.N_SCREENS} screens")
+    check("the atlas citation names the source data's DOI",
+          "10.1002/pro.3978" in _atlas.citation())
+    check("the atlas refuses a screen it does not carry",
+          _atlas.floor(999999999)["status"] == "NOT_IN_ATLAS"
+          and "no_biology_floor" not in _atlas.floor(999999999))
+    check("the shipped atlas is the committed corpus, screen for screen",
+          _atlas.N_SCREENS == len(pd.read_csv(
+              ROOT / "results" / "corpus" / "corpus_per_screen.csv")),
+          f"atlas {_atlas.N_SCREENS}")
+    # CITATION.cff and .zenodo.json are the two files a stranger's tooling
+    # reads. A malformed one fails silently on their side, not ours.
+    _cff = ROOT / "CITATION.cff"
+    check("CITATION.cff exists and is valid YAML with a 1.2.0 schema",
+          _cff.exists() and __import__("yaml").safe_load(
+              _cff.read_text()).get("cff-version") == "1.2.0")
+    _zen = ROOT / ".zenodo.json"
+    check(".zenodo.json exists and is valid JSON",
+          _zen.exists() and bool(json.loads(_zen.read_text()).get("title")))
+    check("the citation files state the prior art rather than hiding it",
+          all("btw695" in f.read_text() for f in (_cff, _zen)),
+          "EGAD's node-degree null must be cited in both")
     check("README states the apply-but-never-nominate asymmetry",
           "deliberately asymmetric" in _rdme and "will not nominate" in _rdme)
     check("the asymmetry is justified by the predictor's own failure",

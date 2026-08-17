@@ -413,5 +413,28 @@ def baseline(sizes: list[float] | None = None,
         return {"status": "REFUSED", "reason": str(e), "scope_limit": SCOPE}
 
 
+@mcp.tool()
+def floor(screen_id: int) -> dict:
+    """The published no-biology floor for one screen in the denali atlas.
+
+    Given a BioGRID ORCS screen id, returns the share of that screen's gene-set
+    hit ranking that is predicted by set size alone -- the value a method has to
+    beat before any of its ranking is attributable to biology -- together with
+    the atlas version, the content hash to cite, and the exact method.
+
+    The number is looked up, not recomputed, so every caller gets the identical
+    value and a citation that means one thing. A screen outside the atlas
+    returns NOT_IN_ATLAS with the inclusion rule stated, rather than a guess.
+
+    This is a property of a RANKING, not a quality score for a screen and not a
+    criticism of the study that produced it. It names no gene and no gene set.
+
+    Args:
+        screen_id: BioGRID ORCS screen id, e.g. 100
+    """
+    from denali_audit.atlas import floor as _floor
+    return _floor(screen_id)
+
+
 if __name__ == "__main__":
     mcp.run()

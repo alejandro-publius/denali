@@ -43,7 +43,8 @@ ROWS = [{"name": f"PATHWAY_{i}", "size": s, "hits": h}
              (150, 2400), (60, 900), (55, 1200), (40, 700), (35, 1100),
              (30, 400), (25, 800)])]
 
-EXPECTED_TOOLS = ["audit", "baseline", "provenance", "rerank", "reversibility"]
+EXPECTED_TOOLS = ["audit", "baseline", "floor", "provenance", "rerank",
+                  "reversibility"]
 
 # The same rows with a prediction column. `pred_sizeish` is deliberately little
 # more than set size with noise on it -- a model that knows nothing -- so the
@@ -71,7 +72,7 @@ async def run() -> None:
             await s.initialize()
 
             listed = sorted(t.name for t in (await s.list_tools()).tools)
-            check("the server lists exactly the five documented tools",
+            check("the server lists exactly the six documented tools",
                   listed == EXPECTED_TOOLS, f"listed {listed}")
 
             async def call(tool, args):
@@ -158,6 +159,25 @@ async def run() -> None:
             check("baseline refuses rows with no prediction in them",
                   nop.get("status") == "REFUSED"
                   and "predicted" in nop.get("reason", ""))
+
+            # ---- floor: the atlas lookup ----------------------------------
+            fl = await call("floor", {"screen_id": 100})
+            check("floor returns a published screen's no-biology floor",
+                  fl.get("status") == "IN_ATLAS"
+                  and isinstance(fl.get("no_biology_floor"), float),
+                  str(fl.get("no_biology_floor")))
+            check("floor hands back a citation that pins the source table",
+                  "doi:10.1002/pro.3978" in fl.get("cite", "")
+                  and len(fl.get("source_sha256", "")) == 64)
+            check("floor refuses to be read as a score for the screen",
+                  "not a quality score" in fl.get("what_this_is_not", "").lower())
+            miss = await call("floor", {"screen_id": 999999999})
+            check("floor refuses a screen it does not carry rather than "
+                  "inventing a number",
+                  miss.get("status") == "NOT_IN_ATLAS"
+                  and "no_biology_floor" not in miss)
+            check("the refusal states the rule that excluded it",
+                  "inclusion_rule" in miss)
 
 
 def main() -> int:

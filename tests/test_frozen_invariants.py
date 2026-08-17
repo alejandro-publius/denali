@@ -1521,9 +1521,29 @@ def main() -> int:
     n_traced = len(TRACE)
     check("build_page traces at least one value per frozen source", n_traced > 0)
 
+    # Extends past any plausible evaluation count on purpose. This map stopped at
+    # twelve, a thirteenth evaluation landed, and the suite died on KeyError: 13
+    # at the surface-agreement check -- taking the 18 checks after it with it.
+    # A crashed suite and a passing suite are distinguishable only if you read
+    # the exit code, and the run that pushed it did not.
     _WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six",
               7: "seven", 8: "eight", 9: "nine", 10: "ten", 11: "eleven",
-              12: "twelve"}
+              12: "twelve", 13: "thirteen", 14: "fourteen", 15: "fifteen",
+              16: "sixteen", 17: "seventeen", 18: "eighteen", 19: "nineteen",
+              20: "twenty"}
+
+    def _word(n: int) -> str:
+        """Number -> word, or a failure that names the gap instead of KeyError.
+
+        The bare dict lookup aborted the whole run and reported a count that
+        looked like a partial pass. Anything this map cannot spell must fail
+        one check loudly, not silently delete the rest of the suite."""
+        w = _WORDS.get(n)
+        if w is None:
+            check(f"the number-word map can spell {n}", False,
+                  f"_WORDS stops at {max(_WORDS)}; extend it and re-run")
+            return str(n)
+        return w
 
     def _count(tok: str) -> int:
         """'Seven' | 'seven' | '7' -> 7.  -1 if the token is not a count."""
@@ -1895,9 +1915,9 @@ def main() -> int:
               f"{len(at.dataframe)} dataframe blocks")
         # and it renders the counts, not just contains them in source
         check("app.py renders the evaluation counts it claims",
-              f"{_WORDS[n_neg].capitalize()} of {_WORDS[n_eval]} evaluations"
+              f"{_word(n_neg).capitalize()} of {_word(n_eval)} evaluations"
               in rendered,
-              f"looking for '{_WORDS[n_neg].capitalize()} of {_WORDS[n_eval]} "
+              f"looking for '{_word(n_neg).capitalize()} of {_word(n_eval)} "
               f"evaluations' in the RENDERED output")
     except ImportError:
         check("app.py renders without raising", False,

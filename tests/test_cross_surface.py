@@ -322,6 +322,35 @@ def main() -> int:
         check("cross-surface: every module inlined in audit.html is byte-identical "
               "to the packaged one", not drift, ", ".join(drift))
 
+        # THE CONVERSE, which is the direction that actually broke. The check
+        # above compares the modules that ARE inlined against the package and has
+        # nothing to say about a package module that is NOT inlined. When core.py
+        # grew `from . import nulls`, audit.html shipped a denali_audit without
+        # nulls.py and died with a circular-import ImportError on the first click,
+        # for every visitor, while this file stayed green. Found by driving the
+        # page in a browser, not by reading it.
+        missing = sorted({q.name for q in pkg.glob("*.py")} - set(inlined))
+        check("cross-surface: audit.html inlines EVERY module the package has",
+              not missing,
+              f"absent from the page: {missing} — the page builds a denali_audit "
+              f"that cannot import itself")
+
+        # And the strongest form: the inlined set must actually be importable on
+        # its own. A module list can be complete and still not work.
+        import shutil as _sh
+        import subprocess as _sp
+        import tempfile as _tf
+        _d = pathlib.Path(_tf.mkdtemp(prefix="denali-inline-"))
+        (_d / "denali_audit").mkdir()
+        for _n, _src in inlined.items():
+            (_d / "denali_audit" / _n).write_text(_src)
+        _r = _sp.run([sys.executable, "-c", "import denali_audit"],
+                     capture_output=True, text=True, cwd=_d, timeout=120)
+        check("cross-surface: the module set audit.html ships can import itself",
+              _r.returncode == 0,
+              (_r.stderr or "").strip().splitlines()[-1] if _r.stderr else "")
+        _sh.rmtree(_d, ignore_errors=True)
+
         # The inlined MODULES are byte-checked above. The page's own driver --
         # the ~50 lines of Python the page wraps around them -- is not a module
         # and was checked by nothing, so a NameError in it shipped green and

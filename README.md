@@ -187,9 +187,16 @@ It takes an `enrichResult` directly — `BgRatio` and `Count` are what the audit
 reads, so nothing is renamed. **It is a thin shell over the CLI and deliberately
 not a reimplementation**: an R port would be exactly the drift `core.py` warns
 about. `tests/test_r_integration.py` runs the R file and the Python package over
-the same bytes and fails the build if any value differs, the same discipline the
-browser port is held to. Mutation-tested — drop one row inside the R function
-and four checks go red.
+the same bytes and fails if any value differs, the same discipline the browser
+port is held to. Mutation-tested — drop one row inside the R function and four
+checks go red.
+
+**Where that guarantee does and does not hold.** It holds on any machine with R,
+and `make test` runs it. **It does not hold in CI**, which does not install R, so
+the suite hits its `Rscript is absent` branch and exits 0 having tested nothing.
+Until CI installs R, this integration is guarded by whoever runs the suite
+locally and not by the build — which is a weaker promise than the browser port's,
+and stated here rather than left to be discovered from a green badge.
 
 ## Reading the literature, rather than grepping it
 

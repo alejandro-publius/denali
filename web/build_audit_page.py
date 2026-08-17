@@ -22,7 +22,19 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PKG = ROOT / "packages" / "denali-audit" / "denali_audit"
-MODULES = ("__init__.py", "core.py", "reference.py", "adapters.py", "atlas.py")
+# EVERY .py IN THE PACKAGE, discovered rather than listed. It was a hand-written
+# tuple, and when core.py grew `from . import nulls` the page shipped a
+# denali_audit missing nulls.py -- so audit.html died with a circular-import
+# ImportError on the first click, for every visitor, while every guard stayed
+# green. The drift check compares the modules that ARE inlined against the
+# package and had nothing to say about one that was not, which is a check
+# written in only one direction.
+#
+# Discovering the list removes the failure mode instead of correcting it, and
+# tests/test_cross_surface.py now asserts the converse too.
+MODULES = tuple(sorted(p.name for p in
+                       (pathlib.Path(__file__).resolve().parent.parent /
+                        "packages" / "denali-audit" / "denali_audit").glob("*.py")))
 
 
 def build() -> str:

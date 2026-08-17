@@ -67,7 +67,14 @@ def main() -> int:
     board = (CHALLENGE / "board.md").read_text() if (CHALLENGE / "board.md").exists() else ""
     check("board.md states the derived confound, not a quoted one",
           f"R² {conf:.4f}" in board, f"derived {conf:.4f} absent from board.md")
-    check("README states the derived confound too",
+    # NAMED FOR THE FILE IT OPENS. This was "README states the derived confound
+    # too", which reads as the repository README and is not what CHALLENGE/ resolves
+    # to. The check was correct and the name was not, which on this repo is its own
+    # hazard: it advertised coverage of the surface where the wrong number actually
+    # shipped. The top-level README is pinned by tests/test_cross_surface.py, which
+    # derives the value from paired_programs.csv with the packaged _r2 rather than
+    # quoting it. Nothing under benchmarks/ pins a surface benchmarks/ does not own.
+    check("benchmarks/challenge/README.md states the derived confound",
           f"R² {conf:.4f}" in (CHALLENGE / "README.md").read_text())
     # The first version of this check was `"0.214" in text and "concordance" not in
     # text`, which passed while testing nothing: nearly every file here names

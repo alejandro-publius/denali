@@ -77,6 +77,33 @@ actually used. Each was found by checking, not by assuming.
 are reported. A null from working machinery is a finding; the positive control
 is what makes it one.
 
+**A check is not evidence until it has been observed to fail for the reason it
+exists.** Assert the failure mode, not only the success. A new green check should
+be assumed broken until it has been made to go red on purpose.
+
+This is here because it happened three times in one day, to two sessions working
+on the same repository, and not one of the three was caught by reading the code:
+
+- A guard written as `"0.214" in text and "concordance" not in text` could never
+  fire, because nearly every file here names `results/concordance/` and the
+  second clause was always false.
+- A guard named "README states the derived confound too" opened
+  `benchmarks/challenge/README.md`. It fired correctly for that file — the
+  defect was the **name**, which advertised coverage of the top-level README,
+  the one surface where the wrong number had actually shipped. A misnamed check
+  is worse than a dead one: a dead check leaves you unprotected, a misnamed
+  check leaves you unprotected while reporting that you are not.
+- A guard asserting that three values each appear "somewhere in the README"
+  passed when one of them was corrupted, because all three also occur elsewhere
+  in the file. It tested the presence of strings, not the claim they were
+  written to protect.
+
+All three were found by mutation and none by review. The cost of the discipline
+is one minute per guard; the cost of skipping it is a guard that reports safety
+it does not provide, which is strictly worse than no guard, because it stops
+anyone looking again. The same argument the rest of this file makes about
+skipped tests applies to passing ones nobody has falsified.
+
 **Enforce the scope rule where the caller is, not only where you are.** Our
 build-time guard stops us publishing a gene-level claim. It does nothing when an
 agent queries the server, and the agent is the caller we cannot see. So the

@@ -243,13 +243,28 @@ STAGES = [
         "breaks": "A gene-set ranking can be largely explained by how big the "
                   "sets are rather than by what the genes do. Bigger sets return "
                   "more hits whatever the biology, so the top of your pathway "
-                  "list can be an artifact of the collection you chose.",
+                  "list can be an artifact of the collection you chose. And if "
+                  "you define your hits by taking a fixed number of them -- the "
+                  "top 200, the top 5% -- the audit cannot help you at all, and "
+                  "will say so rather than give you a clean answer.",
         "checklist": ["Hit-caller chosen, with the direction stated",
+                      "Hits defined by a THRESHOLD, not by taking a top N",
                       "Enrichment run against a named collection",
                       "Ranking audited for set-size confounding",
                       "Pre-registration compared against the result"],
         "runs": "audit",
-        "claims": [_claim("Normalisation choice materially changes which hits "
+        "claims": [_claim("Changing only the rule that turns scores into hits "
+                          "changes the answer. On one screen and 49 programs, "
+                          "four threshold rules all returned a verdict above "
+                          "their own null (R^2 0.4530-0.5631) while three "
+                          "quantile / top-N rules returned UNDETERMINED -- a "
+                          "rule that fixes the hit count leaves set size nothing "
+                          "to predict. Measured in this repository.",
+                          "https://github.com/alejandro-publius/denali/blob/main/docs/HIT_RULE.md",
+                          True,
+                          "Our own evaluation 14, pre-registered before any "
+                          "value was computed."),
+                   _claim("Normalisation choice materially changes which hits "
                           "you get: median-centring has been reported to give "
                           "around 34% hit overlap between screens where better "
                           "normalisation gives around 84%.", REVIEW_SRC, False,

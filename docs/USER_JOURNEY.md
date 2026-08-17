@@ -127,7 +127,7 @@ must already know for the step to work.
 - **C. The only "try it" path assumes a cloned repo and Python.** `pip
   install -e packages/denali-audit` fails verbatim outside a clone. The
   in-page runner removes the wall; the copy should also switch the CLI line
-  to the `pip install denali-audit` form that works anywhere.
+  to a `pip install denali-audit` form — **which does not work yet**: the package is not on PyPI and `docs/RELEASE.md` records the upload as a human decision that has not been made. Until it is, the honest line is the clone.
 - **D. A user with data RIGHT NOW has no input surface.** No upload, no
   paste, nothing. This is the largest single absence and the whole of Phase
   4b/4c.

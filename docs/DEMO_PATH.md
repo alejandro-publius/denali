@@ -11,7 +11,7 @@ paper over a gap, that is a bug, not a script note.
 
 ## Before recording
 
-- `git pull && make test PY=.venv/bin/python` — **555** invariants, **47**
+- `git pull && make test PY=.venv/bin/python` — **556** invariants, **47**
   cross-surface, **20** page-parity. All must pass. Each suite counts itself and
   prints its own total, so read the totals it prints rather than trusting these;
   the invariants figure is checked against the suite by

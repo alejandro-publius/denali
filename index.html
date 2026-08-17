@@ -1156,6 +1156,12 @@ function audit(sizes,hits){
     sets_with_zero_hits:h.filter(function(v){return v===0}).length};
   var share=out.r2_size_alone;
   out.share_explained_without_biology=share;
+  // BEFORE the early return, because mapping describes the TABLE, not the
+  // verdict. It was attached after, so every degenerate input -- constant hits,
+  // constant size -- came back without it, which is exactly the class of input
+  // a caller most needs it for. Same fix as core.py; found by the package's own
+  // verify suite raising KeyError on the inputs it exists to handle gracefully.
+  out.mapping=audStructure(s,h);
   if(!isFinite(share)){
     out.verdict="UNDETERMINED";
     // Two different reasons land here: constant SIZE (no variance in the
@@ -1189,7 +1195,6 @@ function audit(sizes,hits){
      R^2. See core.py: a band calibrated on a non-counting screen told a real
      published counting screen measured at 0.36 against a null of 0.72 to check
      that its leading entries were not simply its largest sets. */
-  out.mapping=audStructure(s,h);
   var nul=audNull(s,h);
   if(nul){
     var st=audStability(share,nul,20260816);

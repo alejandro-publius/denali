@@ -22,19 +22,49 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PKG = ROOT / "packages" / "denali-audit" / "denali_audit"
-# EVERY .py IN THE PACKAGE, discovered rather than listed. It was a hand-written
-# tuple, and when core.py grew `from . import nulls` the page shipped a
-# denali_audit missing nulls.py -- so audit.html died with a circular-import
-# ImportError on the first click, for every visitor, while every guard stayed
-# green. The drift check compares the modules that ARE inlined against the
-# package and had nothing to say about one that was not, which is a check
-# written in only one direction.
+# THE IMPORT CLOSURE OF WHAT THE PAGE ACTUALLY RUNS, computed rather than listed.
 #
-# Discovering the list removes the failure mode instead of correcting it, and
-# tests/test_cross_surface.py now asserts the converse too.
-MODULES = tuple(sorted(p.name for p in
-                       (pathlib.Path(__file__).resolve().parent.parent /
-                        "packages" / "denali-audit" / "denali_audit").glob("*.py")))
+# It was a hand-written tuple of four, and when core.py grew `from . import
+# nulls` the page shipped a denali_audit missing it and died on the first click
+# with a circular-import ImportError, for every visitor, while every guard stayed
+# green -- the drift check compared the modules that WERE inlined against the
+# package and had nothing to say about one that was not.
+#
+# The first fix was to inline every .py in the package. That removed the
+# staleness but pulled in cli.py and verify.py, which the page never calls: it
+# made the browser surface break whenever the command line changed, and grew the
+# page by a fifth for code no visitor runs. So the rule is now the closure of
+# what the page imports -- start at __init__ and the driver's own imports, follow
+# `from . import x` and `from .x import ...` until it stops growing.
+#
+# Both failure modes are guarded in tests/test_cross_surface.py: the page must
+# inline everything its closure needs, and that set must import itself in
+# isolation. A module the page does not need is simply not carried.
+def _closure() -> tuple[str, ...]:
+    import re as _re
+    pkg = (pathlib.Path(__file__).resolve().parent.parent /
+           "packages" / "denali-audit" / "denali_audit")
+    # Seeds: the package init, plus every module the page's own driver imports.
+    tpl = (pathlib.Path(__file__).resolve().parent / "audit.template.html").read_text()
+    seeds = {"__init__.py"}
+    for mod in _re.findall(r"from denali_audit\.(\w+) import", tpl):
+        seeds.add(mod + ".py")
+    seen: set[str] = set()
+    todo = list(seeds)
+    while todo:
+        name = todo.pop()
+        if name in seen or not (pkg / name).exists():
+            continue
+        seen.add(name)
+        src = (pkg / name).read_text()
+        for dep in _re.findall(r"^\s*from \.(\w+) import", src, _re.M):
+            todo.append(dep + ".py")
+        for dep in _re.findall(r"^\s*from \. import (\w+)", src, _re.M):
+            todo.append(dep + ".py")
+    return tuple(sorted(seen))
+
+
+MODULES = _closure()
 
 
 def build() -> str:

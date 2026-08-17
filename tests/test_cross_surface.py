@@ -329,11 +329,31 @@ def main() -> int:
         # nulls.py and died with a circular-import ImportError on the first click,
         # for every visitor, while this file stayed green. Found by driving the
         # page in a browser, not by reading it.
-        missing = sorted({q.name for q in pkg.glob("*.py")} - set(inlined))
-        check("cross-surface: audit.html inlines EVERY module the package has",
-              not missing,
-              f"absent from the page: {missing} — the page builds a denali_audit "
-              f"that cannot import itself")
+        # The page carries the import CLOSURE of what it runs, not every module
+        # in the package: cli.py and verify.py are never called from a browser.
+        #
+        # THIS IS DELIBERATELY NOT `set(build_audit_page.MODULES) - set(inlined)`.
+        # That was the first version and it is a tautology -- the builder writes
+        # the page, so comparing the builder's list against the page's contents
+        # can never fail. Dropping nulls.py from the builder made the page
+        # unusable and left this check green, which is the exact shape
+        # docs/METHOD_RULES.md warns about, written the same day.
+        #
+        # The independent question is whether the inlined sources can satisfy
+        # their OWN imports: every `from .x import` inside a carried module must
+        # name another carried module. That is derived from the page's bytes
+        # alone and knows nothing about the builder.
+        need: set[str] = set()
+        for _src in inlined.values():
+            need |= {m + ".py" for m in re.findall(r"^\s*from \.(\w+) import",
+                                                   _src, re.M)}
+            need |= {m + ".py" for m in re.findall(r"^\s*from \. import (\w+)",
+                                                   _src, re.M)}
+        missing = sorted(need - set(inlined))
+        check("cross-surface: every module audit.html inlines can satisfy its "
+              "own imports from the page", not missing,
+              f"carried modules import {missing}, which the page does not carry "
+              f"— the browser builds a denali_audit that cannot import itself")
 
         # And the strongest form: the inlined set must actually be importable on
         # its own. A module list can be complete and still not work.
@@ -341,11 +361,25 @@ def main() -> int:
         import subprocess as _sp
         import tempfile as _tf
         _d = pathlib.Path(_tf.mkdtemp(prefix="denali-inline-"))
-        (_d / "denali_audit").mkdir()
+        # UNDER A NAME NOTHING ELSE CAN CLAIM. Two earlier versions of this check
+        # passed against a page that could not import itself. The first ran with
+        # cwd=<tmp> and imported the pip-installed denali_audit instead. The
+        # second added sys.path.insert(0, tmp) and STILL did, because an editable
+        # install registers a meta-path finder, and meta_path is consulted before
+        # sys.path -- so no amount of path ordering wins. Importing under a
+        # package name no installed distribution owns is what makes this test the
+        # inlined bytes. Relative imports (`from . import nulls`) resolve against
+        # whatever the package is called, so renaming costs nothing.
+        _probe = "denali_inlined_probe"
+        (_d / _probe).mkdir()
         for _n, _src in inlined.items():
-            (_d / "denali_audit" / _n).write_text(_src)
-        _r = _sp.run([sys.executable, "-c", "import denali_audit"],
-                     capture_output=True, text=True, cwd=_d, timeout=120)
+            (_d / _probe / _n).write_text(_src)
+        _r = _sp.run(
+            [sys.executable, "-c",
+             f"import sys; sys.path.insert(0, {str(_d)!r}); "
+             f"import {_probe} as p; "
+             f"assert p.__file__.startswith({str(_d)!r}), p.__file__"],
+            capture_output=True, text=True, timeout=120)
         check("cross-surface: the module set audit.html ships can import itself",
               _r.returncode == 0,
               (_r.stderr or "").strip().splitlines()[-1] if _r.stderr else "")

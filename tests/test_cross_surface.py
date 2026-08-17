@@ -396,23 +396,30 @@ def main() -> int:
                       f"<b>{N_SCREENS:,}</b>" in page.read_text(),
                       f"page does not state {N_SCREENS:,}")
 
-    # Two surfaces state how many files are in docs/, and both were stale: the
-    # index said 33 and the README said twenty-seven while there were 40. A
-    # count of files on disk is the cheapest possible thing to derive and it had
-    # drifted by thirteen, which is what makes it worth a guard rather than
-    # another correction. Spelled digits and words both, because the README used
-    # a word and the index used a numeral.
-    _ndocs = len(list((ROOT / "docs").glob("*.md")))
-    _words = {27: "twenty-seven", 33: "thirty-three", 43: "forty-three"}
-    for _s, _pat in (("docs/README.md", r"^(\d+) files is a lot to land in"),
+    # NO SURFACE STATES A COUNT OF docs/ FILES, and this guard exists to keep it
+    # that way rather than to check the count is right.
+    #
+    # It was the other way round twice. First the index said 33 and the README
+    # said twenty-seven while there were 40, and the fix was to correct them and
+    # pin the value. Then a single new pre-registration took docs/ from 43 to 44
+    # and both surfaces were stale again within the day, red for every session
+    # sharing the checkout. A hand-typed count of files on disk cannot be
+    # derived at build time in a static markdown file, so under this repo's own
+    # rule -- no number typed into prose -- it should not be there at all. It
+    # also told the reader nothing: "a lot" is the entire content of "43".
+    #
+    # So the number is gone from both sentences and this asserts its absence.
+    # Anyone reintroducing one gets a red build with the reason.
+    for _s, _pat in (("docs/README.md", r"\b(\d+|[a-z]+-?[a-z]*) files is a lot"),
                      ("README.md",
-                      r"documentation index\*\* — (\d+|[a-z-]+) files")):
+                      r"documentation index\*\*[^.\n]{0,20}— (\d+|[a-z-]+) files")):
         _t = texts.get(_s, (ROOT / _s).read_text() if (ROOT / _s).exists() else "")
         _m = re.search(_pat, _t, re.M)
-        _said = _m.group(1) if _m else None
-        check(f"cross-surface: {_s} states the real number of docs",
-              _said in (str(_ndocs), _words.get(_ndocs)),
-              f"says {_said!r}, docs/ has {_ndocs} .md files")
+        check(f"cross-surface: {_s} does not hand-type a count of docs/ files",
+              _m is None,
+              f"states {_m.group(1)!r} files — a count that cannot derive at "
+              f"build time goes stale on the next doc added, and has twice"
+              if _m else "")
 
     # The README states the size confound in the challenge's TARGET, and that
     # number has now been wrong twice in two different ways. First it was

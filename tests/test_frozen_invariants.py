@@ -2443,8 +2443,13 @@ def main() -> int:
                                       "was asked; rhetorical, not a claim about the "
                                       "current suite",
     }
+    # `\*{0,2}` because the first version of this regex required whitespace
+    # immediately after the digits and therefore missed "**552** invariants" -- the
+    # bolded form, which is how the number is written on the surface that was stale.
+    # A discovery guard that cannot see the markup its subject is written in
+    # discovers nothing, which is this same section's lesson applied to itself.
     _COUNT_PHRASE = re.compile(
-        r"\b(\d{3,4})\s+(?:automated\s+checks|assertions|invariants)\b")
+        r"\b(\d{3,4})\*{0,2}\s+(?:automated\s+checks|assertions|invariants)\b")
     discovered: list[tuple[str, int]] = []
     for md in [ROOT / "README.md", *sorted((ROOT / "docs").glob("*.md"))]:
         rel = str(md.relative_to(ROOT))

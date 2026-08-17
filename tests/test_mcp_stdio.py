@@ -23,7 +23,29 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PY = ROOT / ".venv" / "bin" / "python"
+
+
+def _interpreter() -> Path:
+    """The interpreter to launch the server with, preferring the repo's venv.
+
+    This was `ROOT/".venv"/"bin"/"python"` unconditionally, and main() returned 0
+    when that path did not exist. Two environments have no `.venv`: CI, which runs
+    `make test PY=python` against the system interpreter, and any clone made to
+    keep two sessions off one checkout. In both, this suite exited GREEN having
+    started no server and made no call -- the "a skipped check and a passing check
+    look identical" shape this repository keeps rediscovering, in the suite that is
+    the only automated evidence the MCP server starts at all.
+
+    Falling back to the running interpreter means the check RUNS wherever it can
+    instead of reporting success for having done nothing. The `mcp`-not-installed
+    skip below is different and stays: that one is a genuinely optional dependency
+    and the study reproduces without it.
+    """
+    venv = ROOT / ".venv" / "bin" / "python"
+    return venv if venv.exists() else Path(sys.executable)
+
+
+PY = _interpreter()
 
 try:
     from mcp import ClientSession, StdioServerParameters
@@ -183,9 +205,14 @@ async def run() -> None:
 
 
 def main() -> int:
-    if not PY.exists():
-        print(f"SKIP  no interpreter at {PY}; run `make setup` first.")
-        return 0
+    # No `if not PY.exists(): return 0` here any more. _interpreter() always
+    # returns a real interpreter -- the venv's if it exists, otherwise the one
+    # running this file -- so there is no longer an environment in which this
+    # suite can report success without having started the server. If the
+    # interpreter cannot run the server, that is a FAILURE and must look like one.
+    if not PY.exists():                       # pragma: no cover -- sys.executable
+        print(f"FAIL  no usable interpreter at {PY}")
+        return 1
     asyncio.run(run())
     for x in passed:
         print(f"PASS  {x}")

@@ -84,10 +84,20 @@ all: check
 	@echo "DONE. Every number reproduced and every invariant held."
 	@echo "     git diff --stat results/frozen/   # should be empty"
 
+# tests/test_mcp_stdio.py was in NEITHER this target nor .github/workflows/ci.yml
+# -- zero occurrences in both -- so the only automated evidence that the MCP
+# server starts and answers ran only when a human remembered to type it. It is the
+# suite covering a bug this project found and documented (LIMITATIONS.md §7: the
+# server worked from exactly one directory, the one it was always demonstrated
+# from). A gate that guards a known regression and never runs in the environment
+# that gates every push is the shape this repository keeps rediscovering.
+# It is safe here: if the optional `mcp` package is absent the module exits 0
+# loudly, so a missing dependency soft-skips rather than reddening the build.
 test:
 	@$(PY) tests/test_frozen_invariants.py
 	@$(PY) tests/test_cross_surface.py
 	@$(PY) tests/test_page_audit_parity.py
+	@$(PY) tests/test_mcp_stdio.py
 	@$(PY) tests/test_r_integration.py
 
 # A PIPELINE'S EXIT STATUS IS ITS LAST COMMAND'S. Every suite below used to be

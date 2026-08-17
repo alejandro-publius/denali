@@ -1181,13 +1181,21 @@ def main() -> int:
     # PACKAGED functions -- a server-side reimplementation would be item 1's
     # duplication all over again, one layer out.
     import src.mcp_server as _srv                               # noqa: E402
-    check("the server exposes all four tools",
+    check("the server exposes all five tools",
           all(hasattr(_srv, t) for t in
-              ("reversibility", "provenance", "audit", "rerank")))
+              ("reversibility", "provenance", "audit", "rerank", "baseline")))
     check("the server's audit IS the packaged audit",
           _srv._audit is _pkg_core.audit)
     check("the server's rerank IS the packaged rerank",
           _srv._rerank is _pkg_core.rerank)
+    check("the server's baseline IS the packaged baseline",
+          _srv._baseline is _pkg_core.baseline)
+    # The tool's docstring is what an agent reads to decide how to call it, so
+    # a metric list that drifts from the package's hands the caller a refusal.
+    _bdoc = _srv.baseline.__doc__ or ""
+    check("the server's baseline lists exactly the metrics the package accepts",
+          all(m in _bdoc for m in _pkg_core.BASELINE_METRICS),
+          f"missing {[m for m in _pkg_core.BASELINE_METRICS if m not in _bdoc]}")
 
     # The point of these two is that they answer about the CALLER's data. Run
     # them on numbers that have nothing to do with this screen and check the
@@ -1230,9 +1238,47 @@ def main() -> int:
     # The asymmetry is the design and the README has to carry it, because a
     # server that applies a correction while refusing to nominate is unusual
     # enough that a reader will otherwise read it as an oversight.
+    # ---- baseline: the size-only null as a callable artifact ---------------
+    # The claim this subcommand makes is that a naive baseline, computed the
+    # same way every time, is something a reader can check. So the property
+    # that matters is not that it returns a number -- it is that a model which
+    # is nothing but set size cannot be credited with beating set size. The
+    # first implementation failed exactly that on the error metrics; these
+    # assert it across every metric the tool offers.
+    import numpy as np                                          # noqa: E402
+    _bs = np.random.default_rng(21).integers(15, 500, 45)
+    _bt = np.clip(_bs * 0.07 + np.random.default_rng(22).normal(0, 4, 45),
+                  0, None).round()
+    _bnull = _bs * 0.07 + np.random.default_rng(23).normal(0, 4, 45)
+    _binf = _bt + np.random.default_rng(24).normal(0, 1, 45)
+    for _m in sorted(_pkg_core.BASELINE_METRICS):
+        _rn = _pkg_core.baseline(_bs, _bt, _bnull, metric=_m)
+        check(f"baseline: a size-only model is not credited with beating size "
+              f"({_m})",
+              _rn["beats_size_alone"] is False,
+              f"{_rn['your_score']} vs {_rn['size_only_score']}")
+        _ri = _pkg_core.baseline(_bs, _bt, _binf, metric=_m)
+        check(f"baseline: a model that knows something does beat size ({_m})",
+              _ri["beats_size_alone"] is True,
+              f"{_ri['your_score']} vs {_ri['size_only_score']}")
+    check("baseline refuses to guess the caller's metric",
+          _raises(_pkg_core.baseline, _bs, _bt, _binf))
+    check("baseline never returns a verdict on the model",
+          "not a claim that any model is bad"
+          in _pkg_core.baseline(_bs, _bt, _binf,
+                                metric="spearman")["what_this_is_not"].lower())
+    # Scope limit 6 must be carried where it applies, or `baseline` contradicts
+    # a boundary the README already documents about this very tool.
+    _ov = np.array([min(int(v), int(s) - 1) for v, s in zip(_bt, _bs)])
+    check("baseline carries scope limit 6 where hits are counted over the "
+          "set's own members",
+          "scope limit 6" in _pkg_core.baseline(
+              _bs, _ov, _ov + 1.0, metric="spearman").get(
+                  "boundary_condition", ""))
+
     _rdme = (ROOT / "README.md").read_text()
-    check("README states the four tools and the two halves",
-          "Four tools in two halves" in _rdme)
+    check("README states the five tools and the two halves",
+          "Five tools in two halves" in _rdme)
     check("README states the apply-but-never-nominate asymmetry",
           "deliberately asymmetric" in _rdme and "will not nominate" in _rdme)
     check("the asymmetry is justified by the predictor's own failure",

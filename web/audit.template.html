@@ -113,6 +113,21 @@ td.name{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-si
 .fall{color:var(--stat-bad);font-weight:600;font-variant-numeric:tabular-nums}
 .nomove{color:var(--soft);font-style:italic}
 
+/* ---- the baseline form -------------------------------------------------- */
+.baseform{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:14px 0 4px}
+.baseform label{font:600 11px/1.3 var(--sans,ui-sans-serif,system-ui,sans-serif);
+  text-transform:uppercase;letter-spacing:.07em;color:var(--soft)}
+.baseform select{font:400 14px/1.4 var(--sans,ui-sans-serif,system-ui,sans-serif);
+  color:var(--ink);background:var(--paper);border:1px solid var(--rule);
+  border-radius:var(--radius);padding:7px 9px;max-width:230px}
+.baseform .btn{margin-top:0}
+.scores{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 0}
+.scores div{flex:1 1 150px;border:1px solid var(--rule);border-radius:var(--radius);
+  padding:11px 14px;background:var(--fill)}
+.scores b{display:block;font:600 11px/1.3 var(--sans,ui-sans-serif,system-ui,sans-serif);
+  text-transform:uppercase;letter-spacing:.07em;color:var(--soft);margin-bottom:3px}
+.scores span{font:600 20px/1.2 var(--sans,ui-sans-serif,system-ui,sans-serif);
+  color:var(--navy);font-variant-numeric:tabular-nums}
 .notthis{margin-top:20px;padding:15px 18px;background:var(--tint);
   border-radius:var(--radius);font-size:14px;color:var(--navy)}
 .notthis b{display:block;margin-bottom:4px}
@@ -178,6 +193,26 @@ You can disconnect after the page loads and it still works.</p>
   <p id="rrreading"></p>
   <div class="scroll" id="rrtable"></div>
   <div class="notthis" id="notthis"></div>
+
+  <div id="basewrap" hidden>
+    <h2>Does a model beat size alone?</h2>
+    <p id="baseintro">This table has a column that could be a model's predicted
+    score. If it is, the check below reports what a predictor that sees
+    <em>only</em> how big each set is scores on your own evaluation, next to
+    yours. The size-only baseline is leave-one-out, so it never saw the row it
+    predicts.</p>
+    <div class="baseform">
+      <label for="basecol">prediction column</label>
+      <select id="basecol"></select>
+      <label for="basemetric">your metric</label>
+      <select id="basemetric"></select>
+      <button class="btn" id="baserun">Score it</button>
+    </div>
+    <p class="meta" id="basenote">The metric is asked for, never inferred — a
+    baseline scored with a different metric than yours is not a comparison.</p>
+    <div id="baseout"></div>
+  </div>
+
   <button class="btn" id="again">Audit another file</button>
 </div>
 
@@ -260,7 +295,7 @@ var DRIVER = [
 "import io, json, math",
 "import pandas as pd",
 "from denali_audit.adapters import detect, describe_failure",
-"from denali_audit.core import audit, rerank",
+"from denali_audit.core import audit, rerank, baseline, BASELINE_METRICS",
 "from denali_audit.reference import CORPUS, N_SCREENS",
 "",
 "def _clean(o):",
@@ -297,7 +332,45 @@ var DRIVER = [
 "        return json.dumps({'ok': False, 'message': str(e)})",
 "    return json.dumps(_clean({'ok': True, 'fmt': m.fmt, 'note': m.note,",
 "                              'approximate': bool(m.approximate), 'rows': int(len(df)),",
-"                              'audit': res, 'rerank': rr, 'hist': _hist()}))"
+"                              'audit': res, 'rerank': rr, 'hist': _hist(),",
+"                              'metrics': sorted(BASELINE_METRICS),",
+"                              'candidates': _candidates(df, m)}))",
+"",
+"def _candidates(df, m):",
+"    \"\"\"Numeric columns that could hold a model's predictions.",
+"",
+"    Deliberately a LIST for the reader to choose from, never a guess. The",
+"    columns the adapter already claimed as size and hits are excluded because",
+"    scoring a column against itself is not a comparison.\"\"\"",
+"    taken = set()",
+"    for s in (m.size, m.hits):",
+"        nm = getattr(s, 'name', None)",
+"        if nm is not None:",
+"            taken.add(str(nm))",
+"    taken.add(str(m.set_col))",
+"    out = []",
+"    for c in df.columns:",
+"        if str(c) in taken:",
+"            continue",
+"        v = pd.to_numeric(df[c], errors='coerce')",
+"        if v.notna().sum() >= 8 and v.nunique(dropna=True) > 1:",
+"            out.append(str(c))",
+"    return out",
+"",
+"def run_baseline(text, filename, column, metric, k):",
+"    sep = '\\t' if filename.lower().endswith(('.tsv', '.tab', '.txt')) else None",
+"    df = pd.read_csv(io.StringIO(text), sep=sep, engine='python')",
+"    m = detect(df)",
+"    if m is None:",
+"        return json.dumps({'ok': False, 'message': describe_failure(df)})",
+"    if column not in df.columns:",
+"        return json.dumps({'ok': False, 'message': 'no such column: ' + str(column)})",
+"    try:",
+"        res = baseline(m.size, m.hits, df[column], metric=metric, k=int(k))",
+"    except ValueError as e:",
+"        return json.dumps({'ok': False, 'message': str(e)})",
+"    res['predicted_column'] = column",
+"    return json.dumps(_clean({'ok': True, 'baseline': res}))"
 ].join("\n");
 
 function fail(msg){
@@ -375,18 +448,71 @@ function render(r){
       '</tbody></table>';
   }
   $("notthis").innerHTML='<b>What this is not</b>'+esc(rr.what_this_is_not);
+
+  /* 4. the size-only baseline -- shown only when the table actually carries a
+     column that could be a prediction. Offering the check on a table with
+     nothing to score would be an invitation to point it at the wrong column. */
+  var cands = r.candidates || [];
+  $("baseout").innerHTML = "";
+  if(cands.length){
+    $("basecol").innerHTML = cands.map(function(c){
+      return '<option value="'+esc(c)+'">'+esc(c)+'</option>'}).join("");
+    $("basemetric").innerHTML =
+      '<option value="">choose your metric…</option>'+
+      (r.metrics||[]).map(function(m){
+        return '<option value="'+esc(m)+'">'+esc(m)+'</option>'}).join("");
+    $("basewrap").hidden = false;
+  } else {
+    $("basewrap").hidden = true;
+  }
+
   $("out").className="on";
   $("out").scrollIntoView({behavior:"smooth",block:"start"});
 }
 
+function renderBaseline(b){
+  var rows = "";
+  if(b.your_score !== null && b.your_score !== undefined){
+    rows =
+      '<div class="scores">'+
+        '<div><b>your model</b><span>'+b.your_score+'</span></div>'+
+        '<div><b>size alone</b><span>'+b.size_only_score+'</span></div>'+
+        '<div><b>difference</b><span>'+(b.delta>0?"+":"")+b.delta+'</span></div>'+
+      '</div>'+
+      '<p class="meta">'+(b.higher_is_better?"Higher is better.":"Lower is better.")+
+      (b.share_of_your_score_the_baseline_recovers!=null
+        ? ' A predictor with no model in it reaches '+
+          Math.round(b.share_of_your_score_the_baseline_recovers*100)+
+          '% of your score.' : '')+'</p>';
+  }
+  var extra = "";
+  if(b.boundary_condition)
+    extra += '<div class="warn"><b>Boundary condition.</b><br>'+
+             esc(b.boundary_condition)+'</div>';
+  if(b.your_predictions_may_be_in_sample)
+    extra += '<p class="meta">'+esc(b.your_predictions_may_be_in_sample)+'</p>';
+  $("baseout").innerHTML =
+    '<p class="reading" style="margin-top:16px">'+esc(b.reading)+'</p>'+rows+
+    '<p class="meta">baseline: '+esc(b.how_the_baseline_was_built)+'</p>'+
+    extra+
+    '<div class="notthis"><b>What this is not</b>'+esc(b.what_this_is_not)+'</div>';
+}
+
+/* The parsed file is kept so the baseline check can be run against the same
+   bytes without asking the user to pick the file again. It never leaves the
+   page, the same as everything else here. */
+var lastFile=null;
+
 function handle(file){
   if(!file) return;
   $("out").className=""; $("error").innerHTML=""; steps=[];
+  $("basewrap").hidden=true; $("baseout").innerHTML="";
   say("Reading "+file.name);
   var reader=new FileReader();
   reader.onerror=function(){fail("Could not read that file off disk.")};
   reader.onload=function(){
     var text=reader.result;
+    lastFile={text:text,name:file.name};
     boot().then(function(py){
       say("Auditing "+file.name, true);
       var out=py.globals.get("run")(text, file.name);
@@ -396,6 +522,29 @@ function handle(file){
   };
   reader.readAsText(file);
 }
+
+$("baserun").addEventListener("click",function(){
+  if(!lastFile || !pyodide) return;
+  var col=$("basecol").value, metric=$("basemetric").value;
+  if(!metric){
+    /* Refused rather than defaulted. Picking a metric for the user would make
+       every number that follows a different quantity from the one they
+       report, which is the failure this whole check exists to stop. */
+    $("baseout").innerHTML='<div class="err"><h3>Name your metric</h3>'+
+      'This will not guess how you evaluate. A baseline scored with a '+
+      'different metric than yours is not a comparison.</div>';
+    return;
+  }
+  var out=pyodide.globals.get("run_baseline")(
+    lastFile.text, lastFile.name, col, metric, 10);
+  var parsed=JSON.parse(out);
+  if(!parsed.ok){
+    $("baseout").innerHTML='<div class="err"><h3>That did not work</h3>'+
+      esc(parsed.message)+'</div>';
+    return;
+  }
+  renderBaseline(parsed.baseline);
+});
 
 $("tryexample").addEventListener("click",function(e){
   e.stopPropagation();

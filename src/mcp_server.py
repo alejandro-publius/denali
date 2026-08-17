@@ -1,19 +1,20 @@
 """MCP server — the study's findings, and the tool that produced them.
 
-Four tools, in two halves.
+Five tools, in two halves.
 
 LOOKUPS INTO OUR RESULT. `reversibility` and `provenance` answer what WE found:
 measured reversibility for a program if we scored it, a prediction with
 uncertainty if we did not, plus the generated next-experiment proposal and the
 controls behind the whole thing. Read results/frozen/ only, never recompute.
 
-THE TOOL ITSELF, ON THE CALLER'S OWN DATA. `audit` and `rerank` are the packaged
-check from packages/denali-audit, exposed verbatim. An agent hands them its own
-gene-set table -- as arrays, or as a path to whatever its enrichment tool already
-wrote -- and gets back how much of its ranking is set size, and which of its top
-entries do not survive the correction. Nothing about denali is involved in the
-answer. Without these the server was a database of our findings; with them it is
-the instrument, reachable by any agent that speaks MCP.
+THE TOOL ITSELF, ON THE CALLER'S OWN DATA. `audit`, `rerank` and `baseline` are
+the packaged check from packages/denali-audit, exposed verbatim. An agent hands
+them its own gene-set table -- as arrays, or as a path to whatever its enrichment
+tool already wrote -- and gets back how much of its ranking is set size, which of
+its top entries do not survive the correction, and what a size-only predictor
+scores on its own evaluation. Nothing about denali is involved in the answer.
+Without these the server was a database of our findings; with them it is the
+instrument, reachable by any agent that speaks MCP.
 
 The two halves are deliberately asymmetric, and that asymmetry is the design.
 This server will APPLY a correction to your ranking and it will not NOMINATE
@@ -39,6 +40,7 @@ from src.next_experiment import propose
 # server-side reimplementation of it.
 from denali_audit.adapters import describe_failure, detect
 from denali_audit.core import audit as _audit
+from denali_audit.core import baseline as _baseline
 from denali_audit.core import rerank as _rerank
 
 # Anchored to this file, NOT to the caller's cwd. An MCP client launches the
@@ -318,6 +320,97 @@ def rerank(sizes: list[float] | None = None,
         return _rerank(sizes, hits, names, top=top)
     except ValueError as e:
         return {"status": "ERROR", "reason": str(e)}
+
+
+@mcp.tool()
+def baseline(sizes: list[float] | None = None,
+             hits: list[float] | None = None,
+             predicted: list[float] | None = None,
+             metric: str | None = None,
+             k: int = 10,
+             table_path: str | None = None,
+             predicted_column: str | None = None,
+             sets: list[dict] | None = None) -> dict:
+    """How much of YOUR model's score is recoverable from set size, with no model?
+
+    Give it your predictions and the truth you score them against, and it
+    returns the score a predictor that sees ONLY how big each set is achieves
+    on your own evaluation, next to yours, plus the difference. The size-only
+    baseline is leave-one-out, so it never saw the row it predicts.
+
+    Every team reporting "our model beats baseline" computes its own baseline,
+    differently, and nobody can check it. This makes that number a callable
+    artifact rather than an assertion.
+
+    It is a MEASUREMENT and not a verdict. It does not say any model is bad, it
+    does not rank models, and a model can be worth having without beating this.
+
+    Args:
+        sizes: members measured per set, one number per set (min 8 sets)
+        hits: the truth your model is scored against, same order as sizes
+        predicted: your model's score per set, same order as sizes
+        metric: how YOU evaluate. One of spearman, pearson, r2, mae, rmse,
+            top_k_overlap. Never guessed -- a baseline scored with a different
+            metric than yours is not a comparison. Pass "none" to get the
+            baseline's per-set predictions back and score them yourself.
+        k: k for top_k_overlap (default 10)
+        table_path: instead of arrays, a path to the table your enrichment tool
+            wrote; the same formats `audit` recognises. Needs predicted_column.
+        predicted_column: with table_path, the column holding your predictions.
+        sets: instead of arrays, one row per set:
+            {"name", "size", "hits", "predicted"}.
+    """
+    if sets is not None:
+        parsed, err = _rows(sets)
+        if err:
+            return err
+        s, h, _ = parsed
+        preds = [r.get("predicted", r.get("prediction", r.get("score")))
+                 for r in sets]
+        if any(v is None for v in preds):
+            return {"status": "REFUSED",
+                    "reason": "every row needs a 'predicted' value -- your "
+                              "model's score for that set. This tool will not "
+                              "infer it.",
+                    "scope_limit": SCOPE}
+        try:
+            return _baseline(s, h, [float(v) for v in preds], metric=metric, k=k)
+        except ValueError as e:
+            return {"status": "REFUSED", "reason": str(e), "scope_limit": SCOPE}
+    if table_path:
+        if not predicted_column:
+            return {"status": "REFUSED",
+                    "reason": "name the column holding your predictions with "
+                              "predicted_column. Guessing which column is a "
+                              "model score would make every number below a "
+                              "different quantity from the one you report.",
+                    "scope_limit": SCOPE}
+        loaded, err = _load(table_path)
+        if err:
+            return err
+        df, m = loaded
+        if predicted_column not in df.columns:
+            return {"status": "ERROR",
+                    "reason": f"no column {predicted_column!r} in that table.",
+                    "columns_found": [str(c) for c in df.columns]}
+        try:
+            res = _baseline(m.size, m.hits, df[predicted_column],
+                            metric=metric, k=k)
+        except ValueError as e:
+            return {"status": "REFUSED", "reason": str(e), "scope_limit": SCOPE}
+        res["input_format"] = m.fmt
+        res["predicted_column"] = predicted_column
+        if m.approximate:
+            res["input_warning"] = m.note
+        return res
+    if sizes is None or hits is None or predicted is None:
+        return {"status": "ERROR",
+                "reason": "give sizes, hits and predicted, or table_path with "
+                          "predicted_column, or sets."}
+    try:
+        return _baseline(sizes, hits, predicted, metric=metric, k=k)
+    except ValueError as e:
+        return {"status": "REFUSED", "reason": str(e), "scope_limit": SCOPE}
 
 
 if __name__ == "__main__":

@@ -221,6 +221,353 @@ def audit(sizes, hits, corr=None) -> dict:
     return out
 
 
+BASELINE_METRICS = {
+    "spearman": "higher",
+    "pearson": "higher",
+    "r2": "higher",
+    "mae": "lower",
+    "rmse": "lower",
+    "top_k_overlap": "higher",
+}
+
+# Metrics that read only the ORDER of the predictions. They get a different
+# size-only baseline from the ones that read the values, and the reason is not
+# cosmetic -- see `_size_only_ranking`.
+RANK_METRICS = frozenset({"spearman", "top_k_overlap"})
+
+
+def _r2_of_predictions(pred, y) -> float:
+    """R^2 of a prediction vector against truth. NOT `_r2`, which fits a line first.
+
+    The difference matters and is easy to miss: `_r2(x, y)` reports how well the
+    BEST line through x predicts y, which is scale-free and cannot be negative.
+    This reports how well `pred` itself predicts y, which is what a model is
+    scored on, and which goes negative when the predictions are worse than the
+    mean. Scoring a caller's model with the first would silently rescale their
+    predictions and flatter them.
+    """
+    ss_res = float(((y - pred) ** 2).sum())
+    ss_tot = float(((y - y.mean()) ** 2).sum())
+    return float("nan") if ss_tot == 0 else 1.0 - ss_res / ss_tot
+
+
+def _pearson(x, y) -> float:
+    xs, ys = np.asarray(x, dtype=float), np.asarray(y, dtype=float)
+    if np.std(xs) == 0 or np.std(ys) == 0:
+        return float("nan")
+    return float(np.corrcoef(xs, ys)[0, 1])
+
+
+def _top_k_overlap(pred, y, k) -> float:
+    n = len(y)
+    k = max(1, min(int(k), n))
+    a = set((-np.asarray(pred, dtype=float)).argsort(kind="stable")[:k].tolist())
+    b = set((-np.asarray(y, dtype=float)).argsort(kind="stable")[:k].tolist())
+    return len(a & b) / float(k)
+
+
+def _score(metric: str, pred, y, k: int) -> float:
+    if metric == "spearman":
+        return _spearman(pred, y)
+    if metric == "pearson":
+        return _pearson(pred, y)
+    if metric == "r2":
+        return _r2_of_predictions(pred, y)
+    if metric == "mae":
+        return float(np.abs(y - pred).mean())
+    if metric == "rmse":
+        return float(np.sqrt(((y - pred) ** 2).mean()))
+    if metric == "top_k_overlap":
+        return _top_k_overlap(pred, y, k)
+    raise ValueError(f"unknown metric {metric!r}")
+
+
+def _loo_line(x, t):
+    """Leave-one-out predictions from a straight-line fit of t on x.
+
+    A baseline fitted on the same rows it is then scored against has seen the
+    answers, which makes it look better than it is and makes anything measured
+    against it look worse. The closed form is exact and costs one pass:
+    t_i^(-i) = t_i - e_i / (1 - h_i), with h_i the leverage of row i.
+
+    Returns (predictions, exact). `exact` is False when one row carries
+    essentially the whole fit, so dropping it leaves the line undefined and the
+    in-sample fit is returned instead -- reported, never hidden, because such a
+    baseline saw the rows it is scored on and is therefore flattered.
+    """
+    n = len(x)
+    fit = np.polyval(np.polyfit(x, t, 1), x)
+    sxx = float(((x - x.mean()) ** 2).sum())
+    denom = 1.0 - (1.0 / n + (x - x.mean()) ** 2 / sxx)
+    if not bool((denom > 1e-9).all()):
+        return fit, False
+    return t - (t - fit) / denom, True
+
+
+def _size_only_ranking(s, y):
+    """The size-only baseline for a metric that reads only the ORDER: set size.
+
+    WHY THIS IS NOT THE LEAVE-ONE-OUT FIT. A rank metric cannot see the values,
+    so fitting anything is wasted -- and worse than wasted. The leave-one-out
+    correction moves each prediction toward its own row's truth and back again,
+    which perturbs the ORDER slightly and costs the baseline rank accuracy it
+    should not be losing. Caught by the MCP fixture: a "model" that was set size
+    times thirty came out ahead of a size-only baseline on Spearman, 0.9091 to
+    0.8252, which is the tool crediting a model that knows nothing.
+
+    So for rank metrics the baseline is set size itself, unfitted. Nothing is
+    estimated from the data except one bit -- whether bigger sets rank higher or
+    lower -- taken from the sign of the size/truth slope and stated below. This
+    is also the null that EGAD has shipped as node-degree AUROC since 2017
+    (doi:10.1093/bioinformatics/btw695); the method here is not novel and this
+    module does not pretend otherwise.
+    """
+    if np.std(s) == 0:
+        return None, ("set size is constant here, so it induces no ranking at "
+                      "all and there is no size-only order to compare against")
+    t = np.log10(1.0 + y) if bool((y >= 0).all()) else np.asarray(y, dtype=float)
+    slope = float(np.polyfit(s, t, 1)[0])
+    sign = 1.0 if slope >= 0 else -1.0
+    return s * sign, (
+        "set size itself, ranked " + ("largest first" if sign > 0 else
+                                      "smallest first")
+        + " -- no fit and no fitted parameters, only that one direction, taken "
+          "from the sign of the size/truth slope")
+
+
+def _size_only_predictions(s, y):
+    """What set size alone predicts for each set, WITHOUT having seen that set.
+
+    WHY THERE ARE TWO CANDIDATES AND NOT ONE. The first version of this fitted
+    log10(1+y) and back-transformed, because that is the scale the rest of this
+    module works on. On a truth column that is close to linear in size, that
+    baseline is badly specified and scores far worse than it should: a "model"
+    that was literally size plus noise beat it 3.79 to 6.49 on MAE, purely
+    because of the transform. A weak baseline is not a neutral error here. It
+    hands out "your model beats size alone" verdicts that a better-specified
+    size-only model would have taken away, which is the exact failure this
+    function exists to prevent.
+
+    So the baseline is the better of a stated two-member family -- the log fit
+    back-transformed, and a raw-scale fit -- each computed leave-one-out. The
+    choice is made on leave-one-out squared error against the truth, a FIXED
+    criterion named here in advance. It is deliberately not the caller's own
+    metric: selecting the baseline on the same metric the caller is judged by
+    would let this tool tune how bad anyone looks.
+
+    Both members are monotone in size up to the leave-one-out correction, so
+    for rank metrics the choice barely moves anything; it is the value metrics
+    (mae, rmse, r2, pearson) that need it.
+    """
+    n = len(s)
+    if np.std(s) == 0:
+        # Size has no variance, so "predict from size" degenerates to "predict
+        # the mean". Still leave-one-out, still a real baseline, and reported
+        # as contributing nothing FROM SIZE rather than quietly passed off as
+        # a size-only predictor that worked.
+        return (y.sum() - y) / (n - 1.0), "mean-only (set size is constant)"
+
+    cands = []
+    raw, raw_ok = _loo_line(s, np.asarray(y, dtype=float))
+    cands.append((raw, "a raw-scale least-squares fit of truth on size", raw_ok))
+    if bool((y >= 0).all()):
+        lg, lg_ok = _loo_line(s, np.log10(1.0 + y))
+        # Numerical guard only: an extrapolated leave-one-out value on the log
+        # scale can overflow the back-transform on a pathological table.
+        cands.append((10.0 ** np.clip(lg, -12.0, 12.0) - 1.0,
+                      "a least-squares fit of log10(1+truth) on size, "
+                      "back-transformed", lg_ok))
+
+    sse = [float(((y - p) ** 2).sum()) if np.isfinite(p).all() else float("inf")
+           for p, _, _ in cands]
+    best = int(np.argmin(sse))
+    pred, label, exact = cands[best]
+    how = label + (", leave-one-out" if exact else
+                   ", IN-SAMPLE (one row has leverage ~1, so leave-one-out is "
+                   "undefined and this baseline is flattered)")
+    if len(cands) > 1:
+        how += (". Chosen as the better of two stated size-only fits on "
+                "leave-one-out squared error -- a fixed criterion, not the "
+                "metric you are scored by")
+    return pred, how
+
+
+def baseline(sizes, hits, predicted, metric=None, k=10) -> dict:
+    """How much of your model's apparent performance is recoverable from set size?
+
+    sizes : members per set   hits : the truth your model is scored against
+    predicted : your model's score per set, same order
+    metric : how YOU evaluate. Named, never guessed -- see BASELINE_METRICS.
+
+    Every team that reports "our model beats baseline" computes its own
+    baseline, differently, and nobody can check it. This computes one: the
+    score a predictor that sees ONLY how big each set is achieves on the
+    caller's own evaluation, next to the caller's own score.
+
+    It is a measurement, not a verdict. A model can be worth having and not
+    beat this, and beating it says nothing about whether any individual
+    prediction is right.
+    """
+    s = np.asarray(sizes, dtype=float)
+    y = np.asarray(hits, dtype=float)
+    p = np.asarray(predicted, dtype=float)
+    if not (len(s) == len(y) == len(p)):
+        raise ValueError(
+            f"sizes, hits and predicted must be the same length; got "
+            f"{len(s)}, {len(y)}, {len(p)}. This tool will not align them for you.")
+    ok = np.isfinite(s) & np.isfinite(y) & np.isfinite(p)
+    s, y, p = s[ok], y[ok], p[ok]
+    n = len(s)
+    if n < MIN_SETS:
+        raise ValueError(f"need at least {MIN_SETS} sets to say anything; got {n}")
+
+    # The metric is asked for, never inferred. Guessing it would make every
+    # number below a different quantity from the one the caller reports, which
+    # is the failure this whole subcommand exists to stop.
+    known = ", ".join(sorted(BASELINE_METRICS))
+    if metric is None:
+        raise ValueError(
+            "name the metric you evaluate with -- this tool will not guess it, "
+            f"because a baseline scored with a different metric than yours is "
+            f"not a comparison. Recognised: {known}. If yours is not one of "
+            "these, ask for 'none' and score the returned baseline predictions "
+            "yourself.")
+    metric = str(metric).strip().lower()
+    if metric not in BASELINE_METRICS and metric != "none":
+        raise ValueError(
+            f"unrecognised metric {metric!r}. This tool will not approximate it "
+            f"with something adjacent. Recognised: {known}. For anything else "
+            "ask for 'none': the size-only baseline's per-set predictions come "
+            "back and you score them with your own metric, on your own terms.")
+
+    # The FORM of the baseline follows from what kind of metric it will be
+    # scored with, which is a property of the metric and known before any score
+    # is computed. It is deliberately not chosen by which form scores better:
+    # picking the baseline on the caller's own metric would let this tool tune
+    # how bad anyone looks.
+    value_pred, value_how = _size_only_predictions(s, y)
+    if metric in RANK_METRICS:
+        base_pred, how = _size_only_ranking(s, y)
+    else:
+        base_pred, how = value_pred, value_how
+
+    out = {
+        "n_sets": int(n),
+        "metric": metric,
+        "baseline_predictions": [round(float(v), 6) for v in value_pred],
+        "how_the_baseline_was_built":
+            "one predictor, and it is set size: " + how,
+        "what_this_is_not": (
+            "Not a judgement of your model, not a leaderboard entry, and not a "
+            "claim that any model is bad. It measures what set construction "
+            "alone recovers on YOUR evaluation, so that 'we beat baseline' is a "
+            "number someone else can reproduce."),
+    }
+    if np.std(s) == 0:
+        out["size_is_constant"] = True
+
+    if metric == "none":
+        out["reading"] = (
+            f"No metric was named, so nothing is scored. `baseline_predictions` "
+            f"holds what a size-only predictor predicts for each of your {n} "
+            f"sets, in your input's order, leave-one-out. Score those with your "
+            f"own metric and compare against your model's score on the same "
+            f"rows. If your metric reads only the ORDER of predictions, use set "
+            f"size itself as the baseline instead -- no fit is needed and none "
+            f"should be used.")
+        return out
+
+    if base_pred is None:
+        # Constant size and a rank metric: there is no size-only order at all.
+        out["reading"] = (
+            "Every set here is the same size, so set size induces no ranking "
+            f"and there is nothing for your {metric} to be compared against. "
+            "This is not a result in your favour -- it is a comparison that "
+            "cannot be made.")
+        out["your_score"] = None
+        out["size_only_score"] = None
+        return out
+
+    direction = BASELINE_METRICS[metric]
+    yours = _score(metric, p, y, k)
+    base = _score(metric, base_pred, y, k)
+    if metric == "top_k_overlap":
+        out["k"] = int(max(1, min(int(k), n)))
+
+    out["your_score"] = None if not np.isfinite(yours) else round(float(yours), 4)
+    out["size_only_score"] = None if not np.isfinite(base) else round(float(base), 4)
+    out["higher_is_better"] = direction == "higher"
+
+    if not (np.isfinite(yours) and np.isfinite(base)):
+        out["reading"] = (
+            f"The {metric} could not be computed on these columns -- one of them "
+            f"has no variation, or the two scores are not both defined. Nothing "
+            f"is being claimed either way.")
+        return out
+
+    gap = (yours - base) if direction == "higher" else (base - yours)
+    out["delta"] = round(float(gap), 4)
+    out["beats_size_alone"] = bool(gap > 0)
+    if gap > 0:
+        tail = f"Your model beats size alone by {gap:.4f}."
+    elif gap == 0:
+        tail = "Your model exactly ties size alone."
+    else:
+        tail = (f"Your model does not beat size alone: size alone is ahead by "
+                f"{abs(gap):.4f}.")
+    out["reading"] = (
+        f"On {metric}, your predictions score {out['your_score']} and a "
+        f"predictor that sees only how big each set is scores "
+        f"{out['size_only_score']}. " + tail)
+
+    # The brief's question -- what share of the apparent performance needs no
+    # model -- is a ratio, and a ratio is only meaningful where the metric runs
+    # in a direction that makes one. Reported where it is, withheld with a
+    # reason where it is not, rather than printed as a number that reads
+    # convincing and means nothing.
+    if direction == "higher" and yours > 0 and base >= 0:
+        # Deliberately NOT capped at 1. A baseline that outscores the model
+        # gives a share above 1, and that is the reading -- clamping it to
+        # "100% recovered" would hide the case worth knowing about.
+        out["share_of_your_score_the_baseline_recovers"] = round(float(base / yours), 4)
+    else:
+        out["share_of_your_score_the_baseline_recovers"] = None
+        out["share_withheld_because"] = (
+            "a share is only interpretable where a higher score is better and "
+            f"your score is above zero; {metric} here is neither, so the two "
+            "scores are reported side by side instead.")
+
+    out["your_predictions_may_be_in_sample"] = (
+        "The size-only baseline never saw the row it predicts. Your model's "
+        "predictions were supplied, so this tool cannot tell whether they were "
+        "produced the same way. If they were fitted on these same sets, the "
+        "comparison favours them.")
+
+    # Scope limit 6, carried at the point it applies. Where hits are counted
+    # over the set's own members, size predicting hits is partly arithmetic
+    # rather than a confound -- so a strong baseline here is expected and is
+    # not by itself evidence that anyone's ranking is carried by size.
+    if bool((y <= s).all()):
+        out["boundary_condition"] = (
+            "Every set's truth value is at most its size, so the two are "
+            "counted over the same members. Regressing a count on the number of "
+            "trials that produced it recovers the trial count, and a strong "
+            "size-only baseline there is arithmetic before it is a confound. "
+            "Read the gap between the two scores, not the baseline's absolute "
+            "level. See scope limit 6.")
+
+    # Context, not an input to anything above: how size-carried the truth column
+    # is on its own terms. A model beating size alone on a ranking size barely
+    # explains is a different achievement from beating it on one size dominates.
+    try:
+        a = audit(s, y)
+        out["truth_ranking"] = {"verdict": a.get("verdict"),
+                                "r2_size_alone": a.get("r2_size_alone")}
+    except ValueError:
+        pass
+    return out
+
+
 def audit_replication(sizes, hits_a, hits_b) -> dict:
     """When two independent screens agree, how much of the agreement is set size?
 

@@ -43,7 +43,14 @@ ROWS = [{"name": f"PATHWAY_{i}", "size": s, "hits": h}
              (150, 2400), (60, 900), (55, 1200), (40, 700), (35, 1100),
              (30, 400), (25, 800)])]
 
-EXPECTED_TOOLS = ["audit", "provenance", "rerank", "reversibility"]
+EXPECTED_TOOLS = ["audit", "baseline", "provenance", "rerank", "reversibility"]
+
+# The same rows with a prediction column. `pred_sizeish` is deliberately little
+# more than set size with noise on it -- a model that knows nothing -- so the
+# server must NOT report it as beating a size-only baseline.
+PRED_SIZEISH = [s * 30.0 + (i % 5) * 40 for i, s in enumerate(
+    [200, 190, 180, 175, 160, 150, 60, 55, 40, 35, 30, 25])]
+ROWS_WITH_PRED = [dict(r, predicted=p) for r, p in zip(ROWS, PRED_SIZEISH)]
 
 passed: list[str] = []
 failed: list[str] = []
@@ -64,7 +71,7 @@ async def run() -> None:
             await s.initialize()
 
             listed = sorted(t.name for t in (await s.list_tools()).tools)
-            check("the server lists exactly the four documented tools",
+            check("the server lists exactly the five documented tools",
                   listed == EXPECTED_TOOLS, f"listed {listed}")
 
             async def call(tool, args):
@@ -114,6 +121,43 @@ async def run() -> None:
             bad = await call("rerank", {"sets": [{"name": "x"}] * 12})
             check("rerank refuses rows missing size/hits rather than guessing",
                   bad.get("status") == "REFUSED")
+
+            # ---- baseline, over the wire ----------------------------------
+            bl = await call("baseline",
+                            {"sets": ROWS_WITH_PRED, "metric": "spearman"})
+            check("baseline scores the caller's model against size alone",
+                  bl.get("your_score") is not None
+                  and bl.get("size_only_score") is not None,
+                  f"{bl.get('your_score')} vs {bl.get('size_only_score')}")
+            check("baseline does not credit a size-only model with beating size",
+                  bl.get("beats_size_alone") is False,
+                  f"delta {bl.get('delta')}")
+            _how = bl.get("how_the_baseline_was_built", "")
+            check("baseline's own predictor never saw the row it predicts",
+                  ("leave-one-out" in _how or "no fit" in _how)
+                  and "IN-SAMPLE" not in _how, _how[:90])
+            check("a model that is a monotone function of set size ties the "
+                  "size-only baseline exactly",
+                  bl.get("delta") == 0.0, f"delta {bl.get('delta')}")
+            check("baseline refuses to be read as a verdict on a model",
+                  "not a claim that any model is bad"
+                  in bl.get("what_this_is_not", "").lower())
+            nom = await call("baseline", {"sets": ROWS_WITH_PRED})
+            check("baseline refuses to guess the caller's metric",
+                  nom.get("status") == "REFUSED"
+                  and "name the metric" in nom.get("reason", ""),
+                  str(nom.get("reason", ""))[:60])
+            unk = await call("baseline",
+                             {"sets": ROWS_WITH_PRED, "metric": "auroc"})
+            check("baseline refuses a metric it does not implement rather than "
+                  "approximating it",
+                  unk.get("status") == "REFUSED"
+                  and "unrecognised metric" in unk.get("reason", ""))
+            nop = await call("baseline",
+                             {"sets": ROWS, "metric": "spearman"})
+            check("baseline refuses rows with no prediction in them",
+                  nop.get("status") == "REFUSED"
+                  and "predicted" in nop.get("reason", ""))
 
 
 def main() -> int:

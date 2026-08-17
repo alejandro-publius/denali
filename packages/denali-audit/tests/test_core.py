@@ -138,6 +138,131 @@ def test_rerank_demotes_size_carried_entries():
     assert "Not a candidate list" in r["what_this_is_not"]
 
 
+# ---------------------------------------------------------------------------
+# baseline(). The load-bearing test is the first one: a "model" that is really
+# just set size wearing a hat must NOT be reported as beating set size. The
+# first implementation failed exactly that, on the error metrics, because its
+# baseline was fitted on the wrong scale -- so the test is written from the
+# failure rather than from the intended behaviour.
+
+def _size_carried_case(n=60, seed=7):
+    rng = np.random.default_rng(seed)
+    size = rng.integers(10, 600, n)
+    truth = np.clip(size * 0.08 + rng.normal(0, 4, n), 0, None).round()
+    sizeish = size * 0.08 + rng.normal(0, 4, n)      # a model that knows nothing
+    informed = truth + rng.normal(0, 1, n)           # a model that knows something
+    return size, truth, sizeish, informed
+
+
+@pytest.mark.parametrize("metric", ["spearman", "pearson", "r2", "mae", "rmse",
+                                    "top_k_overlap"])
+def test_a_model_that_is_only_size_does_not_beat_size(metric):
+    from denali_audit.core import baseline
+    size, truth, sizeish, _ = _size_carried_case()
+    r = baseline(size, truth, sizeish, metric=metric)
+    assert r["beats_size_alone"] is False, (
+        f"{metric}: a size-plus-noise model was reported as beating a size-only "
+        f"baseline ({r['your_score']} vs {r['size_only_score']}). The baseline "
+        "is under-specified and is flattering the caller.")
+
+
+@pytest.mark.parametrize("metric", ["spearman", "pearson", "r2", "mae", "rmse",
+                                    "top_k_overlap"])
+def test_a_model_that_knows_something_does_beat_size(metric):
+    from denali_audit.core import baseline
+    size, truth, _, informed = _size_carried_case()
+    r = baseline(size, truth, informed, metric=metric)
+    assert r["beats_size_alone"] is True, f"{metric}: {r['reading']}"
+
+
+def test_lower_is_better_metrics_are_scored_in_the_right_direction():
+    from denali_audit.core import baseline
+    size, truth, _, informed = _size_carried_case()
+    r = baseline(size, truth, informed, metric="mae")
+    assert r["higher_is_better"] is False
+    # the informed model's MAE is lower, and a lower error must read as a win
+    assert r["your_score"] < r["size_only_score"]
+    assert r["delta"] > 0 and r["beats_size_alone"] is True
+
+
+def test_the_baseline_is_out_of_sample_not_a_refit():
+    """A baseline that saw the row it predicts is not a baseline."""
+    from denali_audit.core import baseline
+    size, truth, _, _ = _size_carried_case()
+    got = np.array(baseline(size, truth, truth, metric="mae")["baseline_predictions"])
+    in_sample = 10 ** np.polyval(
+        np.polyfit(size, np.log10(1 + truth), 1), size) - 1
+    raw_in_sample = np.polyval(np.polyfit(size, truth, 1), size)
+    assert not np.allclose(got, in_sample, atol=1e-6)
+    assert not np.allclose(got, raw_in_sample, atol=1e-6)
+    assert "leave-one-out" in baseline(
+        size, truth, truth, metric="mae")["how_the_baseline_was_built"]
+
+
+def test_metric_is_never_guessed():
+    from denali_audit.core import baseline
+    size, truth, _, informed = _size_carried_case()
+    with pytest.raises(ValueError, match="name the metric"):
+        baseline(size, truth, informed)
+    with pytest.raises(ValueError, match="unrecognised metric"):
+        baseline(size, truth, informed, metric="auroc")
+
+
+def test_unknown_metric_can_still_get_the_baseline_predictions():
+    """Refusing to guess must not mean refusing to be useful."""
+    from denali_audit.core import baseline
+    size, truth, _, informed = _size_carried_case()
+    r = baseline(size, truth, informed, metric="none")
+    assert len(r["baseline_predictions"]) == len(size)
+    assert "your_score" not in r and "delta" not in r
+
+
+def test_refuses_mismatched_lengths_rather_than_aligning_them():
+    from denali_audit.core import baseline
+    with pytest.raises(ValueError, match="same length"):
+        baseline([10] * 12, [1] * 12, [1] * 11, metric="mae")
+
+
+def test_refuses_too_few_sets():
+    from denali_audit.core import baseline
+    with pytest.raises(ValueError, match="at least 8"):
+        baseline([10, 20, 30], [1, 2, 3], [1, 2, 3], metric="mae")
+
+
+def test_constant_size_degenerates_to_the_mean_and_says_so():
+    from denali_audit.core import baseline
+    rng = np.random.default_rng(4)
+    truth = rng.integers(0, 40, 20)
+    r = baseline([50] * 20, truth, truth + rng.normal(0, 1, 20), metric="mae")
+    assert r["size_is_constant"] is True
+    assert "mean-only" in r["how_the_baseline_was_built"]
+
+
+def test_carries_the_scope_limit_6_boundary_where_it_applies():
+    """hits counted over the set's own members: a strong baseline is arithmetic."""
+    from denali_audit.core import baseline
+    rng = np.random.default_rng(9)
+    size = rng.integers(20, 400, 40)
+    overlap = np.array([rng.integers(0, s) for s in size])       # hits <= size
+    r = baseline(size, overlap, overlap + rng.normal(0, 2, 40), metric="spearman")
+    assert "boundary_condition" in r
+    assert "scope limit 6" in r["boundary_condition"]
+    # and NOT where hits are counted over something else entirely
+    big = overlap * 30 + 100
+    assert "boundary_condition" not in baseline(
+        size, big, big + rng.normal(0, 2, 40), metric="spearman")
+
+
+def test_baseline_never_judges_the_model():
+    from denali_audit.core import baseline
+    size, truth, _, informed = _size_carried_case()
+    r = baseline(size, truth, informed, metric="spearman")
+    assert "not a claim that any model is bad" in r["what_this_is_not"].lower()
+    blob = " ".join(str(v) for v in r.values()).lower()
+    for word in ("candidate", "nominate", "recommend"):
+        assert word not in blob or "not a" in blob
+
+
 def test_rerank_leaves_an_unconfounded_ranking_alone():
     from denali_audit.core import rerank
     rng = np.random.default_rng(2)

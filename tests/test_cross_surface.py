@@ -280,6 +280,67 @@ def main() -> int:
         check("cross-surface: every module inlined in audit.html is byte-identical "
               "to the packaged one", not drift, ", ".join(drift))
 
+        # The inlined MODULES are byte-checked above. The page's own driver --
+        # the ~50 lines of Python the page wraps around them -- is not a module
+        # and was checked by nothing, so a NameError in it shipped green and
+        # only appeared when a browser ran it. Execute it here against the real
+        # package and require it to agree with the package's own functions.
+        drv = re.search(r"var DRIVER = \[(.*?)\]\.join\(\"\\n\"\);",
+                        page.read_text(), re.S)
+        check("cross-surface: audit.html carries an extractable Python driver",
+              drv is not None)
+        if drv:
+            import io as _io
+            import pandas as _pd
+            sys.path.insert(0, str(pkg.parent))
+            ns: dict = {}
+            try:
+                exec(compile("\n".join(json.loads("[" + drv.group(1) + "]")),
+                             "<audit.html driver>", "exec"), ns)
+                err = None
+            except Exception as e:                              # noqa: BLE001
+                err = f"{type(e).__name__}: {e}"
+            check("cross-surface: the page's Python driver imports and compiles",
+                  err is None, err or "")
+            if err is None:
+                ex = (ROOT / "examples" / "example_gprofiler.csv")
+                got = json.loads(ns["run"](ex.read_text(), ex.name))
+                from denali_audit.core import audit as _pkg_audit
+                from denali_audit.adapters import detect as _pkg_detect
+                _df = _pd.read_csv(_io.StringIO(ex.read_text()))
+                _m = _pkg_detect(_df)
+                want = _pkg_audit(_m.size, _m.hits)
+                check("cross-surface: the page's driver returns the package's "
+                      "own audit numbers",
+                      got.get("ok") and got["audit"]["r2_size_alone"]
+                      == want["r2_size_alone"]
+                      and got["audit"]["verdict"] == want["verdict"],
+                      f"page {got.get('audit', {}).get('r2_size_alone')} vs "
+                      f"package {want['r2_size_alone']}")
+                # Every metric the page offers must be one the package accepts,
+                # or the dropdown hands the user a refusal.
+                from denali_audit.core import BASELINE_METRICS as _BM
+                check("cross-surface: every metric the page offers is one the "
+                      "package implements",
+                      sorted(got.get("metrics", [])) == sorted(_BM),
+                      f"page {sorted(got.get('metrics', []))} vs "
+                      f"package {sorted(_BM)}")
+                # The baseline route, end to end through the page's own driver.
+                _b = json.loads(ns["run_baseline"](
+                    ex.read_text(), ex.name, "query_size", "spearman", 10))
+                check("cross-surface: the page's baseline driver refuses a "
+                      "constant prediction column rather than scoring it",
+                      _b.get("ok") is True
+                      and _b["baseline"].get("your_score") is None,
+                      str(_b)[:120])
+                _bad = json.loads(ns["run_baseline"](
+                    ex.read_text(), ex.name, "intersection_size", "auroc", 10))
+                check("cross-surface: the page's baseline driver refuses a "
+                      "metric the package does not know",
+                      _bad.get("ok") is False
+                      and "unrecognised metric" in _bad.get("message", ""),
+                      str(_bad)[:120])
+
     for p in passed:
         print(f"PASS  {p}")
     for f in failed:

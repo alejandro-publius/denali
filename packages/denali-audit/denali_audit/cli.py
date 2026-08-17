@@ -10,7 +10,7 @@ import pandas as pd
 
 from . import __version__
 from .adapters import SUPPORTED, describe_failure, detect
-from .core import audit, audit_replication, rerank
+from .core import BASELINE_METRICS, audit, audit_replication, baseline, rerank
 
 
 def _read(path: str) -> pd.DataFrame:
@@ -115,6 +115,55 @@ def cmd_rerank(a) -> int:
     return 0
 
 
+def cmd_baseline(a) -> int:
+    df = _read(a.file)
+    m = _resolve(df, a)
+    if a.predicted not in df.columns:
+        sys.exit(f"--predicted column {a.predicted!r} not found. "
+                 f"columns: {list(df.columns)}")
+    try:
+        res = baseline(m.size, m.hits, df[a.predicted],
+                       metric=a.metric, k=a.k)
+    except ValueError as e:
+        sys.exit(f"  {e}")
+    res["input_format"] = m.fmt
+    res["predicted_column"] = a.predicted
+    if m.approximate:
+        res["input_warning"] = m.note
+    if a.json:
+        print(json.dumps(res, indent=2))
+        return 0
+
+    print(f"  read as {m.fmt}" + (f" — {m.note}" if m.note else ""))
+    if m.approximate:
+        print("  ⚠ APPROXIMATE INPUT — see the note above; both scores inherit it.")
+    print(f"\n  {res['reading']}\n")
+    if res.get("your_score") is not None:
+        better = "higher is better" if res["higher_is_better"] else "lower is better"
+        print(f"  {'your model':22s} {res['your_score']}")
+        print(f"  {'size alone':22s} {res['size_only_score']}")
+        print(f"  {'difference':22s} {res['delta']:+}   ({better})")
+        share = res.get("share_of_your_score_the_baseline_recovers")
+        if share is not None:
+            print(f"\n  A predictor with no model in it reaches {share:.0%} of your "
+                  f"score.")
+    if res["metric"] == "none":
+        print("  Rerun with --json to get them; they do not belong in a "
+              "terminal one per line.")
+    print(f"\n  sets {res['n_sets']}   metric {res['metric']}")
+    print(f"  baseline: {res['how_the_baseline_was_built']}")
+    if res.get("truth_ranking"):
+        t = res["truth_ranking"]
+        print(f"  your truth column on its own: {t['verdict']} "
+              f"(R2 size-alone {t['r2_size_alone']})")
+    if res.get("boundary_condition"):
+        print(f"\n  ⚠ BOUNDARY CONDITION\n  {res['boundary_condition']}")
+    if res.get("your_predictions_may_be_in_sample"):
+        print(f"\n  {res['your_predictions_may_be_in_sample']}")
+    print(f"\n  {res['what_this_is_not']}")
+    return 0
+
+
 def cmd_formats(a) -> int:
     print("Formats recognised without any flags:\n")
     for f in SUPPORTED:
@@ -159,6 +208,21 @@ def main(argv=None) -> int:
     a4.add_argument("--top", type=int, default=20,
                     help="how many of your top entries to check (default 20)")
     a4.set_defaults(fn=cmd_rerank)
+
+    a5 = sub.add_parser(
+        "baseline",
+        help="how much of your model's score is recoverable from set size alone?")
+    shared(a5)
+    a5.add_argument("--predicted", required=True,
+                    help="column holding YOUR model's predicted score per set")
+    a5.add_argument("--metric", required=True,
+                    help="how you evaluate. One of: "
+                         + ", ".join(sorted(BASELINE_METRICS))
+                         + ". Or 'none' to get the baseline's predictions back "
+                           "and score them yourself. Never guessed.")
+    a5.add_argument("--k", type=int, default=10,
+                    help="k for top_k_overlap (default 10)")
+    a5.set_defaults(fn=cmd_baseline)
 
     a3 = sub.add_parser("formats", help="which tool outputs are recognised")
     a3.set_defaults(fn=cmd_formats)

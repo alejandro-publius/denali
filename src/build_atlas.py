@@ -39,6 +39,20 @@ OUT = ROOT / "packages" / "denali-audit" / "denali_audit" / "atlas.py"
 # content hash below is what distinguishes those.
 ATLAS_VERSION = "1.0.0"
 
+# MIT's single condition is that this notice travel with "all copies or
+# substantial portions" of the Software, and BioGRID's grant explicitly covers
+# the download files rather than only code. A table of 1,272 R^2 values is
+# almost certainly not a substantial portion of a 718 MB corpus -- and carrying
+# the notice costs nothing and removes the argument, which is the cheaper side
+# of a question nobody should have to litigate.
+MIT_NOTICE = (
+    "The screen data these statistics are derived from is BioGRID ORCS, "
+    "released under the MIT License: Copyright (c) 2005 Mike Tyers Lab. "
+    "Permission is hereby granted, free of charge, to any person obtaining a "
+    "copy of this software, download files, and associated documentation files "
+    "(the 'Software'), to deal in the Software without restriction. THE "
+    "SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND.")
+
 HEADER = '''"""Per-screen no-biology floors, embedded so a citation means one thing.
 
 GENERATED FILE -- do not edit. Written by `src/build_atlas.py` from
@@ -83,6 +97,7 @@ COLLECTION = {collection!r}
 INCLUSION_RULE = {rule!r}
 METHOD = {method!r}
 LICENCE_NOTE = {licence!r}
+SOURCE_DATA_LICENCE = {mit!r}
 
 # screen_id -> (r2_size_alone_log, r2_size_raw, n_hits, n_measured, n_sets_used,
 #               pubmed_id)
@@ -151,8 +166,9 @@ def citation() -> str:
         f"denali no-biology floor atlas v{{ATLAS_VERSION}} "
         f"(sha256 {{SOURCE_SHA256[:16]}}), {{N_SCREENS}} human CRISPR screens from "
         f"BioGRID ORCS 2.0.18 (Oughtred R et al., Protein Science "
-        f"2021;30(1):187-200, doi:10.1002/pro.3978), scored against "
-        f"{{COLLECTION}}. https://github.com/alejandro-publius/denali"
+        f"2021;30(1):187-200, doi:10.1002/pro.3978; Stark C et al., Nucleic "
+        f"Acids Research 2006;34:D535-9, doi:10.1093/nar/gkj109), scored "
+        f"against {{COLLECTION}}. https://github.com/alejandro-publius/denali"
     )
 '''
 
@@ -176,10 +192,15 @@ def build() -> str:
         method=("R^2 of log10(1+hits per set) on log10(set size), across the "
                 "Hallmark sets within one screen"),
         licence=("Derived statistics only. The underlying screen data is BioGRID "
-                 "ORCS's; cite doi:10.1002/pro.3978 alongside this atlas. "
+                 "ORCS's, released under the MIT License -- a deliberately "
+                 "non-standard grant that extends to the download files, not "
+                 "only to code. Its one condition is carried below. The PAPER "
+                 "doi:10.1002/pro.3978 is separately CC BY 4.0; the two licences "
+                 "cover different objects and conflating them is a common error. "
                  "Descriptive curation (cell line, phenotype, library) is not "
                  "redistributed here -- it is in the research repository at "
                  "results/corpus/corpus_per_screen.csv."),
+        mit=MIT_NOTICE,
         rows=rows,
     )
 

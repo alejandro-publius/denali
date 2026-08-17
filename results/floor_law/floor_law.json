@@ -1,0 +1,40 @@
+{
+  "arm": "evaluation 13 \u2014 is the no-biology floor predictable from design?",
+  "prereg": "docs/FLOOR_LAW_PREREG.md, sealed before this model was fitted. Post-hoc with respect to the corpus, which already existed; pre-registered with respect to this model, which did not.",
+  "n_screens": 1272,
+  "n_publications": 187,
+  "predictors": [
+    "log10_n_hits",
+    "log10_n_measured",
+    "n_sets_used",
+    "hit_rate"
+  ],
+  "cv": {
+    "scheme": "5-fold, grouped by publication so no publication appears in both train and test",
+    "seed": 20260817
+  },
+  "cv_r2": 0.0935,
+  "permutation_null": {
+    "n": 1000,
+    "p95_of_cv_r2": 0.0007,
+    "clears_null": true,
+    "why": "A cross-validated R^2 is only interpretable against what the same pipeline scores on a shuffled outcome."
+  },
+  "verdict": "CLAIM (c) \u2014 it does not generalise",
+  "coefficients_full_fit": {
+    "intercept": -0.001216,
+    "log10_n_hits": 0.09933,
+    "log10_n_measured": 0.696889,
+    "n_sets_used": -0.060808,
+    "hit_rate": 0.465779
+  },
+  "single_predictor_cv_r2": {
+    "log10_n_hits": 0.1055,
+    "log10_n_measured": -0.0304,
+    "n_sets_used": -0.0249,
+    "hit_rate": 0.0805
+  },
+  "expected_before_fitting": "hit_rate was pre-registered as the expected dominant predictor, because the corpus is entirely in the counting regime where the floor is partly arithmetic. Confirming it is not a discovery.",
+  "what_this_does_not_show": "Nothing about mapping structures other than counting: every screen here counts hits over each set's own members, so mapping structure is constant and cannot be a predictor. The breadth arm's cross-domain question stays open and this arm does not close it. Nothing about whether any individual screen is good \u2014 a predictable floor is not a criticism of the screen that has one.",
+  "scope": "Writes results/floor_law/ only, never results/frozen/. No gene, gene set or publication is named."
+}

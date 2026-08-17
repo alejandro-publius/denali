@@ -96,12 +96,37 @@ including every licence URL actually opened, are in
 
 ## The licence correction that matters
 
-The brief this work was done from stated BioGRID ORCS as **CC BY 4.0**. It is
-**MIT**, and the repository's README was already right. Verified this session by
-fetching `LICENSE.txt` from the BioGRID download host directly and reading the
-grant, which is explicitly extended to the data files. **The source wins over
-the brief**, and the brief was wrong. Nothing in the repository needed changing;
-this is recorded so the next person does not re-derive it.
+The brief this work was done from stated BioGRID ORCS as **CC BY 4.0**. The
+resolution is more precise than "the brief was wrong", and the precision is the
+useful part: **two different objects carry two different licences, and both
+statements are true of one of them.**
+
+- **The DATA is MIT.** Read verbatim this session from
+  `biogrid-downloads.nyc3.digitaloceanspaces.com/LICENSE.txt` (HTTP 200, 1,094
+  bytes). The grant is deliberately non-standard and says so: it covers "this
+  software, **download files**, and associated documentation files". BioGRID
+  extended MIT to the data tarballs on purpose. The downloads page states it
+  again — "All data provided are 100% freely available to both academic and
+  commercial users under the MIT License".
+- **The PAPER is CC BY 4.0.** `doi:10.1002/pro.3978` is an open-access Protein
+  Science article. Confirmed from Crossref licence metadata.
+
+The brief conflated the article licence with the data licence. The repository's
+README was already right, and nothing needed changing. Recorded so the next
+person does not re-derive it, and because "the source wins over the brief" is
+only worth saying when the source has actually been read.
+
+**Two things this session found that DO change what we ship**, both cost-free
+and both now done:
+
+- MIT's single condition is that the copyright notice travel with "all copies or
+  substantial portions". A 1,272-row table of R² values is almost certainly not
+  a substantial portion, but carrying the notice removes the argument entirely,
+  so `denali_audit/atlas.py` now carries it.
+- The BioGRID downloads page **requests** — not as a licence condition — that
+  publications also cite Stark C *et al.*, *Nucleic Acids Research* 2006;34:D535-9.
+  We were citing Oughtred 2021 alone. Both are now in the atlas citation string
+  and in `CITATION.cff`.
 
 ## Did the atlas grow? No, and this is why
 

@@ -51,7 +51,24 @@ references:
     notes: >-
       BioGRID ORCS 2.0.18 is the source of the 1,272 published human CRISPR
       screens behind the reference distribution and the per-screen floor atlas.
-      Cite this alongside any percentile or floor reported by denali.
+      Cite this alongside any percentile or floor reported by denali. The ORCS
+      DATA is released under the MIT License, a grant BioGRID extends explicitly
+      to the download files; this ARTICLE is separately CC BY 4.0. The two
+      licences cover different objects.
+  - type: article
+    title: >-
+      BioGRID: A General Repository for Interaction Datasets
+    authors:
+      - family-names: Stark
+        given-names: Chris
+    journal: Nucleic Acids Research
+    year: 2006
+    volume: 34
+    doi: 10.1093/nar/gkj109
+    notes: >-
+      BioGRID's downloads page requests that publications using ORCS data cite
+      this paper in addition to the ORCS paper above. Not a licence condition;
+      honoured because it was asked for and costs nothing.
   - type: article
     title: >-
       Camera: a competitive gene set test accounting for inter-gene correlation

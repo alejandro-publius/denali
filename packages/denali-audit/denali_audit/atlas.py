@@ -41,7 +41,8 @@ SOURCE = 'BioGRID ORCS 2.0.18, human, screens meeting the inclusion rule'
 COLLECTION = 'MSigDB Hallmark v2026.1.Hs, 50 sets'
 INCLUSION_RULE = 'HIT=YES count >= 20 and >= 10,000 genes measured; >= 8 usable sets, where a set is usable with >= 5 measured members'
 METHOD = 'R^2 of log10(1+hits per set) on log10(set size), across the Hallmark sets within one screen'
-LICENCE_NOTE = "Derived statistics only. The underlying screen data is BioGRID ORCS's; cite doi:10.1002/pro.3978 alongside this atlas. Descriptive curation (cell line, phenotype, library) is not redistributed here -- it is in the research repository at results/corpus/corpus_per_screen.csv."
+LICENCE_NOTE = "Derived statistics only. The underlying screen data is BioGRID ORCS's, released under the MIT License -- a deliberately non-standard grant that extends to the download files, not only to code. Its one condition is carried below. The PAPER doi:10.1002/pro.3978 is separately CC BY 4.0; the two licences cover different objects and conflating them is a common error. Descriptive curation (cell line, phenotype, library) is not redistributed here -- it is in the research repository at results/corpus/corpus_per_screen.csv."
+SOURCE_DATA_LICENCE = "The screen data these statistics are derived from is BioGRID ORCS, released under the MIT License: Copyright (c) 2005 Mike Tyers Lab. Permission is hereby granted, free of charge, to any person obtaining a copy of this software, download files, and associated documentation files (the 'Software'), to deal in the Software without restriction. THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND."
 
 # screen_id -> (r2_size_alone_log, r2_size_raw, n_hits, n_measured, n_sets_used,
 #               pubmed_id)
@@ -1381,6 +1382,7 @@ def citation() -> str:
         f"denali no-biology floor atlas v{ATLAS_VERSION} "
         f"(sha256 {SOURCE_SHA256[:16]}), {N_SCREENS} human CRISPR screens from "
         f"BioGRID ORCS 2.0.18 (Oughtred R et al., Protein Science "
-        f"2021;30(1):187-200, doi:10.1002/pro.3978), scored against "
-        f"{COLLECTION}. https://github.com/alejandro-publius/denali"
+        f"2021;30(1):187-200, doi:10.1002/pro.3978; Stark C et al., Nucleic "
+        f"Acids Research 2006;34:D535-9, doi:10.1093/nar/gkj109), scored "
+        f"against {COLLECTION}. https://github.com/alejandro-publius/denali"
     )

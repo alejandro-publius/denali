@@ -150,3 +150,52 @@ Every model response is cached by the sha256 of (document id, prompt, model,
 schema). A rerun costs nothing and returns the identical labels. The cache is
 committed, so the aggregate is recomputable by anyone without an API key and
 without the index.
+
+---
+
+# CORRECTION 1 — appended 2026-08-17, before any label was computed
+
+Written after the pre-registration above was sealed at sha256 `cd8252ff…`
+(commit `ae63e18`) and before a single paper was classified. Appended rather
+than folded in, per this project's rule.
+
+**What changed.** The pre-registration says the model reads "the full text". It
+cannot, for two reasons discovered while wiring the run and neither of them
+known when the text above was sealed:
+
+1. `paperclip map`, the index's own parallel LLM reader — the mechanism this arm
+   was designed around, and the one that supports `--output-schema` and a
+   `--model` override natively — returns
+   `Parallel map workers are currently limited to GXL testers` on this account.
+2. `paperclip cat` truncates every file at approximately 1,000 characters,
+   including individual `sections/*.lines` files. A paper is roughly 37,000
+   tokens and there is no flag to read it whole.
+
+**What is done instead.** Each publication is classified from **context windows
+returned by `paperclip scan` over a deliberately broad recall pattern set of 25
+terms**, rather than from the whole document. The pattern set is recorded in
+`results/literature_infer/patterns.json` and is far wider than evaluation 11's
+thirteen, by design: it covers method language that never says "size" —
+`competitive`, `self-contained`, `permutation`, `null distribution`,
+`background set`, `gene universe`, `normalised enrichment score`,
+`hypergeometric`, `over-representation`, `size-matched`, `stratified by size`
+and others. `scan` returns each match with surrounding lines, so the classifier
+sees the passage rather than the term.
+
+**What this costs, stated plainly.** The classifier's recall is now bounded by
+the pattern set. A paper that adjusts for set size using language none of the 25
+terms touches is still invisible, exactly as it was to evaluation 11 — the
+window is much wider, and it is still a window. **The undercount direction is
+therefore reduced but not eliminated, and this arm cannot claim to have removed
+it.** The overcount direction is fully addressed, because every match is read in
+context and a hit inside a LaTeX preamble or a reference list is now judged as
+`NONE` rather than counted.
+
+This weakens the arm against its own stated purpose and is reported here rather
+than in the results, where it would read as a caveat on a number instead of a
+limit on the method.
+
+**Unchanged:** the population of 111, the four labels, the primary quantity, all
+three claims and their thresholds, the 25% kill criterion, the two-model second
+pass, the band rule, both controls, and the scope restrictions. No threshold
+moved.

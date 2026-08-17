@@ -730,13 +730,23 @@ A half-strength correction scores 0.6466 and 0.80, so the cost is not in correct
 but in correcting all the way.
 
 **Then the ordering inverts.** That board scores against RPE1's *raw* hit ranking,
-which is itself size-confounded — evaluation 5 measured size alone explaining
-**R² 0.2758** in RPE1 — so a size-corrected predictor is being scored against a
-size-contaminated target. Removing size from both sides reverses the result: the
+which is itself size-confounded: over these 50 programs, RPE1's own set sizes
+explain **R² 0.3090** of it. So a size-corrected predictor is being scored against
+a size-contaminated target. Removing size from both sides reverses the result: the
 naive hit count falls to +0.2193 and is no longer distinguishable from chance
 (permutation p = 0.1214), the size-only baseline goes negative at −0.1755, and the
 correction is the only entrant clearing its permutation null at **+0.4972**,
 p = 0.0003.
+
+*Three different R² values for "size in RPE1" are correct in this repository and
+they answer different questions, which is worth stating because two sessions
+confused them.* **0.3090** is RPE1's hits on RPE1's own sizes over the paired 50
+— the target confound above, and the only one relevant to the board.
+**0.2758** is [evaluation 5](docs/RPE1_PREREG.md), the full RPE1 arm over its 49
+scoreable programs. **0.214** is
+[`results/concordance/cross_screen.json`](results/concordance/cross_screen.json),
+which regresses RPE1 on **K562's** sizes — a cross-screen quantity, not a
+property of RPE1 at all.
 
 That inversion was computed twice, by two sessions, from two independent
 implementations reading the same frozen `paired_programs.csv`. All four rank

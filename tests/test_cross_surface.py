@@ -385,6 +385,68 @@ def main() -> int:
               _said in (str(_ndocs), _words.get(_ndocs)),
               f"says {_said!r}, docs/ has {_ndocs} .md files")
 
+    # The README states the size confound in the challenge's TARGET, and that
+    # number has now been wrong twice in two different ways. First it was
+    # `0.214` quoted out of results/concordance/cross_screen.json, which is RPE1
+    # regressed on K562's sizes -- a cross-screen quantity, not a property of
+    # the target. Then it was "corrected" to evaluation 5's 0.2758, which is the
+    # full RPE1 arm over 49 scoreable programs and not the paired 50 the board
+    # actually scores. Three defensible values, one correct answer per question.
+    #
+    # The challenge verifier believes it pins this, but its check reads
+    # benchmarks/challenge/README.md rather than the top-level one, so this
+    # surface was never covered. Derived here from the frozen paired file with
+    # the packaged function, so it cannot be quoted from anywhere.
+    paired = ROOT / "results" / "concordance" / "paired_programs.csv"
+    if paired.exists() and readme:
+        import numpy as _np
+        import pandas as _pd
+        sys.path.insert(0, str(ROOT / "packages" / "denali-audit"))
+        from denali_audit.core import _r2 as _pkg_r2
+        _p = _pd.read_csv(paired)
+        _want = round(_pkg_r2(_p.n_present_rpe1.to_numpy(float),
+                              _np.log10(1.0 + _p.n_hits_q05_rpe1.to_numpy(float))), 4)
+        _m = re.search(r"RPE1's own set sizes\s*\n?\s*explain \*\*R² ([\d.]+)\*\*",
+                       readme)
+        check("cross-surface: the README's target-confound R2 is the one the "
+              "board actually scores against",
+              _m is not None and float(_m.group(1)) == _want,
+              f"README says {_m.group(1) if _m else 'nothing'}, derived {_want}")
+        # And the three estimands must stay BOUND TO THEIR OWN DESCRIPTIONS in
+        # the paragraph that exists to keep them apart.
+        #
+        # The first version of this checked `all(v in readme for v in (...))`,
+        # which passed while testing nothing: every one of those three strings
+        # also occurs elsewhere in the README, so replacing 0.2758 inside the
+        # disambiguation with 0.9999 left the guard green. Found by mutating
+        # exactly that and watching it pass -- the same shape as the check it
+        # was written to replace. It now pins each value to the phrase that
+        # identifies which question it answers, scoped to the paragraph.
+        _para = re.search(r"\*Three different R² values.*?\n\n", readme, re.S)
+        _bindings = ((r"\*\*0\.3090\*\* is RPE1's hits on RPE1's own sizes",
+                      "0.3090 = target confound"),
+                     (r"\*\*0\.2758\*\* is \[evaluation 5\]",
+                      "0.2758 = evaluation 5"),
+                     (r"\*\*0\.214\*\* is", "0.214 = cross-screen"))
+        _missing = [] if _para is None else [
+            lbl for pat, lbl in _bindings
+            if not re.search(pat, _para.group(0))]
+        check("cross-surface: the README binds each of the three RPE1 "
+              "estimands to the question it answers",
+              _para is not None and not _missing,
+              "no disambiguation paragraph" if _para is None
+              else f"unbound: {_missing}")
+        # The cross-screen value must also still be described as cross-screen.
+        check("cross-surface: the README does not present the cross-screen "
+              "0.214 as a property of RPE1",
+              _para is not None
+              # NOT [^.]* — the sentence names cross_screen.json and the dots in
+              # the filename ended that class immediately, so the guard failed
+              # on correct text. A bounded any-char window is what was meant.
+              and re.search(r"\*\*0\.214\*\*.{0,220}K562", _para.group(0),
+                            re.S) is not None,
+              "0.214 is stated without saying it regresses on K562's sizes")
+
     # ---- the atlas must not drift from the corpus it summarises ------------
     # Same discipline as audit.html: the generated module is regenerated here
     # and the committed one must match, so a corpus edit that never reaches the

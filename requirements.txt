@@ -13,6 +13,10 @@ pyarrow==24.0.0
 scipy==1.18.0
 statsmodels==0.14.6
 
+# Test-time only. tests/test_frozen_invariants.py parses CITATION.cff with it;
+# CI installs from this file and had no yaml, so the invariants job was red.
+pyyaml==6.0.3
+
 # Streamlit expo page (optional — only for app.py, Rachel's alternate view).
 # index.html needs none of this; it is static and self-contained.
 streamlit==1.61.1

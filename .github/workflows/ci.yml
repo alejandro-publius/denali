@@ -44,3 +44,32 @@ jobs:
 
       - name: Run the packaged tool's own tests
         run: python -m pytest packages/denali-audit/tests -q
+
+  package:
+    name: denali-audit builds and installs
+    # The tool is meant to be pip-installed by strangers. This builds the sdist
+    # and wheel, runs twine's metadata check, installs the wheel into a clean
+    # interpreter and asks it for its version, which is the one definition
+    # tests/test_version.py guards.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version-file: .python-version
+
+      - name: Build
+        run: |
+          python -m pip install --upgrade pip build twine
+          python -m build --outdir dist packages/denali-audit
+
+      - name: Check metadata
+        run: python -m twine check dist/*
+
+      - name: Install the wheel and run the CLI
+        run: |
+          pip install dist/*.whl
+          denali --version
+          denali audit examples/example_gprofiler.csv | head -6

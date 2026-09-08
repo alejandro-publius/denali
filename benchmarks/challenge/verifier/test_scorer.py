@@ -55,7 +55,6 @@ def main() -> int:
     check("submitting the truth scores rho 1.0", abs(perfect - 1.0) < 1e-12, f"got {perfect}")
     rev = S.spearman_vs(-truth, truth)
     check("submitting the truth reversed scores rho -1.0", abs(rev + 1.0) < 1e-12, f"got {rev}")
-    base = S.spearman_vs(inp["size"].to_numpy(float), truth)
     check("baseline reproduces the study's published size-alone top-10 of 0.60",
           abs(S.top_k_overlap(inp["size"].to_numpy(float), truth) - 0.60) < 1e-12)
     naive = S.spearman_vs(inp["hits"].to_numpy(float), truth)

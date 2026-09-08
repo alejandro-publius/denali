@@ -1,0 +1,29 @@
+# Lint config for the top-level src/, tests/, results/, benchmarks/ and web/
+# trees. packages/denali-audit/ ships its own pyproject.toml and is not
+# governed by this file's [tool.ruff] table (ruff config does not inherit
+# across a nested pyproject.toml boundary), but `ruff check .` from the repo
+# root still lints it against these same settings, which is what CI runs.
+[tool.ruff]
+target-version = "py312"
+extend-exclude = [".venv"]
+
+[tool.ruff.lint]
+# Default set (E4, E7, E9, F) plus nothing extra. Pyflakes (F) catches real
+# bugs -- unused imports, unused variables, duplicate dict keys, a test
+# function silently redefined -- and every finding in that category was
+# fixed in the commit that added this file, not ignored.
+select = ["E4", "E7", "E9", "F"]
+ignore = [
+    # This repo's analysis and check scripts (results/, tests/, src/) use
+    # dense one-liners on purpose -- `if x: continue`, `a, b = 1, 2; c = 3`
+    # -- the same terse style the README and test-failure messages use in
+    # prose. Reformatting hundreds of these to satisfy pycodestyle would be
+    # rewriting the author's style, not fixing a defect, so they are declared
+    # accepted rather than silently hidden behind a bare `# noqa`.
+    "E701",  # multiple statements on one line (colon)      -- if x: y
+    "E702",  # multiple statements on one line (semicolon)  -- x = 1; y = 2
+    "E731",  # lambda assignment                            -- f = lambda: 1
+    "E741",  # ambiguous variable name                      -- `l` for a line
+    "E402",  # module import not at top of file             -- deferred import
+             # after a doc comment explaining why (see src/build_page.py)
+]

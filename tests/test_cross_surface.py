@@ -229,7 +229,7 @@ def main() -> int:
     for s, txt in texts.items():
         if not s.endswith(".md"):
             continue
-        block, blank_in_table, para_in_table = [], 0, 0
+        blank_in_table, para_in_table = 0, 0
         prev_pipe = False
         for i, ln in enumerate(txt.split("\n")):
             is_pipe = ln.startswith("|")
@@ -256,7 +256,9 @@ def main() -> int:
     # trusting that it was right the day it was pasted in.
     readme_md = texts.get("README.md", "")
     if "## What the tool does to our own result" in readme_md:
-        import subprocess, tempfile, csv as _csv
+        import subprocess
+        import tempfile
+        import csv as _csv
         sec = readme_md.split("## What the tool does to our own result", 1)[1]
         rows = re.findall(
             r"^\| `(HALLMARK_\w+)` \| ([\d,]+) \| ([\d,]+) \| \*{0,2}(\d+) → (\d+)\*{0,2} \| −(\d+) \|",

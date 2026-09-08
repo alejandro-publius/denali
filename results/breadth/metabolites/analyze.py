@@ -9,7 +9,6 @@ from __future__ import annotations
 import collections
 import json
 import os
-import re
 import sys
 
 import numpy as np

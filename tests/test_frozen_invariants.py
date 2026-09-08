@@ -12,7 +12,6 @@ Three classes of check:
 """
 from __future__ import annotations
 
-import ast
 import json
 import re
 import sys
@@ -1439,7 +1438,7 @@ def main() -> int:
         check(f"{pr['outcome']}: states what would change its mind",
               bool(cmm) and len(cmm) > 40, f"{prog}: {cmm[:40]!r}")
         if pr["outcome"] == "HIT_ABOVE_THRESHOLD":
-            check(f"hit branch names a numeric threshold that would demote it",
+            check("hit branch names a numeric threshold that would demote it",
                   "residual" in cmm and any(ch.isdigit() for ch in cmm))
         break_after = len(seen_outcomes) >= 3
         if break_after:
@@ -1986,7 +1985,8 @@ def main() -> int:
         # count has to come out of score_program(), and score_program() has to
         # go through scipy and statsmodels rather than the frozen csv.
         rec = (ROOT / "src" / "independent_recompute.py").read_text()
-        import ast, importlib
+        import ast
+        import importlib
         import numpy as _np
         _ir = importlib.import_module("src.independent_recompute")
         tree = ast.parse(rec)
@@ -2030,7 +2030,6 @@ def main() -> int:
 
         n_q = lit["n_publications_queried"]
         n_r = lit["n_resolved_to_full_text"]
-        n_a = lit["tier_a_explicit_size"]["n"]
         pct_a = lit["tier_a_explicit_size"]["of_resolved"]
 
         # The search terms are part of what was sealed, so the code must
@@ -2336,9 +2335,6 @@ def main() -> int:
                   "the external tables already committed here. Issues no verdict "
                   "about any study and adds no evaluation; it is the tool pointed "
                   "at its author before it is pointed at anyone else",
-        "external_nulls": "the seven committed external screens scored against "
-                          "their own no-biology nulls; evidence about a MAPPING, "
-                          "not a finding about any screen",
         "corpus_rerank": "the shipped rerank() over evaluation 10's screens; part of arm 10",
         # Classified with breadth, and for the same reason: it scores mappings
         # against their own no-biology null to decide what the shipped tool may

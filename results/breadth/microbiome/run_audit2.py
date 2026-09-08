@@ -4,8 +4,12 @@ This is denali's exact estimand (members measured vs members significant),
 applied to the microbiome's operative unit of testing.
 POST-HOC / EXPLORATORY.
 """
-import glob, json, os, sys
-import numpy as np, pandas as pd
+import glob
+import json
+import os
+import sys
+import numpy as np
+import pandas as pd
 from scipy.stats import mannwhitneyu
 sys.path.insert(0, "/tmp/denali-integ-r5rQU4fP/denali/packages/denali-audit")
 from denali_audit import audit, audit_replication
@@ -99,7 +103,7 @@ for hcol, tag in [("hits_FDR10", "D_FDR10"), ("hits_nominal05", "D_nominal05")]:
             if len(cm) < 8: continue
             sz = (x.loc[cm, "size_members_measured"] + y.loc[cm, "size_members_measured"]) / 2.0
             try: r = audit_replication(sz, x.loc[cm, hcol], y.loc[cm, hcol])
-            except Exception as e: continue
+            except Exception: continue
             r.update(mapping=tag, cohort_a=cohs[i], cohort_b=cohs[j]); out["replication_pairs"].append(r)
 R = pd.DataFrame(out["replication_pairs"])
 R.to_csv(os.path.join(HERE, "table_replication_pairs_D.tsv"), sep="\t", index=False)

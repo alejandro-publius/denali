@@ -1,10 +1,13 @@
 """Sensitivity of the members-measured mapping to the testability threshold and
 significance cut. POST-HOC / EXPLORATORY."""
-import glob, json, os, sys
-import numpy as np, pandas as pd
+import glob
+import os
+import sys
+import numpy as np
+import pandas as pd
 from scipy.stats import mannwhitneyu
 sys.path.insert(0, "/tmp/denali-integ-r5rQU4fP/denali/packages/denali-audit")
-from denali_audit import audit, audit_replication
+from denali_audit import audit
 HERE = os.path.dirname(os.path.abspath(__file__)); BASE = "/Users/alexvintera/Documents/GitHub/crc-metagenomics"
 OPS = {"(", ")", ",", "+"}
 sizes = {}
@@ -57,7 +60,7 @@ for thr in [0.05, 0.10, 0.25, 0.50]:
     for hcol in ["fdr10", "fdr20", "nom05"]:
         for szcol, szname in [("members", "membersMeasured"), ("rxn", "reactions")]:
             try: r = audit(p[szcol].values, p[hcol].values)
-            except ValueError as e: continue
+            except ValueError: continue
             res.append(dict(prevalence_threshold=thr, size=szname, hits=hcol, n_sets=r["n_sets"],
                             r2=r["r2_size_alone"], spearman=r["spearman_size_vs_hits"],
                             zero=r["sets_with_zero_hits"], size_range=r["size_range"], verdict=r["verdict"]))

@@ -1,4 +1,7 @@
-import json, os, numpy as np, pandas as pd
+import json
+import os
+import numpy as np
+import pandas as pd
 HERE = os.path.dirname(os.path.abspath(__file__))
 corpus = pd.read_csv("/tmp/denali-integ-r5rQU4fP/denali/results/corpus/corpus_per_screen.csv")["r2_size_alone"].dropna().values
 pct = lambda x: None if x is None or not np.isfinite(x) else round(100 * float((corpus < x).mean()), 1)

@@ -84,7 +84,6 @@ def main():
     rdf["rpe1_rank"] = rdf.rpe1_u_z.rank(ascending=False, method="min")
 
     n_k = kbest.index.nunique()
-    n_r = rdf.index.nunique()
     n_ov = len(set(kbest.index) & set(rdf.index))
     print(f"RPE1 program genes measured : {n_prog_rpe1}")
     print(f"RPE1 DENOMINATOR            : {n_ov}/{n_k} = {100*n_ov/n_k:.1f}% of K562 targets covered")
@@ -121,7 +120,7 @@ def main():
     top = res.head(50)
     frac_ess_top = float(top.essential.mean())
     frac_ess_all = float(res.essential.mean())
-    print(f"\n=== ESSENTIALITY-MATCHED NULL ===")
+    print("\n=== ESSENTIALITY-MATCHED NULL ===")
     print(f"fraction essential in TOP 50 : {frac_ess_top:.3f}")
     print(f"fraction essential overall   : {frac_ess_all:.3f}")
     print(f"enrichment                   : {frac_ess_top/frac_ess_all:.2f}x")

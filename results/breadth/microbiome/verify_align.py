@@ -1,4 +1,6 @@
-import pandas as pd, glob, os, numpy as np
+import pandas as pd
+import glob
+import os
 BASE="/Users/alexvintera/Documents/GitHub/crc-metagenomics"
 chunks = sorted(glob.glob(BASE+"/data/raw/pathway_chunks/*.csv"))
 print([os.path.basename(c) for c in chunks])

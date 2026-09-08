@@ -6,8 +6,12 @@ hits  = several alternative result-quantities, each labelled (see README.md)
 
 No pathway is ever named. Distributions and counts only.
 """
-import glob, json, os, re, sys
-import numpy as np, pandas as pd
+import glob
+import json
+import os
+import sys
+import numpy as np
+import pandas as pd
 from scipy.stats import mannwhitneyu
 sys.path.insert(0, "/tmp/denali-integ-r5rQU4fP/denali/packages/denali-audit")
 from denali_audit import audit, audit_replication

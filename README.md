@@ -7,11 +7,14 @@
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](.python-version)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+**Jump to:** [Findings](#findings) · [Architecture](#architecture) · [MCP server](#mcp-server--denali-as-a-tool-for-ai-agents) · [Reproduce it](#reproduce-it) · [Scope limits](#scope-limits) · [In plain language](#in-plain-language) · [How to check this project](#how-to-check-this-project) · [full docs index](docs/README.md)
+
 A genetic screen hands a lab a ranked list of thousands of hits, and validating the top of it costs a year and six figures. **denali is the check you run before that decision.** It takes the table your gene-set analysis already produced and tells you how much of your ranking is explained by *how the sets were built* rather than by any biology.
 
 ```bash
 pip install -e packages/denali-audit
 denali audit my_results.csv
+denali rerank my_results.csv --top 10
 ```
 
 No column renaming. It reads **ten formats** as-is — g:Profiler, DAVID, clusterProfiler, Enrichr/GSEApy, MAGeCK `gene_summary`, fgsea, GSEA desktop, drugZ, BAGEL2 and this project's own output; `denali formats` lists them. Four of the ten report no per-set hit count, so the tool stands one in and **prints an APPROXIMATE flag above the verdict** rather than hiding the substitution. The reason any of this matters is that a check which asks you to reshape your data first is a check nobody runs.

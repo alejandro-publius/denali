@@ -15,6 +15,19 @@ permissions:
   contents: read
 
 jobs:
+  lint:
+    name: ruff
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version-file: .python-version
+
+      - name: ruff check
+        run: pipx run ruff==0.15.21 check .
+
   test:
     name: invariants
     runs-on: ubuntu-latest

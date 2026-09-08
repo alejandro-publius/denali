@@ -1,4 +1,3 @@
-import re, json, collections
 import numpy as np
 
 PATH = "metacyc_pathways_structured_filtered_v24_subreactions"

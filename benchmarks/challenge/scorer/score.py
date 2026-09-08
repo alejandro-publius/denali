@@ -29,7 +29,7 @@ CHALLENGE = HERE.parent
 ROOT = CHALLENGE.parent.parent
 
 sys.path.insert(0, str(ROOT / "packages" / "denali-audit"))
-from denali_audit.core import rerank, _spearman, _r2  # noqa: E402
+from denali_audit.core import _spearman, _r2  # noqa: E402
 from denali_audit import adapters  # noqa: E402
 
 PAIRED = ROOT / "results" / "concordance" / "paired_programs.csv"
@@ -288,7 +288,7 @@ def main() -> int:
           f"baseline rho alone, which is why PREREG.md splits by screen instead.")
 
     diag = residual_target_diagnostic(inp)
-    print(f"\nsame predictors, target with size removed from it too:")
+    print("\nsame predictors, target with size removed from it too:")
     print(f"{'method':38s} {'spearman':>9s} {'perm p':>9s}")
     print("-" * 58)
     for name, rho, pv in diag:

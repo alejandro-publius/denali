@@ -13,7 +13,6 @@ import json
 import sys
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 
@@ -86,9 +85,9 @@ def propose(program: str, S: pd.DataFrame, feat: dict | None = None) -> dict:
                     f"engaged in this condition")
             fix = ("induce the condition that switches this program on, then "
                    "re-profile the same knockdowns")
-            falsify = (f"If, after induction, expr_ratio rises above 1.0 and the "
-                       f"program still returns 0 hits, the null is NOT explained by "
-                       f"engagement and the mechanism is refuted.")
+            falsify = ("If, after induction, expr_ratio rises above 1.0 and the "
+                       "program still returns 0 hits, the null is NOT explained by "
+                       "engagement and the mechanism is refuted.")
         elif r.sd_ratio < 1.0:
             mech = (f"members are expressed but do not VARY across perturbations "
                     f"(sd_ratio={r.sd_ratio:.2f}); nothing in this library moves them")
@@ -150,8 +149,8 @@ def propose(program: str, S: pd.DataFrame, feat: dict | None = None) -> dict:
                 f"ranking is not recovering known biology and nothing here should "
                 f"be carried forward."
                 + ("" if gate else
-                   f" It also already FAILS the measurability gate, which is a "
-                   f"third strike we are counting against it rather than around.")),
+                   " It also already FAILS the measurability gate, which is a "
+                   "third strike we are counting against it rather than around.")),
             "caveat": (
                 f"Observed R_p is {abs(resid):.2f} {excess} what measurability alone "
                 f"predicts. The measurability model explains most of the variance "

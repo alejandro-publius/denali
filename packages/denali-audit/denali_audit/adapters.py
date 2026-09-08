@@ -13,7 +13,6 @@ inventing the input to a check about silently invented inputs would be a poor jo
 """
 from __future__ import annotations
 
-import re
 from dataclasses import dataclass, field
 
 import pandas as pd

@@ -7,9 +7,8 @@ Does not replace, revise or reweight the pre-registered primary.
     .venv/bin/python -m src.sensitivity_stripped
 """
 from __future__ import annotations
-import json
-from pathlib import Path
-import pandas as pd, statsmodels.api as sm
+import pandas as pd
+import statsmodels.api as sm
 
 ALL = ["frac_present","expr_ratio","sd_ratio","n_present","essentiality_density","coherence"]
 CONSTRUCTION = ["n_present","frac_present","coherence"]

@@ -1,4 +1,7 @@
-import pandas as pd, glob, os, numpy as np, json
+import pandas as pd
+import glob
+import os
+import json
 BASE="/Users/alexvintera/Documents/GitHub/crc-metagenomics"
 meta = pd.read_csv(BASE+"/data/raw/metadata.csv")
 full = pd.read_csv(BASE+"/data/raw/pathway_unstratified_full.csv")

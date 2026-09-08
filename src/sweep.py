@@ -11,7 +11,6 @@ Pre-registered in docs/MATRIX_PREREG.md, sha256 d3e24b77...
 """
 from __future__ import annotations
 
-import json
 import time
 from pathlib import Path
 
@@ -20,7 +19,7 @@ import pandas as pd
 from scipy.stats import norm
 from statsmodels.stats.multitest import multipletests
 
-from src.score_k562 import load_k562, load_sets, score
+from src.score_k562 import load_k562, score
 
 GMT = "data/genesets/h.all.v2026.1.Hs.symbols.gmt"
 OUT_MATRIX = Path("results/discovery/hallmark_matrix.csv")

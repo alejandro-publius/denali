@@ -225,7 +225,7 @@ def cmd_verify(a) -> int:
     f = r.get("floor")
     if f and f.get("no_biology_null"):
         n = f["no_biology_null"]
-        print(f"\n  THE BASELINE, COMPUTED FROM THIS TABLE")
+        print("\n  THE BASELINE, COMPUTED FROM THIS TABLE")
         print(f"    measured R2 size-alone   {f['r2_size_alone']}")
         print(f"    no-biology null          {n['expected_r2']}  "
               f"(95% {n['ci95'][0]}-{n['ci95'][1]}, {n['n_iter']} draws)")
@@ -242,7 +242,7 @@ def cmd_verify(a) -> int:
     for item in r["not_verifiable"]:
         print(f"    · {item['what']}")
         print(f"      {item['why']}")
-    print(f"\n  WHAT THE SOURCE WOULD HAVE NEEDED TO REPORT")
+    print("\n  WHAT THE SOURCE WOULD HAVE NEEDED TO REPORT")
     for s in r["to_make_checkable"]:
         print(f"    · {s}")
     print(f"\n  REPRODUCE\n    {r['reproduce']}")

@@ -68,7 +68,7 @@ def main():
     print(f"genes with 0 papers   : {sum(1 for r in ok if r['papers']==0)}")
     print(f"mean claim-lines/gene : {sum(r['n_claims'] for r in ok)/max(len(ok),1):.1f}")
     print(f"\n=> 6 h of pure querying = {int(6*3600/per):,} gene queries")
-    print(f"   (query cost only; extraction cost NOT included)")
+    print("   (query cost only; extraction cost NOT included)")
 
 
 if __name__ == "__main__":

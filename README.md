@@ -26,8 +26,8 @@ No column renaming. It reads **ten formats** as-is — g:Profiler, DAVID, cluste
 What comes back is a verdict, a percentile against **1,272 published screens**, and a correction:
 
 ```
-CONFOUNDED: 46% of the variance in this ranking is predicted by how the sets
-were built, with no reference to what any gene does.
+MORE SIZE-CARRIED THAN ITS OWN NULL: 46% of the variance in this ranking is
+predicted by how the sets were built, with no reference to what any gene does.
 
 AGAINST THE FIELD
 This ranking is unusually confounded — worse than nine in ten published
@@ -370,7 +370,7 @@ flowchart TB
   DA --> DR["denali rerank<br/>applies the correction · 3 of our top 10 hold"]
   PKG --> WASM["audit.html 🌐<br/>the package itself in WebAssembly<br/>your file, your browser, nothing uploaded"]
   PKG -.->|"anti-drift test: audit() on the frozen<br/>data must return 0.4649 or CI fails"| FROZEN
-  WASM -.->|"page-parity test: the inlined source must<br/>reproduce 0.4649 CONFOUNDED or CI fails"| PKG
+  WASM -.->|"page-parity test: the inlined source must<br/>reproduce 0.4649, above its null, or CI fails"| PKG
 
   PKG --> BREADTH["results/breadth/<br/>3 domains that are not gene sets<br/>regions · metabolites · microbiome"]
   BREADTH --> NULL["null_baselines.py<br/>the no-biology value per mapping"]

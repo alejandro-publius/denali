@@ -115,7 +115,7 @@ def test_size_independent_ranking_is_indistinguishable_from_its_null():
         "a low R^2 must not be reported as a pass")
 
 
-def test_refuses_too_few_sets():
+def test_audit_refuses_too_few_sets():
     with pytest.raises(ValueError, match="at least 8"):
         audit([10, 20, 30], [1, 2, 3])
 
@@ -266,7 +266,7 @@ def test_refuses_mismatched_lengths_rather_than_aligning_them():
         baseline([10] * 12, [1] * 12, [1] * 11, metric="mae")
 
 
-def test_refuses_too_few_sets():
+def test_baseline_refuses_too_few_sets():
     from denali_audit.core import baseline
     with pytest.raises(ValueError, match="at least 8"):
         baseline([10, 20, 30], [1, 2, 3], [1, 2, 3], metric="mae")

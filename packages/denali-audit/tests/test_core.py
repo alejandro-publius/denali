@@ -103,6 +103,36 @@ def test_a_genuinely_size_carried_ranking_is_flagged():
     assert r["no_biology_null"]["position"] == "ABOVE"
 
 
+def test_r2_size_alone_matches_an_independently_computed_regression():
+    """Pins audit()'s r2_size_alone to a value computed by a second method.
+
+    8 sets (the MIN_SETS floor) -- seven with a small, size-proportionate hit
+    count and one (size 80) with a hit count far above what the trend among the
+    other seven predicts. The expected R^2 is worked out here from the textbook
+    covariance/variance formula for simple linear regression --
+    sum((x-xbar)(y-ybar)) / sum((x-xbar)**2) for the slope, then
+    1 - ss_res/ss_tot -- not by calling np.polyfit, which is the function
+    core.py's own `_r2` uses internally. This checks the implementation against
+    an independent derivation rather than against itself.
+    """
+    size = [10, 20, 30, 40, 50, 60, 70, 80]
+    hits = [8, 3, 4, 5, 6, 7, 9, 90]
+
+    x = np.asarray(size, dtype=float)
+    y = np.log10(1.0 + np.asarray(hits, dtype=float))
+    xbar, ybar = x.mean(), y.mean()
+    b = np.sum((x - xbar) * (y - ybar)) / np.sum((x - xbar) ** 2)
+    a = ybar - b * xbar
+    resid = y - (a + b * x)
+    expected_r2 = 1 - np.sum(resid ** 2) / np.sum((y - ybar) ** 2)
+    assert expected_r2 == pytest.approx(0.450079, abs=1e-6), (
+        "the hand-derivation itself drifted -- fix this before trusting it "
+        "as a check on the package")
+
+    r = audit(size, hits)
+    assert r["r2_size_alone"] == round(expected_r2, 4) == 0.4501
+
+
 def test_size_independent_ranking_is_indistinguishable_from_its_null():
     rng = np.random.default_rng(11)
     size = rng.integers(10, 600, 60)
@@ -179,6 +209,52 @@ def test_rerank_demotes_size_carried_entries():
     assert r["left_top_n"] > 0
     assert all(x["moved"] < 0 for x in r["left_the_top"]), "a fall must be negative"
     assert "Not a candidate list" in r["what_this_is_not"]
+
+
+def test_rerank_arithmetic_matches_an_independently_computed_regression():
+    """Pins rerank()'s residuals, ranks and top-N bookkeeping to hand-derived
+    numbers, using the same 8-set dataset as
+    test_r2_size_alone_matches_an_independently_computed_regression.
+
+    Slope, intercept and residuals are computed here by the same independent
+    covariance/variance formula (see that test's docstring), not by calling
+    core.py's np.polyfit path. The resulting ranks are then worked out from
+    those residuals with argsort, and the survivors/fall are read off by hand
+    rather than by calling rerank() and trusting its own bookkeeping:
+
+        raw rank   1=size 80 (90 hits) 2=size 70 (9) 3=size 10 (8) 4=size 60 (7)
+                   5=size 50 (6) 6=size 40 (5) 7=size 30 (4) 8=size 20 (3)
+        size-aware 1=size 80 2=size 10 3=size 20 4=size 30
+                   5=size 40 6=size 50 7=size 60 8=size 70
+
+    size 70 (raw rank 2, a big set whose hit count is unremarkable once its
+    size is priced in) and size 60 (raw rank 4) both fall out of a top-4;
+    size 20, 30 and 40 (unremarkable in raw hits alone) rise to fill the gap.
+    """
+    size = [10, 20, 30, 40, 50, 60, 70, 80]
+    hits = [8, 3, 4, 5, 6, 7, 9, 90]
+    names = [f"P{i}" for i in range(8)]
+
+    x = np.asarray(size, dtype=float)
+    h = np.asarray(hits, dtype=float)
+    y = np.log10(1.0 + h)
+    xbar, ybar = x.mean(), y.mean()
+    b = np.sum((x - xbar) * (y - ybar)) / np.sum((x - xbar) ** 2)
+    a = ybar - b * xbar
+    resid = y - (a + b * x)
+
+    orig = (-h).argsort(kind="stable").argsort(kind="stable") + 1
+    corr = (-resid).argsort(kind="stable").argsort(kind="stable") + 1
+    assert list(orig) == [3, 8, 7, 6, 5, 4, 2, 1], "hand-derived raw ranks drifted"
+    assert list(corr) == [2, 3, 4, 5, 6, 7, 8, 1], "hand-derived residual ranks drifted"
+
+    from denali_audit.core import rerank
+    r = rerank(size, hits, names, top=4)
+    assert r["survived_top_n"] == 2
+    assert r["left_top_n"] == 2
+    assert r["biggest_fall"] == 6
+    fallen = {row["name"]: row["moved"] for row in r["left_the_top"]}
+    assert fallen == {"P5": -3, "P6": -6}, fallen
 
 
 # ---------------------------------------------------------------------------

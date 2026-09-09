@@ -220,3 +220,9 @@ anywhere and no novel gene is named; the build fails if one appears near verdict
 language. The predictor whose residual feeds the UNSCORED branch **failed its own
 held-out evaluation** at balanced accuracy 0.4375 with zero true positives, and it
 was not refit. The proposals are reported, not endorsed.
+
+## What this looks like, mid-run
+
+![The agent choosing what to read next and halting on its own](img/agent-loop.png)
+
+*The loop, mid-run. It picks each program by a stated policy, halts when its estimate stops moving, and reports that stopping early overstated its own answer by 0.081.*

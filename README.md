@@ -7,7 +7,7 @@
 [![Python](https://img.shields.io/badge/python-3.12-blue.svg)](.python-version)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Jump to:** [Findings](#findings) · [Architecture](#architecture) · [MCP server](#mcp-server--denali-as-a-tool-for-ai-agents) · [Reproduce it](#reproduce-it) · [Scope limits](#scope-limits) · [In plain language](#in-plain-language) · [How to check this project](#how-to-check-this-project) · [full docs index](docs/README.md)
+**Jump to:** [Findings](#findings) · [Architecture](docs/ARCHITECTURE.md) · [MCP server](#mcp-server--denali-as-a-tool-for-ai-agents) · [Reproduce it](#reproduce-it) · [Scope limits](#scope-limits) · [In plain language](#in-plain-language) · [How to check this project](#how-to-check-this-project) · [full docs index](docs/README.md)
 
 A genetic screen hands a lab a ranked list of thousands of hits, and validating the top of it costs a year and six figures. **denali is the check you run before that decision.** It takes the table your gene-set analysis already produced and tells you how much of your ranking is explained by *how the sets were built* rather than by any biology.
 
@@ -49,7 +49,7 @@ We scored all **50 MSigDB Hallmark gene programs** against **9,837 CRISPRi knock
 
 **And on seven other people's screens.** We ran the identical command on the published supplementary tables of seven external studies — CRISPR knockout, CRISPRi/a, single-cell CRISPRa, organoid, primary-T-cell, and bulk RNA-seq — and **36–88% of each ranking is explained by set construction alone.** Every input, provenance, and rerun command is in [`audits/external/`](audits/external/README.md); each number was verified against the source document and re-derived against this repo's own `src/audit_screen.py`. One study comes back only partially confounded and one candidate table was refused for having no true hit count — the auditor discriminates rather than flagging everything. The confound is not ours; it is the field's, and it is arithmetic.
 
-**And fourteen times against ourselves.** Ten of fourteen evaluations came back negative, one returned no verdict when our own power rule fired, and all fourteen are reported below. The headline was also recomputed by [a second implementation that never read the first](#the-headline-was-recomputed-by-a-second-implementation-that-never-read-the-first).
+**And fourteen times against ourselves.** Ten of fourteen evaluations came back negative, one returned no verdict when our own power rule fired, and all fourteen are reported below. The headline was also recomputed by [a second implementation that never read the first](docs/INDEPENDENT_RECOMPUTE.md).
 
 **New to CRISPR screens?** [Start with the plain-language section](#in-plain-language) — no jargon, and it explains why any of this matters before the method does.
 
@@ -60,16 +60,6 @@ We scored all **50 MSigDB Hallmark gene programs** against **9,837 CRISPRi knock
 ![Running the audit on your own screen, and re-auditing after the fix](docs/img/use-it.png)
 
 *What a user does: audit the ranking they already have and see where it sits against 1,272 published screens, then `denali rerank` to see what leaves the top ten. Or connect the frozen matrix to their agent — no API key, no backend.*
-
-![The agent choosing what to read next and halting on its own](docs/img/agent-loop.png)
-
-*The loop, mid-run. It picks each program by a stated policy, halts when its estimate stops moving, and reports that stopping early overstated its own answer by 0.081.*
-
-![denali results page](docs/img/page-full.png)
-
-![A program's detail panel, with the falsification condition](docs/img/table-detail.png)
-
-*Click any program: the measured evidence, the generated next experiment, and **what would change my mind** — the specific numeric conditions that would demote this call, stated before the data that would test them.*
 
 ## What the tool does to our own result
 
@@ -117,126 +107,6 @@ ranked by residual — stated in the output, so you can disagree with it.
 We put our own screen through this rather than a borrowed example on purpose. A
 tool that demotes its author's top hit by twenty-three places is a stronger
 argument than any paragraph about why you should trust it.
-
-## `denali baseline` — the naive baseline as something you can call
-
-Arc Institute's Virtual Cell Challenge 2025 drew **5,000+ registrants from 114
-countries, 1,200+ teams and 300+ final submissions**, and its own
-[wrap-up](https://arcinstitute.org/news/virtual-cell-challenge-2025-wrap-up)
-reports that perturbation-prediction models are *"not yet consistently
-outperforming naive baselines across all metrics"*, with the winning approaches
-*"combining deep learning with classical statistical features"*. Arc's own
-[STATE model](https://arcinstitute.org/news/virtual-cell-model-state) is trained
-on 167M observational and 100M perturbational cells across 70 human cell
-contexts. The baseline is the thing the field keeps failing to clear, and it is
-the one number nobody ships.
-
-Every team that reports *"our model beats baseline"* computes its own baseline,
-differently, and unaudited. `denali baseline` makes it a callable artifact:
-
-```bash
-denali baseline my_predictions.csv --predicted model_score --metric spearman
-```
-
-> On spearman, your predictions score 0.5882 and a predictor that sees only how
-> big each set is scores 0.5994. Your model does not beat size alone: size alone
-> is ahead by 0.0112.
-
-**The metric is asked for and never inferred.** A baseline scored with a
-different metric than yours is not a comparison, so the tool refuses rather than
-guessing — and if your metric is not one of the six it implements, `--metric
-none` hands back the baseline's per-set predictions for you to score yourself.
-
-**The baseline never saw the row it predicts.** For metrics that read the
-values, it is a leave-one-out least-squares fit of your truth column on set
-size, in whichever of two stated parameterisations predicts better out of
-sample. For metrics that read only the order, it is set size itself — unfitted,
-because fitting anything there costs rank accuracy the baseline should not lose.
-That distinction was not a design instinct: the first version fitted everything,
-and a "model" that was literally set size times thirty came out ahead of it on
-Spearman, 0.9091 to 0.8252. Under the current baseline the same model ties
-exactly, which is the correct answer, and `tests/test_mcp_stdio.py` asserts it.
-
-**This is a measurement, not a verdict.** It does not rank models, it is not a
-leaderboard entry, and it is not a claim that any model is bad — a model can be
-worth having and not beat this. Arc's finding is a published conclusion about a
-benchmark, not evidence against anyone's model, and this tool does not turn it
-into one.
-
-**The method is not novel and the README says so before a reader finds out.**
-EGAD has shipped node-degree AUROC as a built-in null since 2017
-([doi:10.1093/bioinformatics/btw695](https://doi.org/10.1093/bioinformatics/btw695)),
-Crow et al. PNAS 2019 did the cross-dataset version, and GREAT
-([doi:10.1038/nbt.1630](https://doi.org/10.1038/nbt.1630)) already corrects
-region-size bias. What is new here is that the null is packaged, versioned and
-callable from a CLI, an MCP tool and a browser — not that anyone thought of it
-first.
-
-## Run it at the enrichment step, from R
-
-The audit is useful in the ten seconds after an enrichment finishes and nearly
-useless a week later, once the top of the list is already in a slide. Every
-other surface here asks the analyst to stop, export, and go somewhere else — so
-for an R user running clusterProfiler, the check effectively does not exist.
-
-```r
-source("integrations/denali.R")
-ego <- clusterProfiler::enrichGO(genes, OrgDb = org.Hs.eg.db, ont = "BP")
-
-denali_audit(ego)      # verdict, R², percentile against 1,272 screens
-denali_rerank(ego)     # which of your top entries size was carrying
-denali_report(ego)     # both, printed verdict-first
-```
-
-It takes an `enrichResult` directly — `BgRatio` and `Count` are what the audit
-reads, so nothing is renamed. **It is a thin shell over the CLI and deliberately
-not a reimplementation**: an R port would be exactly the drift `core.py` warns
-about. `tests/test_r_integration.py` runs the R file and the Python package over
-the same bytes and fails if any value differs, the same discipline the browser
-port is held to. Mutation-tested — drop one row inside the R function and four
-checks go red.
-
-**Where that guarantee does and does not hold.** It holds on any machine with R,
-and `make test` runs it. **It does not hold in CI**, which does not install R, so
-the suite hits its `Rscript is absent` branch and exits 0 having tested nothing.
-Until CI installs R, this integration is guarded by whoever runs the suite
-locally and not by the build — which is a weaker promise than the browser port's,
-and stated here rather than left to be discovered from a green badge.
-
-## Reading the literature, rather than grepping it
-
-Evaluation 11 asked whether 111 publications *mention* set size, using `grep`
-over thirteen patterns, and its own output says a match is evidence of mention
-and not of handling. **Evaluation 12 asked whether they did anything about it**,
-with two different models reading each paper and disagreement reported as a
-band. Pre-registered at
-[`docs/LITERATURE_INFER_PREREG.md`](docs/LITERATURE_INFER_PREREG.md) before a
-single paper was classified.
-
-**13.5–16.2% of publications adjusted for set size or measured it.** The band is
-papers both models agreed on, to papers either model called; it is never
-averaged and never broken by a third vote.
-
-The headline share sits close to the regex's 18.0%, and **that closeness is two
-errors nearly cancelling rather than two methods agreeing**:
-
-- Of the 15 publications that actually did something, **10 matched none of the
-  thirteen patterns** — mostly because they used GSEA, whose normalised
-  enrichment score divides out set size without anyone saying the word "size".
-- Of the 20 the regex called positive, **13 did nothing** — matches inside a
-  LaTeX preamble, a competitive *binding* assay, a competitive *growth* assay.
-
-The two methods agree on 5 papers out of a union of 25. **Most adjustment in
-this literature is incidental**: it arrives bundled inside GSEA rather than as a
-decision anyone made, which is a weaker thing than the field handling the
-problem, and a different thing from the field ignoring it.
-
-This is an estimate produced by a language model reading context windows, not
-whole papers — `paperclip`'s parallel reader is gated and its `cat` truncates at
-1,000 characters. That bounds recall and is disclosed as Correction 1 in the
-pre-registration, appended before the first label existed. It writes
-`results/literature_infer/` and never touches `results/frozen/`: no headline
-here changes because a model said so.
 
 ## What we chose, and why
 
@@ -330,150 +200,6 @@ Also measured: essentiality density is flat at program level, coefficient **−0
 - **The loop is drawn and falsifiable** — [`docs/LOOP.md`](docs/LOOP.md) shows the measure → model → gate → propose → audit cycle, names the file behind each stage, and publishes the one-line grep that would prove the claim false
 - **Deterministic reproduction in ten steps** — `make all` from a clean clone reproduces every file in `results/` byte-identical, figures included, in 12 m 05 s; re-verified after the night's merges with an empty diff
 
-## Architecture
-
-```mermaid
-flowchart TB
-  subgraph sub[" "]
-    direction TB
-    PC["Paperclip / GXL<br/>113 gene queries"] --> CIT["citations + blind probe"]
-    CIT --> AUD["retrieval audit<br/>34 sources · 19 of 20 · FIG 4"]
-  end
-
-  REP["Replogle K562 Perturb-seq<br/>11,258 × 8,248 · CC BY 4.0"] --> SC
-  GMT["MSigDB Hallmark<br/>50 programs"] --> SC
-  SC["src/score_k562.py 🔒<br/>byte-frozen scorer · sha256 2abfdc6f…<br/>every arm asserts this hash before it runs"] --> SW
-  SW["src/sweep.py<br/>rank-based reversal, 50 × 9,837"] --> MAT
-
-  DEP["DepMap 24Q4 Chronos<br/>1,178 lines · CC BY 4.0"] --> FM
-  MAT["matrix.csv"] --> FM["src/freeze_matrix.py"]
-  FM --> FROZEN
-
-  FROZEN["results/frozen/ 🔒<br/>matrix · program_summary<br/>provenance · proposals"] --> PRED
-  PRED["src/freeze_predictor.py<br/>OLS on 6 features → predictor.json 🔒"] --> FREEZE
-
-  FREEZE{{"FREEZE BOUNDARY<br/>predictor hashed"}} --> HO
-  HO["src/score_heldout.py<br/>10 Reactome programs, opened after the freeze"] --> FROZEN
-
-  FROZEN --> NEXT["src/next_experiment.py<br/>proposal + what would change my mind<br/>no branch tests a program name"]
-  NEXT --> FZP["src/freeze_proposals.py<br/>the only writer of proposals.json"]
-  FZP -->|"a test asserts the committed<br/>file still matches this"| FROZEN
-
-  FROZEN --> PAGE["src/build_page.py → index.html<br/>+ the agent loop, in-browser"]
-  FROZEN --> APP["app.py → Streamlit<br/>renders proposals.json"]
-  FROZEN --> MCP["src/mcp_server.py → 6 tools<br/>2 read our result, 4 run the tool on yours"]
-  FROZEN --> VIF["src/vif_camera.py<br/>post-freeze: VIF = 1+(m−1)ρ̄"]
-  FROZEN --> BENCH["benchmarks/denali-gate-trap<br/>our finding, as a task for other agents"]
-  FROZEN --> AUD2["src/audit_screen.py<br/>the same check, on anyone's screen"]
-  AUD2 --> PKG["packages/denali-audit 📦<br/>pip installable · core.py vendored verbatim"]
-  PKG --> DA["denali audit<br/>10 formats auto-detected · verdict + percentile"]
-  DA --> DR["denali rerank<br/>applies the correction · 3 of our top 10 hold"]
-  PKG --> WASM["audit.html 🌐<br/>the package itself in WebAssembly<br/>your file, your browser, nothing uploaded"]
-  PKG -.->|"anti-drift test: audit() on the frozen<br/>data must return 0.4649 or CI fails"| FROZEN
-  WASM -.->|"page-parity test: the inlined source must<br/>reproduce 0.4649, above its null, or CI fails"| PKG
-
-  PKG --> BREADTH["results/breadth/<br/>3 domains that are not gene sets<br/>regions · metabolites · microbiome"]
-  BREADTH --> NULL["null_baselines.py<br/>the no-biology value per mapping"]
-  NULL -.->|"BOUNDARY CONDITION, pointing back at the tool:<br/>where hits are counted over the set's own members,<br/>a large R² is arithmetic. None of the three cleared<br/>its own null. Ours does — 0.4649 vs 0.0182"| DA
-
-  ORCS["BioGRID ORCS 2.0.18<br/>1,952 human screens · 418 publications"] --> CORP
-  CORP["src/corpus_audit.py<br/>eval 10 · 1,272 screens meet the rule"] --> CRES
-  CRES["results/corpus/<br/>median 0.224 · ours above the 90th pct"] --> REF
-  REF["denali_audit/reference.py<br/>the corpus, embedded → percentile"] --> DA
-  CRES --> CRR["src/corpus_rerank.py<br/>post-hoc · imports the shipped rerank()"]
-  PKG -.->|"the same correction, run on<br/>the literature rather than on us"| CRR
-  CRR --> CRRES["results/corpus_rerank/<br/>median screen keeps 9 of 10; we keep 3"]
-
-  REP --> IND["src/independent_recompute.py<br/>reimplemented from the method section,<br/>never from the code"]
-  IND -.->|"scipy · statsmodels at every step<br/>agrees to 0.000049 · asserted by the suite"| FROZEN
-  FROZEN --> RP["src/rpe1_arm.py 🔒<br/>eval 5 · 2nd cell line, pre-registered"]
-  RP --> CONC["src/concordance.py<br/>eval 6 · 26% of 'it replicated' is set size"]
-  FROZEN --> CONC
-
-  SC --> ANN["src/annotation_arm.py 🔒<br/>eval 7 · 793 sets, 4 collections, Modal"]
-  GO["WikiPathways · Reactome · GO-BP<br/>10,352 sets"] --> ANN
-  ANN --> ARES["results/annotation/<br/>UNDERPOWERED on 3 of 4"]
-
-  EXT["CHANGE-seq · CRISPRme<br/>two published datasets, neither ours"] --> OT
-  OT["src/offtarget_audit.py<br/>eval 8 · post-hoc, thresholds swept"] --> ORES["results/offtarget/"]
-
-  MOD["src/modal_sweep.py<br/>50 programs / 10 containers"] -.->|"reproduces, does not produce"| FROZEN
-  CRR --> MCR["src/modal_corpus_rerank.py<br/>1,272 screens fanned across containers"]
-  MCR -.->|"same screen_row(), run distributed<br/>join + own-screen + agreement gates"| CRRES
-  VIF -.->|"external theory<br/>Wu &amp; Smyth 2012"| CAM(["CAMERA"])
-  AUD -.->|"audit only — never feeds the matrix"| PAGE
-
-  style FROZEN fill:#f2f2f0,stroke:#1a4d7a,stroke-width:2px
-  style FREEZE fill:#fff,stroke:#1a4d7a,stroke-width:2px,stroke-dasharray:4 3
-  style sub fill:#fff,stroke:#e3e3e3,stroke-dasharray:3 3
-  style MOD fill:#fff,stroke:#8c8c89,stroke-dasharray:4 3
-  style CAM fill:#f2f2f0,stroke:#1a4d7a
-  style SC fill:#fff,stroke:#1a4d7a,stroke-width:2px
-  style FZP fill:#fff,stroke:#1a4d7a,stroke-width:2px
-  style RP fill:#fff,stroke:#1a4d7a,stroke-width:2px
-  style ANN fill:#fff,stroke:#1a4d7a,stroke-width:2px
-  style ARES fill:#f7f7f8,stroke:#8c8c89
-  style ORES fill:#f7f7f8,stroke:#8c8c89
-  style PKG fill:#eef4ea,stroke:#3d6b2e,stroke-width:2px
-  style DA fill:#eef4ea,stroke:#3d6b2e,stroke-width:2px
-  style DR fill:#eef4ea,stroke:#3d6b2e,stroke-width:2px
-  style REF fill:#f7f7f8,stroke:#8c8c89
-  style CORP fill:#fff,stroke:#1a4d7a,stroke-width:2px
-  style CRES fill:#f7f7f8,stroke:#8c8c89
-  style CRR fill:#fff,stroke:#1a4d7a,stroke-width:2px
-  style CRRES fill:#f7f7f8,stroke:#8c8c89
-  style MCR fill:#fff,stroke:#8c8c89,stroke-dasharray:4 3
-  style IND fill:#fff,stroke:#1a4d7a,stroke-width:2px
-```
-
-**The freeze boundary is the load-bearing part.** `results/frozen/` is written once per run and read by everything downstream; nothing after it recomputes. The predictor is fit on the 50 scored programs, serialised, and **hashed** — and only then are the ten held-out programs scored, with `src/score_heldout.py` verifying the hash at load and aborting on mismatch. Scoring them before the freeze would have let the model see its own test set; scoring them after means the failure it produced is a real failure.
-
-**Evaluations 5–8 point sideways, and that is the whole discipline.** `src/annotation_arm.py`, `src/concordance.py`, `src/rpe1_arm.py` and `src/offtarget_audit.py` each write their own directory — `results/annotation/`, `results/concordance/`, `results/rpe1/`, `results/offtarget/` — and **not one of them has an edge back into `results/frozen/`.** That is deliberate. Every one of those arms was built after the primary was frozen, so any of them could have been used to quietly improve the headline: re-score with a looser gate, fold the second cell line in, let a 793-set sweep redefine the comparator. Pointing them sideways makes that impossible to do by accident rather than merely against the rules. What they are allowed to change is the *scope* of the claim — evaluation 7 narrowed it by showing more than half of GO Biological Process cannot be evaluated against this screen at all, and evaluation 8 widened it by finding the same confound in two clinical off-target datasets that have nothing to do with gene sets. Neither moved a number inside the freeze. The two arms that read the byte-frozen scorer, `src/annotation_arm.py` and `src/rpe1_arm.py`, assert its sha256 before they run and abort rather than proceed against a modified scorer.
-
-**`src/freeze_proposals.py` is drawn as the only writer of `proposals.json` because that turned out to matter.** The three generated proposals the page renders are produced by `src/next_experiment.py` and serialised once by that script. It went stale — the generator gained a falsification field and the artifact was never rewritten — and because nothing checked the artifact against its generator, `make all` on a clean clone silently rewrote it and made the byte-identical reproduction claim false while every other test stayed green. The edge back into `results/frozen/` now carries that check.
-
-**The dashed edges are claims you can check, and there are now four of them.** Modal points *into* `results/frozen/` rather than out of it: `src/modal_sweep.py` re-runs the sweep across ten containers and reproduces all 50 programs identically, so it verifies the frozen result without being allowed to produce it — it is deliberately not a `make all` step, and a test asserts that. The VIF edge points *outward*, to a statistical result published in 2012: our two dominant features turn out to be the two terms of CAMERA's variance-inflation factor, which we recovered from data rather than fitted to.
-
-**The packaged tool is drawn downstream of the freeze, with one edge pointing back.** `packages/denali-audit` is what a stranger installs, and it is not a rewrite: `core.py` is the study's own maths vendored verbatim, `reference.py` carries the 1,272-screen corpus so an audit can say where a ranking sits rather than only what its R² is, and `denali rerank` applies the correction. The dashed edge back into `results/frozen/` is the claim that makes the whole arrangement honest — **a test runs the packaged `audit()` against the frozen research data and requires exactly `0.4649`**, the published headline. If the tool and the paper ever disagree, CI fails rather than the two quietly diverging and the README continuing to cite a number the shipped code no longer produces. That is the difference between a tool that came out of a study and a tool that merely resembles one.
-
-**The two strongest validation artifacts are now drawn, because leaving them out flattered the diagram.** The first is the corpus: `src/corpus_audit.py` reads BioGRID ORCS 2.0.18, keeps the 1,272 screens that meet a stated inclusion rule, and writes `results/corpus/` — and the edge that matters runs from there into `denali_audit/reference.py`, because that is where the percentile a stranger sees comes from. Without that edge the tool appears to assert "worse than nine in ten screens" out of nowhere; with it, the claim has a substrate, an inclusion rule and a file. `src/corpus_rerank.py` then takes the *shipped* `rerank()` — imported from the package, not reimplemented — and runs it over the same 1,272 screens, which is why its edge comes from `packages/denali-audit` rather than from the study. The second is `src/independent_recompute.py`, which rebuilt the headline from this README's method section without reading the frozen code, and whose dashed edge into `results/frozen/` is an agreement to 0.000049 that the suite asserts. Both are checks *on* the project rather than steps *in* it, which is exactly why they were the easiest two to forget to draw.
-
-**Paperclip is drawn as a side branch that terminates in the retrieval audit, because that is what it is.** It produced per-gene citations and a blind probe, and those numbers appear on the page — but nothing it generated feeds `matrix.csv`, the predictor, or any frozen result. The per-gene divergence table that once consumed it was withdrawn when guide-pair concordance made per-gene verdicts indefensible.
-
-## Method
-
-For a program *p* with measured members *M* and background *B*, each perturbation *i* gets a signed rank statistic from the Mann–Whitney U of member effects against background:
-
-```
-u_z(i, p) = −(U(X[i, M], X[i, B]) − μ) / σ        μ = n₁n₂/2,  σ = √(n₁n₂(n₁+n₂+1)/12)
-```
-
-Positive `u_z` means the knockdown pushed the program **down**. Per-perturbation p-values are Benjamini–Hochberg corrected **within** each program, and the program's reversibility is:
-
-```
-R_p = log₁₀(1 + |{ i : q(i, p) < 0.05 }|)
-```
-
-The pre-registered decision regressed `R_p` on six measurability features — `frac_present`, `expr_ratio`, `sd_ratio`, `n_present`, `essentiality_density`, `coherence` — with thresholds fixed before the sweep: **adj R² ≥ 0.60 → measurability dominates; ≤ 0.30 → program-intrinsic; between → report both and claim neither.** It returned 0.751.
-
-The **measurability gate** requires ≥50% of members present, ≥25 present in absolute terms, and both expression and variance ratios ≥ 1.0 against background.
-
-**The rule that fired before any number was seen:** the pre-registration states that if fewer than 8 of the 10 held-out programs pass that gate, the evaluation is reported as **underpowered and inconclusive** rather than as success or failure. One passed. The rule fired against us.
-
-## Research challenges
-
-**Circularity between a feature and the outcome.** One of the six features, `coherence`, is the mean pairwise correlation of a program's members across perturbations — computed from the same matrix as the outcome it predicts. A program whose members move together will produce a stronger aggregate signal by construction, so part of the 0.751 is arithmetic. We report the interval rather than the point, and 0.561 is what the outcome-independent features reach on their own. A post-freeze check, run because an adversarial critique demanded it rather than because we planned it, went further: splitting the features into measurement versus gene-set construction gives 0.152 and 0.697 respectively. The number stands; the word *measurement* in our first framing did not.
-
-**Distinguishing "not reversible" from "not engaged."** Our first program returned 517 hits — it is not a quiet program — but failed its known-regulator control: the canonical sensors do not land at the extremes of the ranking. That is the null, and the reason was not biological. K562 is unstressed, so the unfolded protein response was never switched on — knocking out the sensors of an alarm that is not ringing moves nothing. The gate we built tested whether a program was *measurable*; it should have tested whether it was *engaged*. That distinction was absent from the pre-registration and is recorded as a design failure, not as bad luck.
-
-**Guide-pair concordance at −0.019.** The library targets 738 genes with two independent sgRNA constructs scored as separate rows. If per-gene scores were reliable those rows would agree; they do not, and the correlation stays flat at every effect-size threshold, so it is not a power artifact that resolves in the strong hits. This forbids gene-level claims outright. Pathway-level statistics aggregate over ~11,000 perturbations and survive the noise, which is why the unit of inference is the program and why no novel gene is named anywhere in the project — a constraint the test suite enforces by scanning the rendered output.
-
-**A quality filter that is wrong 20 times out of 50.** We built the measurability gate anyone would build, and then checked it against every program rather than only the ones it approved. Twenty fail it and produce hits anyway; exactly one passes and produces nothing. The program we held out fails it on an expression ratio of 0.92 and still ranks 11th of 50 with 773 hits — our own filter would have discarded our best result, which we found only because we did not trust it.
-
-**Retrieval concentration in the literature layer.** Attaching one citation per gene across 113 genes produced 34 distinct sources, with a single review accounting for 50.4% of them and only 14 of 113 top hits naming their own gene in the title. A blind 20-gene probe returned the same zebrafish methods paper for 19 of the 20, and for one gene returned a paper about a different gene entirely. This is a pointer layer, not an evidence chain, and it is labelled as one everywhere it appears.
-
-**Keeping a reproduction path deterministic when a script deleted its own input.** `src/divergence_repair.py` is a one-shot migration that consumed a per-gene verdict table and unlinked it. It sat in `make all`, where it could never run twice — and the first clean-clone check died there at step 5 of 9. The second died at step 6 on a Python file that did not parse, because a blanket text replacement had rewritten an identifier. Neither defect touched a reported number, and neither was visible from inside the working directory: a reproduction path that has never been run from a clean clone is a claim, not a fact.
-
 ## MCP server — denali as a tool for AI agents
 
 ```bash
@@ -499,94 +225,7 @@ claim about what is true, and the predictor that would have to back that claim
 failed its own evaluation. A tool that handed you a candidate list on that
 evidence would be committing the error this project exists to measure.
 
-**Wiring it into a client.** An MCP client launches the server from its own
-working directory, not from this repository, so both paths below are absolute
-and `PYTHONPATH` is set explicitly. Replace `/abs/path/to/denali` with wherever
-you cloned it and nothing else needs changing:
-
-```json
-{
-  "mcpServers": {
-    "denali": {
-      "command": "/abs/path/to/denali/.venv/bin/python",
-      "args": ["-m", "src.mcp_server"],
-      "env": { "PYTHONPATH": "/abs/path/to/denali" }
-    }
-  }
-}
-```
-
-Tested by starting the server from `/tmp` the way a client actually does. Until
-2026-08-16 that failed: `results/frozen/` was resolved against the caller's
-working directory, so anyone wiring this into an agent got a `FileNotFoundError`
-rather than a server. Both modules now anchor to their own file location, and
-the failure is recorded in `docs/LIMITATIONS.md` §7 rather than quietly fixed —
-we had been demonstrating this server by running it from the repo root, which is
-the one directory where the bug is invisible.
-
-| Tool | Argument | Returns |
-|---|---|---|
-| `reversibility` | `program` (MSigDB name) | Measured result if the program is in the frozen 50 — rank, hits, tier, predicted vs. observed, residual — plus the generated next-experiment proposal. Held-out result if it was one of the ten. Otherwise an explicit `UNSCORED` response. |
-| `provenance` | — | Hashes, the deciding statistic, gap numbers, evidence concentration, and the scope limit. |
-| `audit` | `sizes` + `hits` (+ optional `corr`), or `table_path` | **Your** ranking, not ours: what share of it is predicted by set size alone, with a verdict of `CONFOUNDED`, `PARTIALLY CONFOUNDED`, `NOT SIZE-DOMINATED`, or `UNDETERMINED` when every set is the same size and the question cannot be asked. Where a reference applies, where your screen sits against 1,272 published ones. |
-| `rerank` | `sizes` + `hits` (+ optional `names`, `top`), or `table_path` | Applies the size correction to **your** ranking and returns which of your top entries left the top, and how far each fell. The inverse of a candidate list. |
-| `baseline` | `sizes` + `hits` + `predicted` + `metric`, or `table_path` + `predicted_column` | What a predictor that sees **only set size** scores on **your** evaluation, next to your model's score, and the difference. The metric is named by the caller and never inferred. A measurement, not a verdict on any model. |
-| `floor` | `screen_id` | The published no-biology floor for one of the 1,272 screens in the atlas, with the method, the content hash and the citation string. Looked up, never recomputed, so every caller gets the identical number. A screen outside the atlas returns `NOT_IN_ATLAS` with the inclusion rule, never a guess. |
-
-`table_path` accepts the file your enrichment tool already wrote — g:Profiler,
-DAVID, clusterProfiler, Enrichr, fgsea, GSEA desktop, MAGeCK, drugZ and BAGEL are
-recognised with no flags. Pointed at our own g:Profiler-shaped export, `audit`
-returns 0.4649 and `rerank` returns 3 of 10 surviving: the same two numbers on the
-page, through the same code path an outside agent gets.
-
-Every response carries the scope limit. The `UNSCORED` branch reports the predictor's own failure verbatim:
-
-> `"predictor_validation": "FAILED on held-out data: balanced accuracy 0.4375, worse than chance, zero true positives. The predictor is reported, not endorsed."`
-
-A caller cannot mistake a prediction for a validated one.
-
-## Tool chain
-
-Set up is not the same as used. What actually touched the result:
-
-| Tool | Status | Detail |
-|---|---|---|
-| **Paperclip / GXL** | **USED AND AUDITED** | 113/113 gene queries, authenticated. We measured its retrieval quality and found it weak — that audit is FIG 4. Its hosted MCP server is registered and deliberately unqueried: the index is live, and re-running would move the numbers FIG 4 cites |
-| **Anthropic MCP** | **SHIPPED** | `src/mcp_server.py`, 6 tools — 2 over the frozen matrix, 4 running the packaged check on the caller's own data |
-| **Modal** | **USED** | Runs the real 50-program sweep across 10 containers in **133 s** (`src/modal_sweep.py`), reproducing `n_hits`, `R_p`, `n_present` and the gate **identical on all 50**. It verifies the frozen result rather than producing it, so reproduction no longer needs the 470 MB download — `modal run src/modal_sweep.py`. Same scorer imported verbatim, run elsewhere: this establishes portability, not independent confirmation of the maths. A **second entry point**, `src/modal_corpus_rerank.py`, is the one real distributed workload here: it fans the corpus rerank across containers, applying the size correction to each of **1,272 published screens** and counting how many of each screen's top 10 survive it. Neither entry point is a `make all` step, and a test asserts both |
-| **Biohub ESMC** | Set up, not in the pipeline | Verified twice — local MIT weights **and** the authenticated hosted Biohub Platform API, both returning `(1, 67, 960)`. Nothing frozen depends on it |
-| **Benchling** | MCP registered, nothing to register | Hosted server at `hackathon.mcp.bnchdev.org/mcp` answers 401 — up and OAuth-gated. Our pipeline has no wet-lab entity to push into a notebook |
-| **Proto (Evo Design)** | **Installed, not used** | `pip install git+https://github.com/evo-design/proto-tools.git` succeeds. 140 tools, 17 categories, `proto-tools doctor` exits 0 against a live Modal workspace. Serves AlphaFold, Boltz, ESMC, Evo2, AlphaGenome — denali makes no structural or sequence-design claim |
-| **Benchflow** | **USED** | `benchmarks/tasks/denali-gate-trap` — our finding turned into an agent benchmark. An agent sees only measurability features for 50 programs and predicts which returned a result; the naive quality filter scores **0.6981** balanced accuracy with 20 false negatives, our reference solution **0.7413**. `bench tasks check` passes, container builds, verifier discriminates (no answer → 0.0, always-true → 0.0) |
-| **Boltz-2** | **Declined** | Reachable via Proto. No structural claim is possible at −0.019 concordance, and running it to have run it would put a structure on the page no result depends on |
-| **Tamarind** | **Declined** | Key authenticates — `GET /api/jobs` returns 200, **0 jobs submitted**. A job runner for structure and docking workloads; we have no job of that kind |
-
-Arc Institute co-hosted the event this project was built for, which we did not enter. Their [Virtual Cell Challenge wrap-up](https://arcinstitute.org/news/virtual-cell-challenge-2025-wrap-up) (6 December 2025, 300+ final submissions) reported that perturbation-prediction models are *"not yet consistently outperforming naive baselines across all metrics"*, with almost all models below baseline on MAE specifically. That is a larger and different task than ours — predicting expression responses, not program-level movement — so it is not a defence of our held-out failure. It is why we treated that failure as the outcome to design for rather than one to bury, and why we report several statistics instead of optimising one.
-
-## Running things in `src/`
-
-**These are pipeline steps, not command-line tools.** With one exception they do
-not parse arguments at all: `python -m src.<anything> --help` **ignores the flag
-and runs the step**, which for `src.sweep` means fifteen minutes and for the
-`freeze_*` modules means rewriting files in `results/frozen/`. Nothing is
-damaged if you do this — every step is deterministic, which is the whole point,
-and the outputs land byte-identical — but it is not what you asked for.
-
-| You want | Run |
-|---|---|
-| the whole pipeline | `make all` |
-| the tests | `make test` |
-| the page | `make page` |
-| **to audit your own screen** | `denali audit` — the packaged CLI, see the top of this file |
-| the same check without installing | `python -m src.audit_screen --help` — the in-repo original |
-| a next-experiment proposal | `python -m src.next_experiment --demo` |
-| the MCP server | `python -m src.mcp_server` |
-
-The reason they are not CLIs is the byte-frozen scorer: `src/score_k562.py` is
-pinned at sha256 `2abfdc6f…` and verified on load, so adding argument parsing to
-it would invalidate every number in this repository. Rather than make one module
-an exception to a rule the rest follow, they all stayed plain. That is a real
-cost and it is stated here rather than discovered.
+Wiring this into a client's config, and the full six-tool reference table, is in [`docs/MCP_SERVER.md`](docs/MCP_SERVER.md).
 
 ## Reproduce it
 
@@ -643,53 +282,7 @@ An earlier run of this check had two diffs, and both were defects rather than no
 
 `make all` deliberately does **not** re-run the two live-API steps (`make retrieval`). Those indexes change, so their outputs are committed as dated observations from 2026-08-15. The instability of retrieval is the finding, not a defect.
 
-## The headline was recomputed by a second implementation that never read the first
-
-`src/independent_recompute.py` reimplements the headline statistic **from the
-method section of this README**, not from the code. `src/score_k562.py`,
-`src/sweep.py` and `src/freeze_predictor.py` were not read while writing it — a
-reimplementation that consulted the original would only prove the original can
-be copied. Different machinery at every step where a choice existed:
-
-| step | frozen path | independent path |
-|---|---|---|
-| Mann–Whitney U | its own byte-frozen scorer | `scipy.stats.mannwhitneyu` |
-| BH correction | its own | `statsmodels.stats.multitest.multipletests` |
-| regression | its own | `statsmodels.formula.api.ols` |
-
-It reads the raw 470 MB substrate, not `results/frozen/`, and recomputes every
-hit count from `X`.
-
-| figure | published | independent | agree |
-|---|---:|---:|:--:|
-| adj R², all six features | 0.751 | **0.7511** | ✅ |
-| adj R², outcome-independent five | 0.561 | **0.5606** | ✅ |
-| R², set size alone | 0.4649 | **0.4649** | ✅ |
-
-Per-program agreement across all **50** programs: **Pearson 1.000000**, Spearman
-1.000000, largest absolute difference in `R_p` of **0.000049** — which is the
-rounding in the stored file, not a disagreement. The hit counts are identical as
-integers.
-
-Asserted by the suite to a stated tolerance of 0.01, so a future divergence
-fails the build rather than sitting in a JSON nobody opens. The scorer is also
-run against synthetic data with a known answer: a planted signal returns hits on
-60 of 60 perturbations, a null returns 0 of 60.
-
-**What this does not establish.** That the method is *correct*. Two
-implementations of a wrong method agree with each other perfectly. This rules
-out implementation error in the frozen scorer; it does not rule out the question
-being the wrong one to ask, which is what the fourteen evaluations are for.
-
-## What the reproduction check found
-
-Three defects, all in the reproduction wiring, **none touching a reported number**:
-
-1. **`src.divergence_repair` was in `make all` and cannot run twice.** A one-shot migration that consumes and deletes its own input. Removed from the target, kept as documented history.
-2. **`src.freeze` and `src.freeze_matrix` both wrote `provenance.json`.** An interrupted run left the file half-migrated and looking like numeric drift. `freeze_matrix` is now the sole writer.
-3. **`src/sweep.py` did not compile.** A blanket text replacement had rewritten the identifier `SEALED_B` as `HELD OUT_B`. The repo shipped that way, and the tests passed the whole time because nothing imported it.
-
-Each was found only by running from a clean clone, and the third only after the first two were fixed.
+The headline was also rebuilt from scratch by a second implementation that never read the first — see [`docs/INDEPENDENT_RECOMPUTE.md`](docs/INDEPENDENT_RECOMPUTE.md). Three further defects a reproduction check found along the way, none of them touching a reported number, are in [`docs/REPRODUCE_HISTORY.md`](docs/REPRODUCE_HISTORY.md).
 
 ## Tests
 
@@ -698,34 +291,6 @@ Each was found only by running from a clean clone, and the third only after the 
 Two guards exist because each caught a real defect. The **compile guard** parses every file under `src/` and `tests/` before anything else — added after a shipped module was found not to compile. The **scope guard** builds a gene-symbol universe from the Hallmark GMT and fails the build if any symbol appears within 260 characters of verdict language in the rendered page or the captions, with an allowance for "recovered known answer" and "positive control"; it enforces the −0.019 scope limit mechanically. A third set of checks asserts the page makes **no network calls** — no `fetch`, no `XMLHttpRequest`, no external script or stylesheet — so the interactive explorer cannot break unattended.
 
 The suite has caught, in order: a stat bug reporting 5 evidence sources instead of 34, an essentiality coefficient published with the wrong sign, a miscount of failing controls, a stale caption, and a module that did not parse.
-
-## Repo map
-
-**[`docs/README.md`](docs/README.md) is the documentation index**, ordered by what you came to check.
-
-
-| Path | Contents |
-|---|---|
-| `results/frozen/` | 🔒 **The frozen interface.** Matrix, program summary, predictor, held-out, controls, provenance. Everything downstream reads only this |
-| `results/sensitivity/` | Post-freeze checks, explicitly not pre-registered |
-| `results/figures/` | Four figures + `CAPTIONS.md`, the single source of caption wording |
-| `results/prior_work/` | Pre-event ILD evidence — the positive control returning 481–6,532 genes. Not reproducible here |
-| `results/discovery/` | Intermediate scoring outputs |
-| `results/corpus/` | 1,272 published CRISPR screens from BioGRID ORCS — the distribution a verdict is a percentile against |
-| `results/breadth/` | Post-hoc, exploratory. The unmodified `audit()` on three domains that are **not** gene sets — regions, metabolites, microbiome — plus `null_baselines.py`. Reported because it found a boundary condition on the tool, not a fourth confirmation. See scope limit 6 |
-| `audits/external/` | The audit run unchanged on seven **other people's** published screens — standardized inputs, provenance and rerun command per entry |
-| `benchmarks/tasks/` | Three BenchFlow tasks other agents are scored on. `denali-size-carried` derives its ground truth from the shipped `rerank()` rather than a hand-typed key |
-| `benchmarks/challenge/` | A public self-scoring challenge: does your method beat the size-only baseline at predicting a second cell line? Our own `rerank` is entered as a contestant and places fourth of four on top-10 overlap |
-| `packages/denali-audit/` | The packaged CLI a stranger installs. `core.py` is `src/`'s maths vendored verbatim; a test requires it to return 0.4649 on the frozen data. |
-| `src/` | Pipeline modules, run as `python -m src.<module>` |
-| `tests/` | Invariants over the frozen interface |
-| `docs/` | Report, limitations, method rules, origins, prior work, data dictionary, pre-registrations |
-| `data/genesets/` | MSigDB v2026.1.Hs, committed |
-| `data/raw/` | git-ignored substrate — see above |
-| `index.html` | The static page. Self-contained, built from frozen numbers |
-| `audit.html` | **Run the tool on your own file, in the browser.** The package's own source, executed by CPython in WebAssembly — not a JavaScript restatement of it. Nothing is uploaded |
-| `web/` | `build_audit_page.py` inlines the package into `audit.html`; `shoot.py` re-shoots the README images from the current pages |
-| `app.py` | Streamlit view of the same frozen data |
 
 ## The baseline, as a contest
 
@@ -785,67 +350,36 @@ wrong reason — [evaluation 6](results/concordance/) pointed back at us.
 5. **Transcriptional movement is not phenotypic reversal.** Computational only — no wet-lab protocols, no dosing, no clinical or therapeutic recommendation.
 6. **A large R² is a confound only where `hits` are not counted over the set's own members.** [`results/breadth/`](results/breadth/README.md) ran the unmodified `audit()` across three domains that are not gene sets and found the boundary. Where `hits ≤ size` because both are counted over the same members — which is what classical overlap enrichment does — regressing a count on the number of trials that produced it recovers the trial count, and a large R² there is **arithmetic rather than a confound**. The no-biology value is not zero and depends entirely on the mapping, so the number is interpretable only against the right null. All three domains returned large R² values and **none survived its own null**; our primary screen is the one that does — 0.4649 against a permutation null of 0.0182. [`results/breadth/null_baselines.py`](results/breadth/null_baselines.py) computes the correct null per mapping. This applies to anyone running this check, including us.
 
-## How to cite a floor
-
-If you report a no-biology floor, a percentile, or a size-corrected re-ranking
-from this tool, cite **both the software and the data underneath it**. The
-citation string is generated rather than typed, so it always names the exact
-table the number came from:
-
-```bash
-denali floor 100          # prints the number, the method, and the CITE line
-python -c "from denali_audit.atlas import citation; print(citation())"
-```
-
-The string pins a **sha256 of the corpus table**, not a version number or a
-commit. A version can be bumped without the numbers moving and a commit moves
-when an unrelated file changes; the content hash changes when and only when the
-floors do, which is the property a citation needs.
-
-[`CITATION.cff`](CITATION.cff) and [`.zenodo.json`](.zenodo.json) carry the same
-information in the two formats other people's tooling reads. **No release has
-been cut and no tag pushed** — those files are prepared so that minting a DOI is
-a decision someone makes, not a side effect of this work.
-
-Cite BioGRID ORCS alongside anything from the atlas: Oughtred R et al., *Protein
-Science* 2021;30(1):187–200,
-[doi:10.1002/pro.3978](https://doi.org/10.1002/pro.3978). The floors are derived
-statistics we computed; the screens are theirs.
-
 7. **The audit does not apply to a top-N or top-percentile hit list.** Evaluation 14 changed nothing but the rule turning scores into hits, on the same screen and the same 49 programs. All four **threshold** rules (BH q, raw p, effect size) returned a verdict above their own null, R² **0.4530–0.5631**. All three **quantile / top-N** rules returned **UNDETERMINED** — because a rule that fixes how many hits each program gets leaves set size nothing to predict. "Our top 200 hits" is an ordinary way to publish a screen, so this reaches real users, and a clean-looking verdict on such a list is a false reassurance rather than a finding. The power asymmetry has not gone away; it has moved out of the hit count and into the within-program ordering, which `audit()` never reads. [`docs/HIT_RULE.md`](docs/HIT_RULE.md).
 
-## Citations
+How to cite a floor, a percentile, or a size-corrected re-ranking from this tool is in [`docs/CITE_A_FLOOR.md`](docs/CITE_A_FLOOR.md).
 
-Everything quantitative here rests on data and methods someone else published.
-Nothing in this list was generated by this project, and each entry names what it
-was used **for**, so a reader can check the use rather than only the source.
+## Deeper docs
 
-**Data.**
+Everything below was cut from this README to keep it readable, not to bury it. Each file keeps the words it had here.
 
-| Source | Used for | Licence |
-|---|---|---|
-| Replogle et al. 2022, genome-scale Perturb-seq (K562 and RPE1), figshare `10.25452/figshare.plus.20029387.v1` | The substrate. Every hit count in `results/frozen/` and the RPE1 arm | CC BY 4.0 |
-| DepMap 24Q4, Chronos gene effect across 1,178 lines | The essentiality tier on every row — separating "moves the program" from "kills the cell" | CC BY 4.0 |
-| MSigDB v2026.1.Hs — Hallmark, Reactome, WikiPathways, GO-BP | The 50 programs, the held-out ten, and the 793-set annotation arm | MSigDB terms |
-| BioGRID ORCS 2.0.18, human. Oughtred R et al., *Protein Science* 2021;30(1):187–200, [doi:10.1002/pro.3978](https://doi.org/10.1002/pro.3978) | Evaluation 10's 1,272 published screens, and the percentile the shipped tool reports | MIT |
-| Adamson et al. 2016, UPR Perturb-seq, [doi:10.1016/j.cell.2016.11.048](https://doi.org/10.1016/j.cell.2016.11.048) | Evaluation 9 — the one substrate where engagement can be established rather than assumed | per publisher |
-| Lazzarotto et al. 2020, CHANGE-seq, *Nat Biotechnol*, [doi:10.1038/s41587-020-0555-7](https://doi.org/10.1038/s41587-020-0555-7) | Evaluation 8, arm 1. Not our data; a methods audit of published nominations | per publisher |
-| Cancellieri et al. 2022, CRISPRme, *Nat Genet*, [doi:10.1038/s41588-022-01257-y](https://doi.org/10.1038/s41588-022-01257-y) | Evaluation 8, arm 2. That variants create off-target sites is **their** finding, not ours | per publisher |
-
-**Methods and prior art.** These are the standards this work is judged against
-rather than sources it consumes — see [`docs/LANDSCAPE.md`](docs/LANDSCAPE.md)
-for the full review and [`docs/PRIOR_WORK.md`](docs/PRIOR_WORK.md) for what
-predates the project.
-
-- **Wu & Smyth 2012, CAMERA**, *Nucleic Acids Research* 40(17):e133, [doi:10.1093/nar/gks461](https://doi.org/10.1093/nar/gks461) — `VIF = 1 + (m−1)ρ̄`. Our two dominant features turn out to be its two terms, which we recovered from data before we knew the theory named it. The correction `denali rerank` applies is a cheaper relative of this, and the tool says so in its own output.
-- **Freedman, Cockburn & Simcoe 2015**, *PLOS Biology* 13(6):e1002165, [doi:10.1371/journal.pbio.1002165](https://doi.org/10.1371/journal.pbio.1002165) — irreproducible preclinical research above 50%, ~US$28 bn/yr. Quoted for the order of magnitude and the motivation, not as a measurement of this mechanism.
-- **Gene-length bias in RNA-seq enrichment**, [doi:10.1371/journal.pbio.3000481](https://doi.org/10.1371/journal.pbio.3000481), and **category false-positive rates in spatial brain transcriptomics**, [doi:10.1038/s41467-021-22862-1](https://doi.org/10.1038/s41467-021-22862-1) — the same construction confound, found independently in two fields that share no biology with ours.
+| | |
+|---|---|
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | The full pipeline diagram, and why the freeze boundary is the load-bearing part |
+| [`docs/METHOD.md`](docs/METHOD.md) | The statistic, the regression, the measurability gate, and the rule that fired before any number was seen |
+| [`docs/RESEARCH_CHALLENGES.md`](docs/RESEARCH_CHALLENGES.md) | What nearly went wrong: the circular feature, engagement vs. reversibility, the filter that fails 20 of 50, retrieval concentration |
+| [`docs/MCP_SERVER.md`](docs/MCP_SERVER.md) | Wiring denali into an agent's client config, and the six-tool reference table |
+| [`docs/TOOL_CHAIN.md`](docs/TOOL_CHAIN.md) | Every sponsor tool at the enrichment step, what touched a number and what didn't |
+| [`docs/RUNNING_SRC.md`](docs/RUNNING_SRC.md) | The pipeline scripts in `src/`, one at a time, and why they take no flags |
+| [`docs/REPRODUCE_HISTORY.md`](docs/REPRODUCE_HISTORY.md) | Three defects a reproduction check found, all in the wiring and none in a reported number |
+| [`docs/INDEPENDENT_RECOMPUTE.md`](docs/INDEPENDENT_RECOMPUTE.md) | The headline rebuilt from the method section by code that never read the original |
+| [`docs/REPO_MAP.md`](docs/REPO_MAP.md) | What's in every top-level directory |
+| [`docs/BASELINE_CLI.md`](docs/BASELINE_CLI.md) | `denali baseline` — the naive baseline as something you can call on your own evaluation |
+| [`docs/R_INTEGRATION.md`](docs/R_INTEGRATION.md) | Running the audit from R, directly on a `clusterProfiler` `enrichResult` |
+| [`docs/LITERATURE_INFER_RESULTS.md`](docs/LITERATURE_INFER_RESULTS.md) | Two models reading all 111 papers instead of grepping them, and what that changed |
+| [`docs/CITE_A_FLOOR.md`](docs/CITE_A_FLOOR.md) | How to cite a floor, a percentile, or a re-ranking from this tool |
+| [`docs/CITATIONS.md`](docs/CITATIONS.md) | Every dataset and paper this project rests on, and what it was used for |
+| [`docs/RESULTS_PAGE.md`](docs/RESULTS_PAGE.md) | Two more screenshots of the static page and its per-program detail panel |
+| [`docs/README.md`](docs/README.md) | The full documentation index — pre-registrations, limitations, everything else |
 
 ---
 
 Code MIT ([LICENSE](LICENSE)). Data: Replogle et al. 2022 Perturb-seq and DepMap 24Q4, both CC BY 4.0; MSigDB v2026.1.Hs under its own terms.
-
----
 
 # In plain language
 
@@ -888,8 +422,6 @@ This is the part we care most about, so it is built into the code rather than pr
 - **Ten of our fourteen evaluations came back negative.** All fourteen are reported, including the one that clears its bar by only 0.026.
 - **The one positive is a control, not a discovery.** Run unchanged on a pathway it was never tuned for, the ranking puts that pathway's known master switch at **rank 2 of 11,258**. So the machinery works — it just is not finding what people assume it is finding.
 - **556 automated checks** fail the build if the words and the data stop agreeing. They have caught us five times, including once when we published a number with the wrong sign.
-
----
 
 # How to check this project
 

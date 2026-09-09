@@ -40,6 +40,37 @@ VERDICT_UNDETERMINED = "UNDETERMINED"
 VERDICTS = (VERDICT_ABOVE, VERDICT_INSIDE, VERDICT_BELOW, VERDICT_UNDETERMINED)
 
 
+def _no_real_spread(v: np.ndarray) -> bool:
+    """True if v has no spread worth calling variance -- only float noise.
+
+    THE SAME FAILURE AS `_r2`'s ss_tot GUARD, ONE LEVEL UP. `_r2` used to test
+    `ss_tot == 0` and that shipped a false all-clear because summing squared
+    deviations from a float mean does not reliably return bit-identical 0.0 for
+    constant input (see that fix's docstring). `_spearman` and `_pearson` had
+    the same shape of guard -- `xs.std() == 0` -- and it has the same failure:
+    std() is itself computed from a sum of squared deviations, so it inherits
+    exactly the imprecision it is being asked to detect.
+
+    Measured: for x drawn from a real integer range and y = 5.0 + x * 1e-13 --
+    a column that is the constant 5.0 in every sense that matters, with only
+    sub-machine-precision noise that happens to be proportional to x, which is
+    exactly the shape accumulated summation error takes in practice -- `y.std()`
+    comes out to ~1e-12, not 0.0, so the old guard let it through and
+    `_spearman`/`_pearson` reported rho = 1.0 and r = 0.99999999: a fabricated
+    perfect correlation on data with no real relationship at all, which is the
+    one thing a tool built to catch fabricated confounds must never do.
+
+    Checked on the RANGE (max - min), not on std(): ptp is one subtraction, not
+    a full sum-of-squared-deviations reduction, so it does not manufacture the
+    same residual noise it is being used to detect. The tolerance is relative
+    to the values' own scale for the same reason `_r2`'s is -- an absolute
+    tolerance is a different magic number on every input.
+    """
+    v = np.asarray(v, dtype=float)
+    scale = max(1.0, float(np.abs(v).max())) if v.size else 1.0
+    return bool(np.ptp(v) <= 1e-9 * scale)
+
+
 def _spearman(x, y) -> float:
     """Spearman by its definition: Pearson on the ranks, average ranks for ties.
 
@@ -52,7 +83,7 @@ def _spearman(x, y) -> float:
     and on every fixture in the suite.
     """
     xs, ys = pd.Series(np.asarray(x, dtype=float)), pd.Series(np.asarray(y, dtype=float))
-    if xs.std() == 0 or ys.std() == 0:
+    if _no_real_spread(xs.to_numpy()) or _no_real_spread(ys.to_numpy()):
         return float("nan")
     return float(np.corrcoef(xs.rank(), ys.rank())[0, 1])
 
@@ -362,12 +393,16 @@ def _r2_of_predictions(pred, y) -> float:
     """
     ss_res = float(((y - pred) ** 2).sum())
     ss_tot = float(((y - y.mean()) ** 2).sum())
-    return float("nan") if ss_tot == 0 else 1.0 - ss_res / ss_tot
+    # Scale-relative, for the same reason `_r2` above is: an exact `== 0` on a
+    # float sum-of-squares does not reliably fire on a constant column, and a
+    # denormal denominator turns a degenerate case into a confident number.
+    scale = max(1.0, float((np.asarray(y, dtype=float) ** 2).sum()))
+    return float("nan") if ss_tot <= 1e-12 * scale else 1.0 - ss_res / ss_tot
 
 
 def _pearson(x, y) -> float:
     xs, ys = np.asarray(x, dtype=float), np.asarray(y, dtype=float)
-    if np.std(xs) == 0 or np.std(ys) == 0:
+    if _no_real_spread(xs) or _no_real_spread(ys):
         return float("nan")
     return float(np.corrcoef(xs, ys)[0, 1])
 

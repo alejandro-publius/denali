@@ -486,3 +486,97 @@ def test_the_fix_did_not_move_a_real_r2():
     """The tolerance is scale-relative so it can only fire on degenerate outcomes."""
     size, hits = _above_null()
     assert audit(size, hits)["r2_size_alone"] > 0.4
+
+
+# --- _spearman / _pearson: the ss_tot defect's twin, one function up -------
+#
+# `_r2`'s guard against a false all-clear (above) tests ss_tot with a
+# scale-relative tolerance because an exact `== 0` on a float sum-of-squares
+# is not reliable. `_spearman` and `_pearson` guarded degeneracy with
+# `xs.std() == 0` -- the identical shape of bug, since std() is itself built
+# from a sum of squared deviations. Found by feeding it a y column that is
+# the constant 5.0 in every sense that matters, with only floating-point
+# noise -- proportional to x, exactly the shape accumulated summation error
+# takes in real pipelines -- distinguishing the values. `_spearman` reported
+# rho=1.0 and `_pearson` reported r=0.99999999: a fabricated perfect
+# correlation on data with no real relationship, from the one function pair
+# in this module whose entire job is refusing to do exactly that.
+
+def _constant_with_float_noise(seed=0, n=49):
+    """y is 5.0 for every set. Only sub-machine-precision, x-scaled float
+    noise -- not real variance -- separates the values."""
+    rng = np.random.default_rng(seed)
+    x = rng.integers(10, 200, n).astype(float)
+    y = 5.0 + x * 1e-13
+    assert np.ptp(y) > 0, "fixture must not be bit-identical (that path already works)"
+    return x, y
+
+
+def test_spearman_does_not_fabricate_a_correlation_from_float_noise():
+    from denali_audit.core import _spearman
+    x, y = _constant_with_float_noise()
+    rho = _spearman(x, y)
+    assert not np.isfinite(rho), (
+        f"_spearman reported rho={rho} for a y column with no real variance -- "
+        "float noise below the input's own representable precision was read as "
+        "a perfect correlation")
+
+
+def test_pearson_does_not_fabricate_a_correlation_from_float_noise():
+    from denali_audit.core import _pearson
+    x, y = _constant_with_float_noise()
+    r = _pearson(x, y)
+    assert not np.isfinite(r), (
+        f"_pearson reported r={r} for a y column with no real variance")
+
+
+def test_spearman_still_detects_a_real_correlation():
+    """The fix must not blind the function to genuine signal."""
+    from denali_audit.core import _spearman
+    rng = np.random.default_rng(1)
+    x = rng.integers(10, 200, 49).astype(float)
+    y = x * 0.5 + rng.normal(0, 1, 49)
+    assert _spearman(x, y) > 0.9
+
+
+def test_audits_reported_spearman_is_not_corrupted_by_float_noise():
+    """End-to-end: the same defect reachable through the public audit() dict,
+    where callers actually read `spearman_size_vs_hits`."""
+    rng = np.random.default_rng(0)
+    sizes = rng.integers(10, 200, 49).astype(float)
+    # hits with zero real relationship to size, only x-scaled float noise
+    hits = 10.0 ** (5.0 + sizes * 1e-13) - 1.0
+    r = audit(sizes, hits)
+    assert not np.isfinite(r["spearman_size_vs_hits"]), (
+        f"audit() reported spearman_size_vs_hits={r['spearman_size_vs_hits']} "
+        "on a hit column with no real variance")
+    # the headline r2_size_alone path was already fixed and must stay fixed
+    assert not np.isfinite(r["r2_size_alone"])
+
+
+def test_r2_of_predictions_does_not_score_a_model_against_a_constant_truth():
+    """`_r2_of_predictions` had the exact-zero ss_tot guard `_r2` was already
+    fixed for, and nothing tested it. When truth is constant, R^2 is undefined:
+    there is no variance to explain. With an exact `== 0` the guard misses a
+    truth column separated only by float noise, and `1 - ss_res/ss_tot` divides
+    by a near-denormal, handing the caller a huge finite number as a model score.
+    """
+    from denali_audit.core import _r2_of_predictions
+    rng = np.random.default_rng(3)
+    x = rng.integers(10, 200, 49).astype(float)
+    truth = 5.0 + x * 1e-13          # constant in every sense that matters
+    pred = truth + rng.normal(0, 1, 49)   # an ordinary, wrong-ish prediction
+    assert np.ptp(truth) > 0, "fixture must not be bit-identical"
+    score = _r2_of_predictions(pred, truth)
+    assert not np.isfinite(score), (
+        f"_r2_of_predictions returned {score} scoring a model against a truth "
+        "column with no real variance; R^2 is undefined there")
+
+
+def test_r2_of_predictions_still_scores_a_real_model():
+    """The tolerance is scale-relative, so it must not fire on genuine data."""
+    from denali_audit.core import _r2_of_predictions
+    rng = np.random.default_rng(4)
+    truth = rng.integers(10, 200, 49).astype(float)
+    pred = truth + rng.normal(0, 3, 49)
+    assert _r2_of_predictions(pred, truth) > 0.9

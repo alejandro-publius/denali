@@ -108,7 +108,15 @@ def _r2(x, y) -> float:
     """
     x = np.asarray(x, dtype=float)
     y = np.asarray(y, dtype=float)
-    if np.ptp(x) == 0:
+    # `_no_real_spread`, not `np.ptp(x) == 0`. The exact test is the same shape
+    # of guard this module replaced everywhere else, and it survived here on the
+    # PREDICTOR while the outcome guard below was made scale-relative. It fires
+    # correctly when x is log10 of an integer set size, where identical inputs
+    # give bit-identical logs -- but not on the VIF path, where x is
+    # log10(1 + (m-1)*rho_bar) built from float correlations and a "constant"
+    # column arrives carrying sub-precision noise. `_spearman` and `_pearson`
+    # already refuse that column; this returned a number for it.
+    if _no_real_spread(x):
         return float("nan")
     b = np.polyfit(x, y, 1)
     pred = np.polyval(b, x)
@@ -154,6 +162,17 @@ def audit(sizes, hits, corr=None) -> dict:
             out["r2_vif"] = round(_r2(np.log10(vif), y), 4)
 
     share = out.get("r2_vif", out["r2_size_alone"])
+    # A VIF with no spread carries nothing to adjust WITH: rho_bar = 0 gives
+    # VIF = 1 for every set, which is the no-op correction, so `r2_vif` is NaN
+    # while `r2_size_alone` is a perfectly good answer. Taking the NaN anyway
+    # threw that answer away and dropped the caller into the UNDETERMINED branch
+    # below, which knows only two reasons a share can be NaN and so announced
+    # "every set returned the same number of hits" about a table whose hits ran
+    # 3..89 -- the third instance of the false-statement bug this branch's own
+    # comment records fixing twice. Passing a no-op correction must never leave
+    # the tool less able to answer than omitting `corr` entirely.
+    if not np.isfinite(share):
+        share = out["r2_size_alone"]
     out["share_explained_without_biology"] = share
 
     # A non-finite share means the question could not be ASKED -- every set is the

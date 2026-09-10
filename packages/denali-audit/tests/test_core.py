@@ -13,7 +13,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from denali_audit.core import audit, audit_replication, _r2
+from denali_audit.core import audit, audit_replication, _r2, _no_real_spread
 from denali_audit.reference import N_SCREENS, percentile
 
 PUBLISHED_HEADLINE = 0.4649
@@ -580,3 +580,74 @@ def test_r2_of_predictions_still_scores_a_real_model():
     truth = rng.integers(10, 200, 49).astype(float)
     pred = truth + rng.normal(0, 3, 49)
     assert _r2_of_predictions(pred, truth) > 0.9
+
+
+# --- a VIF with no spread must not discard a good size-alone answer --------
+#
+# THE FALSE-STATEMENT BUG, THIRD INSTANCE. `audit`'s UNDETERMINED branch knows
+# two reasons a share can be NaN -- constant size, constant hits -- and its own
+# comment records both being reported as the wrong one at different times. A
+# third reason existed: `share` takes `r2_vif` whenever `corr` is supplied, and
+# rho_bar = 0 makes VIF = 1 for every set, so `r2_vif` is NaN while
+# `r2_size_alone` is a perfectly good number. The NaN won, the branch had no
+# third explanation, and it announced constant hits about a table whose hits
+# ran 3..89.
+
+
+def _varied_screen(seed: int = 7, n: int = 30):
+    rng = np.random.default_rng(seed)
+    return (rng.integers(20, 600, size=n).astype(float),
+            rng.integers(0, 90, size=n).astype(float))
+
+
+def test_zero_correlation_is_a_no_op_not_a_loss_of_the_answer():
+    """VIF = 1 + (m-1)*rho_bar, so rho_bar = 0 is the no-op correction.
+    Supplying it must not leave the tool less able to answer than omitting it."""
+    size, hits = _varied_screen()
+    without = audit(size, hits)
+    with_zeros = audit(size, hits, corr=np.zeros(len(size)))
+    assert without["verdict"] == with_zeros["verdict"]
+    assert (without["share_explained_without_biology"]
+            == with_zeros["share_explained_without_biology"])
+
+
+def test_a_constant_vif_never_reports_constant_hits_about_varying_hits():
+    """The reading must not state something false about the caller's data."""
+    size, hits = _varied_screen()
+    assert len(set(hits.tolist())) > 1, "fixture must have varying hits"
+    reading = audit(size, hits, corr=np.zeros(len(size))).get("reading", "")
+    assert "same number of hits" not in reading
+    assert "every set is the same size" not in reading
+
+
+def test_a_genuinely_degenerate_table_still_refuses_with_the_right_reason():
+    """The fallback must not resurrect a verdict where none is available."""
+    size, _ = _varied_screen()
+    flat = np.full(len(size), 12.0)             # constant hits, varying size
+    out = audit(size, flat, corr=np.zeros(len(size)))
+    assert out["verdict"] == "UNDETERMINED"
+    assert "same number of hits" in out["reading"]
+
+    same = np.full(len(size), 200.0)            # constant size, varying hits
+    _, hits = _varied_screen()
+    out2 = audit(same, hits, corr=np.zeros(len(same)))
+    assert out2["verdict"] == "UNDETERMINED"
+    assert "every set is the same size" in out2["reading"]
+
+
+def test_r2_refuses_a_predictor_with_only_sub_precision_spread():
+    """`_r2` guarded its PREDICTOR with an exact `np.ptp(x) == 0` while every
+    other spread guard in the module had already been made scale-relative.
+    `_spearman` and `_pearson` refuse this column; `_r2` returned a number."""
+    y = np.random.default_rng(0).normal(size=12) * 10
+    x = 5.0 + np.arange(12) * 1e-13             # constant 5.0 plus float noise
+    assert np.ptp(x) != 0, "fixture must defeat an exact-equality guard"
+    assert _no_real_spread(x)
+    assert not np.isfinite(_r2(x, y))
+
+
+def test_r2_still_answers_on_a_predictor_with_real_spread():
+    """The tolerance is scale-relative, so it can only fire on degenerate input."""
+    x = np.arange(40, dtype=float)
+    y = 3.0 * x + 1.0
+    assert _r2(x, y) > 0.99

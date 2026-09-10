@@ -25,7 +25,7 @@ Arc Institute's Virtual Cell Challenge 2025 — 5,000+ registrants, 1,200+ teams
 [reported](https://arcinstitute.org/news/virtual-cell-challenge-2025-wrap-up) that
 perturbation models are "not yet consistently outperforming naive baselines across
 all metrics." This repository measures one such naive baseline and shipped it only
-as a diagnosis. [`benchmarks/challenge/`](benchmarks/challenge/) makes it something
+as a diagnosis. [`benchmarks/challenge/`](challenge/) makes it something
 a stranger can run their own method against: clone, one command, a score, no
 account and no download. A pull request is the submission mechanism.
 
@@ -49,7 +49,7 @@ Which method wins is decided by whether the target is size-corrected. That is th
 project's thesis occurring inside this project's own challenge. It rules out the
 correction destroying all signal; it does **not** establish that the residual is
 biology, since both sides are corrected the same way and can agree for the same
-wrong reason — [evaluation 6](results/concordance/) pointed back at us.
+wrong reason — [evaluation 6](../results/concordance/) pointed back at us.
 ```
 
 ## 3. For `docs/DATA_DICTIONARY.md` — a trap that is currently undocumented
